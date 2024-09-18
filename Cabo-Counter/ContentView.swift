@@ -7,19 +7,40 @@
 
 import SwiftUI
 
-var gameArray = [Game]()
 private var game = Game(name: "Testspiel")
 
 
 struct ContentView: View {
-    func addGameToArray(game:Game){
-        gameArray.append(game)
-    }
+    @State var gameArray = [Game]()
     var body: some View {
         NavigationView {
             HStack {
                 List(gameArray){
-                    game in Text(game.name)
+                    game in Button(action: {
+                        print("Spiel ausgewählt: \(game.name)")
+                    }) {
+                        VStack{
+                            Text(game.getDateInNormalFormat()).fontWeight(.bold)
+                            ZStack{
+                                HStack{
+                                    Text(game.name).padding([.leading])
+                                    Spacer()
+                                }
+                                
+                                HStack{
+                                    Image(systemName: "crown.fill")
+                                    Text(game.winner)
+                                }
+                                
+                                HStack{
+                                    Spacer()
+                                    Text(String(game.playerAmount))
+                                    Image(systemName: "person.3.fill").padding([.trailing])
+                                }
+                                
+                            }
+                        }
+                    }
                 }
             }
             .navigationTitle("Cabo-Counter") // Titel der Navigation Bar
@@ -28,12 +49,13 @@ struct ContentView: View {
                 Button(
                     action: {
                         let game = Game(name: "Testspiel")
-                        addGameToArray(game: game)
+                        gameArray.append(game)
                     }
                 ){
                     Image(systemName: "plus")
                 })
         }
+        Text("Bottom")
     }
 }
 #Preview {

@@ -26,10 +26,20 @@ class Game : Identifiable{
         get { _id }
         set { _id = newValue }
     }
+    
+    private var _playerAmount: Int = 0
+    var playerAmount: Int {
+        get { _playerAmount }
+    }
         
+    private var _winner: String = "Peter"
+    var winner: String {
+        get { _winner }
+        set { _winner = newValue }
+    }
+    
     var playerArray = [Player]()
-    var playerCount: Int = 0
-    var winner: String?
+
     
     
     init(name : String){
@@ -42,18 +52,22 @@ class Game : Identifiable{
         _id = _date + "_" + _time + "_" + String(Int.random(in: 1..<100))
         _name = name
         
-        
-        print("New Game \(name) created\nid: \(id)\nDate: \(date)\nTime: \(time)\n")
+        print("New Game \"\(name)\" created\nid: \(id)\nDate: \(date)\nTime: \(time)\n")
     }
     
-    func createPlayer(name: String) -> Player{
-        return Player(id: playerCount, name: name)
+    func createPlayer(playerName: String) -> Player{
+        return Player(id: _playerAmount, name: playerName)
     }
     
     func addPlayerToGame(playerName: String){
-        let player = createPlayer(name: playerName)
+        let player = createPlayer(playerName: playerName)
         playerArray.append(player)
-        playerCount = playerArray.count
+        _playerAmount = playerArray.count
         print("Added Player to Game!\nName: \(player.name)\nID: \(player.id)\n")
+    }
+    
+    func getDateInNormalFormat() -> String{
+        formatter.dateFormat = "dd.MM.YYYY"
+        return formatter.string(from:Date())
     }
 }
