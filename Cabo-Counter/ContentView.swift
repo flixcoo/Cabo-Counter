@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-private var game = Game(name: "Testspiel")
-
+private var game = Game()
+private var i: Int = 0
 
 struct ContentView: View {
     @State var gameArray = [Game]()
@@ -17,7 +17,7 @@ struct ContentView: View {
             HStack {
                 List(gameArray){
                     game in Button(action: {
-                        print("Spiel ausgewählt: \(game.name)")
+                        print("Spiel ausgewählt: \(game.name) \(i)")
                     }) {
                         VStack{
                             Text(game.getDateInNormalFormat()).fontWeight(.bold)
@@ -45,19 +45,16 @@ struct ContentView: View {
             }
             .navigationTitle("Cabo-Counter") // Titel der Navigation Bar
             .navigationBarItems(
-                trailing:  // Buttons rechts in der Navigation Bar
-                Button(
-                    action: {
-                        let game = Game(name: "Testspiel")
-                        gameArray.append(game)
-                    }
-                ){
-                    Image(systemName: "plus")
-                })
+                trailing:
+                NavigationLink(destination: NewGameView()) {  // Verweis auf die Ziel-View
+                    Image(systemName: "plus")  // Bild oder Text für den Button
+                }
+            )
         }
-        Text("Bottom")
     }
 }
 #Preview {
     ContentView()
 }
+
+

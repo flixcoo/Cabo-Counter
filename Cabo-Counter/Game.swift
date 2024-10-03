@@ -15,7 +15,7 @@ class Game : Identifiable{
         set { _time = newValue }
     }
     
-    private var _name: String
+    private var _name: String = ""
     var name: String {
         get { _name }
         set { _name = newValue }
@@ -42,7 +42,7 @@ class Game : Identifiable{
 
     
     
-    init(name : String){
+    init(){
         formatter.dateFormat = "yyyy-MM-dd"
         _date = formatter.string(from: Date())
                 
@@ -50,9 +50,8 @@ class Game : Identifiable{
         _time = formatter.string(from: Date())
         
         _id = _date + "_" + _time + "_" + String(Int.random(in: 1..<100))
-        _name = name
         
-        print("New Game \"\(name)\" created\nid: \(id)\nDate: \(date)\nTime: \(time)\n")
+        print("New Game created\nid: \(id)\nDate: \(date)\nTime: \(time)\n")
     }
     
     func createPlayer(playerName: String) -> Player{

@@ -4,6 +4,9 @@ class Player : Identifiable {
         get{ return _id }
         set{ _id = newValue }
     }
+    func getID ()-> Int{
+        return _id
+    }
     
     private var _name: String
     var name: String{
