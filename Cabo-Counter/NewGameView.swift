@@ -5,61 +5,62 @@ struct NewGameView: View {
     @State private var game = Game() // Dein Game-Objekt
 
     var body: some View {
-        VStack {
-            Text("Spiel erstellen")
-                .font(.largeTitle)
-                .padding()
-
-            // Dynamische Textfelder für Spieler
-
-            ForEach(playerNames.indices, id: \.self) { index in
-                HStack {
-                    // Textfeld für den Spielernamen
-                    TextField("Spielername", text: Binding(
-                        get: { self.playerNames[index] },
-                        set: { self.playerNames[index] = $0 }
-                    ))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-
-                    // Minus-Button zum Entfernen des Spielers
-                    Button(action: {
-                        self.removePlayer(at: index) // Spieler entfernen
-                    }) {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(.red)
+        NavigationView{
+            ScrollView{
+                VStack(alignment: .center){
+                    TextField("Name des Spiels", text: $game.name)
+                    Text("Spieler").font(.largeTitle).padding()
+                    
+                    // Dynamische Textfelder für Spieler
+                    ForEach(playerNames.indices, id: \.self) { index in
+                        HStack {
+                            // Textfeld für den Spielernamen
+                            TextField("Spielername", text: Binding(
+                                get: { self.playerNames[index] },
+                                set: { self.playerNames[index] = $0 }
+                            ))
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            
+                            // Minus-Button zum Entfernen des Spielers
+                            Button(action: {
+                                self.removePlayer(at: index) // Spieler entfernen
+                            }) {
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundColor(.red)
+                            }
+                            .padding(.leading, 8)
+                        }
                     }
-                    .padding(.leading, 8)
+                    
+                    // Button zum Hinzufügen eines weiteren Spielers
+                    Button(action: {
+                        // Füge einen neuen leeren Namen hinzu
+                        self.addNewPlayer()
+                    }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Spieler hinzufügen")
+                        }
+                    }
+                    
+                    // Button zum Erstellen des Spiels mit den eingegebenen Namen
+                    Button(action: {
+                        self.createGame() // Spiel erstellen mit Spielernamen
+                        
+                    }) {
+                        Text("Spiel erstellen")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                    }
                 }
+                .padding()
+                .frame(maxHeight: .infinity,alignment: .top)
             }
-
-            // Button zum Hinzufügen eines weiteren Spielers
-            Button(action: {
-                // Füge einen neuen leeren Namen hinzu
-                self.addNewPlayer()
-            }) {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Spieler hinzufügen")
-                }
-            }
-            .padding()
-
-            // Button zum Erstellen des Spiels mit den eingegebenen Namen
-            Button(action: {
-                self.createGame() // Spiel erstellen mit Spielernamen
-                
-            }) {
-                Text("Spiel erstellen")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            .padding()
-
+            .navigationTitle("Neues Spiel")
         }
-        .padding()
     }
     
     func createGame() {
