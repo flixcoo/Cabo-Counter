@@ -1,14 +1,19 @@
 import SwiftUI
 
-struct GameView: View{
-    @State var game: Game //Übergebenes Spiel
-    @State var round: Int = 1 //
-    @State private var selectedPlayerID: Int? = nil
+struct GameView: View {
+    @State var game: Game // Übergebenes Spiel
+    @State var round: Int = 1 // Rundennummer
+    @State private var selectedPlayerID: Int? = nil // Aktuell ausgewählter Spieler
     
-    var body: some View{
+    // Pop-Up für Punkteingabe
+    @State private var showingPointsInput = false
+    @State private var playerPoints: [Int: Int] = [:] // Spieler-ID und die eingegebenen Punkte
+    
+    var body: some View {
         VStack {
             Text("Runde \(round)")
             Text("Wer hat CABO gesagt?")
+            
             // Liste der Spieler mit ihren Punkteständen
             List(game.playerArray) { player in
                 HStack {
@@ -34,7 +39,7 @@ struct GameView: View{
             }
             .listStyle(PlainListStyle())
             
-            Button("Runde zuende"){
+            Button("Runde zuende") {
                 showingPointsInput = true
             }
             .padding()
@@ -47,6 +52,20 @@ struct GameView: View{
         .padding()
         .navigationTitle("Spielansicht")
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $showingPointsInput) {
+            PointsInputView(
+                players: game.playerArray,
+                playerPoints: $playerPoints,
+                onSave: {
+                    // Speichert die Punkte, die für die Spieler eingegeben wurden
+                    for (playerID, points) in playerPoints {
+                        game.addPoints(toPlayerWithID: playerID, points: points)
+                    }
+                    // Pop-Up schließen
+                    showingPointsInput = false
+                }
+            )
+        }
     }
 }
 
