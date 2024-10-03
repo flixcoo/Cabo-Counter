@@ -11,7 +11,7 @@ import SwiftUI
 struct Cabo_CounterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainMenu()
         }
     }
 

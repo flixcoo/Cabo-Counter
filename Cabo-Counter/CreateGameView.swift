@@ -1,11 +1,12 @@
 import SwiftUI
 
-struct NewGameView: View {
+struct CreateGameView: View {
     @State private var playerNames: [String] = [] // Leeres Array für Spielernamen
     @State private var game = Game() // Dein Game-Objekt
+    @State private var isGameCreated = false // Flag, um die Navigation zu steuern
 
     var body: some View {
-        NavigationView{
+        NavigationStack{
             ScrollView{
                 VStack(alignment: .center){
                     TextField("Name des Spiels", text: $game.name)
@@ -41,20 +42,30 @@ struct NewGameView: View {
                         HStack {
                             Image(systemName: "plus.circle.fill")
                             Text("Spieler hinzufügen")
+                            .padding()
                         }
                     }
                     
                     // Button zum Erstellen des Spiels mit den eingegebenen Namen
                     Button(action: {
                         self.createGame() // Spiel erstellen mit Spielernamen
-                        
-                    }) {
-                        Text("Spiel erstellen")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
-                    }
+                        isGameCreated = true // Setze das Flag auf true, um zur GameView zu navigieren
+                   }) {
+                    Text("Spiel erstellen")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(8)
+                    .opacity(isGameReady() ? 0.5 : 1.0)
+                   }
+                   .disabled(isGameReady())
+                    
+                    NavigationLink(
+                        destination: GameView(game: game),
+                        isActive: $isGameCreated){
+                            EmptyView()
+                        }
+
                 }
                 .padding()
                 .frame(maxHeight: .infinity,alignment: .top)
@@ -83,8 +94,18 @@ struct NewGameView: View {
             self.playerNames.remove(at: index) // Entferne den Spieler an der gegebenen Position
         }
     }
+    
+    func isGameReady() -> Bool {
+        if(playerNames.count >= 2 &&
+           !playerNames[0].isEmpty &&
+           !playerNames[1].isEmpty &&
+           !game.name.isEmpty){
+            return false
+        }
+        return true
+    }
 }
 
 #Preview {
-    NewGameView()
+    CreateGameView()
 }

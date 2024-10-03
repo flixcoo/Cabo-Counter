@@ -1,6 +1,6 @@
 import Foundation
 
-class Game : Identifiable{
+class Game : Identifiable, Hashable {
     let formatter = DateFormatter() // Formatting of
     
     private var _date: String
@@ -65,8 +65,27 @@ class Game : Identifiable{
         print("Added Player to Game!\nName: \(player.name)\nID: \(player.id)\n")
     }
     
+    // Funktion zum Hinzufügen der Punkte
+       func addPoints(toPlayerWithID playerID: Int, points: Int) {
+           if let player = playerArray.first(where: { $0.id == playerID }) {
+               player.incrementScore(by: points) // Punkte hinzufügen
+               print("Added \(points) points to \(player.name). Total score: \(player.score)")
+           } else {
+               print("Player not found.")
+           }
+       }
+    
     func getDateInNormalFormat() -> String{
         formatter.dateFormat = "dd.MM.YYYY"
         return formatter.string(from:Date())
+    }
+    
+    // Hashable implementation
+    static func ==(lhs: Game, rhs: Game) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)  // Use the unique `id` for hashing
     }
 }
