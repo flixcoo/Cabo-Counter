@@ -1,4 +1,6 @@
-class Player : Identifiable {
+import Foundation
+
+class Player : Identifiable, ObservableObject {
     private var _id: Int
     var id: Int{
         get{ return _id }
@@ -14,7 +16,7 @@ class Player : Identifiable {
         set{ _name = newValue }
     }
     
-    private var _score: Int
+    @Published private var _score: Int
     var score: Int{
         get{ return _score }
         set{ _score = newValue }

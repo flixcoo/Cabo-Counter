@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct GameView: View {
-    @State var game: Game // Übergebenes Spiel
+    @ObservedObject var game: Game // Übergebenes Spiel, als ObservableObject
     @State var round: Int = 1 // Rundennummer
     @State private var selectedPlayerID: Int? = nil // Aktuell ausgewählter Spieler
     
@@ -16,26 +16,19 @@ struct GameView: View {
             
             // Liste der Spieler mit ihren Punkteständen
             List(game.playerArray) { player in
-                HStack {
-                    Text(player.name)
-                        .fontWeight(.bold)
-                    
-                    Spacer()
-                    
-                    Text("Punkte: \(player.score)")
-                        .foregroundColor(.gray)
-                }
-                .padding()
-                .background(self.selectedPlayerID == player.id ? Color.green.opacity(0.4) : Color.clear) // Markierung des ausgewählten Eintrags
-                .cornerRadius(8)
-                .onTapGesture {
-                    // Wenn der Spieler ausgewählt wird, setzen wir die `selectedPlayerID`
-                    if selectedPlayerID == player.id {
-                        selectedPlayerID = nil // Wenn der Spieler erneut angeklickt wird, wird die Markierung entfernt
-                    } else {
-                        selectedPlayerID = player.id
+                // Wir nutzen @ObservedObject hier, damit Änderungen am Player erkannt werden
+                PlayerView(
+                    player: player,
+                    isSelected: selectedPlayerID == player.id, // Markierung des ausgewählten Spielers
+                    onTap: {
+                        // Wenn der Spieler ausgewählt wird, setzen wir die `selectedPlayerID`
+                        if selectedPlayerID == player.id {
+                            selectedPlayerID = nil // Wenn der Spieler erneut angeklickt wird, wird die Markierung entfernt
+                        } else {
+                            selectedPlayerID = player.id
+                        }
                     }
-                }
+                )
             }
             .listStyle(PlainListStyle())
             
@@ -69,6 +62,30 @@ struct GameView: View {
     }
 }
 
+struct PlayerView: View {
+    @ObservedObject var player: Player // Wir binden den Player als @ObservedObject
+    var isSelected: Bool // Flag, ob der Spieler ausgewählt ist
+    var onTap: () -> Void // Aktion beim Tippen auf den Spieler
+    
+    var body: some View {
+        HStack {
+            Text(player.name)
+                .fontWeight(.bold)
+            
+            Spacer()
+            
+            Text("Punkte: \(player.score)")
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(isSelected ? Color.green.opacity(0.4) : Color.clear) // Markierung, wenn der Spieler ausgewählt ist
+        .cornerRadius(8)
+        .onTapGesture {
+            onTap() // Spieler wurde angetippt
+        }
+    }
+}
+
 #Preview {
-    GameView(game:Game())
+    GameView(game: Game())
 }

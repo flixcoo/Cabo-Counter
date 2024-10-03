@@ -1,6 +1,6 @@
 import Foundation
 
-class Game : Identifiable, Hashable {
+class Game : Identifiable, Hashable, ObservableObject {
     let formatter = DateFormatter() // Formatting of
     
     private var _date: String
@@ -27,21 +27,19 @@ class Game : Identifiable, Hashable {
         set { _id = newValue }
     }
     
-    private var _playerAmount: Int = 0
+    @Published private var _playerAmount: Int = 0
     var playerAmount: Int {
         get { _playerAmount }
     }
         
-    private var _winner: String = "Peter"
+    @Published private var _winner: String = "Peter"
     var winner: String {
         get { _winner }
         set { _winner = newValue }
     }
     
-    var playerArray = [Player]()
+    @Published var playerArray = [Player]() // Spieler werden hier als `@Published` gespeichert.
 
-    
-    
     init(){
         formatter.dateFormat = "yyyy-MM-dd"
         _date = formatter.string(from: Date())
@@ -54,8 +52,9 @@ class Game : Identifiable, Hashable {
         print("New Game created\nid: \(id)\nDate: \(date)\nTime: \(time)\n")
     }
     
-    func createPlayer(playerName: String) -> Player{
-        return Player(id: _playerAmount, name: playerName)
+    func createPlayer(playerName: String) -> Player {
+        let player = Player(id: _playerAmount, name: playerName)
+        return player
     }
     
     func addPlayerToGame(playerName: String){
@@ -66,14 +65,14 @@ class Game : Identifiable, Hashable {
     }
     
     // Funktion zum Hinzufügen der Punkte
-       func addPoints(toPlayerWithID playerID: Int, points: Int) {
-           if let player = playerArray.first(where: { $0.id == playerID }) {
-               player.incrementScore(by: points) // Punkte hinzufügen
-               print("Added \(points) points to \(player.name). Total score: \(player.score)")
-           } else {
-               print("Player not found.")
-           }
-       }
+    func addPoints(toPlayerWithID playerID: Int, points: Int) {
+        if let player = playerArray.first(where: { $0.id == playerID }) {
+            player.incrementScore(by: points) // Punkte hinzufügen
+            print("Added \(points) points to \(player.name). Total score: \(player.score)")
+        } else {
+            print("Player not found.")
+        }
+    }
     
     func getDateInNormalFormat() -> String{
         formatter.dateFormat = "dd.MM.YYYY"
