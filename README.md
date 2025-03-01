@@ -1,16 +1,14 @@
-# cabo_counter
+# CABO Counter
 
-Mobile app for the card game CABO
+![Version](https://img.shields.io/badge/Version-0.0.5-orange)
+![Flutter](https://img.shields.io/badge/Flutter-3.24.5-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.5.4-blue?logo=dart)
+![iOS](https://img.shields.io/badge/iOS-18.3.1-white?logo=apple)
+![GitHub Issues](https://img.shields.io/github/issues/flixcoo/Cabo-Counter?logo=github)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/flixcoo/Cabo-Counter?logo=github)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
 
-## Getting Started
+Mobile app for the card game CABO.
 
-This project is a starting point for a Flutter application.
+`// todo`
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
