@@ -10,6 +10,7 @@ linter:
     prefer_const_declarations: false
     prefer_const_literals_to_create_immutables: false
     unnecessary_const: true
+    lines_longer_than_80_chars: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
