@@ -21,17 +21,28 @@ class GameSession {
 
   @override
   String toString() {
-    print('GameSession: [gameTitle: $gameTitle, '
+    return ('GameSession: [gameTitle: $gameTitle, '
         'players: $players, winner: $winner, '
         'round: $round, gameMode: $gameMode, '
         'playerScores: $playerScores]');
-    return super.toString();
+  }
+
+  void expandPlayerScoreLists() {
+    for (int i = 0; i < playerScores.length; i++) {
+      playerScores[i].add(0);
+    }
+  }
+
+  void addRoundScoresToScoreList(List<int> roundScores, int roundNumber) {
+    for (int i = 0; i < roundScores.length; i++) {
+      playerScores[i][roundNumber] = (roundScores[i]);
+    }
   }
 
   void sumPoints() {
     for (int i = 0; i < playerScores.length; i++) {
       playerScores[i][0] = 0;
-      for (int j = 1; j < playerScores[i].length; i++) {
+      for (int j = 1; j < playerScores[i].length; j++) {
         playerScores[i][0] += playerScores[i][j];
       }
     }
