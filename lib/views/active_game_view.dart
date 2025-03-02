@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data_classes/game_session.dart';
 import 'package:cabo_counter/utility/styles.dart';
+import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
 
 class ActiveGameView extends StatefulWidget {
@@ -71,15 +72,26 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               shrinkWrap: true,
               itemCount: widget.gameSession.playerScores[0].length,
               itemBuilder: (BuildContext context, int index) {
-                return CupertinoListTile(
-                  title: Text(
-                    'Runde ${index + 1}',
-                  ),
-                  trailing:
-                      index + 1 == widget.gameSession.playerScores[0].length
-                          ? Text('⏳', style: TextStyle(fontSize: 22))
-                          : Text('✅', style: TextStyle(fontSize: 22)),
-                );
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => RoundView(
+                              gameSession: widget.gameSession,
+                              roundNumber: index + 1),
+                        ),
+                      );
+                    },
+                    child: CupertinoListTile(
+                      title: Text(
+                        'Runde ${index + 1}',
+                      ),
+                      trailing:
+                          index + 1 == widget.gameSession.playerScores[0].length
+                              ? Text('⏳', style: TextStyle(fontSize: 22))
+                              : Text('✅', style: TextStyle(fontSize: 22)),
+                    ));
               },
             ),
           ],

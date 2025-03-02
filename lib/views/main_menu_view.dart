@@ -101,8 +101,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   void randomizeRoundNumbers() {
     var random = Random();
-    gameSessionArray.forEach((s) {
+    for (var s in gameSessionArray) {
       s.round = random.nextInt(20);
-    });
+    }
   }
 }
