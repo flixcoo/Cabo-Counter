@@ -18,8 +18,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   @override
   Widget build(BuildContext context) {
     sortedPlayerIndices = _getSortedPlayerIndices();
-    print('Aktuelle Runde: ${widget.gameSession.playerScores[0].length}');
-    print('playerScores: ${widget.gameSession.playerScores}');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(widget.gameSession.gameTitle),
@@ -104,14 +102,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     // Erstelle eine Liste von Indizes der Spieler
     List<int> playerIndices =
         List<int>.generate(widget.gameSession.players.length, (index) => index);
-    print('playerIndices: $playerIndices');
     // Sortiere die Indizes basierend auf den summierten Punkten (playerScores[i][0])
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
       int scoreB = widget.gameSession.playerScores[b][0];
       return scoreA.compareTo(scoreB); // Absteigende Sortierung
     });
-    print('playerIndices sortiert: $playerIndices');
     return playerIndices;
   }
 
