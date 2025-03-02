@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cabo_counter/data_classes/game_session.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
+import 'package:cabo_counter/views/information_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +45,16 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => InformationView(),
+                ),
+              );
+            },
+            icon: const Icon(CupertinoIcons.info_circle)),
         middle: const Text('Cabo Counter'),
         trailing: IconButton(
             onPressed: () {
