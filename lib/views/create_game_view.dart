@@ -44,6 +44,7 @@ class _CreateGameState extends State<CreateGame> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: CupertinoTextField(
+                maxLength: 8,
                 prefix: Text('Name'),
                 textAlign: TextAlign.right,
                 placeholder: 'Titel des Spiels',

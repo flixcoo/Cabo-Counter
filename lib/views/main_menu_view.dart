@@ -18,12 +18,12 @@ class _MainMenuViewState extends State<MainMenuView> {
   final List<GameSession> gameSessionArray = [
     GameSession(
         gameTitle: 'Spiel am 27.02.2025',
-        players: ['Alex', 'Ben', 'Clara'],
+        players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
         winner: 'Clara',
         gameMode: 0),
     GameSession(
         gameTitle: 'Freundschaftsrunde',
-        players: ['Jonas', 'Felix', 'Nils'],
+        players: ['Felix', 'Jonas', 'Nils'],
         winner: 'Jonas',
         gameMode: 1),
     GameSession(
