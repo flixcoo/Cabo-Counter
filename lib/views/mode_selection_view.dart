@@ -17,7 +17,8 @@ class ModeSelectionMenu extends StatelessWidget {
             child: CupertinoListTile(
               title: Text('101 Punkte', style: Styles.modeTitle),
               subtitle: const Text(
-                'Es wird solange gespielt, bis einer Spieler die 101 Punkte genau erreicht oder überschreitet.',
+                'Es wird solange gespielt, bis einer Spieler die 101 Punkte '
+                'genau erreicht oder überschreitet.',
                 style: Styles.modeDescription,
                 maxLines: 3,
               ),
@@ -31,7 +32,8 @@ class ModeSelectionMenu extends StatelessWidget {
             child: CupertinoListTile(
               title: Text('Unbegrenzt', style: Styles.modeTitle),
               subtitle: const Text(
-                'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis die Spieler keine Lust mehr haben.',
+                'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange '
+                'gespielt, bis die Spieler keine Lust mehr haben.',
                 style: Styles.modeDescription,
                 maxLines: 3,
               ),

@@ -52,8 +52,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   trailing: Row(
                     children: [
                       SizedBox(width: 5),
-                      Text(
-                          '${widget.gameSession.playerScores[playerIndex][0]} Punkte')
+                      Text('${widget.gameSession.playerScores[playerIndex][0]} '
+                          'Punkte')
                     ],
                   ),
                 );
@@ -102,7 +102,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     // Erstelle eine Liste von Indizes der Spieler
     List<int> playerIndices =
         List<int>.generate(widget.gameSession.players.length, (index) => index);
-    // Sortiere die Indizes basierend auf den summierten Punkten (playerScores[i][0])
+    // Sortiere die Indizes basierend auf den summierten Punkten
+    // (playerScores[i][0])
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
       int scoreB = widget.gameSession.playerScores[b][0];

@@ -21,7 +21,8 @@ class _RoundViewState extends State<RoundView> {
   /// Index of the player who said CABO.
   int _caboPlayerIndex = 0;
 
-  /// List of booleans that represent whether the kamikaze checkbox is checked for a player on that index.
+  /// List of booleans that represent whether the kamikaze checkbox is checked
+  /// for a player on that index.
   late final List<bool> _isKamikazeChecked =
       List.filled(widget.gameSession.players.length, false);
 
@@ -139,7 +140,8 @@ class _RoundViewState extends State<RoundView> {
                                   ],
                                 ),
                                 subtitle: Text(
-                                  '${widget.gameSession.playerScores[index][0]} Punkte',
+                                  '${widget.gameSession.playerScores[index][0]}'
+                                  ' Punkte',
                                 ),
                                 trailing: Row(
                                   children: [
@@ -192,7 +194,7 @@ class _RoundViewState extends State<RoundView> {
               ],
             )),
             Positioned(
-              bottom: 0,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
               left: 0,
               right: 0,
               child: Container(
@@ -255,23 +257,23 @@ class _RoundViewState extends State<RoundView> {
     print('Spieler: ${gameSession.players}');
     print('Punkte: $roundScores');
     print('${gameSession.players[_caboPlayerIndex]} hat CABO gesagt');
-    print(
-        '${gameSession.players[_caboPlayerIndex]} hat ${roundScores[_caboPlayerIndex]} Punkte');
+    print('${gameSession.players[_caboPlayerIndex]} hat '
+        '${roundScores[_caboPlayerIndex]} Punkte');
 
     /// List of the index of the player(s) with the lowest score
     List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
     // Spieler der CABO gesagt hat, hat am wenigsten Punkte
     if (lowestScoreIndex.contains(_caboPlayerIndex)) {
-      print(
-          '${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt und bekommt 0 Punkte');
+      print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt '
+          'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
 
       ///
       _assignPoints([_caboPlayerIndex], -1, roundScores);
     } else {
       // Ein anderer Spieler hat weniger Punkte
-      print(
-          '${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt, jedoch nicht die wenigsten Punkte.');
+      print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt, '
+          'jedoch nicht die wenigsten Punkte.');
 
       print('Folgende:r Spieler haben die wenigsten Punkte:');
       for (int i in lowestScoreIndex) {
@@ -284,7 +286,8 @@ class _RoundViewState extends State<RoundView> {
   /// Assigns points to the players based on the scores of the current round.
   /// [winnerIndex] is the index of the player(s) who receive 0 points
   /// [loserIndex] is the index of the player who receives 5 extra points
-  /// [roundScores] is the raw list of the scores of all players in the current round.
+  /// [roundScores] is the raw list of the scores of all players in the
+  /// current round.
   void _assignPoints(
       List<int> winnnerIndex, int loserIndex, List<int> roundScores) {
     print('Punkte der Spieler');
@@ -312,17 +315,17 @@ class _RoundViewState extends State<RoundView> {
   List<int> _getLowestScoreIndex(List<int> roundScores) {
     int lowestScore = roundScores[0];
     List<int> lowestScoreIndex = [0];
-    print(
-        'Niedrigster Score: ${gameSession.players[lowestScoreIndex[0]]} ($lowestScore Punkte)');
+    print('Niedrigster Score: ${gameSession.players[lowestScoreIndex[0]]} '
+        '($lowestScore Punkte)');
     for (int i = 1; i < roundScores.length; i++) {
       if (roundScores[i] < lowestScore) {
-        print(
-            'Neuer niedrigster Score: ${gameSession.players[i]} (${roundScores[i]} Punkte)');
+        print('Neuer niedrigster Score: ${gameSession.players[i]} '
+            '(${roundScores[i]} Punkte)');
         lowestScore = roundScores[i];
         lowestScoreIndex = [i];
       } else if (roundScores[i] == lowestScore) {
-        print(
-            '${gameSession.players[i]} hat ebenfalls am wenigsten Punkte (${roundScores[i]} Punkte)');
+        print('${gameSession.players[i]} hat ebenfalls am wenigsten Punkte '
+            '(${roundScores[i]} Punkte)');
         lowestScoreIndex.add(i);
       }
     }

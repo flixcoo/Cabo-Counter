@@ -131,7 +131,8 @@ class _CreateGameState extends State<CreateGame> {
                               builder: (context) => CupertinoAlertDialog(
                                 title: Text('Maximale Spielerzahl erreicht'),
                                 content: Text(
-                                    'Es können maximal 5 Spieler hinzugefügt werden.'),
+                                    'Es können maximal 5 Spieler hinzugefügt '
+                                    'werden.'),
                                 actions: [
                                   CupertinoDialogAction(
                                     child: Text('OK'),
@@ -198,8 +199,9 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: Text('Fehler'),
-                        content: Text(
-                            'Es muss ein Titel für das Spiel eingegeben werden.'),
+                        content:
+                            Text('Es muss ein Titel für das Spiel eingegeben '
+                                'werden.'),
                         actions: [
                           CupertinoDialogAction(
                             child: Text('OK'),
@@ -232,8 +234,9 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: Text('Fehler'),
-                        content: Text(
-                            'Es müssen mindestens 2 Spieler hinzugefügt werden.'),
+                        content:
+                            Text('Es müssen mindestens 2 Spieler hinzugefügt '
+                                'werden.'),
                         actions: [
                           CupertinoDialogAction(
                             child: Text('OK'),
