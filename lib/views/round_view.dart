@@ -22,12 +22,8 @@ class _RoundViewState extends State<RoundView> {
   /// Index of the player who said CABO.
   int _caboPlayerIndex = 0;
 
-  int? _kamikazePlayerIndex; // null = kein Kamikaze, sonst Spielerindex
-
-  /// List of booleans that represent whether the kamikaze checkbox is checked
-  /// for a player on that index.
-  late final List<bool> _isKamikazeChecked =
-      List.filled(widget.gameSession.players.length, false);
+  /// Index of the player who has Kamikaze. Default is null (no kamikaze player).
+  int? _kamikazePlayerIndex;
 
   /// List of text controllers for the point text fields.
   late final List<TextEditingController> _pointControllers = List.generate(
@@ -233,32 +229,55 @@ class _RoundViewState extends State<RoundView> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CupertinoButton(
+                          onPressed: _areRoundInputsValid()
+                              ? () => {_finishRound(), Navigator.pop(context)}
+                              : null,
                           child: const Text('Fertig'),
-                          onPressed: () => Navigator.pop(context),
                         ),
                         CupertinoButton(
-                            child: const Text('Nächste Runde'),
-                            onPressed: () => {
-                                  print('===================================='),
-                                  print('Runde ${widget.roundNumber} beendet'),
-                                  if (widget.roundNumber >=
-                                      widget.gameSession.playerScores[0].length)
-                                    {gameSession.expandPlayerScoreLists()},
-                                  _checkForWinner(),
-                                  widget.gameSession.sumPoints(),
-                                  Navigator.pushReplacement(context,
-                                      CupertinoPageRoute(builder: (context) {
-                                    return RoundView(
-                                        gameSession: widget.gameSession,
-                                        roundNumber: widget.roundNumber + 1);
-                                  })),
-                                }),
+                            onPressed: _areRoundInputsValid()
+                                ? () => {
+                                      _finishRound(),
+                                      Navigator.pushReplacement(context,
+                                          CupertinoPageRoute(
+                                              builder: (context) {
+                                        return RoundView(
+                                            gameSession: widget.gameSession,
+                                            roundNumber:
+                                                widget.roundNumber + 1);
+                                      })),
+                                    }
+                                : null,
+                            child: const Text('Nächste Runde')),
                       ],
                     )),
               ),
             ),
           ],
         ));
+  }
+
+  bool _areRoundInputsValid() {
+    if (_kamikazePlayerIndex == null) {
+      return false;
+    } else {
+      for (TextEditingController c in _pointControllers) {
+        if (c.text.isEmpty) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void _finishRound() {
+    print('====================================');
+    print('Runde ${widget.roundNumber} beendet');
+    if (widget.roundNumber >= widget.gameSession.playerScores[0].length) {
+      gameSession.expandPlayerScoreLists();
+    }
+    _checkForWinner();
+    widget.gameSession.sumPoints();
   }
 
   /// Checks the scores of the current round and assigns points to the players.
