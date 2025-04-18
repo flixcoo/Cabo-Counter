@@ -22,6 +22,8 @@ class _RoundViewState extends State<RoundView> {
   /// Index of the player who said CABO.
   int _caboPlayerIndex = 0;
 
+  int? _kamikazePlayerIndex; // null = kein Kamikaze, sonst Spielerindex
+
   /// List of booleans that represent whether the kamikaze checkbox is checked
   /// for a player on that index.
   late final List<bool> _isKamikazeChecked =
@@ -92,6 +94,7 @@ class _RoundViewState extends State<RoundView> {
                           child: Text(
                             widget.gameSession.players[index],
                             style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 fontSize:
                                     gameSession.players.length > 3 ? 14 : 16),
                           ),
@@ -116,7 +119,7 @@ class _RoundViewState extends State<RoundView> {
                           width: 100,
                           child: Center(child: Text('Punkte')),
                         ),
-                        SizedBox(width: 20),
+                        SizedBox(width: 28),
                         SizedBox(
                           width: 70,
                           child: Center(child: Text('Kamikaze')),
@@ -172,25 +175,43 @@ class _RoundViewState extends State<RoundView> {
                                         controller: _pointControllers[index],
                                         placeholder: 'Punkte',
                                         textAlign: TextAlign.center,
-                                        // 👇 Action-Typ explizit setzen
-
                                         onSubmitted: (_) => _nextField(index),
                                       ),
                                     ),
-                                    SizedBox(width: 20),
-                                    SizedBox(
-                                      width: 50,
-                                      child: CupertinoCheckbox(
-                                        activeColor: Styles.primaryColor,
-                                        tristate: false,
-                                        value: _isKamikazeChecked[index],
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _isKamikazeChecked[index] = value!;
-                                          });
-                                        },
+                                    SizedBox(width: 50),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _kamikazePlayerIndex =
+                                              (_kamikazePlayerIndex == index)
+                                                  ? null
+                                                  : index;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: _kamikazePlayerIndex == index
+                                              ? CupertinoColors.systemRed
+                                              : CupertinoColors
+                                                  .tertiarySystemFill,
+                                          border: Border.all(
+                                            color: _kamikazePlayerIndex == index
+                                                ? CupertinoColors.systemRed
+                                                : CupertinoColors.systemGrey,
+                                          ),
+                                        ),
+                                        child: _kamikazePlayerIndex == index
+                                            ? Icon(
+                                                CupertinoIcons.exclamationmark,
+                                                size: 16,
+                                                color: CupertinoColors.white)
+                                            : null,
                                       ),
                                     ),
+                                    SizedBox(width: 22),
                                   ],
                                 ))));
                   },
@@ -241,13 +262,17 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Checks the scores of the current round and assigns points to the players.
-  /// There are two possible outcomes of a round:
+  /// There are three possible outcomes of a round:
   ///
   /// **Case 1**<br>
+  /// One player has Kamikaze. This player receives 0 points. Every other player
+  /// receives 50 points.
+  ///
+  /// **Case 2**<br>
   /// The player who said CABO has the lowest score. They receive 0 points.
   /// Every other player gets their round score.
   ///
-  /// **Case 2**<br>
+  /// **Case 3**<br>
   ///  The player who said CABO does not have the lowest score.
   ///  They receive 5 extra points added to their round score.
   ///  Every player with the lowest score gets 0 points.
@@ -267,7 +292,12 @@ class _RoundViewState extends State<RoundView> {
     /// List of the index of the player(s) with the lowest score
     List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
     // Spieler der CABO gesagt hat, hat am wenigsten Punkte
-    if (lowestScoreIndex.contains(_caboPlayerIndex)) {
+    if (_kamikazePlayerIndex != null) {
+      print('${widget.gameSession.players[_kamikazePlayerIndex!]} hat Kamikaze '
+          'und bekommt 0 Punkte');
+      print('Alle anderen Spieler bekommen 50 Punkte');
+      _applyKamikaze(_kamikazePlayerIndex!, roundScores);
+    } else if (lowestScoreIndex.contains(_caboPlayerIndex)) {
       print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
@@ -285,6 +315,19 @@ class _RoundViewState extends State<RoundView> {
       }
       _assignPoints(lowestScoreIndex, _caboPlayerIndex, roundScores);
     }
+  }
+
+  /// Assigns 50 points to all players except the kamikaze player.
+  /// [kamikazePlayerIndex] is the index of the kamikaze player.
+  /// [roundScores] is the list of the scores of all players in the
+  /// current round.
+  void _applyKamikaze(int kamikazePlayerIndex, List<int> roundScores) {
+    for (int i = 0; i < widget.gameSession.players.length; i++) {
+      if (i != kamikazePlayerIndex) {
+        roundScores[i] += 50;
+      }
+    }
+    gameSession.addRoundScoresToScoreList(roundScores, widget.roundNumber);
   }
 
   /// Assigns points to the players based on the scores of the current round.
