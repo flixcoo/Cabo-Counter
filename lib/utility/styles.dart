@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 abstract class Styles {
   static Color primaryColor = CupertinoColors.systemGreen;
-  static Color backgroundColor = Color(0x00014b00);
+  static Color backgroundColor = Color(0xFF080808);
 
   static TextStyle modeTitle = TextStyle(
     color: primaryColor,

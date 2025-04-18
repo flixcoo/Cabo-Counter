@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data_classes/game_session.dart';
 import 'package:cabo_counter/utility/styles.dart';
+import 'package:cabo_counter/utility/theme.dart' as theme;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -198,9 +199,9 @@ class _RoundViewState extends State<RoundView> {
               left: 0,
               right: 0,
               child: Container(
-                height: 80, // Höhe der Bar
-                decoration: const BoxDecoration(
-                  color: CupertinoColors.darkBackgroundGray,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: theme.backgroundTintColor,
                 ),
                 child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
