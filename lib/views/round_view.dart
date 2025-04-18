@@ -79,12 +79,15 @@ class _RoundViewState extends State<RoundView> {
                   child: SizedBox(
                     height: 40,
                     child: CupertinoSegmentedControl<int>(
+                      unselectedColor: theme.backgroundTintColor,
+                      selectedColor: theme.primaryColor,
                       groupValue: _caboPlayerIndex,
                       children: Map<int, Widget>.fromIterable(
                         widget.gameSession.players.asMap().keys,
                         value: (index) => Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: gameSession.players.length > 3 ? 7 : 15,
+                            horizontal:
+                                gameSession.players.length > 3 ? 11 : 15,
                           ),
                           child: Text(
                             widget.gameSession.players[index],
