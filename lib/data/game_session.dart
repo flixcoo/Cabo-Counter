@@ -27,18 +27,31 @@ class GameSession {
         'playerScores: $playerScores]');
   }
 
+  /// Expands the player score lists by adding a new score of 0 for each player.
+  /// This method is called when a new round starts so the lists in the
+  /// active game view expands
   void expandPlayerScoreLists() {
     for (int i = 0; i < playerScores.length; i++) {
       playerScores[i].add(0);
     }
   }
 
+  /// Sets the scores of the players for a specific round.
+  /// This method takes a list of round scores and a round number as parameters.
+  /// It then replaces the values for the given [roundNumber] in the playerScores.
+  /// Its important that each index of the [roundScores] list corresponds to the
+  /// index of the player in the [playerScores] list.
   void addRoundScoresToScoreList(List<int> roundScores, int roundNumber) {
     for (int i = 0; i < roundScores.length; i++) {
       playerScores[i][roundNumber] = (roundScores[i]);
     }
   }
 
+  /// Summarizes the points of all players in the first index of their score list.
+  /// The method clears the first index of each player score list and then sums up
+  /// the points from the second index to the last index. It then stores the
+  /// result in the first index.
+  /// This method is used to update the total points of each player after a round.
   void sumPoints() {
     for (int i = 0; i < playerScores.length; i++) {
       playerScores[i][0] = 0;
