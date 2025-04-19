@@ -75,6 +75,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => RoundView(
                               gameSession: widget.gameSession,
                               roundNumber: index + 1),

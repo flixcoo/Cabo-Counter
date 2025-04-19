@@ -45,10 +45,17 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
+        navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
-          middle: Text('Ergebnisse'),
+          middle: const Text('Ergebnisse'),
           previousPageTitle: 'Übersicht',
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Abbrechen'),
+          ),
         ),
         child: Stack(
           children: [
