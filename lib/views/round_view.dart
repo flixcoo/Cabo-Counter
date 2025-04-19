@@ -1,5 +1,4 @@
 import 'package:cabo_counter/data_classes/game_session.dart';
-import 'package:cabo_counter/utility/styles.dart';
 import 'package:cabo_counter/utility/theme.dart' as theme;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +45,6 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        backgroundColor: Styles.backgroundColor,
         navigationBar: const CupertinoNavigationBar(
           transitionBetweenRoutes: true,
           middle: Text('Ergebnisse'),
@@ -62,7 +60,7 @@ class _RoundViewState extends State<RoundView> {
                   padding: const EdgeInsets.fromLTRB(0, 40, 0, 50),
                   child: Text(
                     'Runde ${widget.roundNumber}',
-                    style: Styles.roundTitle,
+                    style: theme.roundTitle,
                   ),
                 ),
                 Padding(

@@ -42,8 +42,9 @@ class _CreateGameState extends State<CreateGame> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: CupertinoTextField(
+                decoration: BoxDecoration(),
                 maxLength: 8,
                 prefix: Text('Name'),
                 textAlign: TextAlign.right,
@@ -53,8 +54,9 @@ class _CreateGameState extends State<CreateGame> {
             ),
             // Spielmodus-Auswahl mit Chevron
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: CupertinoTextField(
+                decoration: BoxDecoration(),
                 readOnly: true,
                 prefix: Text('Modus'),
                 suffix: Row(
@@ -148,16 +150,10 @@ class _CreateGameState extends State<CreateGame> {
                   } else {
                     // Spieler-Einträge
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 5),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: CupertinoTextField(
-                              controller: _playerNameTextControllers[index],
-                              placeholder: 'Spieler:in ${index + 1}',
-                              padding: const EdgeInsets.all(12),
-                            ),
-                          ),
                           CupertinoButton(
                             padding: EdgeInsets.zero,
                             child: Icon(
@@ -171,6 +167,14 @@ class _CreateGameState extends State<CreateGame> {
                                 _playerNameTextControllers.removeAt(index);
                               });
                             },
+                          ),
+                          Expanded(
+                            child: CupertinoTextField(
+                              controller: _playerNameTextControllers[index],
+                              placeholder: 'Spieler:in ${index + 1}',
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(),
+                            ),
                           ),
                         ],
                       ),

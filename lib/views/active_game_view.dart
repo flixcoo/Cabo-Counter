@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data_classes/game_session.dart';
-import 'package:cabo_counter/utility/styles.dart';
+import 'package:cabo_counter/utility/theme.dart' as theme;
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -30,7 +30,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: Styles.createGameTitle,
+                style: theme.createGameTitle,
               ),
             ),
             ListView.builder(
@@ -63,7 +63,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Runden',
-                style: Styles.createGameTitle,
+                style: theme.createGameTitle,
               ),
             ),
             ListView.builder(
