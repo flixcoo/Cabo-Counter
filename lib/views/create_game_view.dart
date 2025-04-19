@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data_classes/game_session.dart';
+import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/styles.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';

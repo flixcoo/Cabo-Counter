@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data_classes/game_session.dart';
+import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/theme.dart' as theme;
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,18 +70,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               shrinkWrap: true,
               itemCount: widget.gameSession.playerScores[0].length,
               itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => RoundView(
-                              gameSession: widget.gameSession,
-                              roundNumber: index + 1),
-                        ),
-                      );
-                    },
+                return Padding(
+                    padding: EdgeInsets.all(1),
                     child: CupertinoListTile(
                       title: Text(
                         'Runde ${index + 1}',
@@ -90,6 +80,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           index + 1 == widget.gameSession.playerScores[0].length
                               ? Text('⏳', style: TextStyle(fontSize: 22))
                               : Text('✅', style: TextStyle(fontSize: 22)),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) => RoundView(
+                                gameSession: widget.gameSession,
+                                roundNumber: index + 1),
+                          ),
+                        );
+                      },
                     ));
               },
             ),

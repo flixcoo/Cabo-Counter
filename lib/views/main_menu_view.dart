@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cabo_counter/data_classes/game_session.dart';
+import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/information_view.dart';
@@ -73,41 +73,49 @@ class _MainMenuViewState extends State<MainMenuView> {
             itemCount: gameSessionArray.length,
             itemBuilder: (context, index) {
               final session = gameSessionArray[index];
-              return GestureDetector(
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: CupertinoListTile(
-                        title: Text(session.gameTitle),
-                        leading: session.gameMode.toInt() == 0
-                            ? Icon(CupertinoIcons.hare_fill)
-                            : Icon(CupertinoIcons.time_solid),
-                        subtitle: Text('Gewinner*in: ${session.winner}'),
-                        trailing: Row(
-                          children: [
-                            Text('${session.round}'),
-                            SizedBox(width: 3),
-                            Icon(CupertinoIcons.arrow_2_circlepath_circle_fill),
-                            SizedBox(width: 6),
-                            Text('${session.players.length}'),
-                            SizedBox(width: 3),
-                            Icon(CupertinoIcons.person_2_fill),
-                          ],
+              return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child: CupertinoListTile(
+                    title: Text(session.gameTitle),
+                    subtitle:
+                        Text('Modus: ${_translateGameMode(session.gameMode)}'),
+                    trailing: Row(
+                      children: [
+                        Text('${session.round}'),
+                        SizedBox(width: 3),
+                        Icon(CupertinoIcons.arrow_2_circlepath_circle_fill),
+                        SizedBox(width: 15),
+                        Text('${session.players.length}'),
+                        SizedBox(width: 3),
+                        Icon(CupertinoIcons.person_2_fill),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ActiveGameView(
+                              gameSession: gameSessionArray[index]),
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => ActiveGameView(
-                                  gameSession: gameSessionArray[index]),
-                            ),
-                          );
-                        },
-                      )));
+                      );
+                    },
+                  ));
             },
           ),
         ),
       ),
     );
+  }
+
+  String _translateGameMode(int gameMode) {
+    switch (gameMode) {
+      case 0:
+        return '101 Punkte';
+      case 1:
+        return 'Unendlich';
+      default:
+        return '-';
+    }
   }
 
   void randomizeRoundNumbers() {
