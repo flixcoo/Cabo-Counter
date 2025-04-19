@@ -39,6 +39,20 @@ class _RoundViewState extends State<RoundView> {
   @override
   void initState() {
     print('Runde ${widget.roundNumber} geöffnet');
+    print(
+        'Schon gespielte Runden: ${widget.gameSession.playerScores[0].length}');
+    if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
+      print(
+          'Die Länge ist ${widget.gameSession.playerScores[0].length} und somit kleiner als '
+          'die Runde ${widget.gameSession.round}');
+
+      // If the current round has already been played, the text fields are filled
+      // with the scores from this round
+      for (int i = 0; i < _pointControllers.length; i++) {
+        _pointControllers[i].text =
+            gameSession.playerScores[i][widget.roundNumber].toString();
+      }
+    }
     super.initState();
   }
 
@@ -263,16 +277,17 @@ class _RoundViewState extends State<RoundView> {
   }
 
   bool _areRoundInputsValid() {
-    if (_kamikazePlayerIndex == null) {
-      return false;
-    } else {
-      for (TextEditingController c in _pointControllers) {
-        if (c.text.isEmpty) {
-          return false;
-        }
+    if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
+    return true;
+  }
+
+  bool _areTextFieldsEmpty() {
+    for (TextEditingController t in _pointControllers) {
+      if (t.text.isEmpty) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   void _finishRound() {

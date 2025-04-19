@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
@@ -41,7 +39,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   ];
   @override
   Widget build(BuildContext context) {
-    randomizeRoundNumbers();
+    calculateRoundNumbers();
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -118,10 +116,9 @@ class _MainMenuViewState extends State<MainMenuView> {
     }
   }
 
-  void randomizeRoundNumbers() {
-    var random = Random();
+  void calculateRoundNumbers() {
     for (var s in gameSessionArray) {
-      s.round = random.nextInt(20);
+      s.round = s.playerScores[0].length - 1;
     }
   }
 }
