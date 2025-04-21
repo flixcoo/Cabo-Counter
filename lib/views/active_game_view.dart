@@ -41,7 +41,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                 return CupertinoListTile(
                   title: Row(
                     children: [
-                      _getPlayerPlacement(index),
+                      _getPlacementPrefix(index),
                       SizedBox(width: 5),
                       Text(
                         widget.gameSession.players[playerIndex],
@@ -114,7 +114,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return playerIndices;
   }
 
-  Widget _getPlayerPlacement(int index) {
+  Widget _getPlacementPrefix(int index) {
     switch (index) {
       case 0:
         return Text(
