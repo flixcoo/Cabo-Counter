@@ -118,7 +118,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   void calculateRoundNumbers() {
     for (var s in gameSessionArray) {
-      s.round = s.playerScores[0].length - 1;
+      s.round = s.playerScores[0].length;
     }
   }
 }
