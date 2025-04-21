@@ -36,6 +36,26 @@ class _MainMenuViewState extends State<MainMenuView> {
         players: ['Tim', 'Max', 'Sophie', 'Lena'],
         winner: 'Sophie',
         gameMode: 0),
+    GameSession(
+        gameTitle: '2 Namen max length',
+        players: ['Heinrich', 'Johannes'],
+        winner: 'Sophie',
+        gameMode: 0),
+    GameSession(
+        gameTitle: '3 Namen max length',
+        players: ['Benjamin', 'Stefanie', 'Wolfgang'],
+        winner: 'Sophie',
+        gameMode: 0),
+    GameSession(
+        gameTitle: '4 Namen max length',
+        players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
+        winner: 'Sophie',
+        gameMode: 0),
+    GameSession(
+        gameTitle: '5 Namen max length',
+        players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
+        winner: 'Sophie',
+        gameMode: 0),
   ];
   @override
   Widget build(BuildContext context) {
