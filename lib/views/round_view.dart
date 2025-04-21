@@ -40,7 +40,8 @@ class _RoundViewState extends State<RoundView> {
   void initState() {
     print('Runde ${widget.roundNumber} geöffnet');
     print(
-        'Schon gespielte Runden: ${widget.gameSession.playerScores[0].length}');
+        'Abgeschlossene Runden: ${widget.gameSession.playerScores[0].length - 1}');
+    print('Aktuelle Runde: ${widget.gameSession.round}');
     if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
       print(
           'Die Länge ist ${widget.gameSession.playerScores[0].length} und somit kleiner als '
@@ -59,6 +60,7 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: true,
           middle: const Text('Ergebnisse'),
@@ -190,7 +192,8 @@ class _RoundViewState extends State<RoundView> {
                                         controller: _pointControllers[index],
                                         placeholder: 'Punkte',
                                         textAlign: TextAlign.center,
-                                        onSubmitted: (_) => _nextField(index),
+                                        onSubmitted: (_) =>
+                                            _focusNextTextfield(index),
                                       ),
                                     ),
                                     SizedBox(width: 50),
@@ -276,11 +279,27 @@ class _RoundViewState extends State<RoundView> {
         ));
   }
 
+  /// Focuses the next text field in the list of text fields.
+  /// [index] is the index of the current text field.
+  void _focusNextTextfield(int index) {
+    if (index < widget.gameSession.players.length - 1) {
+      FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+    } else {
+      _focusNodes[index].unfocus();
+    }
+  }
+
+  /// Checks if the inputs for the round are valid.
+  /// Returns true if the inputs are valid, false otherwise.
+  /// Round Inputs are valid if every player has a score or
+  /// kamikaze is selected for a player
   bool _areRoundInputsValid() {
     if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
     return true;
   }
 
+  /// Checks if any of the text fields for the players points are empty.
+  /// Returns true if any of the text fields is empty, false otherwise.
   bool _areTextFieldsEmpty() {
     for (TextEditingController t in _pointControllers) {
       if (t.text.isEmpty) {
@@ -290,13 +309,18 @@ class _RoundViewState extends State<RoundView> {
     return false;
   }
 
+  /// Finishes the current round.
+  /// Calls the [_calculateScoredPoints()] method to calculate the points for every player.
+  /// If the round is the highest round played in this game, it expands the player score lists
+  /// At the end it updates the score array for the game.
   void _finishRound() {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
     if (widget.roundNumber >= widget.gameSession.playerScores[0].length) {
       gameSession.expandPlayerScoreLists();
+      print('Das Punkte-Array wurde erweitert');
     }
-    _checkForWinner();
+    _calculateScoredPoints();
     widget.gameSession.sumPoints();
   }
 
@@ -316,8 +340,8 @@ class _RoundViewState extends State<RoundView> {
   ///  They receive 5 extra points added to their round score.
   ///  Every player with the lowest score gets 0 points.
   ///  Every other player gets their round score.
-  void _checkForWinner() {
-    /// List of the scores of the current round
+  void _calculateScoredPoints() {
+    // List of the scores of the current round
     List<int> roundScores = [];
     for (TextEditingController c in _pointControllers) {
       roundScores.add(int.parse(c.text));
@@ -354,6 +378,34 @@ class _RoundViewState extends State<RoundView> {
       }
       _assignPoints(lowestScoreIndex, _caboPlayerIndex, roundScores);
     }
+  }
+
+  /// Returns the index of the player with the lowest score. If there are
+  /// multiple players with the same lowest score, all of them are returned.
+  /// [roundScores] is a list of the scores of all players in the current round.
+  List<int> _getLowestScoreIndex(List<int> roundScores) {
+    print('_getLowestScoreIndex() aufgerufen');
+    int lowestScore = roundScores[0];
+    List<int> lowestScoreIndex = [0];
+    print('Niedrigster Score: ${gameSession.players[lowestScoreIndex[0]]} '
+        '($lowestScore Punkte)');
+    for (int i = 1; i < roundScores.length; i++) {
+      if (roundScores[i] < lowestScore) {
+        print('Neuer niedrigster Score: ${gameSession.players[i]} '
+            '(${roundScores[i]} Punkte)');
+        lowestScore = roundScores[i];
+        lowestScoreIndex = [i];
+      } else if (roundScores[i] == lowestScore) {
+        print('${gameSession.players[i]} hat ebenfalls am wenigsten Punkte '
+            '(${roundScores[i]} Punkte)');
+        lowestScoreIndex.add(i);
+      }
+    }
+    print('Folgende Spieler haben die niedrigsten Punte:');
+    for (int i in lowestScoreIndex) {
+      print('${widget.gameSession.players[i]} (${roundScores[i]} Punkte)');
+    }
+    return lowestScoreIndex;
   }
 
   /// Assigns 50 points to all players except the kamikaze player.
@@ -393,43 +445,6 @@ class _RoundViewState extends State<RoundView> {
       print('${widget.gameSession.players[i]}: ${roundScores[i]}');
     }
     gameSession.addRoundScoresToScoreList(roundScores, widget.roundNumber);
-  }
-
-  /// Returns the index of the player with the lowest score. If there are
-  /// multiple players with the same lowest score, all of them are returned.
-  /// [roundScores] is a list of the scores of all players in the current round.
-  List<int> _getLowestScoreIndex(List<int> roundScores) {
-    int lowestScore = roundScores[0];
-    List<int> lowestScoreIndex = [0];
-    print('Niedrigster Score: ${gameSession.players[lowestScoreIndex[0]]} '
-        '($lowestScore Punkte)');
-    for (int i = 1; i < roundScores.length; i++) {
-      if (roundScores[i] < lowestScore) {
-        print('Neuer niedrigster Score: ${gameSession.players[i]} '
-            '(${roundScores[i]} Punkte)');
-        lowestScore = roundScores[i];
-        lowestScoreIndex = [i];
-      } else if (roundScores[i] == lowestScore) {
-        print('${gameSession.players[i]} hat ebenfalls am wenigsten Punkte '
-            '(${roundScores[i]} Punkte)');
-        lowestScoreIndex.add(i);
-      }
-    }
-    print('Folgende Spieler haben die niedrigsten Punte:');
-    for (int i in lowestScoreIndex) {
-      print('${widget.gameSession.players[i]} (${roundScores[i]} Punkte)');
-    }
-    return lowestScoreIndex;
-  }
-
-  /// Focuses the next text field in the list of text fields.
-  /// [index] is the index of the current text field.
-  void _nextField(int index) {
-    if (index < widget.gameSession.players.length - 1) {
-      FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
-    } else {
-      _focusNodes[index].unfocus();
-    }
   }
 
   @override
