@@ -18,47 +18,41 @@ class _MainMenuViewState extends State<MainMenuView> {
     GameSession(
         gameTitle: 'Spiel am 27.02.2025',
         players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-        winner: 'Clara',
         gameMode: 0),
     GameSession(
         gameTitle: 'Freundschaftsrunde',
         players: ['Felix', 'Jonas', 'Nils'],
-        winner: 'Jonas',
         gameMode: 1),
     GameSession(
       gameTitle: 'Familienabend',
       players: ['Mama', 'Papa', 'Lisa'],
-      winner: 'Lisa',
       gameMode: 0,
     ),
     GameSession(
         gameTitle: 'Turnier 1. Runde',
         players: ['Tim', 'Max', 'Sophie', 'Lena'],
-        winner: 'Sophie',
         gameMode: 0),
     GameSession(
         gameTitle: '2 Namen max length',
         players: ['Heinrich', 'Johannes'],
-        winner: 'Sophie',
         gameMode: 0),
     GameSession(
         gameTitle: '3 Namen max length',
         players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-        winner: 'Sophie',
         gameMode: 0),
     GameSession(
         gameTitle: '4 Namen max length',
         players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-        winner: 'Sophie',
         gameMode: 0),
     GameSession(
         gameTitle: '5 Namen max length',
         players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-        winner: 'Sophie',
         gameMode: 0),
   ];
+
   @override
   Widget build(BuildContext context) {
+    gameSessionArray.sort((b, a) => a.createdAt.compareTo(b.createdAt));
     calculateRoundNumbers();
 
     return CupertinoPageScaffold(
