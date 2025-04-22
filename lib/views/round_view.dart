@@ -104,10 +104,13 @@ class _RoundViewState extends State<RoundView> {
                         widget.gameSession.players.asMap().keys,
                         value: (index) => Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: gameSession.players.length < 3
-                                ? 15
-                                : (gameSession.players.length > 4 ? 2 : 11),
-                          ),
+                              horizontal: gameSession.getLengthOfPlayerNames() >
+                                      20
+                                  ? (gameSession.getLengthOfPlayerNames() > 32
+                                      ? 5
+                                      : 10)
+                                  : 15,
+                              vertical: 6),
                           child: Text(
                             widget.gameSession.players[index],
                             textAlign: TextAlign.center,
@@ -115,7 +118,9 @@ class _RoundViewState extends State<RoundView> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize:
-                                    gameSession.players.length > 3 ? 15 : 18),
+                                    gameSession.getLengthOfPlayerNames() > 28
+                                        ? 14
+                                        : 18),
                           ),
                         ),
                       ),

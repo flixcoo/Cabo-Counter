@@ -30,6 +30,15 @@ class GameSession {
         'playerScores: $playerScores]');
   }
 
+  int getLengthOfPlayerNames() {
+    int length = 0;
+    for (String player in players) {
+      length += player.length;
+    }
+    print('Namenslänge: $length');
+    return length;
+  }
+
   /// Returns a string representation of the scores for a specific round.
   /// The method takes a round number as a parameter and returns a string
   /// containing the name of each player and their corressponding score in
