@@ -100,12 +100,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     );
   }
 
+  /// Returns a list of player indices sorted by their scores in
+  /// ascending order.
   List<int> _getSortedPlayerIndices() {
-    // Erstelle eine Liste von Indizes der Spieler
     List<int> playerIndices =
         List<int>.generate(widget.gameSession.players.length, (index) => index);
-    // Sortiere die Indizes basierend auf den summierten Punkten
-    // (playerScores[i][0])
+    // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
       int scoreB = widget.gameSession.playerScores[b][0];
@@ -114,6 +114,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return playerIndices;
   }
 
+  /// Returns a widget that displays the placement prefix based on the index.
+  /// First three places are represented by medals, and the rest are numbered.
+  /// [index] is the index of the player in the descending sorted list.
   Widget _getPlacementPrefix(int index) {
     switch (index) {
       case 0:

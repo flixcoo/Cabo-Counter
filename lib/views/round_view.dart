@@ -40,12 +40,11 @@ class _RoundViewState extends State<RoundView> {
   @override
   void initState() {
     print('Runde ${widget.roundNumber} geöffnet');
-    print('Abgeschlossene Runden: '
-        '${widget.gameSession.playerScores[0].length - 1}');
-    print('Aktuelle Runde: ${widget.gameSession.round}');
+    print('Neuste Runde: ${widget.gameSession.playerScores[0].length}');
     if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
-      print('Die Länge ist ${widget.gameSession.playerScores[0].length} und '
-          'somit kleiner als die Runde ${widget.gameSession.round}');
+      print('Die Runde ${widget.gameSession.round} ist kleiner als die neuste '
+          'Runde ${widget.gameSession.playerScores[0].length}, somit werden '
+          'die bereits eingetragenen Punkte angezeigt.');
 
       // If the current round has already been played, the text fields
       // are filled with the scores from this round
