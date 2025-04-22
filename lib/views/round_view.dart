@@ -313,18 +313,27 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Finishes the current round.
-  /// Calls the [_calculateScoredPoints()] method to calculate the points for every player.
-  /// If the round is the highest round played in this game, it expands the player score lists
-  /// At the end it updates the score array for the game.
+  /// Calls the [_calculateScoredPoints()] method to calculate the points for
+  /// every player. If the round is the highest round played in this game,
+  /// it expands the player score lists. At the end it updates the score
+  /// array for the game.
   void _finishRound() {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
+    // The shown round is smaller than the newest round
+    if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
+      print('Da diese Runde bereits gespielt wurde, werden die alten '
+          'Punktestaende ueberschrieben');
+      print('Alte Punktestaende:');
+      print(gameSession.printRoundScores(widget.roundNumber));
+    }
     if (widget.roundNumber >= widget.gameSession.playerScores[0].length) {
       gameSession.expandPlayerScoreLists();
       print('Das Punkte-Array wurde erweitert');
     }
     _calculateScoredPoints();
     widget.gameSession.sumPoints();
+    print('Die Punktesummen wurden aktualisiert');
   }
 
   /// Checks the scores of the current round and assigns points to the players.
@@ -367,8 +376,6 @@ class _RoundViewState extends State<RoundView> {
       print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
-
-      ///
       _assignPoints([_caboPlayerIndex], -1, roundScores);
     } else {
       // Ein anderer Spieler hat weniger Punkte

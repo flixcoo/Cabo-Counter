@@ -27,6 +27,18 @@ class GameSession {
         'playerScores: $playerScores]');
   }
 
+  /// Returns a string representation of the scores for a specific round.
+  /// The method takes a round number as a parameter and returns a string
+  /// containing the name of each player and their corressponding score in
+  /// the given round.
+  String printRoundScores(int round) {
+    String result = '';
+    for (int i = 0; i < players.length; i++) {
+      result += '${players[i]}: ${playerScores[i][round]}\n';
+    }
+    return result;
+  }
+
   /// Expands the player score lists by adding a new score of 0 for each player.
   /// This method is called when a new round starts so the lists in the
   /// active game view expands
