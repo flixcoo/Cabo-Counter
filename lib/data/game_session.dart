@@ -1,14 +1,17 @@
+import 'dart:math';
+
 class GameSession {
   final String gameTitle;
   final List<String> players;
   final int gameMode;
+  final DateTime createdAt = DateTime.now().subtract(Duration(
+      milliseconds: Random().nextInt(
+          Duration(days: 21).inMilliseconds + 1))); // DEBUG: Random Timestamp
   int round = 1;
-  String? winner;
 
   GameSession({
     required this.gameTitle,
     required this.players,
-    required this.winner,
     required this.gameMode,
   });
   List<List<int>> playerScores = [
@@ -22,7 +25,7 @@ class GameSession {
   @override
   String toString() {
     return ('GameSession: [gameTitle: $gameTitle, '
-        'players: $players, winner: $winner, '
+        'players: $players, '
         'round: $round, gameMode: $gameMode, '
         'playerScores: $playerScores]');
   }

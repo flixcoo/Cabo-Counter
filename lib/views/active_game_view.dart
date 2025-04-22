@@ -109,7 +109,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
       int scoreB = widget.gameSession.playerScores[b][0];
-      return scoreA.compareTo(scoreB); // Absteigende Sortierung
+      return scoreA.compareTo(scoreB);
     });
     return playerIndices;
   }

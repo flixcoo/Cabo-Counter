@@ -275,7 +275,6 @@ class _CreateGameState extends State<CreateGame> {
                   GameSession gameSession = GameSession(
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    winner: players[0],
                     gameMode: selectedMode == '101 Pkt.' ? 0 : 1,
                   );
                   Navigator.push(
