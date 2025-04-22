@@ -14,13 +14,7 @@ class GameSession {
     required this.players,
     required this.gameMode,
   });
-  List<List<int>> playerScores = [
-    [7, 1, 4, 2],
-    [7, 0, 3, 4],
-    [5, 5, 0, 0],
-    [10, 3, 3, 2],
-    [30, 10, 15, 5]
-  ];
+  List<List<int>> playerScores = List.generate(5, (_) => [0]);
 
   @override
   String toString() {
@@ -30,12 +24,15 @@ class GameSession {
         'playerScores: $playerScores]');
   }
 
+  void increaseRound() {
+    round++;
+  }
+
   int getLengthOfPlayerNames() {
     int length = 0;
     for (String player in players) {
       length += player.length;
     }
-    print('Namenslänge: $length');
     return length;
   }
 

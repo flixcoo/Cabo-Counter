@@ -40,10 +40,10 @@ class _RoundViewState extends State<RoundView> {
   @override
   void initState() {
     print('Runde ${widget.roundNumber} geöffnet');
-    print('Neuste Runde: ${widget.gameSession.playerScores[0].length}');
-    if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
-      print('Die Runde ${widget.gameSession.round} ist kleiner als die neuste '
-          'Runde ${widget.gameSession.playerScores[0].length}, somit werden '
+    print('Neuste Runde: ${widget.gameSession.round}');
+    if (widget.roundNumber < widget.gameSession.round) {
+      print('Die Runde ${widget.roundNumber} ist kleiner als die neuste '
+          'Runde ${widget.gameSession.round}, somit werden '
           'die bereits eingetragenen Punkte angezeigt.');
 
       // If the current round has already been played, the text fields
@@ -66,9 +66,7 @@ class _RoundViewState extends State<RoundView> {
           previousPageTitle: 'Übersicht',
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context, widget.gameSession),
             child: Text('Abbrechen'),
           ),
         ),
@@ -259,7 +257,10 @@ class _RoundViewState extends State<RoundView> {
                       children: [
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () => {_finishRound(), Navigator.pop(context)}
+                              ? () => {
+                                    _finishRound(),
+                                    Navigator.pop(context, widget.gameSession)
+                                  }
                               : null,
                           child: const Text('Fertig'),
                         ),
@@ -337,6 +338,7 @@ class _RoundViewState extends State<RoundView> {
     }
     _calculateScoredPoints();
     widget.gameSession.sumPoints();
+    widget.gameSession.increaseRound();
     print('Die Punktesummen wurden aktualisiert');
   }
 
@@ -357,42 +359,51 @@ class _RoundViewState extends State<RoundView> {
   ///  Every player with the lowest score gets 0 points.
   ///  Every other player gets their round score.
   void _calculateScoredPoints() {
-    // List of the scores of the current round
-    List<int> roundScores = [];
-    for (TextEditingController c in _scoreControllerList) {
-      roundScores.add(int.parse(c.text));
-    }
     print('Spieler: ${gameSession.players}');
-    print('Punkte: $roundScores');
-    print('${gameSession.players[_caboPlayerIndex]} hat CABO gesagt');
-    print('${gameSession.players[_caboPlayerIndex]} hat '
-        '${roundScores[_caboPlayerIndex]} Punkte');
 
-    /// List of the index of the player(s) with the lowest score
-    List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
     // A player has Kamikaze
     if (_kamikazePlayerIndex != null) {
       print('${widget.gameSession.players[_kamikazePlayerIndex!]} hat Kamikaze '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen 50 Punkte');
-      _applyKamikaze(_kamikazePlayerIndex!, roundScores);
-    }
-    // The player who said CABO is one of the players which have the
-    // fewest points.
-    else if (lowestScoreIndex.contains(_caboPlayerIndex)) {
-      print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt '
-          'und bekommt 0 Punkte');
-      print('Alle anderen Spieler bekommen ihre Punkte');
-      _assignPoints([_caboPlayerIndex], -1, roundScores);
+      _applyKamikaze(_kamikazePlayerIndex!,
+          List.generate(widget.gameSession.players.length, (index) => 0));
     } else {
-      // A player other than the one who said CABO has the fewest points.
-      print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt, '
-          'jedoch nicht die wenigsten Punkte.');
-      print('Folgende:r Spieler haben die wenigsten Punkte:');
-      for (int i in lowestScoreIndex) {
-        print('${widget.gameSession.players[i]}: ${roundScores[i]} Punkte');
+      // List of the scores of the current round
+      List<int> roundScores = [];
+      for (TextEditingController c in _scoreControllerList) {
+        if (c.text.isNotEmpty) roundScores.add(int.parse(c.text));
       }
-      _assignPoints(lowestScoreIndex, _caboPlayerIndex, roundScores);
+
+      print('Punkte: $roundScores');
+      print('${gameSession.players[_caboPlayerIndex]} hat CABO gesagt');
+      print('${gameSession.players[_caboPlayerIndex]} hat '
+          '${roundScores[_caboPlayerIndex]} Punkte');
+
+      /// List of the index of the player(s) with the lowest score
+      List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
+      print('Folgende Spieler haben die niedrigsten Punte:');
+      for (int i in lowestScoreIndex) {
+        print('${widget.gameSession.players[i]} (${roundScores[i]} Punkte)');
+      }
+      // The player who said CABO is one of the players which have the
+      // fewest points.
+      if (lowestScoreIndex.contains(_caboPlayerIndex)) {
+        print('${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt '
+            'und bekommt 0 Punkte');
+        print('Alle anderen Spieler bekommen ihre Punkte');
+        _assignPoints([_caboPlayerIndex], -1, roundScores);
+      } else {
+        // A player other than the one who said CABO has the fewest points.
+        print(
+            '${widget.gameSession.players[_caboPlayerIndex]} hat CABO gesagt, '
+            'jedoch nicht die wenigsten Punkte.');
+        print('Folgende:r Spieler haben die wenigsten Punkte:');
+        for (int i in lowestScoreIndex) {
+          print('${widget.gameSession.players[i]}: ${roundScores[i]} Punkte');
+        }
+        _assignPoints(lowestScoreIndex, _caboPlayerIndex, roundScores);
+      }
     }
   }
 
@@ -400,26 +411,16 @@ class _RoundViewState extends State<RoundView> {
   /// multiple players with the same lowest score, all of them are returned.
   /// [roundScores] is a list of the scores of all players in the current round.
   List<int> _getLowestScoreIndex(List<int> roundScores) {
-    print('_getLowestScoreIndex() aufgerufen');
     int lowestScore = roundScores[0];
     List<int> lowestScoreIndex = [0];
-    print('Niedrigster Score: ${gameSession.players[lowestScoreIndex[0]]} '
-        '($lowestScore Punkte)');
+
     for (int i = 1; i < roundScores.length; i++) {
       if (roundScores[i] < lowestScore) {
-        print('Neuer niedrigster Score: ${gameSession.players[i]} '
-            '(${roundScores[i]} Punkte)');
         lowestScore = roundScores[i];
         lowestScoreIndex = [i];
       } else if (roundScores[i] == lowestScore) {
-        print('${gameSession.players[i]} hat ebenfalls am wenigsten Punkte '
-            '(${roundScores[i]} Punkte)');
         lowestScoreIndex.add(i);
       }
-    }
-    print('Folgende Spieler haben die niedrigsten Punte:');
-    for (int i in lowestScoreIndex) {
-      print('${widget.gameSession.players[i]} (${roundScores[i]} Punkte)');
     }
     return lowestScoreIndex;
   }
@@ -444,19 +445,20 @@ class _RoundViewState extends State<RoundView> {
   /// current round.
   void _assignPoints(
       List<int> winnnerIndex, int loserIndex, List<int> roundScores) {
-    print('Punkte der Spieler');
+    print('Folgende Punkte wurden aus der Runde übernommen:');
     for (int i = 0; i < roundScores.length; i++) {
       print('${widget.gameSession.players[i]}: ${roundScores[i]}');
     }
     for (int i in winnnerIndex) {
-      print('${widget.gameSession.players[i]} bekommt 0 Punkte');
+      print(
+          '${widget.gameSession.players[i]} hat gewonnen und bekommt 0 Punkte');
       roundScores[i] = 0;
     }
     if (loserIndex != -1) {
       print('${widget.gameSession.players[loserIndex]} bekommt 5 Fehlerpunkte');
       roundScores[loserIndex] += 5;
     }
-    print('Aktualisierte Punkte');
+    print('Aktualisierte Punkte:');
     for (int i = 0; i < roundScores.length; i++) {
       print('${widget.gameSession.players[i]}: ${roundScores[i]}');
     }

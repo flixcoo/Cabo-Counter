@@ -13,11 +13,9 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
-  List<int> sortedPlayerIndices = [];
-
   @override
   Widget build(BuildContext context) {
-    sortedPlayerIndices = _getSortedPlayerIndices();
+    List<int> sortedPlayerIndices = _getSortedPlayerIndices();
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(widget.gameSession.gameTitle),
@@ -68,7 +66,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: widget.gameSession.playerScores[0].length,
+              itemCount: widget.gameSession.round,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                     padding: EdgeInsets.all(1),
@@ -80,8 +78,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           index + 1 == widget.gameSession.playerScores[0].length
                               ? Text('⏳', style: TextStyle(fontSize: 22))
                               : Text('✅', style: TextStyle(fontSize: 22)),
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final val = await Navigator.push(
                           context,
                           CupertinoPageRoute(
                             fullscreenDialog: true,
@@ -90,6 +88,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 roundNumber: index + 1),
                           ),
                         );
+                        setState(() {});
                       },
                     ));
               },
@@ -105,6 +104,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   List<int> _getSortedPlayerIndices() {
     List<int> playerIndices =
         List<int>.generate(widget.gameSession.players.length, (index) => index);
+    print('Player Indices: $playerIndices');
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
