@@ -79,6 +79,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ? Text('⏳', style: TextStyle(fontSize: 22))
                               : Text('✅', style: TextStyle(fontSize: 22)),
                       onTap: () async {
+                        // ignore: unused_local_variable
                         final val = await Navigator.push(
                           context,
                           CupertinoPageRoute(
