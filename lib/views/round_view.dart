@@ -39,12 +39,11 @@ class _RoundViewState extends State<RoundView> {
 
   @override
   void initState() {
-    print('Runde ${widget.roundNumber} geöffnet');
-    print('Neuste Runde: ${widget.gameSession.round}');
-    if (widget.roundNumber < widget.gameSession.round) {
-      print('Die Runde ${widget.roundNumber} ist kleiner als die neuste '
-          'Runde ${widget.gameSession.round}, somit werden '
-          'die bereits eingetragenen Punkte angezeigt.');
+    print('=== Runde ${widget.roundNumber} geöffnet ===');
+    if (widget.roundNumber < widget.gameSession.round ||
+        widget.gameSession.finished == true) {
+      print('Die Runde ${widget.roundNumber} wurde bereits gespielt, deshalb '
+          'werden die alten Punktestaende angezeigt');
 
       // If the current round has already been played, the text fields
       // are filled with the scores from this round
@@ -57,234 +56,252 @@ class _RoundViewState extends State<RoundView> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
-          middle: const Text('Ergebnisse'),
-          previousPageTitle: 'Übersicht',
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => Navigator.pop(context, widget.gameSession),
-            child: Text('Abbrechen'),
-          ),
+      resizeToAvoidBottomInset: false,
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: true,
+        middle: const Text('Ergebnisse'),
+        previousPageTitle: 'Übersicht',
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.pop(context, widget.gameSession),
+          child: const Text('Abbrechen'),
         ),
-        child: Stack(
-          children: [
-            SafeArea(
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 100 + bottomInset),
+              child: SafeArea(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 40, 0, 50),
-                  child: Text(
-                    'Runde ${widget.roundNumber}',
-                    style: theme.roundTitle,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  child: Text('Wer hat CABO gesagt?',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: gameSession.players.length > 3 ? 5 : 20,
-                      vertical: 10),
-                  child: SizedBox(
-                    height: 40,
-                    child: CupertinoSegmentedControl<int>(
-                      unselectedColor: theme.backgroundTintColor,
-                      selectedColor: theme.primaryColor,
-                      groupValue: _caboPlayerIndex,
-                      children: Map<int, Widget>.fromIterable(
-                        widget.gameSession.players.asMap().keys,
-                        value: (index) => Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: gameSession.getLengthOfPlayerNames() >
-                                      20
-                                  ? (gameSession.getLengthOfPlayerNames() > 32
-                                      ? 5
-                                      : 10)
-                                  : 15,
-                              vertical: 6),
-                          child: Text(
-                            widget.gameSession.players[index],
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    gameSession.getLengthOfPlayerNames() > 28
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+                    Text('Runde ${widget.roundNumber}',
+                        style: theme.roundTitle),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Wer hat CABO gesagt?',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            widget.gameSession.players.length > 3 ? 5 : 20,
+                        vertical: 10,
+                      ),
+                      child: SizedBox(
+                        height: 40,
+                        child: CupertinoSegmentedControl<int>(
+                          unselectedColor: theme.backgroundTintColor,
+                          selectedColor: theme.primaryColor,
+                          groupValue: _caboPlayerIndex,
+                          children: Map.fromEntries(widget.gameSession.players
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            final index = entry.key;
+                            final name = entry.value;
+                            return MapEntry(
+                              index,
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: widget.gameSession
+                                              .getLengthOfPlayerNames() >
+                                          20
+                                      ? (widget.gameSession
+                                                  .getLengthOfPlayerNames() >
+                                              32
+                                          ? 5
+                                          : 10)
+                                      : 15,
+                                  vertical: 6,
+                                ),
+                                child: Text(
+                                  name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: widget.gameSession
+                                                .getLengthOfPlayerNames() >
+                                            28
                                         ? 14
-                                        : 18),
-                          ),
+                                        : 18,
+                                  ),
+                                ),
+                              ),
+                            );
+                          })),
+                          onValueChanged: (value) {
+                            setState(() {
+                              _caboPlayerIndex = value;
+                            });
+                          },
                         ),
                       ),
-                      onValueChanged: (int value) {
-                        setState(() {
-                          _caboPlayerIndex = value;
-                        });
-                      },
                     ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-                  child: CupertinoListTile(
-                    title: Text('Spieler:in'),
-                    trailing: Row(
-                      children: [
-                        SizedBox(
-                          width: 100,
-                          child: Center(child: Text('Punkte')),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: CupertinoListTile(
+                        title: const Text('Spieler:in'),
+                        trailing: Row(
+                          children: const [
+                            SizedBox(
+                                width: 100,
+                                child: Center(child: Text('Punkte'))),
+                            SizedBox(width: 28),
+                            SizedBox(
+                                width: 70,
+                                child: Center(child: Text('Kamikaze'))),
+                          ],
                         ),
-                        SizedBox(width: 28),
-                        SizedBox(
-                          width: 70,
-                          child: Center(child: Text('Kamikaze')),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                Expanded(
-                    child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.gameSession.players.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(12), // Radius der Ecken
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: widget.gameSession.players.length,
+                      itemBuilder: (context, index) {
+                        final name = widget.gameSession.players[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
                             child: CupertinoListTile(
-                                backgroundColor: CupertinoColors.secondaryLabel,
-                                title: Row(
-                                  children: [
-                                    Text(widget.gameSession.players[index]),
-                                  ],
-                                ),
-                                subtitle: Text(
-                                  '${widget.gameSession.playerScores[index][0]}'
-                                  ' Punkte',
-                                ),
-                                trailing: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 100,
-                                      child: CupertinoTextField(
-                                        maxLength: 3,
-                                        focusNode: _focusNodeList[index],
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                          signed: true,
-                                          decimal: false,
-                                        ),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                        ],
-                                        textInputAction: index ==
-                                                widget.gameSession.players
-                                                        .length -
-                                                    1
-                                            ? TextInputAction.done
-                                            : TextInputAction.next,
-                                        controller: _scoreControllerList[index],
-                                        placeholder: 'Punkte',
-                                        textAlign: TextAlign.center,
-                                        onSubmitted: (_) =>
-                                            _focusNextTextfield(index),
+                              backgroundColor: CupertinoColors.secondaryLabel,
+                              title: Row(children: [Text(name)]),
+                              subtitle: Text(
+                                  '${widget.gameSession.playerScores[index][0]} Punkte'),
+                              trailing: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    child: CupertinoTextField(
+                                      maxLength: 3,
+                                      focusNode: _focusNodeList[index],
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                        signed: true,
+                                        decimal: false,
                                       ),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      textInputAction: index ==
+                                              widget.gameSession.players
+                                                      .length -
+                                                  1
+                                          ? TextInputAction.done
+                                          : TextInputAction.next,
+                                      controller: _scoreControllerList[index],
+                                      placeholder: 'Punkte',
+                                      textAlign: TextAlign.center,
+                                      onSubmitted: (_) =>
+                                          _focusNextTextfield(index),
                                     ),
-                                    SizedBox(width: 50),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _kamikazePlayerIndex =
-                                              (_kamikazePlayerIndex == index)
-                                                  ? null
-                                                  : index;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 24,
-                                        height: 24,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
+                                  ),
+                                  const SizedBox(width: 50),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _kamikazePlayerIndex =
+                                            (_kamikazePlayerIndex == index)
+                                                ? null
+                                                : index;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _kamikazePlayerIndex == index
+                                            ? CupertinoColors.systemRed
+                                            : CupertinoColors
+                                                .tertiarySystemFill,
+                                        border: Border.all(
                                           color: _kamikazePlayerIndex == index
                                               ? CupertinoColors.systemRed
-                                              : CupertinoColors
-                                                  .tertiarySystemFill,
-                                          border: Border.all(
-                                            color: _kamikazePlayerIndex == index
-                                                ? CupertinoColors.systemRed
-                                                : CupertinoColors.systemGrey,
-                                          ),
+                                              : CupertinoColors.systemGrey,
                                         ),
-                                        child: _kamikazePlayerIndex == index
-                                            ? Icon(
-                                                CupertinoIcons.exclamationmark,
-                                                size: 16,
-                                                color: CupertinoColors.white)
-                                            : null,
                                       ),
+                                      child: _kamikazePlayerIndex == index
+                                          ? const Icon(
+                                              CupertinoIcons.exclamationmark,
+                                              size: 16,
+                                              color: CupertinoColors.white,
+                                            )
+                                          : null,
                                     ),
-                                    SizedBox(width: 22),
-                                  ],
-                                ))));
-                  },
-                )),
-              ],
-            )),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  color: theme.backgroundTintColor,
+                                  ),
+                                  const SizedBox(width: 22),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CupertinoButton(
-                          onPressed: _areRoundInputsValid()
-                              ? () => {
-                                    _finishRound(),
-                                    Navigator.pop(context, widget.gameSession)
-                                  }
-                              : null,
-                          child: const Text('Fertig'),
-                        ),
-                        CupertinoButton(
-                            onPressed: _areRoundInputsValid()
-                                ? () => {
-                                      _finishRound(),
-                                      Navigator.pushReplacement(context,
-                                          CupertinoPageRoute(
-                                              builder: (context) {
-                                        return RoundView(
-                                            gameSession: widget.gameSession,
-                                            roundNumber:
-                                                widget.roundNumber + 1);
-                                      })),
-                                    }
-                                : null,
-                            child: const Text('Nächste Runde')),
-                      ],
-                    )),
               ),
             ),
-          ],
-        ));
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: bottomInset,
+            child: Container(
+              height: 80,
+              padding: const EdgeInsets.only(bottom: 20),
+              color: theme.backgroundTintColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CupertinoButton(
+                    onPressed: _areRoundInputsValid()
+                        ? () {
+                            _finishRound();
+                            Navigator.pop(context, widget.gameSession);
+                          }
+                        : null,
+                    child: const Text('Fertig'),
+                  ),
+                  CupertinoButton(
+                    onPressed: _areRoundInputsValid()
+                        ? () {
+                            _finishRound();
+                            if (widget.gameSession.finished == true) {
+                              Navigator.pop(context, widget.gameSession);
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => RoundView(
+                                    gameSession: widget.gameSession,
+                                    roundNumber: widget.roundNumber + 1,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        : null,
+                    child: const Text('Nächste Runde'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   /// Focuses the next text field in the list of text fields.
@@ -332,13 +349,19 @@ class _RoundViewState extends State<RoundView> {
       print('Alte Punktestaende:');
       print(gameSession.printRoundScores(widget.roundNumber));
     }
-    if (widget.roundNumber >= widget.gameSession.playerScores[0].length) {
-      gameSession.expandPlayerScoreLists();
-      print('Das Punkte-Array wurde erweitert');
-    }
+
     _calculateScoredPoints();
     widget.gameSession.sumPoints();
-    widget.gameSession.increaseRound();
+    if (widget.gameSession.finished == true) {
+      print('Das Spiel ist beendet');
+    } else {
+      if (widget.roundNumber >= widget.gameSession.playerScores[0].length - 1) {
+        gameSession.expandPlayerScoreLists();
+        print('Das Punkte-Array wurde erweitert');
+      }
+      widget.gameSession.increaseRound();
+    }
+
     print('Die Punktesummen wurden aktualisiert');
   }
 
