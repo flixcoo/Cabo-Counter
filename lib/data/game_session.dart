@@ -1,20 +1,18 @@
-import 'dart:math';
-
 /// This class represents a game session for the Cabo game.
 /// [gameTitle] is the title of the game.
 /// [players] is a string list of player names.
-/// [gameMode] is an integer representing the game mode.
-/// 0 for the 101 points mode, 1 for unlimited
+/// [pointLimit] is a boolean indicating if the game has the
+/// default point limit of 101 points or not.
 /// [createdAt] is the timestamp of when the game session was created.
 /// [round] is the current round number.
 /// [finished] is a boolean indicating if the game session is finished.
+/// [winner] is the name of the player who won the game.
 class GameSession {
+  final DateTime createdAt = DateTime.now();
   final String gameTitle;
+  final bool pointLimit;
   final List<String> players;
-  final int gameMode;
-  final DateTime createdAt = DateTime.now().subtract(Duration(
-      milliseconds: Random().nextInt(
-          Duration(days: 21).inMilliseconds + 1))); // DEBUG: Random Timestamp
+  List<List<int>> playerScores = List.generate(5, (_) => [0, 0]);
   int round = 1;
   bool finished = false;
   String winner = '';
@@ -22,46 +20,18 @@ class GameSession {
   GameSession({
     required this.gameTitle,
     required this.players,
-    required this.gameMode,
+    required this.pointLimit,
   });
-  List<List<int>> playerScores = List.generate(5, (_) => [0, 0]);
 
   @override
   String toString() {
     return ('GameSession: [gameTitle: $gameTitle, '
         'players: $players, '
-        'round: $round, gameMode: $gameMode, '
+        'round: $round, pointLimit: $pointLimit, '
         'playerScores: $playerScores]');
   }
 
-  void increaseRound() {
-    round++;
-  }
-
-  int getLengthOfPlayerNames() {
-    int length = 0;
-    for (String player in players) {
-      length += player.length;
-    }
-    return length;
-  }
-
-  void _determineWinner() {
-    int score = playerScores[0][0];
-    String lowestPlayer = players[0];
-    for (int i = 0; i < players.length; i++) {
-      print('Player: ${players[i]}, Score: ${playerScores[i][0]}');
-      if (playerScores[i][0] < score) {
-        print(
-            'New lowest player: ${players[i]} - Score: ${playerScores[i][0]}');
-        score = playerScores[i][0];
-        lowestPlayer = players[i];
-      }
-    }
-    print('Der Gewinner ist: $lowestPlayer');
-    winner = lowestPlayer;
-  }
-
+  // FIXME Debug
   /// Returns a string representation of the scores for a specific round.
   /// The method takes a round number as a parameter and returns a string
   /// containing the name of each player and their corressponding score in
@@ -72,6 +42,20 @@ class GameSession {
       result += '${players[i]}: ${playerScores[i][round]}\n';
     }
     return result;
+  }
+
+  /// Returns the length of all player names combined.
+  int getLengthOfPlayerNames() {
+    int length = 0;
+    for (String player in players) {
+      length += player.length;
+    }
+    return length;
+  }
+
+  /// Increases the round number by 1.
+  void increaseRound() {
+    round++;
   }
 
   /// Expands the player score lists by adding a new score of 0 for each player.
@@ -91,10 +75,23 @@ class GameSession {
   void addRoundScoresToScoreList(List<int> roundScores, int roundNumber) {
     print('addRoundScoresToScoreList: $roundScores');
     for (int i = 0; i < roundScores.length; i++) {
-      print(
-          'i: $i, roundNumber: $roundNumber, playerScores[i].length: ${playerScores[i].length}');
       playerScores[i][roundNumber] = (roundScores[i]);
     }
+  }
+
+  /// Determines the winner of the game session.
+  /// It iterates through the player scores and finds the player
+  /// with the lowest score.
+  void _determineWinner() {
+    int score = playerScores[0][0];
+    String lowestPlayer = players[0];
+    for (int i = 0; i < players.length; i++) {
+      if (playerScores[i][0] < score) {
+        score = playerScores[i][0];
+        lowestPlayer = players[i];
+      }
+    }
+    winner = lowestPlayer;
   }
 
   /// Summarizes the points of all players in the first index of their
@@ -109,7 +106,7 @@ class GameSession {
       for (int j = 1; j < playerScores[i].length; j++) {
         playerScores[i][0] += playerScores[i][j];
       }
-      if (gameMode == 0 && playerScores[i][0] > 101) {
+      if (pointLimit && playerScores[i][0] > 101) {
         finished = true;
         print('${players[i]} hat die 101 Punkte ueberschritten, '
             'deswegen wurde das Spiel beendet');
