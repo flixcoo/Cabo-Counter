@@ -178,7 +178,8 @@ class _RoundViewState extends State<RoundView> {
                               backgroundColor: CupertinoColors.secondaryLabel,
                               title: Row(children: [Text(name)]),
                               subtitle: Text(
-                                  '${widget.gameSession.playerScores[index][0]} Punkte'),
+                                  '${widget.gameSession.playerScores[index][0]}'
+                                  ' Punkte'),
                               trailing: Row(
                                 children: [
                                   SizedBox(

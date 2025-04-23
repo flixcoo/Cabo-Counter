@@ -109,6 +109,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                     onTap: () async {
+                      //ignore: unused_local_variable
                       final val = await Navigator.push(
                         context,
                         CupertinoPageRoute(
