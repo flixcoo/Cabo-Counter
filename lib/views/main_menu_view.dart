@@ -18,36 +18,36 @@ class _MainMenuViewState extends State<MainMenuView> {
     GameSession(
         gameTitle: 'Spiel am 27.02.2025',
         players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-        gameMode: 0),
+        pointLimit: true),
     GameSession(
         gameTitle: 'Freundschaftsrunde',
         players: ['Felix', 'Jonas', 'Nils'],
-        gameMode: 1),
+        pointLimit: false),
     GameSession(
       gameTitle: 'Familienabend',
       players: ['Mama', 'Papa', 'Lisa'],
-      gameMode: 0,
+      pointLimit: true,
     ),
     GameSession(
         gameTitle: 'Turnier 1. Runde',
         players: ['Tim', 'Max', 'Sophie', 'Lena'],
-        gameMode: 0),
+        pointLimit: false),
     GameSession(
         gameTitle: '2 Namen max length',
         players: ['Heinrich', 'Johannes'],
-        gameMode: 0),
+        pointLimit: true),
     GameSession(
         gameTitle: '3 Namen max length',
         players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-        gameMode: 0),
+        pointLimit: false),
     GameSession(
         gameTitle: '4 Namen max length',
         players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-        gameMode: 0),
+        pointLimit: true),
     GameSession(
         gameTitle: '5 Namen max length',
         players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-        gameMode: 0),
+        pointLimit: false),
   ];
 
   @override
@@ -94,7 +94,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             style: TextStyle(fontSize: 14),
                           )
                         : Text(
-                            'Modus: ${_translateGameMode(session.gameMode)}',
+                            'Modus: ${_translateGameMode(session.pointLimit)}',
                             style: TextStyle(fontSize: 14),
                           ),
                     trailing: Row(
@@ -126,14 +126,8 @@ class _MainMenuViewState extends State<MainMenuView> {
     );
   }
 
-  String _translateGameMode(int gameMode) {
-    switch (gameMode) {
-      case 0:
-        return '101 Punkte';
-      case 1:
-        return 'Unendlich';
-      default:
-        return '-';
-    }
+  String _translateGameMode(bool pointLimit) {
+    if (pointLimit) return '101 Punkte';
+    return 'Unbegrenzt';
   }
 }
