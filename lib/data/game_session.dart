@@ -1,5 +1,13 @@
 import 'dart:math';
 
+/// This class represents a game session for the Cabo game.
+/// [gameTitle] is the title of the game.
+/// [players] is a string list of player names.
+/// [gameMode] is an integer representing the game mode.
+/// 0 for the 101 points mode, 1 for unlimited
+/// [createdAt] is the timestamp of when the game session was created.
+/// [round] is the current round number.
+/// [finished] is a boolean indicating if the game session is finished.
 class GameSession {
   final String gameTitle;
   final List<String> players;
@@ -8,6 +16,7 @@ class GameSession {
       milliseconds: Random().nextInt(
           Duration(days: 21).inMilliseconds + 1))); // DEBUG: Random Timestamp
   int round = 1;
+  bool finished = false;
 
   GameSession({
     required this.gameTitle,
@@ -73,11 +82,17 @@ class GameSession {
   /// list and then sums up the points from the second index to the last
   /// index. It then stores the result in the first index. This method is
   /// used to update the total points of each player after a round.
+  /// If a player reaches the 101 points,
   void sumPoints() {
     for (int i = 0; i < playerScores.length; i++) {
       playerScores[i][0] = 0;
       for (int j = 1; j < playerScores[i].length; j++) {
         playerScores[i][0] += playerScores[i][j];
+      }
+      if (gameMode == 0 && playerScores[i][0] > 101) {
+        finished = true;
+        print('${players[i]} hat die 101 Punkte ueberschritten, '
+            'deswegen wurde das Spiel beendet');
       }
     }
   }
