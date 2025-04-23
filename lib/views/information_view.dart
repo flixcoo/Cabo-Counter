@@ -48,7 +48,11 @@ class InformationView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     )),
                 SizedBox(
-                  height: 20,
+                  height: 30,
+                ),
+                Text(
+                  '\u00A9 Felix Kirchner',
+                  style: TextStyle(fontSize: 16),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
