@@ -74,10 +74,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       title: Text(
                         'Runde ${index + 1}',
                       ),
-                      trailing:
-                          index + 1 == widget.gameSession.playerScores[0].length
-                              ? Text('⏳', style: TextStyle(fontSize: 22))
-                              : Text('✅', style: TextStyle(fontSize: 22)),
+                      trailing: index + 1 != widget.gameSession.round ||
+                              widget.gameSession.finished == true
+                          ? (Text('\u{2705}', style: TextStyle(fontSize: 22)))
+                          : Text('\u{23F3}', style: TextStyle(fontSize: 22)),
                       onTap: () async {
                         // ignore: unused_local_variable
                         final val = await Navigator.push(
@@ -105,7 +105,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   List<int> _getSortedPlayerIndices() {
     List<int> playerIndices =
         List<int>.generate(widget.gameSession.players.length, (index) => index);
-    print('Player Indices: $playerIndices');
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
       int scoreA = widget.gameSession.playerScores[a][0];
@@ -122,17 +121,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     switch (index) {
       case 0:
         return Text(
-          '🥇',
+          '\u{1F947}',
           style: TextStyle(fontSize: 22),
         );
       case 1:
         return Text(
-          '🥈',
+          '\u{1F948}',
           style: TextStyle(fontSize: 22),
         );
       case 2:
         return Text(
-          '🥉',
+          '\u{1F949}',
           style: TextStyle(fontSize: 22),
         );
       default:

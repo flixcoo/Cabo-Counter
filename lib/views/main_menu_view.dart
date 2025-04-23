@@ -53,7 +53,6 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   Widget build(BuildContext context) {
     gameSessionArray.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-    calculateRoundNumbers();
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -89,8 +88,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                   padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: CupertinoListTile(
                     title: Text(session.gameTitle),
-                    subtitle:
-                        Text('Modus: ${_translateGameMode(session.gameMode)}'),
+                    subtitle: session.finished == true
+                        ? Text(
+                            '\u{1F947} ${session.winner}',
+                            style: TextStyle(fontSize: 14),
+                          )
+                        : Text(
+                            'Modus: ${_translateGameMode(session.gameMode)}',
+                            style: TextStyle(fontSize: 14),
+                          ),
                     trailing: Row(
                       children: [
                         Text('${session.round}'),
@@ -102,14 +108,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                         Icon(CupertinoIcons.person_2_fill),
                       ],
                     ),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final val = await Navigator.push(
                         context,
                         CupertinoPageRoute(
                           builder: (context) => ActiveGameView(
                               gameSession: gameSessionArray[index]),
                         ),
                       );
+                      setState(() {});
                     },
                   ));
             },
@@ -127,12 +134,6 @@ class _MainMenuViewState extends State<MainMenuView> {
         return 'Unendlich';
       default:
         return '-';
-    }
-  }
-
-  void calculateRoundNumbers() {
-    for (var s in gameSessionArray) {
-      s.round = s.playerScores[0].length;
     }
   }
 }

@@ -17,13 +17,14 @@ class GameSession {
           Duration(days: 21).inMilliseconds + 1))); // DEBUG: Random Timestamp
   int round = 1;
   bool finished = false;
+  String winner = '';
 
   GameSession({
     required this.gameTitle,
     required this.players,
     required this.gameMode,
   });
-  List<List<int>> playerScores = List.generate(5, (_) => [0]);
+  List<List<int>> playerScores = List.generate(5, (_) => [0, 0]);
 
   @override
   String toString() {
@@ -43,6 +44,22 @@ class GameSession {
       length += player.length;
     }
     return length;
+  }
+
+  void _determineWinner() {
+    int score = playerScores[0][0];
+    String lowestPlayer = players[0];
+    for (int i = 0; i < players.length; i++) {
+      print('Player: ${players[i]}, Score: ${playerScores[i][0]}');
+      if (playerScores[i][0] < score) {
+        print(
+            'New lowest player: ${players[i]} - Score: ${playerScores[i][0]}');
+        score = playerScores[i][0];
+        lowestPlayer = players[i];
+      }
+    }
+    print('Der Gewinner ist: $lowestPlayer');
+    winner = lowestPlayer;
   }
 
   /// Returns a string representation of the scores for a specific round.
@@ -72,7 +89,10 @@ class GameSession {
   /// playerScores. Its important that each index of the [roundScores] list
   /// corresponds to the index of the player in the [playerScores] list.
   void addRoundScoresToScoreList(List<int> roundScores, int roundNumber) {
+    print('addRoundScoresToScoreList: $roundScores');
     for (int i = 0; i < roundScores.length; i++) {
+      print(
+          'i: $i, roundNumber: $roundNumber, playerScores[i].length: ${playerScores[i].length}');
       playerScores[i][roundNumber] = (roundScores[i]);
     }
   }
@@ -93,6 +113,7 @@ class GameSession {
         finished = true;
         print('${players[i]} hat die 101 Punkte ueberschritten, '
             'deswegen wurde das Spiel beendet');
+        _determineWinner();
       }
     }
   }
