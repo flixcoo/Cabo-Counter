@@ -24,7 +24,7 @@ class InformationView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                     'Cabo Counter',
                     style: TextStyle(
@@ -34,9 +34,16 @@ class InformationView extends StatelessWidget {
                   ),
                 ),
                 Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: SizedBox(
+                      height: 200,
+                      child:
+                          Image.asset('assets/cabo-counter-logo_rounded.png'),
+                    )),
+                Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
-                      'Hey :)\nDanke, dass du als eine:r der ersten User '
+                      'Hey :) Danke, dass du als eine:r der ersten User '
                       'meiner ersten eigenen App dabei bist! Ich hab sehr '
                       'viel Arbeit in dieses Projekt gesteckt und auch, '
                       'wenn ich (hoffentlich) an vieles Gedacht hab, wird '
