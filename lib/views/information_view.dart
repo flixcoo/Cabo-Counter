@@ -49,7 +49,7 @@ class InformationView extends StatelessWidget {
                       'wenn ich (hoffentlich) an vieles Gedacht hab, wird '
                       'auf jeden Fall noch nicht alles 100% funktionieren. '
                       'Solltest du also irgendwelche Fehler entdecken oder '
-                      'Feedback zum Design oder der Benutzerfreundlichekeit'
+                      'Feedback zum Design oder der Benutzerfreund- lichekeit'
                       ' haben, zögere bitte nicht sie mir auf den dir '
                       'bekannten Wegen mitzuteilen. Danke! ',
                       textAlign: TextAlign.center,
