@@ -104,7 +104,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                       children: [
                         Text('${session.round}'),
                         const SizedBox(width: 3),
-                        const Icon(CupertinoIcons.arrow_2_circlepath_circle_fill),
+                        const Icon(
+                            CupertinoIcons.arrow_2_circlepath_circle_fill),
                         const SizedBox(width: 15),
                         Text('${session.players.length}'),
                         const SizedBox(width: 3),

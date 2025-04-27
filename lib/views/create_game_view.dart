@@ -131,7 +131,8 @@ class _CreateGameState extends State<CreateGame> {
                             showCupertinoDialog(
                               context: context,
                               builder: (context) => CupertinoAlertDialog(
-                                title: const Text('Maximale Spielerzahl erreicht'),
+                                title:
+                                    const Text('Maximale Spielerzahl erreicht'),
                                 content: const Text(
                                     'Es können maximal 5 Spieler hinzugefügt '
                                     'werden.'),
@@ -203,9 +204,9 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: const Text('Fehler'),
-                        content:
-                            const Text('Es muss ein Titel für das Spiel eingegeben '
-                                'werden.'),
+                        content: const Text(
+                            'Es muss ein Titel für das Spiel eingegeben '
+                            'werden.'),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text('OK'),
@@ -221,8 +222,8 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: const Text('Fehler'),
-                        content:
-                            const Text('Es muss ein Spielmodus ausgewählt werden.'),
+                        content: const Text(
+                            'Es muss ein Spielmodus ausgewählt werden.'),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text('OK'),
@@ -238,9 +239,9 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: const Text('Fehler'),
-                        content:
-                            const Text('Es müssen mindestens 2 Spieler hinzugefügt '
-                                'werden.'),
+                        content: const Text(
+                            'Es müssen mindestens 2 Spieler hinzugefügt '
+                            'werden.'),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text('OK'),
@@ -256,7 +257,8 @@ class _CreateGameState extends State<CreateGame> {
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
                         title: const Text('Fehler'),
-                        content: const Text('Jeder Spieler muss einen Namen haben.'),
+                        content:
+                            const Text('Jeder Spieler muss einen Namen haben.'),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text('OK'),

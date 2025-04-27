@@ -76,8 +76,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ),
                       trailing: index + 1 != widget.gameSession.round ||
                               widget.gameSession.finished == true
-                          ? (const Text('\u{2705}', style: TextStyle(fontSize: 22)))
-                          : const Text('\u{23F3}', style: TextStyle(fontSize: 22)),
+                          ? (const Text('\u{2705}',
+                              style: TextStyle(fontSize: 22)))
+                          : const Text('\u{23F3}',
+                              style: TextStyle(fontSize: 22)),
                       onTap: () async {
                         // ignore: unused_local_variable
                         final val = await Navigator.push(

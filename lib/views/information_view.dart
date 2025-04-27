@@ -34,7 +34,8 @@ class InformationView extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: SizedBox(
                       height: 200,
                       child:
