@@ -1,0 +1,103 @@
+name: Flutter
+
+on:
+  push:
+    branches:
+      - "develop"
+      - "main"
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Check Formatting
+        run: |
+          if ! dart format --set-exit-if-changed .; then
+            echo "needs_formatting=true" >> $GITHUB_OUTPUT
+          fi
+          flutter analyze  # Standard-Linting
+  format:
+    runs-on: macos-latest
+    needs: lint
+    # Only when lint fails, and its a push to develop branch
+    if: |
+      failure() && 
+      needs.lint.outputs.needs_formatting == 'true' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/develop'
+      
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Get & upgrade dependencies
+        run: |
+          flutter pub get
+          # flutter pub upgrade --major-versions
+          
+      - name: Auto-format
+        run: |
+          dart format .
+          dart fix --apply
+      
+      - name: Commit Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Actions: Auto-formatting [skip ci]"
+          git push
+    
+  test:
+    runs-on: macos-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Run Tests
+        run: flutter test
+
+    
+  build:
+    runs-on: macos-latest
+    needs: test
+    if: false # skips job
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+        run: flutter analyze --fatal-infos
+        
+      - name: Run App
+        run: flutter run
