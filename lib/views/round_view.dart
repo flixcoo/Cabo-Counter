@@ -2,6 +2,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/theme.dart' as theme;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
@@ -259,47 +260,53 @@ class _RoundViewState extends State<RoundView> {
             left: 0,
             right: 0,
             bottom: bottomInset,
-            child: Container(
-              height: 80,
-              padding: const EdgeInsets.only(bottom: 20),
-              color: theme.backgroundTintColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CupertinoButton(
-                    onPressed: _areRoundInputsValid()
-                        ? () {
-                            _finishRound();
-                            Navigator.pop(context, widget.gameSession);
-                          }
-                        : null,
-                    child: const Text('Fertig'),
+            child: KeyboardVisibilityBuilder(builder: (context, visible) {
+              if (!visible) {
+                return Container(
+                  height: 80,
+                  padding: const EdgeInsets.only(bottom: 20),
+                  color: theme.backgroundTintColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CupertinoButton(
+                        onPressed: _areRoundInputsValid()
+                            ? () {
+                                _finishRound();
+                                Navigator.pop(context, widget.gameSession);
+                              }
+                            : null,
+                        child: const Text('Fertig'),
+                      ),
+                      CupertinoButton(
+                        onPressed: _areRoundInputsValid()
+                            ? () {
+                                _finishRound();
+                                if (widget.gameSession.finished == true) {
+                                  Navigator.pop(context, widget.gameSession);
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => RoundView(
+                                        gameSession: widget.gameSession,
+                                        roundNumber: widget.roundNumber + 1,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            : null,
+                        child: const Text('Nächste Runde'),
+                      ),
+                    ],
                   ),
-                  CupertinoButton(
-                    onPressed: _areRoundInputsValid()
-                        ? () {
-                            _finishRound();
-                            if (widget.gameSession.finished == true) {
-                              Navigator.pop(context, widget.gameSession);
-                            } else {
-                              Navigator.pushReplacement(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => RoundView(
-                                    gameSession: widget.gameSession,
-                                    roundNumber: widget.roundNumber + 1,
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        : null,
-                    child: const Text('Nächste Runde'),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+          )
         ],
       ),
     );
