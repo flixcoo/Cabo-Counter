@@ -26,9 +26,10 @@ jobs:
       - name: Check Formatting
         id: check_format
         run: |
-          dart format --set-exit-if-changed . || echo "::set-output name=needs_formatting::true"
-          flutter analyze
-
+          if ! dart format --set-exit-if-changed .; then
+            echo "needs_formatting=true" >> $GITHUB_OUTPUT
+          fi
+          flutter analyze  # Standard-Linting
   format:
     runs-on: macos-latest
     needs: lint
