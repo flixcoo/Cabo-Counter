@@ -30,10 +30,10 @@ jobs:
     needs: lint
     # Only when lint fails, and its a push to develop branch
     if: |
-      failure() && 
-      needs.lint.outputs.needs_formatting == 'true' &&
+      (needs.lint.result == 'failure' && 
+       needs.lint.outputs.needs_formatting == 'true') &&
       github.event_name == 'push' &&
-      github.ref == 'refs/heads/develop'
+      # github.ref == 'refs/heads/develop'
       
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,6 @@ jobs:
     
   test:
     runs-on: macos-latest
-    needs: lint
 
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +80,6 @@ jobs:
     
   build:
     runs-on: macos-latest
-    needs: test
     if: false # skips job
     
     steps:
