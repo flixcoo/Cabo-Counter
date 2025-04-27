@@ -23,15 +23,22 @@ jobs:
           flutter-version: '3.29.2'
           channel: 'stable'
           
-      - name: Linting project
-        run: flutter analyze
+      - name: Check Formatting
+        id: check_format
+        run: |
+          dart format --set-exit-if-changed . || echo "::set-output name=needs_formatting::true"
+          flutter analyze
 
   format:
     runs-on: macos-latest
     needs: lint
     # Only when lint fails, and its a push to develop branch
-    if: ${{ failure() }} && github.event_name == 'push' #&& github.ref == 'refs/heads/develop'
-    
+    if: |
+      failure() && 
+      needs.lint.outputs.needs_formatting == 'true' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/develop'
+      
     steps:
       - uses: actions/checkout@v4
       
@@ -44,25 +51,25 @@ jobs:
       - name: Get & upgrade dependencies
         run: |
           flutter pub get
-          flutter pub upgrade --major-versions
-      - name: Formatting Code
+          # flutter pub upgrade --major-versions
+          
+      - name: Auto-format
         run: |
-          flutter analyze
-          dart fix --apply
-          dart format . --set-exit-if-changed || true
-
-      - name: Commit Format Changes
-        #if: failure() && steps.format.outcome == 'failure'
+          dart format .  # Korrigiert Formatierung
+          dart fix --apply  # Behebt einfache Issues
+      
+      - name: Commit Changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "Pipeline: Auto-formatting"
+          git commit -m "style: Auto-formatting [skip ci]"
           git push
           
 
   build:
     runs-on: macos-latest
+    if: false # skips job
     steps:
       - uses: actions/checkout@v4
       
