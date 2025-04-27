@@ -24,7 +24,7 @@ class InformationView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     'Cabo Counter',
                     style: TextStyle(
@@ -49,10 +49,11 @@ class InformationView extends StatelessWidget {
                       'wenn ich (hoffentlich) an vieles Gedacht hab, wird '
                       'auf jeden Fall noch nicht alles 100% funktionieren. '
                       'Solltest du also irgendwelche Fehler entdecken oder '
-                      'Feedback zum Design oder der Benutzerfreund- lichekeit'
+                      'Feedback zum Design oder der Benutzerfreundlichkeit'
                       ' haben, zögere bitte nicht sie mir auf den dir '
                       'bekannten Wegen mitzuteilen. Danke! ',
                       textAlign: TextAlign.center,
+                      softWrap: true,
                     )),
                 SizedBox(
                   height: 30,
