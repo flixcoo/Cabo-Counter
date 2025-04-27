@@ -47,8 +47,18 @@ jobs:
         run: |
           dart format .
           dart fix --apply
-      
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+            
       - name: Commit Changes
+        if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
