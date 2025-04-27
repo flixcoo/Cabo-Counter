@@ -3,18 +3,66 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: Flutter
 
 on:
   push:
     branches-ignore: []
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "prod" ]
 
 jobs:
+  lint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Linting project
+        run: flutter analyze
+
+  format:
+    runs-on: macos-latest
+    needs: lint
+    # Only when lint fails, and its a push to develop branch
+    if: ${{ failure() }} && github.event_name == 'push' #&& github.ref == 'refs/heads/develop'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Get & upgrade dependencies
+        run: |
+          flutter pub get
+          flutter pub upgrade --major-versions
+      - name: Formatting Code
+        run: |
+          flutter analyze
+          dart fix --apply
+          dart format . --set-exit-if-changed || true
+
+      - name: Commit Format Changes
+        #if: failure() && steps.format.outcome == 'failure'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Pipeline: Auto-formatting"
+          git push
+          
+
   build:
     runs-on: macos-latest
-
     steps:
       - uses: actions/checkout@v4
       
@@ -27,16 +75,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze --fatal-infos
         
       - name: Run App
         run: flutter run
+  
   test:
     runs-on: macos-latest
 
@@ -48,10 +92,6 @@ jobs:
         with:
           flutter-version: '3.29.2'
           channel: 'stable'
-
-
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
+          
       - name: Run tests
         run: flutter test
