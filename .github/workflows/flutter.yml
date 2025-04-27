@@ -41,7 +41,7 @@ jobs:
       - name: Get & upgrade dependencies
         run: |
           flutter pub get
-          # flutter pub upgrade --major-versions
+          flutter pub upgrade --major-versions
           
       - name: Auto-format
         run: |
