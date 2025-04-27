@@ -32,7 +32,7 @@ jobs:
     if: |
       (needs.lint.result == 'failure' && 
        needs.lint.outputs.needs_formatting == 'true') &&
-      github.event_name == 'push' &&
+      github.event_name == 'push'
       
     steps:
       - uses: actions/checkout@v4
