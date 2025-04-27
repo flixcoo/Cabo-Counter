@@ -61,7 +61,7 @@ class _MainMenuViewState extends State<MainMenuView> {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => InformationView(),
+                  builder: (context) => const InformationView(),
                 ),
               );
             },
@@ -88,27 +88,27 @@ class _MainMenuViewState extends State<MainMenuView> {
             itemBuilder: (context, index) {
               final session = gameSessionArray[index];
               return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: CupertinoListTile(
                     title: Text(session.gameTitle),
                     subtitle: session.finished == true
                         ? Text(
                             '\u{1F947} ${session.winner}',
-                            style: TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 14),
                           )
                         : Text(
                             'Modus: ${_translateGameMode(session.pointLimit)}',
-                            style: TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 14),
                           ),
                     trailing: Row(
                       children: [
                         Text('${session.round}'),
-                        SizedBox(width: 3),
-                        Icon(CupertinoIcons.arrow_2_circlepath_circle_fill),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 3),
+                        const Icon(CupertinoIcons.arrow_2_circlepath_circle_fill),
+                        const SizedBox(width: 15),
                         Text('${session.players.length}'),
-                        SizedBox(width: 3),
-                        Icon(CupertinoIcons.person_2_fill),
+                        const SizedBox(width: 3),
+                        const Icon(CupertinoIcons.person_2_fill),
                       ],
                     ),
                     onTap: () async {

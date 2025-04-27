@@ -21,13 +21,13 @@ TextStyle createGameTitle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-TextStyle roundTitle = TextStyle(
+TextStyle roundTitle = const TextStyle(
   fontSize: 60,
   color: CupertinoColors.white,
   fontWeight: FontWeight.bold,
 );
 
-TextStyle roundPlayers = TextStyle(
+TextStyle roundPlayers = const TextStyle(
   fontSize: 20,
   color: CupertinoColors.white,
   fontWeight: FontWeight.bold,

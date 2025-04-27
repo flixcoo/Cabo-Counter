@@ -24,9 +24,9 @@ class _CreateGameState extends State<CreateGame> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+        navigationBar: const CupertinoNavigationBar(
           previousPageTitle: 'Übersicht',
-          middle: const Text('Neues Spiel'),
+          middle: Text('Neues Spiel'),
         ),
         child: SafeArea(
             child: Center(
@@ -35,18 +35,18 @@ class _CreateGameState extends State<CreateGame> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spiel',
                 style: Styles.createGameTitle,
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: CupertinoTextField(
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 maxLength: 8,
-                prefix: Text('Name'),
+                prefix: const Text('Name'),
                 textAlign: TextAlign.right,
                 placeholder: 'Titel des Spiels',
                 controller: _gameTitleTextController,
@@ -54,18 +54,18 @@ class _CreateGameState extends State<CreateGame> {
             ),
             // Spielmodus-Auswahl mit Chevron
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: CupertinoTextField(
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 readOnly: true,
-                prefix: Text('Modus'),
+                prefix: const Text('Modus'),
                 suffix: Row(
                   children: [
                     Text(
                       selectedMode ?? 'Wähle einen Modus',
                     ),
-                    SizedBox(width: 3),
-                    CupertinoListTileChevron(),
+                    const SizedBox(width: 3),
+                    const CupertinoListTileChevron(),
                   ],
                 ),
                 onTap: () async {
@@ -73,7 +73,7 @@ class _CreateGameState extends State<CreateGame> {
                   final selected = await Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => ModeSelectionMenu(),
+                      builder: (context) => const ModeSelectionMenu(),
                     ),
                   );
 
@@ -87,7 +87,7 @@ class _CreateGameState extends State<CreateGame> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
                 style: Styles.createGameTitle,
@@ -104,9 +104,9 @@ class _CreateGameState extends State<CreateGame> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoButton(
                         padding: EdgeInsets.zero,
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               CupertinoIcons.add_circled,
                               color: CupertinoColors.activeGreen,
@@ -131,13 +131,13 @@ class _CreateGameState extends State<CreateGame> {
                             showCupertinoDialog(
                               context: context,
                               builder: (context) => CupertinoAlertDialog(
-                                title: Text('Maximale Spielerzahl erreicht'),
-                                content: Text(
+                                title: const Text('Maximale Spielerzahl erreicht'),
+                                content: const Text(
                                     'Es können maximal 5 Spieler hinzugefügt '
                                     'werden.'),
                                 actions: [
                                   CupertinoDialogAction(
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                 ],
@@ -156,7 +156,7 @@ class _CreateGameState extends State<CreateGame> {
                         children: [
                           CupertinoButton(
                             padding: EdgeInsets.zero,
-                            child: Icon(
+                            child: const Icon(
                               CupertinoIcons.minus_circle_fill,
                               color: CupertinoColors.destructiveRed,
                               size: 25,
@@ -173,7 +173,7 @@ class _CreateGameState extends State<CreateGame> {
                               controller: _playerNameTextControllers[index],
                               placeholder: 'Spieler:in ${index + 1}',
                               padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                             ),
                           ),
                         ],
@@ -186,9 +186,9 @@ class _CreateGameState extends State<CreateGame> {
             Center(
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'Spiel erstellen ',
                       style: TextStyle(
@@ -202,13 +202,13 @@ class _CreateGameState extends State<CreateGame> {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
-                        title: Text('Fehler'),
+                        title: const Text('Fehler'),
                         content:
-                            Text('Es muss ein Titel für das Spiel eingegeben '
+                            const Text('Es muss ein Titel für das Spiel eingegeben '
                                 'werden.'),
                         actions: [
                           CupertinoDialogAction(
-                            child: Text('OK'),
+                            child: const Text('OK'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],
@@ -220,12 +220,12 @@ class _CreateGameState extends State<CreateGame> {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
-                        title: Text('Fehler'),
+                        title: const Text('Fehler'),
                         content:
-                            Text('Es muss ein Spielmodus ausgewählt werden.'),
+                            const Text('Es muss ein Spielmodus ausgewählt werden.'),
                         actions: [
                           CupertinoDialogAction(
-                            child: Text('OK'),
+                            child: const Text('OK'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],
@@ -237,13 +237,13 @@ class _CreateGameState extends State<CreateGame> {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
-                        title: Text('Fehler'),
+                        title: const Text('Fehler'),
                         content:
-                            Text('Es müssen mindestens 2 Spieler hinzugefügt '
+                            const Text('Es müssen mindestens 2 Spieler hinzugefügt '
                                 'werden.'),
                         actions: [
                           CupertinoDialogAction(
-                            child: Text('OK'),
+                            child: const Text('OK'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],
@@ -255,11 +255,11 @@ class _CreateGameState extends State<CreateGame> {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
-                        title: Text('Fehler'),
-                        content: Text('Jeder Spieler muss einen Namen haben.'),
+                        title: const Text('Fehler'),
+                        content: const Text('Jeder Spieler muss einen Namen haben.'),
                         actions: [
                           CupertinoDialogAction(
-                            child: Text('OK'),
+                            child: const Text('OK'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],

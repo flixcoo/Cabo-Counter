@@ -147,12 +147,12 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: CupertinoListTile(
-                        title: const Text('Spieler:in'),
+                        title: Text('Spieler:in'),
                         trailing: Row(
-                          children: const [
+                          children: [
                             SizedBox(
                                 width: 100,
                                 child: Center(child: Text('Punkte'))),

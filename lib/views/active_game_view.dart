@@ -25,7 +25,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
                 style: theme.createGameTitle,
@@ -40,16 +40,16 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   title: Row(
                     children: [
                       _getPlacementPrefix(index),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text(
                         widget.gameSession.players[playerIndex],
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                   trailing: Row(
                     children: [
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text('${widget.gameSession.playerScores[playerIndex][0]} '
                           'Punkte')
                     ],
@@ -58,7 +58,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               },
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Runden',
                 style: theme.createGameTitle,
@@ -69,15 +69,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               itemCount: widget.gameSession.round,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
-                    padding: EdgeInsets.all(1),
+                    padding: const EdgeInsets.all(1),
                     child: CupertinoListTile(
                       title: Text(
                         'Runde ${index + 1}',
                       ),
                       trailing: index + 1 != widget.gameSession.round ||
                               widget.gameSession.finished == true
-                          ? (Text('\u{2705}', style: TextStyle(fontSize: 22)))
-                          : Text('\u{23F3}', style: TextStyle(fontSize: 22)),
+                          ? (const Text('\u{2705}', style: TextStyle(fontSize: 22)))
+                          : const Text('\u{23F3}', style: TextStyle(fontSize: 22)),
                       onTap: () async {
                         // ignore: unused_local_variable
                         final val = await Navigator.push(
@@ -120,24 +120,24 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   Widget _getPlacementPrefix(int index) {
     switch (index) {
       case 0:
-        return Text(
+        return const Text(
           '\u{1F947}',
           style: TextStyle(fontSize: 22),
         );
       case 1:
-        return Text(
+        return const Text(
           '\u{1F948}',
           style: TextStyle(fontSize: 22),
         );
       case 2:
-        return Text(
+        return const Text(
           '\u{1F949}',
           style: TextStyle(fontSize: 22),
         );
       default:
         return Text(
           ' ${index + 1}.',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         );
     }
   }

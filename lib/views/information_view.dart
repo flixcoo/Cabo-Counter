@@ -14,7 +14,7 @@ class InformationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+        navigationBar: const CupertinoNavigationBar(
           middle: Text('Über'),
         ),
         child: SafeArea(
@@ -23,7 +23,7 @@ class InformationView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     'Cabo Counter',
@@ -34,13 +34,13 @@ class InformationView extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: SizedBox(
                       height: 200,
                       child:
                           Image.asset('assets/cabo-counter-logo_rounded.png'),
                     )),
-                Padding(
+                const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
                       'Hey :) Danke, dass du als eine:r der ersten User '
@@ -55,10 +55,10 @@ class InformationView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       softWrap: true,
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-                Text(
+                const Text(
                   '\u00A9 Felix Kirchner',
                   style: TextStyle(fontSize: 16),
                 ),
@@ -68,15 +68,15 @@ class InformationView extends StatelessWidget {
                     IconButton(
                         onPressed: () => launchUrl(
                             Uri.parse('https://www.instagram.com/fx.kr')),
-                        icon: Icon(FontAwesomeIcons.instagram)),
+                        icon: const Icon(FontAwesomeIcons.instagram)),
                     IconButton(
                         onPressed: () => launchUrl(
                             Uri.parse('mailto:felix.kirchner.fk@gmail.com')),
-                        icon: Icon(CupertinoIcons.envelope)),
+                        icon: const Icon(CupertinoIcons.envelope)),
                     IconButton(
                         onPressed: () => launchUrl(
                             Uri.parse('https://www.github.com/flixcoo')),
-                        icon: Icon(FontAwesomeIcons.github)),
+                        icon: const Icon(FontAwesomeIcons.github)),
                   ],
                 )
               ],
@@ -95,12 +95,12 @@ class InformationView extends StatelessWidget {
                       textAlign: TextAlign.center,
                     );
                   } else if (snapshot.hasError) {
-                    return Text(
+                    return const Text(
                       'App-Version -.-.- (Build -)',
                       textAlign: TextAlign.center,
                     );
                   }
-                  return Text(
+                  return const Text(
                     'Lade Version...',
                     textAlign: TextAlign.center,
                   );

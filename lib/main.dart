@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'CABO-Counter',
-      home: MainMenuView(),
+      home: const MainMenuView(),
     );
   }
 }
