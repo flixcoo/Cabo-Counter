@@ -1,15 +1,11 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Flutter
 
 on:
   push:
-    branches-ignore: []
+    branches:
+      - "develop"
+      - "main"
   pull_request:
-    branches: [ "develop", "prod" ]
 
 jobs:
   lint:
@@ -24,7 +20,6 @@ jobs:
           channel: 'stable'
           
       - name: Check Formatting
-        id: check_format
         run: |
           if ! dart format --set-exit-if-changed .; then
             echo "needs_formatting=true" >> $GITHUB_OUTPUT
@@ -56,21 +51,39 @@ jobs:
           
       - name: Auto-format
         run: |
-          dart format .  # Korrigiert Formatierung
-          dart fix --apply  # Behebt einfache Issues
+          dart format .
+          dart fix --apply
       
       - name: Commit Changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "style: Auto-formatting [skip ci]"
+          git commit -m "Actions: Auto-formatting [skip ci]"
           git push
-          
+    
+  test:
+    runs-on: macos-latest
+    needs: lint
 
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: 'stable'
+          
+      - name: Run Tests
+        run: flutter test
+
+    
   build:
     runs-on: macos-latest
+    needs: test
     if: false # skips job
+    
     steps:
       - uses: actions/checkout@v4
       
@@ -88,18 +101,3 @@ jobs:
         
       - name: Run App
         run: flutter run
-  
-  test:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set Up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.29.2'
-          channel: 'stable'
-          
-      - name: Run tests
-        run: flutter test
