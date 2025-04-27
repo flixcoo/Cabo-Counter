@@ -131,8 +131,7 @@ class _CreateGameState extends State<CreateGame> {
                             showCupertinoDialog(
                               context: context,
                               builder: (context) => CupertinoAlertDialog(
-                                title:
-                                    const Text('Maximale Spielerzahl erreicht'),
+                                title: Text('Maximale Spielerzahl erreicht'),
                                 content: const Text(
                                     'Es können maximal 5 Spieler hinzugefügt '
                                     'werden.'),
