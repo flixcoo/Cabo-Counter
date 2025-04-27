@@ -21,18 +21,13 @@ jobs:
           
       - name: Check Formatting
         run: |
-          if ! dart format --set-exit-if-changed .; then
-            echo "needs_formatting=true" >> $GITHUB_OUTPUT
-          fi
+          if ! dart format --set-exit-if-changed .
           flutter analyze
   format:
     runs-on: macos-latest
     needs: lint
     # Only when lint fails, and its a push to develop branch
-    if: |
-      (needs.lint.result == 'failure' && 
-       needs.lint.outputs.needs_formatting == 'true') &&
-      github.event_name == 'push'
+    if: ${{ failure() && needs.lint.result == 'failure' }} 
       
     steps:
       - uses: actions/checkout@v4
