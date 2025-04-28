@@ -10,9 +10,6 @@ on:
 jobs:
   lint:
     runs-on: macos-latest
-    continue-on-error: true
-    outputs:
-      needs_formatting: ${{ steps.check_format.outputs.needs_formatting }}
     steps:
       - uses: actions/checkout@v4
       
@@ -24,18 +21,13 @@ jobs:
           
       - name: Check Formatting
         run: |
-         if ! dart format --set-exit-if-changed .; then
-            echo "needs_formatting=true" >> $GITHUB_OUTPUT
-            echo "::warning::Formatting issues detected"
-          else
-            echo "needs_formatting=false" >> $GITHUB_OUTPUT
-          fi
-          flutter analyze || echo "::warning::Lint issues found"
+          if ! dart format --set-exit-if-changed .
+          flutter analyze
           
   format:
     runs-on: macos-latest
     needs: lint
-    if: ${{ needs.lint.outputs.needs_formatting == 'true' && github.event_name == 'push' }}      
+    if: ${{ failure() && needs.lint.result == 'failure' && github.event_name == 'push' && github.ref == 'refs/heads/develop'}} 
     steps:
       - uses: actions/checkout@v4
       
