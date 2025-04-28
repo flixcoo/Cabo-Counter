@@ -20,9 +20,7 @@ jobs:
           channel: 'stable'
           
       - name: Check Formatting
-        run: |
-          if ! dart format --set-exit-if-changed .
-          flutter analyze
+        run: flutter analyze
           
   format:
     runs-on: macos-latest
