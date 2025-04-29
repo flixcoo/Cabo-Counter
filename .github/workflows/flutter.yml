@@ -65,6 +65,7 @@ jobs:
     
   test:
     runs-on: macos-latest
+    if: always()
     needs: [lint, format]
 
     steps:
