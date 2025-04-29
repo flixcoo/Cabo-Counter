@@ -65,6 +65,8 @@ jobs:
     
   test:
     runs-on: macos-latest
+    if: always()
+    needs: [lint, format]
 
     steps:
       - uses: actions/checkout@v4
@@ -82,6 +84,7 @@ jobs:
   build:
     runs-on: macos-latest
     if: false # skips job
+    needs: [lint, format, test]
     
     steps:
       - uses: actions/checkout@v4

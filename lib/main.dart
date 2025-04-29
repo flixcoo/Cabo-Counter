@@ -21,7 +21,7 @@ class App extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'CABO-Counter',
+      title: 'Cabo Counter',
       home: const MainMenuView(),
     );
   }
