@@ -50,7 +50,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   trailing: Row(
                     children: [
                       const SizedBox(width: 5),
-                      Text('${widget.gameSession.playerScores[playerIndex][0]} '
+                      Text('${widget.gameSession.playerScores[playerIndex]} '
                           'Punkte')
                     ],
                   ),
@@ -109,8 +109,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         List<int>.generate(widget.gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
-      int scoreA = widget.gameSession.playerScores[a][0];
-      int scoreB = widget.gameSession.playerScores[b][0];
+      int scoreA = widget.gameSession.playerScores[a];
+      int scoreB = widget.gameSession.playerScores[b];
       return scoreA.compareTo(scoreB);
     });
     return playerIndices;
