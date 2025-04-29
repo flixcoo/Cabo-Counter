@@ -201,7 +201,6 @@ class GameSession {
   /// Sums up the points of all players and stores the result in the
   /// playerScores list.
   void _sumPoints() {
-    print('_sumPoints()');
     for (int i = 0; i < players.length; i++) {
       playerScores[i] = 0;
       for (int j = 0; j < roundList.length; j++) {

@@ -285,7 +285,7 @@ class _CreateGameState extends State<CreateGame> {
                     players: players,
                     gameHasPointLimit: selectedMode!,
                   );
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
                           builder: (context) =>
