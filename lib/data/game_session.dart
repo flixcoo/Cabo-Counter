@@ -1,7 +1,7 @@
 /// This class represents a game session for the Cabo game.
 /// [gameTitle] is the title of the game.
 /// [players] is a string list of player names.
-/// [pointLimit] is a boolean indicating if the game has the
+/// [gameHasPointLimit] is a boolean indicating if the game has the
 /// default point limit of 101 points or not.
 /// [createdAt] is the timestamp of when the game session was created.
 /// [round] is the current round number.
@@ -10,7 +10,7 @@
 class GameSession {
   final DateTime createdAt = DateTime.now();
   final String gameTitle;
-  final bool pointLimit;
+  final bool gameHasPointLimit;
   final List<String> players;
   List<List<int>> playerScores = List.generate(5, (_) => [0, 0]);
   int round = 1;
@@ -20,14 +20,14 @@ class GameSession {
   GameSession({
     required this.gameTitle,
     required this.players,
-    required this.pointLimit,
+    required this.gameHasPointLimit,
   });
 
   @override
   String toString() {
     return ('GameSession: [gameTitle: $gameTitle, '
         'players: $players, '
-        'round: $round, pointLimit: $pointLimit, '
+        'round: $round, pointLimit: $gameHasPointLimit, '
         'playerScores: $playerScores]');
   }
 
@@ -106,9 +106,9 @@ class GameSession {
       for (int j = 1; j < playerScores[i].length; j++) {
         playerScores[i][0] += playerScores[i][j];
       }
-      if (pointLimit && playerScores[i][0] > 101) {
+      if (gameHasPointLimit && playerScores[i][0] > 100) {
         finished = true;
-        print('${players[i]} hat die 101 Punkte ueberschritten, '
+        print('${players[i]} hat die 100 Punkte ueberschritten, '
             'deswegen wurde das Spiel beendet');
         _determineWinner();
       }

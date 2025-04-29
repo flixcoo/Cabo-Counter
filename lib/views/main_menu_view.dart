@@ -18,36 +18,36 @@ class _MainMenuViewState extends State<MainMenuView> {
     GameSession(
         gameTitle: 'Spiel am 27.02.2025',
         players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-        pointLimit: true),
+        gameHasPointLimit: true),
     GameSession(
         gameTitle: 'Freundschaftsrunde',
         players: ['Felix', 'Jonas', 'Nils'],
-        pointLimit: false),
+        gameHasPointLimit: false),
     GameSession(
       gameTitle: 'Familienabend',
       players: ['Mama', 'Papa', 'Lisa'],
-      pointLimit: true,
+      gameHasPointLimit: true,
     ),
     GameSession(
         gameTitle: 'Turnier 1. Runde',
         players: ['Tim', 'Max', 'Sophie', 'Lena'],
-        pointLimit: false),
+        gameHasPointLimit: false),
     GameSession(
         gameTitle: '2 Namen max length',
         players: ['Heinrich', 'Johannes'],
-        pointLimit: true),
+        gameHasPointLimit: true),
     GameSession(
         gameTitle: '3 Namen max length',
         players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-        pointLimit: false),
+        gameHasPointLimit: false),
     GameSession(
         gameTitle: '4 Namen max length',
         players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-        pointLimit: true),
+        gameHasPointLimit: true),
     GameSession(
         gameTitle: '5 Namen max length',
         players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-        pointLimit: false),
+        gameHasPointLimit: false),
   ];
 
   @override
@@ -97,7 +97,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             style: const TextStyle(fontSize: 14),
                           )
                         : Text(
-                            'Modus: ${_translateGameMode(session.pointLimit)}',
+                            'Modus: ${_translateGameMode(session.gameHasPointLimit)}',
                             style: const TextStyle(fontSize: 14),
                           ),
                     trailing: Row(
