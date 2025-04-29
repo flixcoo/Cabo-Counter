@@ -91,7 +91,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: CupertinoListTile(
                     title: Text(session.gameTitle),
-                    subtitle: session.finished == true
+                    subtitle: session.isGameFinished == true
                         ? Text(
                             '\u{1F947} ${session.winner}',
                             style: const TextStyle(fontSize: 14),
@@ -102,7 +102,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           ),
                     trailing: Row(
                       children: [
-                        Text('${session.round}'),
+                        Text('${session.roundNumber}'),
                         const SizedBox(width: 3),
                         const Icon(
                             CupertinoIcons.arrow_2_circlepath_circle_fill),

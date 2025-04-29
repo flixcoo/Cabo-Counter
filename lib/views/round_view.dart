@@ -41,8 +41,8 @@ class _RoundViewState extends State<RoundView> {
   @override
   void initState() {
     print('=== Runde ${widget.roundNumber} geöffnet ===');
-    if (widget.roundNumber < widget.gameSession.round ||
-        widget.gameSession.finished == true) {
+    if (widget.roundNumber < widget.gameSession.roundNumber ||
+        widget.gameSession.isGameFinished == true) {
       print('Die Runde ${widget.roundNumber} wurde bereits gespielt, deshalb '
           'werden die alten Punktestaende angezeigt');
 
@@ -282,7 +282,7 @@ class _RoundViewState extends State<RoundView> {
                         onPressed: _areRoundInputsValid()
                             ? () {
                                 _finishRound();
-                                if (widget.gameSession.finished == true) {
+                                if (widget.gameSession.isGameFinished == true) {
                                   Navigator.pop(context, widget.gameSession);
                                 } else {
                                   Navigator.pushReplacement(
@@ -351,7 +351,8 @@ class _RoundViewState extends State<RoundView> {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
     // The shown round is smaller than the newest round
-    if (widget.gameSession.round < widget.gameSession.playerScores[0].length) {
+    if (widget.gameSession.roundNumber <
+        widget.gameSession.playerScores[0].length) {
       print('Da diese Runde bereits gespielt wurde, werden die alten '
           'Punktestaende ueberschrieben');
       print('Alte Punktestaende:');
@@ -360,7 +361,7 @@ class _RoundViewState extends State<RoundView> {
 
     _calculateScoredPoints();
     widget.gameSession.sumPoints();
-    if (widget.gameSession.finished == true) {
+    if (widget.gameSession.isGameFinished == true) {
       print('Das Spiel ist beendet');
     } else {
       if (widget.roundNumber >= widget.gameSession.playerScores[0].length - 1) {
