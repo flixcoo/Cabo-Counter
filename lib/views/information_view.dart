@@ -91,7 +91,7 @@ class InformationView extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Text(
-                      'App-Version ${snapshot.data!.version} '
+                      'Alpha ${snapshot.data!.version} '
                       '(Build ${snapshot.data!.buildNumber})',
                       textAlign: TextAlign.center,
                     );
