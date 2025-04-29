@@ -53,7 +53,7 @@ class _RoundViewState extends State<RoundView> {
             gameSession.roundList[widget.roundNumber - 1].scores[i].toString();
       }
       _kamikazePlayerIndex =
-          gameSession.roundList[widget.roundNumber - 1].kamikaze;
+          gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
     super.initState();
   }

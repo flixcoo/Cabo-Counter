@@ -1,13 +1,14 @@
 import 'package:cabo_counter/data/round.dart';
 
-/// This class represents a game session for the Cabo game.
-/// [gameTitle] is the title of the game.
-/// [players] is a string list of player names.
-/// [gameHasPointLimit] is a boolean indicating if the game has the
-/// default point limit of 101 points or not.
+/// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
+/// [gameTitle] is the title of the game.
+/// [gameHasPointLimit] is a boolean indicating if the game has the default
+/// point limit of 101 points or not.
+/// [players] is a string list of player names.
+/// [playerScores] is a list of the summed scores of all players.
 /// [roundNumber] is the current round number.
-/// [isGameFinished] is a boolean indicating if the game session is finished.
+/// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession {
   final DateTime createdAt = DateTime.now();
@@ -162,7 +163,7 @@ class GameSession {
       roundNum: roundNum,
       scores: roundScores,
       scoreUpdates: scoreUpdates,
-      kamikaze: kamikazePlayerIndex,
+      kamikazePlayerIndex: kamikazePlayerIndex,
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
