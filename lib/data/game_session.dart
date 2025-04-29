@@ -4,8 +4,8 @@
 /// [gameHasPointLimit] is a boolean indicating if the game has the
 /// default point limit of 101 points or not.
 /// [createdAt] is the timestamp of when the game session was created.
-/// [round] is the current round number.
-/// [finished] is a boolean indicating if the game session is finished.
+/// [roundNumber] is the current round number.
+/// [isGameFinished] is a boolean indicating if the game session is finished.
 /// [winner] is the name of the player who won the game.
 class GameSession {
   final DateTime createdAt = DateTime.now();
@@ -13,8 +13,8 @@ class GameSession {
   final bool gameHasPointLimit;
   final List<String> players;
   List<List<int>> playerScores = List.generate(5, (_) => [0, 0]);
-  int round = 1;
-  bool finished = false;
+  int roundNumber = 1;
+  bool isGameFinished = false;
   String winner = '';
 
   GameSession({
@@ -25,10 +25,10 @@ class GameSession {
 
   @override
   String toString() {
-    return ('GameSession: [gameTitle: $gameTitle, '
-        'players: $players, '
-        'round: $round, pointLimit: $gameHasPointLimit, '
-        'playerScores: $playerScores]');
+    return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
+        'gameHasPointLimit: $gameHasPointLimit, players: $players, '
+        'playerScores: $playerScores, roundNumber: $roundNumber, '
+        'isGameFinished: $isGameFinished, winner: $winner]');
   }
 
   // FIXME Debug
@@ -55,7 +55,7 @@ class GameSession {
 
   /// Increases the round number by 1.
   void increaseRound() {
-    round++;
+    roundNumber++;
   }
 
   /// Expands the player score lists by adding a new score of 0 for each player.
@@ -106,12 +106,22 @@ class GameSession {
       for (int j = 1; j < playerScores[i].length; j++) {
         playerScores[i][0] += playerScores[i][j];
       }
-      if (gameHasPointLimit && playerScores[i][0] > 100) {
-        finished = true;
-        print('${players[i]} hat die 100 Punkte ueberschritten, '
-            'deswegen wurde das Spiel beendet');
-        _determineWinner();
+      if (gameHasPointLimit) {
+        print('playerScores[i][0]: ${playerScores[i][0]}');
+        if (playerScores[i][0] == 100) {
+          print('${players[i]} hat genau 100 Punkte erreicht, '
+              'seine Punkte werden auf 50 Punkte reduziert');
+          playerScores[i][playerScores[i].length - 1] -=
+              50; // Subtract 50 from this round
+          playerScores[i][0] -= 50; // Subtract 50 from the sum
+        } else if (playerScores[i][0] > 100) {
+          isGameFinished = true;
+          print('${players[i]} hat die 100 Punkte ueberschritten, '
+              'deswegen wurde das Spiel beendet');
+          _determineWinner();
+        }
       }
     }
+    print('GameSession: sumPoints: $playerScores');
   }
 }
