@@ -50,7 +50,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   trailing: Row(
                     children: [
                       const SizedBox(width: 5),
-                      Text('${widget.gameSession.playerScores[playerIndex][0]} '
+                      Text('${widget.gameSession.playerScores[playerIndex]} '
                           'Punkte')
                     ],
                   ),
@@ -66,7 +66,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: widget.gameSession.round,
+              itemCount: widget.gameSession.roundNumber,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                     padding: const EdgeInsets.all(1),
@@ -74,8 +74,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       title: Text(
                         'Runde ${index + 1}',
                       ),
-                      trailing: index + 1 != widget.gameSession.round ||
-                              widget.gameSession.finished == true
+                      trailing: index + 1 != widget.gameSession.roundNumber ||
+                              widget.gameSession.isGameFinished == true
                           ? (const Text('\u{2705}',
                               style: TextStyle(fontSize: 22)))
                           : const Text('\u{23F3}',
@@ -109,8 +109,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         List<int>.generate(widget.gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
-      int scoreA = widget.gameSession.playerScores[a][0];
-      int scoreB = widget.gameSession.playerScores[b][0];
+      int scoreA = widget.gameSession.playerScores[a];
+      int scoreB = widget.gameSession.playerScores[b];
       return scoreA.compareTo(scoreB);
     });
     return playerIndices;

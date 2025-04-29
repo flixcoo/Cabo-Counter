@@ -18,8 +18,12 @@ class _CreateGameState extends State<CreateGame> {
   ];
   final TextEditingController _gameTitleTextController =
       TextEditingController();
+
+  /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
-  String? selectedMode; // Variable für den ausgewählten Spielmodus
+
+  /// Variable to store the selected game mode.
+  bool? selectedMode;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: CupertinoTextField(
                 decoration: const BoxDecoration(),
-                maxLength: 8,
+                maxLength: 16,
                 prefix: const Text('Name'),
                 textAlign: TextAlign.right,
                 placeholder: 'Titel des Spiels',
@@ -62,7 +66,9 @@ class _CreateGameState extends State<CreateGame> {
                 suffix: Row(
                   children: [
                     Text(
-                      selectedMode ?? 'Wähle einen Modus',
+                      selectedMode == null
+                          ? 'Wähle einen Modus'
+                          : (selectedMode! ? '101 Punkte' : 'Unbegrenzt'),
                     ),
                     const SizedBox(width: 3),
                     const CupertinoListTileChevron(),
@@ -131,7 +137,8 @@ class _CreateGameState extends State<CreateGame> {
                             showCupertinoDialog(
                               context: context,
                               builder: (context) => CupertinoAlertDialog(
-                                title: const Text('Maximale Spielerzahl erreicht'),
+                                title:
+                                    const Text('Maximale Spielerzahl erreicht'),
                                 content: const Text(
                                     'Es können maximal 5 Spieler hinzugefügt '
                                     'werden.'),
@@ -276,9 +283,9 @@ class _CreateGameState extends State<CreateGame> {
                   GameSession gameSession = GameSession(
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: selectedMode == '101 Pkt.' ? true : false,
+                    gameHasPointLimit: selectedMode!,
                   );
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
                           builder: (context) =>
