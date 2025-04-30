@@ -38,6 +38,30 @@ class GameSession {
         'winner: $winner]');
   }
 
+  /// Converts the GameSession object to a JSON map.
+  Map<String, dynamic> toJson() => {
+        'gameTitle': gameTitle,
+        'gameHasPointLimit': gameHasPointLimit,
+        'players': players,
+        'playerScores': playerScores,
+        'roundNumber': roundNumber,
+        'isGameFinished': isGameFinished,
+        'winner': winner,
+        'roundList': roundList.map((e) => e.toJson()).toList()
+      };
+
+  /// Creates a GameSession object from a JSON map.
+  GameSession.fromJson(Map<String, dynamic> json)
+      : gameTitle = json['gameTitle'],
+        gameHasPointLimit = json['gameHasPointLimit'],
+        players = List<String>.from(json['players']),
+        playerScores = List<int>.from(json['playerScores']),
+        roundNumber = json['roundNumber'],
+        isGameFinished = json['isGameFinished'],
+        winner = json['winner'],
+        roundList =
+            (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
+
   /// Returns the length of all player names combined.
   int getLengthOfPlayerNames() {
     int length = 0;
