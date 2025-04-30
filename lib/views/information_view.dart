@@ -1,3 +1,4 @@
+import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -83,7 +84,10 @@ class InformationView extends StatelessWidget {
                 ),
                 CupertinoButton(
                     child: const Text('Spieldaten exportieren'),
-                    onPressed: () => {saveJsonToDevice()})
+                    onPressed: () => LocalStorageService.exportJsonFile()),
+                CupertinoButton(
+                    child: const Text('Spieldaten importieren'),
+                    onPressed: () => LocalStorageService.importJsonFile()),
               ],
             ),
             Positioned(
@@ -114,9 +118,5 @@ class InformationView extends StatelessWidget {
             ),
           ],
         )));
-  }
-
-  void saveJsonToDevice() async {
-    //todo: implement
   }
 }

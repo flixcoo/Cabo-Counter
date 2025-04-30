@@ -1,17 +1,34 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/globals.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
 
-  /// Speichert GameSessions im App-Dokumentenverzeichnis
+  /// Writes the game session list to a  JSON file and returns it as string.
+  static String getJsonFile() {
+    final jsonFile =
+        Globals.gameList.map((session) => session.toJson()).toList();
+    return json.encode(jsonFile);
+  }
+
+  /// Returns the path to the local JSON file.
+  static Future<File> _getFilePath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = '${directory.path}/$_fileName';
+    return File(path);
+  }
+
+  /// Saves the game sessions to a local JSON file.
   static Future<void> saveGameSessions() async {
     try {
-      final file = await _getLocalFile();
+      final file = await _getFilePath();
       final jsonFile = getJsonFile();
       await file.writeAsString(jsonFile);
       print('Daten gespeichert');
@@ -20,44 +37,82 @@ class LocalStorageService {
     }
   }
 
-  /// Lädt GameSessions aus dem App-Dokumentenverzeichnis
+  /// Loads the game data from a local JSON file.
   static Future<void> loadGameSessions() async {
-    print('Versuche, Daten zu laden...'); // FIXME Debug-Ausgabe
+    print('Versuche, Daten zu laden...');
     try {
-      final file = await _getLocalFile();
+      final file = await _getFilePath();
       if (await file.exists()) {
-        print('Datei existiert'); // FIXME Debug-Ausgabe
+        print('Es existiert bereits eine Datei mit Spieldaten');
         final jsonString = await file.readAsString();
         if (jsonString.isNotEmpty) {
-          print('Datei ist nicht leer'); // FIXME Debug-Ausgabe
+          print('Die Datei ist nicht leer');
           final jsonList = json.decode(jsonString) as List<dynamic>;
-          print('JSON: $jsonList'); // FIXME Debug-Ausgabe
-          Globals.gameList =
-              jsonList.map((json) => GameSession.fromJson(json)).toList();
-          print('Daten erfolgreich geladen');
+          print('JSON: $jsonList');
+          Globals.gameList = jsonList
+              .map((jsonItem) =>
+                  GameSession.fromJson(jsonItem as Map<String, dynamic>))
+              .toList()
+              .cast<GameSession>(); // Explicit cast to List<GameSession>
+          print('Die Daten wurden erfolgreich geladen');
         } else {
-          print('Datei ist leer');
+          print('Die Datei ist leer');
         }
       } else {
-        print('Datei existiert nicht');
+        print('Es existiert bisher noch keine Datei mit Spieldaten');
       }
     } catch (e) {
-      print('Fehler beim Laden: $e');
-      // Bei Fehler eine leere Liste setzen
+      print('Fehler beim Laden der Spieldaten:\n$e');
       Globals.gameList = [];
     }
   }
 
-  static String getJsonFile() {
-    final jsonFile =
-        Globals.gameList.map((session) => session.toJson()).toList();
-    return json.encode(jsonFile);
+  /// Opens the file picker to save a JSON file with the current game data.
+  static Future<void> exportJsonFile() async {
+    final jsonString = getJsonFile();
+    try {
+      final bytes = Uint8List.fromList(utf8.encode(jsonString));
+      final result = await FileSaver.instance.saveAs(
+        name: 'cabo_counter_data',
+        bytes: bytes,
+        ext: 'json',
+        mimeType: MimeType.json,
+      );
+      print('Datei gespeichert: $result');
+    } catch (e) {
+      print('Fehler beim Speichern: $e');
+    }
   }
 
-  static Future<File> _getLocalFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/$_fileName';
-    print('Speicherpfad: $path'); // FIXME Debug-Ausgabe
-    return File(path);
+  static Future<bool> importJsonFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+      );
+      String jsonString = '';
+      if (result != null) {
+        if (result.files.single.bytes != null) {
+          final Uint8List fileBytes = result.files.single.bytes!;
+          jsonString = utf8.decode(fileBytes);
+        } else if (result.files.single.path != null) {
+          final file = File(result.files.single.path!);
+          jsonString = await file.readAsString();
+        }
+        final jsonList = json.decode(jsonString) as List<dynamic>;
+        print('JSON Inhalt: $jsonList');
+        Globals.gameList = jsonList
+            .map((jsonItem) =>
+                GameSession.fromJson(jsonItem as Map<String, dynamic>))
+            .toList();
+        return true;
+      } else {
+        print('Der Dialog wurde abgebrochen');
+        return false;
+      }
+    } catch (e) {
+      print('Fehler beim Importieren: $e');
+      return false;
+    }
   }
 }
