@@ -83,11 +83,46 @@ class InformationView extends StatelessWidget {
                   ],
                 ),
                 CupertinoButton(
+                    sizeStyle: CupertinoButtonSize.medium,
                     child: const Text('Spieldaten exportieren'),
-                    onPressed: () => LocalStorageService.exportJsonFile()),
+                    onPressed: () async =>
+                        await LocalStorageService.exportJsonFile()
+                            ? null
+                            : showCupertinoDialog(
+                                context: context,
+                                builder: (context) => CupertinoAlertDialog(
+                                      title: const Text('Fehler'),
+                                      content: const Text(
+                                          'Datei konnte nicht exportiert werden.'),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: const Text('OK'),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ))),
                 CupertinoButton(
+                    sizeStyle: CupertinoButtonSize.medium,
                     child: const Text('Spieldaten importieren'),
-                    onPressed: () => LocalStorageService.importJsonFile()),
+                    onPressed: () async => {
+                          await LocalStorageService.importJsonFile()
+                              ? null
+                              : showCupertinoDialog(
+                                  context: context,
+                                  builder: (context) => CupertinoAlertDialog(
+                                        title: const Text('Fehler'),
+                                        content: const Text(
+                                            'Datei konnte nicht importiert werden.'),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: const Text('OK'),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                          ),
+                                        ],
+                                      ))
+                        }),
               ],
             ),
             Positioned(

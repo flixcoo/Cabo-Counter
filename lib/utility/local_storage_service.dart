@@ -68,7 +68,7 @@ class LocalStorageService {
   }
 
   /// Opens the file picker to save a JSON file with the current game data.
-  static Future<void> exportJsonFile() async {
+  static Future<bool> exportJsonFile() async {
     final jsonString = getJsonFile();
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
@@ -79,14 +79,18 @@ class LocalStorageService {
         mimeType: MimeType.json,
       );
       print('Datei gespeichert: $result');
+      return true;
     } catch (e) {
       print('Fehler beim Speichern: $e');
+      return false;
     }
   }
 
+  /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<bool> importJsonFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
+        dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
         type: FileType.custom,
         allowedExtensions: ['json'],
       );
@@ -108,7 +112,7 @@ class LocalStorageService {
         return true;
       } else {
         print('Der Dialog wurde abgebrochen');
-        return false;
+        return true;
       }
     } catch (e) {
       print('Fehler beim Importieren: $e');
