@@ -1,4 +1,4 @@
-import 'package:cabo_counter/utility/theme.dart' as theme;
+import 'package:cabo_counter/utility/theme.dart';
 import 'package:cabo_counter/views/main_menu_view.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,10 +14,10 @@ class App extends StatelessWidget {
     return CupertinoApp(
       theme: CupertinoThemeData(
         brightness: Brightness.dark,
-        primaryColor: theme.primaryColor,
-        scaffoldBackgroundColor: theme.backgroundColor,
+        primaryColor: Theme.primaryColor,
+        scaffoldBackgroundColor: Theme.backgroundColor,
         textTheme: CupertinoTextThemeData(
-          primaryColor: theme.primaryColor,
+          primaryColor: Theme.primaryColor,
         ),
       ),
       debugShowCheckedModeBanner: false,

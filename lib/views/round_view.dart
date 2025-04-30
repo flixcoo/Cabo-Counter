@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/theme.dart' as theme;
+import 'package:cabo_counter/utility/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -86,7 +86,7 @@ class _RoundViewState extends State<RoundView> {
                   children: [
                     const SizedBox(height: 40),
                     Text('Runde ${widget.roundNumber}',
-                        style: theme.roundTitle),
+                        style: Theme.roundTitle),
                     const SizedBox(height: 10),
                     const Text(
                       'Wer hat CABO gesagt?',
@@ -101,8 +101,8 @@ class _RoundViewState extends State<RoundView> {
                       child: SizedBox(
                         height: 40,
                         child: CupertinoSegmentedControl<int>(
-                          unselectedColor: theme.backgroundTintColor,
-                          selectedColor: theme.primaryColor,
+                          unselectedColor: Theme.backgroundTintColor,
+                          selectedColor: Theme.primaryColor,
                           groupValue: _caboPlayerIndex,
                           children: Map.fromEntries(widget.gameSession.players
                               .asMap()
@@ -267,7 +267,7 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: theme.backgroundTintColor,
+                  color: Theme.backgroundTintColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
