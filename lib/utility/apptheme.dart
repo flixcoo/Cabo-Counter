@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class Theme {
+class AppTheme {
   static Color white = CupertinoColors.white;
   static Color primaryColor = CupertinoColors.systemGreen;
   static Color backgroundColor = const Color(0xFF101010);

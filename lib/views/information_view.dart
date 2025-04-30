@@ -14,6 +14,7 @@ class InformationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: const CupertinoNavigationBar(
           middle: Text('Über'),
         ),
