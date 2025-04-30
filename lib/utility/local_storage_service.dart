@@ -11,10 +11,9 @@ class LocalStorageService {
   /// Speichert GameSessions im App-Dokumentenverzeichnis
   static Future<void> saveGameSessions() async {
     try {
-      List<GameSession> sessions = Globals.gameList;
       final file = await _getLocalFile();
-      final jsonList = sessions.map((session) => session.toJson()).toList();
-      await file.writeAsString(json.encode(jsonList));
+      final jsonFile = getJsonFile();
+      await file.writeAsString(jsonFile);
       print('Daten gespeichert');
     } catch (e) {
       print('Fehler beim Speichern: $e');
@@ -47,6 +46,12 @@ class LocalStorageService {
       // Bei Fehler eine leere Liste setzen
       Globals.gameList = [];
     }
+  }
+
+  static String getJsonFile() {
+    final jsonFile =
+        Globals.gameList.map((session) => session.toJson()).toList();
+    return json.encode(jsonFile);
   }
 
   static Future<File> _getLocalFile() async {

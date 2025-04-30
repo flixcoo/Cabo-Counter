@@ -80,7 +80,10 @@ class InformationView extends StatelessWidget {
                             Uri.parse('https://www.github.com/flixcoo')),
                         icon: const Icon(FontAwesomeIcons.github)),
                   ],
-                )
+                ),
+                CupertinoButton(
+                    child: const Text('Spieldaten exportieren'),
+                    onPressed: () => {saveJsonToDevice()})
               ],
             ),
             Positioned(
@@ -111,5 +114,9 @@ class InformationView extends StatelessWidget {
             ),
           ],
         )));
+  }
+
+  void saveJsonToDevice() async {
+    //todo: implement
   }
 }
