@@ -275,7 +275,6 @@ class _CreateGameState extends State<CreateGame> {
                         ],
                       ),
                     );
-                    return;
                   }
 
                   List<String> players = [];
