@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/information_view.dart';
@@ -14,46 +14,8 @@ class MainMenuView extends StatefulWidget {
 }
 
 class _MainMenuViewState extends State<MainMenuView> {
-  final List<GameSession> gameSessionArray = [
-    GameSession(
-        gameTitle: 'Spiel am 27.02.2025',
-        players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: 'Freundschaftsrunde',
-        players: ['Felix', 'Jonas', 'Nils'],
-        gameHasPointLimit: false),
-    GameSession(
-      gameTitle: 'Familienabend',
-      players: ['Mama', 'Papa', 'Lisa'],
-      gameHasPointLimit: true,
-    ),
-    GameSession(
-        gameTitle: 'Turnier 1. Runde',
-        players: ['Tim', 'Max', 'Sophie', 'Lena'],
-        gameHasPointLimit: false),
-    GameSession(
-        gameTitle: '2 Namen max length',
-        players: ['Heinrich', 'Johannes'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: '3 Namen max length',
-        players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-        gameHasPointLimit: false),
-    GameSession(
-        gameTitle: '4 Namen max length',
-        players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: '5 Namen max length',
-        players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-        gameHasPointLimit: false),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    gameSessionArray.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: IconButton(
@@ -84,9 +46,9 @@ class _MainMenuViewState extends State<MainMenuView> {
       child: CupertinoPageScaffold(
         child: SafeArea(
           child: ListView.builder(
-            itemCount: gameSessionArray.length,
+            itemCount: Globals.gameList.length,
             itemBuilder: (context, index) {
-              final session = gameSessionArray[index];
+              final session = Globals.gameList[index];
               return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: CupertinoListTile(
@@ -118,7 +80,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         context,
                         CupertinoPageRoute(
                           builder: (context) => ActiveGameView(
-                              gameSession: gameSessionArray[index]),
+                              gameSession: Globals.gameList[index]),
                         ),
                       );
                       setState(() {});
