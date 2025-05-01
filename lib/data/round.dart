@@ -19,6 +19,12 @@ class Round {
       required this.scoreUpdates,
       this.kamikazePlayerIndex});
 
+  @override
+  toString() {
+    return 'Round $roundNum: scores: $scores, scoreUpdates: $scoreUpdates, '
+        'kamikazePlayerIndex: $kamikazePlayerIndex';
+  }
+
   /// Converts the Round object to a JSON map.
   Map<String, dynamic> toJson() => {
         'roundNum': roundNum,

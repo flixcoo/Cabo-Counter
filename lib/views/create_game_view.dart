@@ -284,7 +284,7 @@ class _CreateGameState extends State<CreateGame> {
                   GameSession gameSession = GameSession(
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    gameHasPointLimit: selectedMode!,
+                    isPointsLimitEnabled: selectedMode!,
                   );
                   Globals.addGameSession(gameSession);
                   LocalStorageService.saveGameSessions();

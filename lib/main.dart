@@ -11,36 +11,36 @@ void main() {
   Globals.addGameSession(GameSession(
       gameTitle: 'Spiel am 27.02.2025',
       players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-      gameHasPointLimit: true));
+      isPointsLimitEnabled: true));
   Globals.addGameSession(GameSession(
       gameTitle: 'Freundschaftsrunde',
       players: ['Felix', 'Jonas', 'Nils'],
-      gameHasPointLimit: false));
+      isPointsLimitEnabled: false));
   Globals.addGameSession(GameSession(
     gameTitle: 'Familienabend',
     players: ['Mama', 'Papa', 'Lisa'],
-    gameHasPointLimit: true,
+    isPointsLimitEnabled: true,
   ));
   Globals.addGameSession(GameSession(
       gameTitle: 'Turnier 1. Runde',
       players: ['Tim', 'Max', 'Sophie', 'Lena'],
-      gameHasPointLimit: false));
+      isPointsLimitEnabled: false));
   Globals.addGameSession(GameSession(
       gameTitle: '2 Namen max length',
       players: ['Heinrich', 'Johannes'],
-      gameHasPointLimit: true));
+      isPointsLimitEnabled: true));
   Globals.addGameSession(GameSession(
       gameTitle: '3 Namen max length',
       players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-      gameHasPointLimit: false));
+      isPointsLimitEnabled: false));
   Globals.addGameSession(GameSession(
       gameTitle: '4 Namen max length',
       players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-      gameHasPointLimit: true));
+      isPointsLimitEnabled: true));
   Globals.addGameSession(GameSession(
       gameTitle: '5 Namen max length',
       players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-      gameHasPointLimit: false));
+      isPointsLimitEnabled: false));
 
   runApp(const App());
 }

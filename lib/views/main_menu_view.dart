@@ -97,7 +97,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   style: const TextStyle(fontSize: 14),
                                 )
                               : Text(
-                                  'Modus: ${_translateGameMode(session.gameHasPointLimit)}',
+                                  'Modus: ${_translateGameMode(session.isPointsLimitEnabled)}',
                                   style: const TextStyle(fontSize: 14),
                                 ),
                           trailing: Row(
