@@ -1,4 +1,4 @@
-import 'package:cabo_counter/utility/local_storage_service.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

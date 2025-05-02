@@ -1,7 +1,8 @@
 import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
-import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -206,7 +207,7 @@ class _CreateGameState extends State<CreateGame> {
                     ),
                   ],
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_gameTitleTextController.text == '') {
                     showCupertinoDialog(
                       context: context,
@@ -282,17 +283,24 @@ class _CreateGameState extends State<CreateGame> {
                     players.add(controller.text);
                   }
                   GameSession gameSession = GameSession(
+                    createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
+                    pointLimit: await ConfigService.getPointLimit(),
+                    caboPenalty: await ConfigService.getCaboPenalty(),
                     isPointsLimitEnabled: selectedMode!,
                   );
                   Globals.addGameSession(gameSession);
                   LocalStorageService.saveGameSessions();
-                  Navigator.pushReplacement(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              ActiveGameView(gameSession: gameSession)));
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                ActiveGameView(gameSession: gameSession)));
+                  } else {
+                    print('Context is not mounted');
+                  }
                 },
               ),
             ),
