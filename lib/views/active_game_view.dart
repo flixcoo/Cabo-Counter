@@ -82,8 +82,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               style: TextStyle(fontSize: 22)),
                       onTap: () async {
                         // ignore: unused_local_variable
-                        final val = await Navigator.push(
-                          context,
+                        final val =
+                            await Navigator.of(context, rootNavigator: true)
+                                .push(
                           CupertinoPageRoute(
                             fullscreenDialog: true,
                             builder: (context) => RoundView(

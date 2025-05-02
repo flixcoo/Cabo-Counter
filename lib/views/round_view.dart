@@ -293,8 +293,8 @@ class _RoundViewState extends State<RoundView> {
                                 if (widget.gameSession.isGameFinished == true) {
                                   Navigator.pop(context, widget.gameSession);
                                 } else {
-                                  Navigator.pushReplacement(
-                                    context,
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pushReplacement(
                                     CupertinoPageRoute(
                                       builder: (context) => RoundView(
                                         gameSession: widget.gameSession,
