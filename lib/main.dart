@@ -2,7 +2,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/apptheme.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/utility/local_storage_service.dart';
-import 'package:cabo_counter/views/main_menu_view.dart';
+import 'package:cabo_counter/views/tab_view.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
@@ -89,7 +89,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Cabo Counter',
-      home: const MainMenuView(),
+      home: const TabView(),
     );
   }
 }
