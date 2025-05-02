@@ -1,4 +1,4 @@
-import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/information_view.dart';
 import 'package:cabo_counter/views/main_menu_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,7 @@ class _TabViewState extends State<TabView> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-          backgroundColor: AppTheme.backgroundTintColor,
+          backgroundColor: CustomTheme.backgroundTintColor,
           iconSize: 27,
           height: 55,
           items: const <BottomNavigationBarItem>[
