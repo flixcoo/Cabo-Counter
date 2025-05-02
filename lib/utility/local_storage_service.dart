@@ -46,14 +46,13 @@ class LocalStorageService {
         print('Es existiert bereits eine Datei mit Spieldaten');
         final jsonString = await file.readAsString();
         if (jsonString.isNotEmpty) {
-          print('Die Datei ist nicht leer');
+          print('Die gefundene Datei ist nicht leer');
           final jsonList = json.decode(jsonString) as List<dynamic>;
-          print('JSON: $jsonList');
           Globals.gameList = jsonList
               .map((jsonItem) =>
                   GameSession.fromJson(jsonItem as Map<String, dynamic>))
               .toList()
-              .cast<GameSession>(); // Explicit cast to List<GameSession>
+              .cast<GameSession>();
           print('Die Daten wurden erfolgreich geladen');
         } else {
           print('Die Datei ist leer');
