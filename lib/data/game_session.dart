@@ -11,20 +11,25 @@ import 'package:cabo_counter/data/round.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession {
-  final DateTime createdAt = DateTime.now();
+  final DateTime createdAt;
   final String gameTitle;
-  final bool isPointsLimitEnabled;
   final List<String> players;
-  late List<int> playerScores;
-  List<Round> roundList = [];
-  int roundNumber = 1;
+  final int pointLimit;
+  final int caboPenalty;
+  final bool isPointsLimitEnabled;
   bool isGameFinished = false;
   String winner = '';
+  int roundNumber = 1;
+  late List<int> playerScores;
+  List<Round> roundList = [];
 
   GameSession({
+    required this.createdAt,
     required this.gameTitle,
-    required this.isPointsLimitEnabled,
     required this.players,
+    required this.pointLimit,
+    required this.caboPenalty,
+    required this.isPointsLimitEnabled,
   }) {
     playerScores = List.filled(players.length, 0);
   }
@@ -32,33 +37,37 @@ class GameSession {
   @override
   toString() {
     return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
-        'isPointsLimitEnabled: $isPointsLimitEnabled, players: $players, '
-        'playerScores: $playerScores, roundList: $roundList, '
-        'roundNumber: $roundNumber, isGameFinished: $isGameFinished, '
-        'winner: $winner]');
+        'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
+        ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
   }
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
+        'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
-        'gameHasPointLimit': isPointsLimitEnabled,
         'players': players,
-        'playerScores': playerScores,
-        'roundNumber': roundNumber,
+        'pointLimit': pointLimit,
+        'caboPenalty': caboPenalty,
+        'isPointsLimitEnabled': isPointsLimitEnabled,
         'isGameFinished': isGameFinished,
         'winner': winner,
+        'roundNumber': roundNumber,
+        'playerScores': playerScores,
         'roundList': roundList.map((e) => e.toJson()).toList()
       };
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : gameTitle = json['gameTitle'],
-        isPointsLimitEnabled = json['gameHasPointLimit'],
+      : createdAt = DateTime.parse(json['createdAt']),
+        gameTitle = json['gameTitle'],
         players = List<String>.from(json['players']),
-        playerScores = List<int>.from(json['playerScores']),
-        roundNumber = json['roundNumber'],
+        pointLimit = json['pointLimit'],
+        caboPenalty = json['caboPenalty'],
+        isPointsLimitEnabled = json['gameHasPointLimit'],
         isGameFinished = json['isGameFinished'],
         winner = json['winner'],
+        roundNumber = json['roundNumber'],
+        playerScores = List<int>.from(json['playerScores']),
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
@@ -76,7 +85,7 @@ class GameSession {
   void applyKamikaze(int roundNum, int kamikazePlayerIndex) {
     List<int> roundScores = List.generate(players.length, (_) => 0);
     List<int> scoreUpdates = List.generate(players.length, (_) => 0);
-    for (int i = 0; i < roundScores.length; i++) {
+    for (int i = 0; i < scoreUpdates.length; i++) {
       if (i != kamikazePlayerIndex) {
         scoreUpdates[i] += 50;
       }
@@ -206,13 +215,13 @@ class GameSession {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
-  void updatePoints() {
+  Future<void> updatePoints() async {
     _sumPoints();
     if (isPointsLimitEnabled) {
       _checkHundredPointsReached();
 
       for (int i = 0; i < playerScores.length; i++) {
-        if (playerScores[i] > 100) {
+        if (playerScores[i] > pointLimit) {
           isGameFinished = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
@@ -238,7 +247,7 @@ class GameSession {
   /// the corresponding round update.
   void _checkHundredPointsReached() {
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == 100) {
+      if (playerScores[i] == pointLimit) {
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
             'deswegen 50 Punkte abgezogen');
         roundList[roundNumber - 1].scoreUpdates[i] -= 50;
