@@ -1,5 +1,7 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/styles.dart';
+import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/globals.dart';
+import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +44,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spiel',
-                style: Styles.createGameTitle,
+                style: AppTheme.createGameTitle,
               ),
             ),
             Padding(
@@ -96,7 +98,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: Styles.createGameTitle,
+                style: AppTheme.createGameTitle,
               ),
             ),
             Expanded(
@@ -273,7 +275,6 @@ class _CreateGameState extends State<CreateGame> {
                         ],
                       ),
                     );
-                    return;
                   }
 
                   List<String> players = [];
@@ -283,8 +284,10 @@ class _CreateGameState extends State<CreateGame> {
                   GameSession gameSession = GameSession(
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    gameHasPointLimit: selectedMode!,
+                    isPointsLimitEnabled: selectedMode!,
                   );
+                  Globals.addGameSession(gameSession);
+                  LocalStorageService.saveGameSessions();
                   Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(

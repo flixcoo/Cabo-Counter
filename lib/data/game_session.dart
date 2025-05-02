@@ -3,7 +3,7 @@ import 'package:cabo_counter/data/round.dart';
 /// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
 /// [gameTitle] is the title of the game.
-/// [gameHasPointLimit] is a boolean indicating if the game has the default
+/// [isPointsLimitEnabled] is a boolean indicating if the game has the default
 /// point limit of 101 points or not.
 /// [players] is a string list of player names.
 /// [playerScores] is a list of the summed scores of all players.
@@ -13,7 +13,7 @@ import 'package:cabo_counter/data/round.dart';
 class GameSession {
   final DateTime createdAt = DateTime.now();
   final String gameTitle;
-  final bool gameHasPointLimit;
+  final bool isPointsLimitEnabled;
   final List<String> players;
   late List<int> playerScores;
   List<Round> roundList = [];
@@ -23,20 +23,44 @@ class GameSession {
 
   GameSession({
     required this.gameTitle,
-    required this.gameHasPointLimit,
+    required this.isPointsLimitEnabled,
     required this.players,
   }) {
     playerScores = List.filled(players.length, 0);
   }
 
   @override
-  String toString() {
+  toString() {
     return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
-        'gameHasPointLimit: $gameHasPointLimit, players: $players, '
+        'isPointsLimitEnabled: $isPointsLimitEnabled, players: $players, '
         'playerScores: $playerScores, roundList: $roundList, '
         'roundNumber: $roundNumber, isGameFinished: $isGameFinished, '
         'winner: $winner]');
   }
+
+  /// Converts the GameSession object to a JSON map.
+  Map<String, dynamic> toJson() => {
+        'gameTitle': gameTitle,
+        'gameHasPointLimit': isPointsLimitEnabled,
+        'players': players,
+        'playerScores': playerScores,
+        'roundNumber': roundNumber,
+        'isGameFinished': isGameFinished,
+        'winner': winner,
+        'roundList': roundList.map((e) => e.toJson()).toList()
+      };
+
+  /// Creates a GameSession object from a JSON map.
+  GameSession.fromJson(Map<String, dynamic> json)
+      : gameTitle = json['gameTitle'],
+        isPointsLimitEnabled = json['gameHasPointLimit'],
+        players = List<String>.from(json['players']),
+        playerScores = List<int>.from(json['playerScores']),
+        roundNumber = json['roundNumber'],
+        isGameFinished = json['isGameFinished'],
+        winner = json['winner'],
+        roundList =
+            (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
   /// Returns the length of all player names combined.
   int getLengthOfPlayerNames() {
@@ -184,7 +208,7 @@ class GameSession {
   /// the winner.
   void updatePoints() {
     _sumPoints();
-    if (gameHasPointLimit) {
+    if (isPointsLimitEnabled) {
       _checkHundredPointsReached();
 
       for (int i = 0; i < playerScores.length; i++) {

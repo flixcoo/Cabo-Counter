@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/theme.dart' as theme;
+import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -71,7 +72,10 @@ class _RoundViewState extends State<RoundView> {
         previousPageTitle: 'Übersicht',
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => Navigator.pop(context, widget.gameSession),
+          onPressed: () => {
+            LocalStorageService.saveGameSessions(),
+            Navigator.pop(context, widget.gameSession)
+          },
           child: const Text('Abbrechen'),
         ),
       ),
@@ -86,7 +90,7 @@ class _RoundViewState extends State<RoundView> {
                   children: [
                     const SizedBox(height: 40),
                     Text('Runde ${widget.roundNumber}',
-                        style: theme.roundTitle),
+                        style: AppTheme.roundTitle),
                     const SizedBox(height: 10),
                     const Text(
                       'Wer hat CABO gesagt?',
@@ -101,8 +105,8 @@ class _RoundViewState extends State<RoundView> {
                       child: SizedBox(
                         height: 40,
                         child: CupertinoSegmentedControl<int>(
-                          unselectedColor: theme.backgroundTintColor,
-                          selectedColor: theme.primaryColor,
+                          unselectedColor: AppTheme.backgroundTintColor,
+                          selectedColor: AppTheme.primaryColor,
                           groupValue: _caboPlayerIndex,
                           children: Map.fromEntries(widget.gameSession.players
                               .asMap()
@@ -267,7 +271,7 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: theme.backgroundTintColor,
+                  color: AppTheme.backgroundTintColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -275,6 +279,7 @@ class _RoundViewState extends State<RoundView> {
                         onPressed: _areRoundInputsValid()
                             ? () {
                                 _finishRound();
+                                LocalStorageService.saveGameSessions();
                                 Navigator.pop(context, widget.gameSession);
                               }
                             : null,
@@ -284,6 +289,7 @@ class _RoundViewState extends State<RoundView> {
                         onPressed: _areRoundInputsValid()
                             ? () {
                                 _finishRound();
+                                LocalStorageService.saveGameSessions();
                                 if (widget.gameSession.isGameFinished == true) {
                                   Navigator.pop(context, widget.gameSession);
                                 } else {

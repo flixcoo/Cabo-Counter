@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-abstract class Styles {
+class AppTheme {
+  static Color white = CupertinoColors.white;
   static Color primaryColor = CupertinoColors.systemGreen;
-  static Color backgroundColor = const Color(0xFF080808);
+  static Color backgroundColor = const Color(0xFF101010);
+  static Color backgroundTintColor = CupertinoColors.darkBackgroundGray;
 
   static TextStyle modeTitle = TextStyle(
     color: primaryColor,
@@ -20,15 +22,15 @@ abstract class Styles {
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle roundTitle = const TextStyle(
+  static TextStyle roundTitle = TextStyle(
     fontSize: 60,
-    color: CupertinoColors.white,
+    color: white,
     fontWeight: FontWeight.bold,
   );
 
-  static TextStyle roundPlayers = const TextStyle(
+  static TextStyle roundPlayers = TextStyle(
     fontSize: 20,
-    color: CupertinoColors.white,
+    color: white,
     fontWeight: FontWeight.bold,
   );
 }

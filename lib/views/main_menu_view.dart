@@ -1,4 +1,6 @@
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/globals.dart';
+import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/information_view.dart';
@@ -14,47 +16,19 @@ class MainMenuView extends StatefulWidget {
 }
 
 class _MainMenuViewState extends State<MainMenuView> {
-  final List<GameSession> gameSessionArray = [
-    GameSession(
-        gameTitle: 'Spiel am 27.02.2025',
-        players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: 'Freundschaftsrunde',
-        players: ['Felix', 'Jonas', 'Nils'],
-        gameHasPointLimit: false),
-    GameSession(
-      gameTitle: 'Familienabend',
-      players: ['Mama', 'Papa', 'Lisa'],
-      gameHasPointLimit: true,
-    ),
-    GameSession(
-        gameTitle: 'Turnier 1. Runde',
-        players: ['Tim', 'Max', 'Sophie', 'Lena'],
-        gameHasPointLimit: false),
-    GameSession(
-        gameTitle: '2 Namen max length',
-        players: ['Heinrich', 'Johannes'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: '3 Namen max length',
-        players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-        gameHasPointLimit: false),
-    GameSession(
-        gameTitle: '4 Namen max length',
-        players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-        gameHasPointLimit: true),
-    GameSession(
-        gameTitle: '5 Namen max length',
-        players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-        gameHasPointLimit: false),
-  ];
+  @override
+  initState() {
+    super.initState();
+    LocalStorageService.loadGameSessions().then((_) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    gameSessionArray.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-
+    LocalStorageService.loadGameSessions();
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         leading: IconButton(
             onPressed: () {
@@ -83,49 +57,74 @@ class _MainMenuViewState extends State<MainMenuView> {
       ),
       child: CupertinoPageScaffold(
         child: SafeArea(
-          child: ListView.builder(
-            itemCount: gameSessionArray.length,
-            itemBuilder: (context, index) {
-              final session = gameSessionArray[index];
-              return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: CupertinoListTile(
-                    title: Text(session.gameTitle),
-                    subtitle: session.isGameFinished == true
-                        ? Text(
-                            '\u{1F947} ${session.winner}',
-                            style: const TextStyle(fontSize: 14),
-                          )
-                        : Text(
-                            'Modus: ${_translateGameMode(session.gameHasPointLimit)}',
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                    trailing: Row(
-                      children: [
-                        Text('${session.roundNumber}'),
-                        const SizedBox(width: 3),
-                        const Icon(
-                            CupertinoIcons.arrow_2_circlepath_circle_fill),
-                        const SizedBox(width: 15),
-                        Text('${session.players.length}'),
-                        const SizedBox(width: 3),
-                        const Icon(CupertinoIcons.person_2_fill),
-                      ],
+          child: Globals.gameList.isEmpty
+              ? Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Oben ausrichten
+                  children: [
+                    const SizedBox(height: 30), // Abstand von oben
+                    Center(
+                        child: GestureDetector(
+                      onTap: () => setState(() {}),
+                      child: Icon(
+                        CupertinoIcons.plus,
+                        size: 60,
+                        color: AppTheme.primaryColor,
+                      ),
+                    )),
+                    const SizedBox(height: 10), // Abstand von oben
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 70),
+                      child: Text(
+                        'Ganz schön leer hier...\nFüge über den Button oben rechts eine neue Runde hinzu.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                    onTap: () async {
-                      //ignore: unused_local_variable
-                      final val = await Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => ActiveGameView(
-                              gameSession: gameSessionArray[index]),
-                        ),
-                      );
-                      setState(() {});
-                    },
-                  ));
-            },
-          ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: Globals.gameList.length,
+                  itemBuilder: (context, index) {
+                    final session = Globals.gameList[index];
+                    return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: CupertinoListTile(
+                          title: Text(session.gameTitle),
+                          subtitle: session.isGameFinished == true
+                              ? Text(
+                                  '\u{1F947} ${session.winner}',
+                                  style: const TextStyle(fontSize: 14),
+                                )
+                              : Text(
+                                  'Modus: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                          trailing: Row(
+                            children: [
+                              Text('${session.roundNumber}'),
+                              const SizedBox(width: 3),
+                              const Icon(CupertinoIcons
+                                  .arrow_2_circlepath_circle_fill),
+                              const SizedBox(width: 15),
+                              Text('${session.players.length}'),
+                              const SizedBox(width: 3),
+                              const Icon(CupertinoIcons.person_2_fill),
+                            ],
+                          ),
+                          onTap: () async {
+                            //ignore: unused_local_variable
+                            final val = await Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => ActiveGameView(
+                                    gameSession: Globals.gameList[index]),
+                              ),
+                            );
+                            setState(() {});
+                          },
+                        ));
+                  }),
         ),
       ),
     );

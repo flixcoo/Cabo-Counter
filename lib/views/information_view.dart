@@ -1,3 +1,4 @@
+import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,7 @@ class InformationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: const CupertinoNavigationBar(
           middle: Text('Über'),
         ),
@@ -79,7 +81,52 @@ class InformationView extends StatelessWidget {
                             Uri.parse('https://www.github.com/flixcoo')),
                         icon: const Icon(FontAwesomeIcons.github)),
                   ],
-                )
+                ),
+                CupertinoButton(
+                  sizeStyle: CupertinoButtonSize.medium,
+                  child: const Text('Spieldaten exportieren'),
+                  onPressed: () async {
+                    final success = await LocalStorageService.exportJsonFile();
+                    if (!success && context.mounted) {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: const Text('Fehler'),
+                          content: const Text(
+                              'Datei konnte nicht exportiert werden.'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: const Text('OK'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+                CupertinoButton(
+                    sizeStyle: CupertinoButtonSize.medium,
+                    child: const Text('Spieldaten importieren'),
+                    onPressed: () async {
+                      final success =
+                          await LocalStorageService.importJsonFile();
+                      if (!success && context.mounted) {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  title: const Text('Fehler'),
+                                  content: const Text(
+                                      'Datei konnte nicht importiert werden.'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: const Text('OK'),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ));
+                      }
+                    }),
               ],
             ),
             Positioned(
