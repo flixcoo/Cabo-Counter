@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -28,7 +28,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: AppTheme.createGameTitle,
+                style: CustomTheme.createGameTitle,
               ),
             ),
             ListView.builder(
@@ -61,7 +61,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Runden',
-                style: AppTheme.createGameTitle,
+                style: CustomTheme.createGameTitle,
               ),
             ),
             ListView.builder(
@@ -82,8 +82,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               style: TextStyle(fontSize: 22)),
                       onTap: () async {
                         // ignore: unused_local_variable
-                        final val = await Navigator.push(
-                          context,
+                        final val =
+                            await Navigator.of(context, rootNavigator: true)
+                                .push(
                           CupertinoPageRoute(
                             fullscreenDialog: true,
                             builder: (context) => RoundView(

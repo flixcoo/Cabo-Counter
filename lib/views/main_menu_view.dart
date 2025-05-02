@@ -1,9 +1,9 @@
-import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
-import 'package:cabo_counter/views/information_view.dart';
+import 'package:cabo_counter/views/settings_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,12 +35,12 @@ class _MainMenuViewState extends State<MainMenuView> {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => const InformationView(),
+                  builder: (context) => const SettingsView(),
                 ),
               );
             },
             icon: const Icon(
-              CupertinoIcons.info_circle,
+              CupertinoIcons.settings,
               size: 30,
             )),
         middle: const Text('Cabo Counter'),
@@ -69,7 +69,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       child: Icon(
                         CupertinoIcons.plus,
                         size: 60,
-                        color: AppTheme.primaryColor,
+                        color: CustomTheme.primaryColor,
                       ),
                     )),
                     const SizedBox(height: 10), // Abstand von oben

@@ -1,4 +1,4 @@
-import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModeSelectionMenu extends StatelessWidget {
@@ -15,10 +15,10 @@ class ModeSelectionMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
-              title: Text('101 Punkte', style: AppTheme.modeTitle),
+              title: Text('101 Punkte', style: CustomTheme.modeTitle),
               subtitle: const Text(
                 'Es wird solange gespielt, bis einer Spieler mehr als 100 Punkte erreicht',
-                style: AppTheme.modeDescription,
+                style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
               onTap: () {
@@ -29,11 +29,11 @@ class ModeSelectionMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: CupertinoListTile(
-              title: Text('Unbegrenzt', style: AppTheme.modeTitle),
+              title: Text('Unbegrenzt', style: CustomTheme.modeTitle),
               subtitle: const Text(
                 'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange '
                 'gespielt, bis Ihr keine Lust mehr habt.',
-                style: AppTheme.modeDescription,
+                style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
               onTap: () {

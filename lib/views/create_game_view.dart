@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/apptheme.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
@@ -44,7 +44,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spiel',
-                style: AppTheme.createGameTitle,
+                style: CustomTheme.createGameTitle,
               ),
             ),
             Padding(
@@ -98,7 +98,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: AppTheme.createGameTitle,
+                style: CustomTheme.createGameTitle,
               ),
             ),
             Expanded(
