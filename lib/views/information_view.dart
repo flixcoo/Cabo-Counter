@@ -83,46 +83,50 @@ class InformationView extends StatelessWidget {
                   ],
                 ),
                 CupertinoButton(
-                    sizeStyle: CupertinoButtonSize.medium,
-                    child: const Text('Spieldaten exportieren'),
-                    onPressed: () async =>
-                        await LocalStorageService.exportJsonFile()
-                            ? null
-                            : showCupertinoDialog(
-                                context: context,
-                                builder: (context) => CupertinoAlertDialog(
-                                      title: const Text('Fehler'),
-                                      content: const Text(
-                                          'Datei konnte nicht exportiert werden.'),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: const Text('OK'),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                      ],
-                                    ))),
+                  sizeStyle: CupertinoButtonSize.medium,
+                  child: const Text('Spieldaten exportieren'),
+                  onPressed: () async {
+                    final success = await LocalStorageService.exportJsonFile();
+                    if (!success && context.mounted) {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: const Text('Fehler'),
+                          content: const Text(
+                              'Datei konnte nicht exportiert werden.'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: const Text('OK'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
                 CupertinoButton(
                     sizeStyle: CupertinoButtonSize.medium,
                     child: const Text('Spieldaten importieren'),
-                    onPressed: () async => {
-                          await LocalStorageService.importJsonFile()
-                              ? null
-                              : showCupertinoDialog(
-                                  context: context,
-                                  builder: (context) => CupertinoAlertDialog(
-                                        title: const Text('Fehler'),
-                                        content: const Text(
-                                            'Datei konnte nicht importiert werden.'),
-                                        actions: [
-                                          CupertinoDialogAction(
-                                            child: const Text('OK'),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                          ),
-                                        ],
-                                      ))
-                        }),
+                    onPressed: () async {
+                      final success =
+                          await LocalStorageService.importJsonFile();
+                      if (!success && context.mounted) {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  title: const Text('Fehler'),
+                                  content: const Text(
+                                      'Datei konnte nicht importiert werden.'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: const Text('OK'),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ));
+                      }
+                    }),
               ],
             ),
             Positioned(
