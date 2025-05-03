@@ -53,6 +53,8 @@ class _RoundViewState extends State<RoundView> {
         _scoreControllerList[i].text =
             gameSession.roundList[widget.roundNumber - 1].scores[i].toString();
       }
+      _caboPlayerIndex =
+          gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
       _kamikazePlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }

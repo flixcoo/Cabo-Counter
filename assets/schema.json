@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for cabo game data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "createdAt": {
+        "type": "string"
+      },
+      "gameTitle": {
+        "type": "string"
+      },
+      "players": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "pointLimit": {
+        "type": "number"
+      },
+      "caboPenalty": {
+        "type": "number"
+      },
+      "isPointsLimitEnabled": {
+        "type": "boolean"
+      },
+      "isGameFinished": {
+        "type": "boolean"
+      },
+      "winner": {
+        "type": "string"
+      },
+      "roundNumber": {
+        "type": "number"
+      },
+      "playerScores": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "roundList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "number"
+            },
+            "caboPlayerIndex": {
+              "type": "number"
+            },
+            "kamikazePlayerIndex": {
+              "type": ["number", "null"]
+            },
+            "scores": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        }
+      }
+    },
+    "required": [
+      "createdAt",
+      "gameTitle",
+      "players",
+      "pointLimit",
+      "caboPenalty",
+      "isPointsLimitEnabled",
+      "isGameFinished",
+      "winner",
+      "roundNumber",
+      "playerScores",
+      "roundList"
+    ]
+  }
+}
