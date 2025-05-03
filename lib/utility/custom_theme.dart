@@ -16,7 +16,7 @@ class CustomTheme {
     fontSize: 16,
   );
 
-  static TextStyle createGameTitle = TextStyle(
+  static TextStyle rowTitle = TextStyle(
     fontSize: 20,
     color: primaryColor,
     fontWeight: FontWeight.bold,
@@ -24,12 +24,6 @@ class CustomTheme {
 
   static TextStyle roundTitle = TextStyle(
     fontSize: 60,
-    color: white,
-    fontWeight: FontWeight.bold,
-  );
-
-  static TextStyle roundPlayers = TextStyle(
-    fontSize: 20,
     color: white,
     fontWeight: FontWeight.bold,
   );

@@ -1,7 +1,7 @@
 import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
-import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,11 +44,11 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spiel',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
                 decoration: const BoxDecoration(),
                 maxLength: 16,
@@ -60,7 +60,7 @@ class _CreateGameState extends State<CreateGame> {
             ),
             // Spielmodus-Auswahl mit Chevron
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
                 decoration: const BoxDecoration(),
                 readOnly: true,
@@ -77,15 +77,15 @@ class _CreateGameState extends State<CreateGame> {
                   ],
                 ),
                 onTap: () async {
-                  // Öffne das Modus-Auswahlmenü
                   final selected = await Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => const ModeSelectionMenu(),
+                      builder: (context) => ModeSelectionMenu(
+                        pointLimit: Globals.pointLimit,
+                      ),
                     ),
                   );
 
-                  // Aktualisiere den ausgewählten Modus
                   if (selected != null) {
                     setState(() {
                       selectedMode = selected;
@@ -98,7 +98,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             Expanded(
@@ -282,17 +282,24 @@ class _CreateGameState extends State<CreateGame> {
                     players.add(controller.text);
                   }
                   GameSession gameSession = GameSession(
+                    createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
+                    pointLimit: Globals.pointLimit,
+                    caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
                   Globals.addGameSession(gameSession);
                   LocalStorageService.saveGameSessions();
-                  Navigator.pushReplacement(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) =>
-                              ActiveGameView(gameSession: gameSession)));
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                ActiveGameView(gameSession: gameSession)));
+                  } else {
+                    print('Context is not mounted');
+                  }
                 },
               ),
             ),

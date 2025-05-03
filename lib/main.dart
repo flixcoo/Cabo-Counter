@@ -1,47 +1,15 @@
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
-import 'package:cabo_counter/utility/local_storage_service.dart';
 import 'package:cabo_counter/views/tab_view.dart';
 import 'package:flutter/cupertino.dart';
 
-void main() {
-  /// FIXME Just for Debugging
-  /// Fills the game list with some test data.
-  Globals.addGameSession(GameSession(
-      gameTitle: 'Spiel am 27.02.2025',
-      players: ['Clara', 'Tobias', 'Yannik', 'Lena', 'Lekaia'],
-      isPointsLimitEnabled: true));
-  Globals.addGameSession(GameSession(
-      gameTitle: 'Freundschaftsrunde',
-      players: ['Felix', 'Jonas', 'Nils'],
-      isPointsLimitEnabled: false));
-  Globals.addGameSession(GameSession(
-    gameTitle: 'Familienabend',
-    players: ['Mama', 'Papa', 'Lisa'],
-    isPointsLimitEnabled: true,
-  ));
-  Globals.addGameSession(GameSession(
-      gameTitle: 'Turnier 1. Runde',
-      players: ['Tim', 'Max', 'Sophie', 'Lena'],
-      isPointsLimitEnabled: false));
-  Globals.addGameSession(GameSession(
-      gameTitle: '2 Namen max length',
-      players: ['Heinrich', 'Johannes'],
-      isPointsLimitEnabled: true));
-  Globals.addGameSession(GameSession(
-      gameTitle: '3 Namen max length',
-      players: ['Benjamin', 'Stefanie', 'Wolfgang'],
-      isPointsLimitEnabled: false));
-  Globals.addGameSession(GameSession(
-      gameTitle: '4 Namen max length',
-      players: ['Leonhard', 'Mathilde', 'Bernhard', 'Gerlinde'],
-      isPointsLimitEnabled: true));
-  Globals.addGameSession(GameSession(
-      gameTitle: '5 Namen max length',
-      players: ['Hartmuth', 'Elisabet', 'Rosalind', 'Theresia', 'Karoline'],
-      isPointsLimitEnabled: false));
-
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ConfigService.initConfig();
+  Globals.pointLimit = await ConfigService.getPointLimit();
+  Globals.caboPenalty = await ConfigService.getCaboPenalty();
   runApp(const App());
 }
 

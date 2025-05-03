@@ -8,4 +8,10 @@ class Globals {
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
+
+  static int pointLimit = 100;
+
+  static int caboPenalty = 5;
+
+  static String appDevPhase = 'Alpha';
 }
