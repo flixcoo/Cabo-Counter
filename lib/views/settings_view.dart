@@ -14,8 +14,6 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  final TextEditingController _gameTitleTextController =
-      TextEditingController();
   late final int _pointLimit;
   late final int _caboPenalty;
   bool _isLoading = true;
@@ -168,7 +166,7 @@ class _SettingsViewState extends State<SettingsView> {
                               child: Text('Fehler gefunden?'),
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                               child: Center(
                                 child: CupertinoButton(
                                   onPressed: () => launchUrl(Uri.parse(
