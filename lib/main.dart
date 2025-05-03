@@ -1,12 +1,15 @@
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/tab_view.dart';
 import 'package:flutter/cupertino.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConfigService.initConfig();
+  Globals.pointLimit = await ConfigService.getPointLimit();
+  Globals.caboPenalty = await ConfigService.getCaboPenalty();
   runApp(const App());
 }
 

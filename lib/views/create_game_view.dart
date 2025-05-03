@@ -1,5 +1,4 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
@@ -78,15 +77,15 @@ class _CreateGameState extends State<CreateGame> {
                   ],
                 ),
                 onTap: () async {
-                  // Öffne das Modus-Auswahlmenü
                   final selected = await Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => const ModeSelectionMenu(),
+                      builder: (context) => ModeSelectionMenu(
+                        pointLimit: Globals.pointLimit,
+                      ),
                     ),
                   );
 
-                  // Aktualisiere den ausgewählten Modus
                   if (selected != null) {
                     setState(() {
                       selectedMode = selected;
@@ -207,7 +206,7 @@ class _CreateGameState extends State<CreateGame> {
                     ),
                   ],
                 ),
-                onPressed: () async {
+                onPressed: () {
                   if (_gameTitleTextController.text == '') {
                     showCupertinoDialog(
                       context: context,
@@ -286,8 +285,8 @@ class _CreateGameState extends State<CreateGame> {
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: await ConfigService.getPointLimit(),
-                    caboPenalty: await ConfigService.getCaboPenalty(),
+                    pointLimit: Globals.pointLimit,
+                    caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
                   Globals.addGameSession(gameSession);
