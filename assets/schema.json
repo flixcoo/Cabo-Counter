@@ -1,15 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Schema for cabo game data",
+  "title": "Generated schema for cabo game data",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
-      "gameTitle": {
+      "createdAt": {
         "type": "string"
       },
-      "gameHasPointLimit": {
-        "type": "boolean"
+      "gameTitle": {
+        "type": "string"
       },
       "players": {
         "type": "array",
@@ -17,20 +17,29 @@
           "type": "string"
         }
       },
-      "playerScores": {
-        "type": "array",
-        "items": {
-          "type": "number"
-        }
-      },
-      "roundNumber": {
+      "pointLimit": {
         "type": "number"
+      },
+      "caboPenalty": {
+        "type": "number"
+      },
+      "isPointsLimitEnabled": {
+        "type": "boolean"
       },
       "isGameFinished": {
         "type": "boolean"
       },
       "winner": {
         "type": "string"
+      },
+      "roundNumber": {
+        "type": "number"
+      },
+      "playerScores": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
       },
       "roundList": {
         "type": "array",
@@ -43,7 +52,9 @@
             "caboPlayerIndex": {
               "type": "number"
             },
-            "kamikazePlayerIndex": {},
+            "kamikazePlayerIndex": {
+              "type": ["number", "null"]
+            },
             "scores": {
               "type": "array",
               "items": {
@@ -60,7 +71,6 @@
           "required": [
             "roundNum",
             "caboPlayerIndex",
-            "kamikazePlayerIndex",
             "scores",
             "scoreUpdates"
           ]
@@ -68,13 +78,16 @@
       }
     },
     "required": [
+      "createdAt",
       "gameTitle",
-      "gameHasPointLimit",
       "players",
-      "playerScores",
-      "roundNumber",
+      "pointLimit",
+      "caboPenalty",
+      "isPointsLimitEnabled",
       "isGameFinished",
       "winner",
+      "roundNumber",
+      "playerScores",
       "roundList"
     ]
   }

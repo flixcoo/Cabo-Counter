@@ -7,10 +7,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
 import 'package:json_schema/json_schema.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
+  static var logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   /// Writes the game session list to a  JSON file and returns it as string.
   static String getJsonFile() {
@@ -32,38 +36,38 @@ class LocalStorageService {
       final file = await _getFilePath();
       final jsonFile = getJsonFile();
       await file.writeAsString(jsonFile);
-      print('Daten gespeichert');
+      logger.i('Die Spieldaten wurden zwischengespeichert.');
     } catch (e) {
-      print('Fehler beim Speichern: $e');
+      logger.w('Fehler beim Speichern der Spieldaten. Exception: $e');
     }
   }
 
   /// Loads the game data from a local JSON file.
   static Future<bool> loadGameSessions() async {
-    print('Versuche, Daten zu laden...');
+    logger.d('Versuche, Daten zu laden...');
     try {
       final file = await _getFilePath();
 
       if (!await file.exists()) {
-        print('Es existiert noch keine Datei mit Spieldaten');
+        logger.w('Es existiert noch keine Datei mit Spieldaten');
         return false;
       }
 
-      print('Es existiert bereits eine Datei mit Spieldaten');
+      logger.d('Es existiert bereits eine Datei mit Spieldaten');
       final jsonString = await file.readAsString();
 
       if (jsonString.isEmpty) {
-        print('Die gefundene Datei ist leer');
+        logger.w('Die gefundene Datei ist leer');
         return false;
       }
 
       if (!await validateJsonSchema(jsonString)) {
-        print('Die Datei konnte nicht validiert werden');
+        logger.w('Die Datei konnte nicht validiert werden');
         Globals.gameList = [];
         return false;
       }
-
-      print('Die gefundene Datei ist nicht leer und validiert');
+      logger.d('Die gefundene Datei hat Inhalt');
+      logger.d('Die gefundene Datei wurde erfolgreich validiert');
       final jsonList = json.decode(jsonString) as List<dynamic>;
 
       Globals.gameList = jsonList
@@ -71,10 +75,11 @@ class LocalStorageService {
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
 
-      print('Die Daten wurden erfolgreich geladen und verarbeitet');
+      logger.i('Die Spieldaten wurden erfolgreich geladen und verarbeitet');
       return true;
     } catch (e) {
-      print('Fehler beim Laden der Spieldaten:\n$e');
+      logger.e('Fehler beim Laden der Spieldaten:\n$e',
+          error: 'JSON nicht geladen');
       Globals.gameList = [];
       return false;
     }
@@ -91,10 +96,11 @@ class LocalStorageService {
         ext: 'json',
         mimeType: MimeType.json,
       );
-      print('Datei gespeichert: $result');
+      logger.i('Die Spieldaten wurden exportiert. Dateipfad: $result');
       return true;
     } catch (e) {
-      print('Fehler beim Speichern: $e');
+      logger.w('Fehler beim Exportieren der Spieldaten. Exception: $e',
+          error: 'JSON nicht exportiert');
       return false;
     }
   }
@@ -108,7 +114,7 @@ class LocalStorageService {
     );
 
     if (result == null) {
-      print('Der Dialog wurde abgebrochen');
+      logger.d('Der Filepicker-Dialog wurde abgebrochen');
       return false;
     }
 
@@ -119,17 +125,18 @@ class LocalStorageService {
         return false;
       }
       final jsonData = json.decode(jsonString) as List<dynamic>;
-      print('JSON Inhalt: $jsonData');
       Globals.gameList = jsonData
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
+      logger.i('Die Datei wurde erfolgreich Importiertn');
       return true;
     } on FormatException catch (e) {
-      print('Ungültiges JSON-Format: $e');
+      logger.e('Ungültiges JSON-Format. Exception: $e', error: 'Formatfehler');
       return false;
     } on Exception catch (e) {
-      print('Fehler beim Dateizugriff: $e');
+      logger.e('Fehler beim Dateizugriff. Exception: $e',
+          error: 'Dateizugriffsfehler');
       return false;
     }
   }
@@ -151,13 +158,14 @@ class LocalStorageService {
       final result = schema.validate(jsonData);
 
       if (result.isValid) {
-        print('JSON ist erfolgreich validiert.');
+        logger.d('JSON ist erfolgreich validiert.');
         return true;
       }
-      print('JSON ist nicht gültig: ${result.errors}');
+      logger.w('JSON ist nicht gültig.\nFehler: ${result.errors}');
       return false;
     } catch (e) {
-      print('Fehler beim Validieren des JSON-Schemas: $e');
+      logger.e('Fehler beim Validieren des JSON-Schemas: $e',
+          error: 'Validierung fehlgeschlagen');
       return false;
     }
   }
