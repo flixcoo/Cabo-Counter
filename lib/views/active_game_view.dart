@@ -28,7 +28,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             ListView.builder(
@@ -61,7 +61,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Runden',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             ListView.builder(

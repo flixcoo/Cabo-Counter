@@ -39,7 +39,7 @@ class _SettingsViewState extends State<SettingsView> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
                   'Punkte',
-                  style: CustomTheme.createGameTitle,
+                  style: CustomTheme.rowTitle,
                 ),
               ),
               Padding(
@@ -100,7 +100,7 @@ class _SettingsViewState extends State<SettingsView> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
                   'Spieldaten',
-                  style: CustomTheme.createGameTitle,
+                  style: CustomTheme.rowTitle,
                 ),
               ),
               Padding(
@@ -201,7 +201,7 @@ class _SettingsViewState extends State<SettingsView> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Text(
-                          'Alpha ${snapshot.data!.version} '
+                          '${Globals.appDevPhase} ${snapshot.data!.version} '
                           '(Build ${snapshot.data!.buildNumber})',
                           textAlign: TextAlign.center,
                         );

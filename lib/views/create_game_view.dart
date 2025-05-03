@@ -44,7 +44,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spiel',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             Padding(
@@ -98,7 +98,7 @@ class _CreateGameState extends State<CreateGame> {
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Text(
                 'Spieler:innen',
-                style: CustomTheme.createGameTitle,
+                style: CustomTheme.rowTitle,
               ),
             ),
             Expanded(

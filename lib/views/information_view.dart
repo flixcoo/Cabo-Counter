@@ -29,7 +29,7 @@ class InformationView extends StatelessWidget {
             ),
             Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: SizedBox(
                   height: 200,
                   child: Image.asset('assets/cabo-counter-logo_rounded.png'),
