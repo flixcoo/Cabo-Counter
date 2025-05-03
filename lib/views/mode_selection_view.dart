@@ -2,7 +2,8 @@ import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModeSelectionMenu extends StatelessWidget {
-  const ModeSelectionMenu({super.key});
+  final int pointLimit;
+  const ModeSelectionMenu({super.key, required this.pointLimit});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,9 @@ class ModeSelectionMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
-              title: Text('101 Punkte', style: CustomTheme.modeTitle),
-              subtitle: const Text(
-                'Es wird solange gespielt, bis einer Spieler mehr als 100 Punkte erreicht',
+              title: Text('$pointLimit Punkte', style: CustomTheme.modeTitle),
+              subtitle: Text(
+                'Es wird solange gespielt, bis einer Spieler mehr als $pointLimit Punkte erreicht',
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
