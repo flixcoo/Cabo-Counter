@@ -49,7 +49,7 @@ class _CreateGameState extends State<CreateGame> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
                 decoration: const BoxDecoration(),
                 maxLength: 16,
@@ -61,7 +61,7 @@ class _CreateGameState extends State<CreateGame> {
             ),
             // Spielmodus-Auswahl mit Chevron
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
                 decoration: const BoxDecoration(),
                 readOnly: true,

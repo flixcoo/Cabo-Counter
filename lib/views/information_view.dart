@@ -1,4 +1,3 @@
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -51,7 +50,7 @@ class InformationView extends StatelessWidget {
                   softWrap: true,
                 )),
             const SizedBox(
-              height: 15,
+              height: 30,
             ),
             const Text(
               '\u00A9 Felix Kirchner',
@@ -74,53 +73,6 @@ class InformationView extends StatelessWidget {
                     icon: const Icon(FontAwesomeIcons.github)),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            CupertinoButton(
-              sizeStyle: CupertinoButtonSize.medium,
-              child: const Text('Spieldaten exportieren'),
-              onPressed: () async {
-                final success = await LocalStorageService.exportJsonFile();
-                if (!success && context.mounted) {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                      title: const Text('Fehler'),
-                      content:
-                          const Text('Datei konnte nicht exportiert werden.'),
-                      actions: [
-                        CupertinoDialogAction(
-                          child: const Text('OK'),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-            CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                child: const Text('Spieldaten importieren'),
-                onPressed: () async {
-                  final success = await LocalStorageService.importJsonFile();
-                  if (!success && context.mounted) {
-                    showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                              title: const Text('Fehler'),
-                              content: const Text(
-                                  'Datei konnte nicht importiert werden.'),
-                              actions: [
-                                CupertinoDialogAction(
-                                  child: const Text('OK'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            ));
-                  }
-                }),
           ],
         )));
   }
