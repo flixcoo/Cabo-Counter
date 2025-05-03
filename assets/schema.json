@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schema for cabo game data",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "gameTitle": {
+        "type": "string"
+      },
+      "gameHasPointLimit": {
+        "type": "boolean"
+      },
+      "players": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "playerScores": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "roundNumber": {
+        "type": "number"
+      },
+      "isGameFinished": {
+        "type": "boolean"
+      },
+      "winner": {
+        "type": "string"
+      },
+      "roundList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "number"
+            },
+            "caboPlayerIndex": {
+              "type": "number"
+            },
+            "kamikazePlayerIndex": {},
+            "scores": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        }
+      }
+    },
+    "required": [
+      "gameTitle",
+      "gameHasPointLimit",
+      "players",
+      "playerScores",
+      "roundNumber",
+      "isGameFinished",
+      "winner",
+      "roundList"
+    ]
+  }
+}

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:flutter/services.dart';
+import 'package:json_schema/json_schema.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LocalStorageService {
@@ -38,31 +39,44 @@ class LocalStorageService {
   }
 
   /// Loads the game data from a local JSON file.
-  static Future<void> loadGameSessions() async {
+  static Future<bool> loadGameSessions() async {
     print('Versuche, Daten zu laden...');
     try {
       final file = await _getFilePath();
-      if (await file.exists()) {
-        print('Es existiert bereits eine Datei mit Spieldaten');
-        final jsonString = await file.readAsString();
-        if (jsonString.isNotEmpty) {
-          print('Die gefundene Datei ist nicht leer');
-          final jsonList = json.decode(jsonString) as List<dynamic>;
-          Globals.gameList = jsonList
-              .map((jsonItem) =>
-                  GameSession.fromJson(jsonItem as Map<String, dynamic>))
-              .toList()
-              .cast<GameSession>();
-          print('Die Daten wurden erfolgreich geladen');
-        } else {
-          print('Die Datei ist leer');
-        }
-      } else {
-        print('Es existiert bisher noch keine Datei mit Spieldaten');
+
+      if (!await file.exists()) {
+        print('Es existiert noch keine Datei mit Spieldaten');
+        return false;
       }
+
+      print('Es existiert bereits eine Datei mit Spieldaten');
+      final jsonString = await file.readAsString();
+
+      if (jsonString.isEmpty) {
+        print('Die gefundene Datei ist leer');
+        return false;
+      }
+
+      if (!await validateJsonSchema(jsonString)) {
+        print('Die Datei konnte nicht validiert werden');
+        Globals.gameList = [];
+        return false;
+      }
+
+      print('Die gefundene Datei ist nicht leer und validiert');
+      final jsonList = json.decode(jsonString) as List<dynamic>;
+
+      Globals.gameList = jsonList
+          .map((jsonItem) =>
+              GameSession.fromJson(jsonItem as Map<String, dynamic>))
+          .toList();
+
+      print('Die Daten wurden erfolgreich geladen und verarbeitet');
+      return true;
     } catch (e) {
       print('Fehler beim Laden der Spieldaten:\n$e');
       Globals.gameList = [];
+      return false;
     }
   }
 
@@ -87,34 +101,63 @@ class LocalStorageService {
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<bool> importJsonFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
+      type: FileType.custom,
+      allowedExtensions: ['json'],
+    );
+
+    if (result == null) {
+      print('Der Dialog wurde abgebrochen');
+      return false;
+    }
+
     try {
-      final result = await FilePicker.platform.pickFiles(
-        dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-      );
-      String jsonString = '';
-      if (result != null) {
-        if (result.files.single.bytes != null) {
-          final Uint8List fileBytes = result.files.single.bytes!;
-          jsonString = utf8.decode(fileBytes);
-        } else if (result.files.single.path != null) {
-          final file = File(result.files.single.path!);
-          jsonString = await file.readAsString();
-        }
-        final jsonList = json.decode(jsonString) as List<dynamic>;
-        print('JSON Inhalt: $jsonList');
-        Globals.gameList = jsonList
-            .map((jsonItem) =>
-                GameSession.fromJson(jsonItem as Map<String, dynamic>))
-            .toList();
-        return true;
-      } else {
-        print('Der Dialog wurde abgebrochen');
+      final jsonString = await _readFileContent(result.files.single);
+
+      if (!await validateJsonSchema(jsonString)) {
+        return false;
+      }
+      final jsonData = json.decode(jsonString) as List<dynamic>;
+      print('JSON Inhalt: $jsonData');
+      Globals.gameList = jsonData
+          .map((jsonItem) =>
+              GameSession.fromJson(jsonItem as Map<String, dynamic>))
+          .toList();
+      return true;
+    } on FormatException catch (e) {
+      print('Ungültiges JSON-Format: $e');
+      return false;
+    } on Exception catch (e) {
+      print('Fehler beim Dateizugriff: $e');
+      return false;
+    }
+  }
+
+  /// Helper method to read file content from either bytes or path
+  static Future<String> _readFileContent(PlatformFile file) async {
+    if (file.bytes != null) return utf8.decode(file.bytes!);
+    if (file.path != null) return await File(file.path!).readAsString();
+
+    throw Exception('Die Datei hat keinen lesbaren Inhalt');
+  }
+
+  /// Validates the JSON data against the schema.
+  static Future<bool> validateJsonSchema(String jsonString) async {
+    try {
+      final schemaString = await rootBundle.loadString('assets/schema.json');
+      final schema = JsonSchema.create(json.decode(schemaString));
+      final jsonData = json.decode(jsonString);
+      final result = schema.validate(jsonData);
+
+      if (result.isValid) {
+        print('JSON ist erfolgreich validiert.');
         return true;
       }
+      print('JSON ist nicht gültig: ${result.errors}');
+      return false;
     } catch (e) {
-      print('Fehler beim Importieren: $e');
+      print('Fehler beim Validieren des JSON-Schemas: $e');
       return false;
     }
   }
