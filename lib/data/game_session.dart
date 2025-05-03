@@ -63,7 +63,7 @@ class GameSession {
         players = List<String>.from(json['players']),
         pointLimit = json['pointLimit'],
         caboPenalty = json['caboPenalty'],
-        isPointsLimitEnabled = json['gameHasPointLimit'],
+        isPointsLimitEnabled = json['isPointsLimitEnabled'],
         isGameFinished = json['isGameFinished'],
         winner = json['winner'],
         roundNumber = json['roundNumber'],
