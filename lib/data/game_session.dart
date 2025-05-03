@@ -82,7 +82,7 @@ class GameSession {
       }
     }
     addRoundScoresToList(
-        roundNum, roundScores, scoreUpdates, kamikazePlayerIndex);
+        roundNum, roundScores, scoreUpdates, 0, kamikazePlayerIndex);
   }
 
   /// Checks the scores of the current round and assigns points to the players.
@@ -116,7 +116,7 @@ class GameSession {
       print('${players[caboPlayerIndex]} hat CABO gesagt '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
-      _assignPoints(roundNum, roundScores, [caboPlayerIndex]);
+      _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
     } else {
       // A player other than the one who said CABO has the fewest points.
       print('${players[caboPlayerIndex]} hat CABO gesagt, '
@@ -125,7 +125,8 @@ class GameSession {
       for (int i in lowestScoreIndex) {
         print('${players[i]}: ${roundScores[i]} Punkte');
       }
-      _assignPoints(roundNum, roundScores, lowestScoreIndex, caboPlayerIndex);
+      _assignPoints(roundNum, roundScores, caboPlayerIndex, lowestScoreIndex,
+          caboPlayerIndex);
     }
   }
 
@@ -151,8 +152,9 @@ class GameSession {
   /// [roundNum] is the number of the current round.
   /// [roundScores] is the raw list of the scores of all players in the current round.
   /// [winnerIndex] is the index of the player who receives 5 extra points
-  void _assignPoints(int roundNum, List<int> roundScores, List<int> winnerIndex,
-      [int loserIndex = -1]) {
+  void _assignPoints(int roundNum, List<int> roundScores, int caboPlayerIndex,
+      List<int> winnerIndex,
+      [int? loserIndex]) {
     /// List of the updates for every player score
     List<int> scoreUpdates = [...roundScores];
     print('Folgende Punkte wurden aus der Runde übernommen:');
@@ -163,7 +165,7 @@ class GameSession {
       print('${players[i]} hat gewonnen und bekommt 0 Punkte');
       scoreUpdates[i] = 0;
     }
-    if (loserIndex != -1) {
+    if (loserIndex != null) {
       print('${players[loserIndex]} bekommt 5 Fehlerpunkte');
       scoreUpdates[loserIndex] += 5;
     }
@@ -172,7 +174,7 @@ class GameSession {
       print('${players[i]}: ${scoreUpdates[i]}');
     }
     print('scoreUpdates: $scoreUpdates, roundScores: $roundScores');
-    addRoundScoresToList(roundNum, roundScores, scoreUpdates);
+    addRoundScoresToList(roundNum, roundScores, scoreUpdates, caboPlayerIndex);
   }
 
   /// Sets the scores of the players for a specific round.
@@ -181,13 +183,18 @@ class GameSession {
   /// playerScores. Its important that each index of the [roundScores] list
   /// corresponds to the index of the player in the [playerScores] list.
   void addRoundScoresToList(
-      int roundNum, List<int> roundScores, List<int> scoreUpdates,
-      [int? kamikazePlayerIndex]) {
+    int roundNum,
+    List<int> roundScores,
+    List<int> scoreUpdates,
+    int caboPlayerIndex, [
+    int? kamikazePlayerIndex,
+  ]) {
     Round newRound = Round(
       roundNum: roundNum,
+      caboPlayerIndex: caboPlayerIndex,
+      kamikazePlayerIndex: kamikazePlayerIndex,
       scores: roundScores,
       scoreUpdates: scoreUpdates,
-      kamikazePlayerIndex: kamikazePlayerIndex,
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
