@@ -289,7 +289,9 @@ class _CreateGameState extends State<CreateGame> {
                     caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
-                  Globals.addGameSession(gameSession);
+                  setState(() {
+                    Globals.addGameSession(gameSession);
+                  });
                   LocalStorageService.saveGameSessions();
                   if (context.mounted) {
                     Navigator.pushReplacement(
