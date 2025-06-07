@@ -1,4 +1,5 @@
 import 'package:cabo_counter/data/round.dart';
+import 'package:flutter/cupertino.dart';
 
 /// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
@@ -139,6 +140,11 @@ class GameSession {
     }
   }
 
+  /// The _getLowestScoreIndex method but forwarded for testing purposes.
+  @visibleForTesting
+  List<int> testingGetLowestScoreIndex(List<int> roundScores) =>
+      _getLowestScoreIndex(roundScores);
+
   /// Returns the index of the player with the lowest score. If there are
   /// multiple players with the same lowest score, all of them are returned.
   /// [roundScores] is a list of the scores of all players in the current round.
@@ -156,6 +162,12 @@ class GameSession {
     }
     return lowestScoreIndex;
   }
+
+  @visibleForTesting
+  void testingAssignPoints(int roundNum, List<int> roundScores,
+          int caboPlayerIndex, List<int> winnerIndex, [int? loserIndex]) =>
+      _assignPoints(
+          roundNum, roundScores, caboPlayerIndex, winnerIndex, loserIndex);
 
   /// Assigns points to the players based on the scores of the current round.
   /// [roundNum] is the number of the current round.
@@ -237,6 +249,9 @@ class GameSession {
       }
     }
   }
+
+  @visibleForTesting
+  void testingSumPoints() => _sumPoints();
 
   /// Sums up the points of all players and stores the result in the
   /// playerScores list.
