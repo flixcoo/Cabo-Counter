@@ -45,20 +45,17 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
               );
             },
-            icon: const Icon(
-              CupertinoIcons.settings,
-              size: 30,
-            )),
+            icon: const Icon(CupertinoIcons.settings, size: 30)),
         middle: const Text('Cabo Counter'),
         trailing: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => const CreateGame(),
-                ),
-              );
-            },
+            onPressed: () => {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => const CreateGame(),
+                    ),
+                  )
+                },
             icon: const Icon(CupertinoIcons.add)),
       ),
       child: CupertinoPageScaffold(
@@ -95,7 +92,30 @@ class _MainMenuViewState extends State<MainMenuView> {
                       itemCount: Globals.gameList.length,
                       itemBuilder: (context, index) {
                         final session = Globals.gameList[index];
-                        return Padding(
+                        return Dismissible(
+                          key: Key(session.gameTitle),
+                          background: Container(
+                            color: CupertinoColors.destructiveRed,
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: const Icon(
+                              CupertinoIcons.delete,
+                              color: CupertinoColors.white,
+                            ),
+                          ),
+                          direction: DismissDirection.startToEnd,
+                          confirmDismiss: (direction) async {
+                            final String gameTitle =
+                                Globals.gameList[index].gameTitle;
+                            return await _showDeleteGamePopup(gameTitle);
+                          },
+                          onDismissed: (direction) {
+                            _deleteSpecificGame(index);
+                          },
+                          dismissThresholds: const {
+                            DismissDirection.startToEnd: 0.6
+                          },
+                          child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: CupertinoListTile(
                               title: Text(session.gameTitle),
@@ -131,15 +151,60 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 );
                                 setState(() {});
                               },
-                            ));
-                      }),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
         ),
       ),
     );
   }
 
+  /// Translates the game mode boolean into the corresponding String.
+  /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
   String _translateGameMode(bool pointLimit) {
     if (pointLimit) return '101 Punkte';
     return 'Unbegrenzt';
+  }
+
+  /// Shows a confirmation dialog to delete all game sessions.
+  /// Returns true if the user confirms the deletion, false otherwise.
+  ///
+  Future<bool> _showDeleteGamePopup(String gameTitle) async {
+    bool? shouldDelete = await showCupertinoDialog<bool>(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: const Text('Spiel löschen?'),
+              content: Text(
+                  'Bist du sicher, dass du die Runde "$gameTitle" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('Abbrechen'),
+                ),
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('Löschen'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+    return shouldDelete;
+  }
+
+  /// Deletes a specific game session by its index.
+  /// This function takes an [index] as parameter and removes the game session at
+  /// that index from the global game list,
+  void _deleteSpecificGame(int index) {
+    Globals.gameList.removeAt(index);
+    LocalStorageService.saveGameSessions();
   }
 }

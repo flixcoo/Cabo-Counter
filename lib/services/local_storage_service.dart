@@ -169,4 +169,17 @@ class LocalStorageService {
       return false;
     }
   }
+
+  static Future<bool> deleteAllGames() async {
+    try {
+      Globals.gameList.clear();
+      await saveGameSessions();
+      logger.i('Alle Runden wurden erfolgreich gelöscht.');
+      return true;
+    } catch (e) {
+      logger.e('Fehler beim Löschen aller Runden: $e',
+          error: 'Löschen fehlgeschlagen');
+      return false;
+    }
+  }
 }
