@@ -58,6 +58,11 @@ class _RoundViewState extends State<RoundView> {
       _kamikazePlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
+
+    for (var controller in _scoreControllerList) {
+      controller.addListener(_updateButtonState);
+    }
+
     super.initState();
   }
 
@@ -337,6 +342,7 @@ class _RoundViewState extends State<RoundView> {
   /// Round Inputs are valid if every player has a score or
   /// kamikaze is selected for a player
   bool _areRoundInputsValid() {
+    print('Überprüfe, ob die Eingaben für die Runde gültig sind');
     if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
     return true;
   }
@@ -387,10 +393,17 @@ class _RoundViewState extends State<RoundView> {
     }
   }
 
+  void _updateButtonState() {
+    setState(() {}); // Erzwingt UI-Update
+  }
+
   @override
   void dispose() {
     for (final controller in _scoreControllerList) {
       controller.dispose();
+    }
+    for (var controller in _scoreControllerList) {
+      controller.removeListener(_updateButtonState);
     }
     for (final focusNode in _focusNodeList) {
       focusNode.dispose();
