@@ -58,6 +58,7 @@ class _RoundViewState extends State<RoundView> {
       _kamikazePlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
+
     super.initState();
   }
 
@@ -215,6 +216,7 @@ class _RoundViewState extends State<RoundView> {
                                       textAlign: TextAlign.center,
                                       onSubmitted: (_) =>
                                           _focusNextTextfield(index),
+                                      onChanged: (_) => setState(() {}),
                                     ),
                                   ),
                                   const SizedBox(width: 50),

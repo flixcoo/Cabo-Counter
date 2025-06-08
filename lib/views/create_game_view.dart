@@ -1,3 +1,4 @@
+import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
@@ -289,9 +290,7 @@ class _CreateGameState extends State<CreateGame> {
                     caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
-                  setState(() {
-                    Globals.addGameSession(gameSession);
-                  });
+                  globals.addGameSession(gameSession);
                   LocalStorageService.saveGameSessions();
                   if (context.mounted) {
                     Navigator.pushReplacement(

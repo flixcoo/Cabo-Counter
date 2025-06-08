@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +19,7 @@ class LocalStorageService {
   /// Writes the game session list to a  JSON file and returns it as string.
   static String getJsonFile() {
     final jsonFile =
-        Globals.gameList.map((session) => session.toJson()).toList();
+        globals.gameList.map((session) => session.toJson()).toList();
     return json.encode(jsonFile);
   }
 
@@ -63,14 +63,14 @@ class LocalStorageService {
 
       if (!await validateJsonSchema(jsonString)) {
         logger.w('Die Datei konnte nicht validiert werden');
-        Globals.gameList = [];
+        globals.gameList = [];
         return false;
       }
       logger.d('Die gefundene Datei hat Inhalt');
       logger.d('Die gefundene Datei wurde erfolgreich validiert');
       final jsonList = json.decode(jsonString) as List<dynamic>;
 
-      Globals.gameList = jsonList
+      globals.gameList = jsonList
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
@@ -80,7 +80,7 @@ class LocalStorageService {
     } catch (e) {
       logger.e('Fehler beim Laden der Spieldaten:\n$e',
           error: 'JSON nicht geladen');
-      Globals.gameList = [];
+      globals.gameList = [];
       return false;
     }
   }
@@ -125,7 +125,7 @@ class LocalStorageService {
         return false;
       }
       final jsonData = json.decode(jsonString) as List<dynamic>;
-      Globals.gameList = jsonData
+      globals.gameList = jsonData
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
@@ -172,7 +172,7 @@ class LocalStorageService {
 
   static Future<bool> deleteAllGames() async {
     try {
-      Globals.gameList.clear();
+      globals.gameList.clear();
       await saveGameSessions();
       logger.i('Alle Runden wurden erfolgreich gelöscht.');
       return true;
