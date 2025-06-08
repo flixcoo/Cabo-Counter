@@ -1,17 +1,25 @@
 import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:flutter/foundation.dart';
 
-class Globals {
-  /// The [gameList] contains all active game sessions.
-  static List<GameSession> gameList = [];
+class Globals extends ChangeNotifier {
+  List<GameSession> gameList = [];
+  int pointLimit = 100;
+  int caboPenalty = 5;
+  String appDevPhase = 'Alpha';
 
-  static void addGameSession(GameSession session) {
+  void addGameSession(GameSession session) {
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    notifyListeners(); // Wichtig!
+    LocalStorageService.saveGameSessions();
   }
 
-  static int pointLimit = 100;
-
-  static int caboPenalty = 5;
-
-  static String appDevPhase = 'Alpha';
+  void removeGameSession(int index) {
+    gameList.removeAt(index);
+    notifyListeners(); // Wichtig!
+    LocalStorageService.saveGameSessions();
+  }
 }
+
+final globals = Globals(); // Globale Instanz

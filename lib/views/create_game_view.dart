@@ -81,7 +81,7 @@ class _CreateGameState extends State<CreateGame> {
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
-                        pointLimit: Globals.pointLimit,
+                        pointLimit: globals.pointLimit,
                       ),
                     ),
                   );
@@ -285,13 +285,11 @@ class _CreateGameState extends State<CreateGame> {
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: Globals.pointLimit,
-                    caboPenalty: Globals.caboPenalty,
+                    pointLimit: globals.pointLimit,
+                    caboPenalty: globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
-                  setState(() {
-                    Globals.addGameSession(gameSession);
-                  });
+                  globals.addGameSession(gameSession);
                   LocalStorageService.saveGameSessions();
                   if (context.mounted) {
                     Navigator.pushReplacement(
