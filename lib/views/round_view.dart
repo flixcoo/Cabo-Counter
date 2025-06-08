@@ -339,7 +339,6 @@ class _RoundViewState extends State<RoundView> {
   /// Round Inputs are valid if every player has a score or
   /// kamikaze is selected for a player
   bool _areRoundInputsValid() {
-    print('Überprüfe, ob die Eingaben für die Runde gültig sind');
     if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
     return true;
   }
