@@ -32,7 +32,7 @@ class InformationView extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: SizedBox(
                   height: 200,
-                  child: Image.asset('assets/cabo-counter-logo_rounded.png'),
+                  child: Image.asset('assets/cabo_counter-logo_rounded.png'),
                 )),
             const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
