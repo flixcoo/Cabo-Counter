@@ -7,14 +7,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
 import 'package:json_schema/json_schema.dart';
-import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
-  static var logger = Logger(
-    printer: PrettyPrinter(),
-  );
 
   /// Writes the game session list to a  JSON file and returns it as string.
   static String getJsonFile() {
@@ -36,38 +32,44 @@ class LocalStorageService {
       final file = await _getFilePath();
       final jsonFile = getJsonFile();
       await file.writeAsString(jsonFile);
-      logger.i('Die Spieldaten wurden zwischengespeichert.');
+      print(
+          '[local_storage_service.dart] Die Spieldaten wurden zwischengespeichert.');
     } catch (e) {
-      logger.w('Fehler beim Speichern der Spieldaten. Exception: $e');
+      print(
+          '[local_storage_service.dart] Fehler beim Speichern der Spieldaten. Exception: $e');
     }
   }
 
   /// Loads the game data from a local JSON file.
   static Future<bool> loadGameSessions() async {
-    logger.d('Versuche, Daten zu laden...');
+    print('[local_storage_service.dart] Versuche, Daten zu laden...');
     try {
       final file = await _getFilePath();
 
       if (!await file.exists()) {
-        logger.w('Es existiert noch keine Datei mit Spieldaten');
+        print(
+            '[local_storage_service.dart] Es existiert noch keine Datei mit Spieldaten');
         return false;
       }
 
-      logger.d('Es existiert bereits eine Datei mit Spieldaten');
+      print(
+          '[local_storage_service.dart] Es existiert bereits eine Datei mit Spieldaten');
       final jsonString = await file.readAsString();
 
       if (jsonString.isEmpty) {
-        logger.w('Die gefundene Datei ist leer');
+        print('[local_storage_service.dart] Die gefundene Datei ist leer');
         return false;
       }
 
       if (!await validateJsonSchema(jsonString)) {
-        logger.w('Die Datei konnte nicht validiert werden');
+        print(
+            '[local_storage_service.dart] Die Datei konnte nicht validiert werden');
         gameManager.gameList = [];
         return false;
       }
-      logger.d('Die gefundene Datei hat Inhalt');
-      logger.d('Die gefundene Datei wurde erfolgreich validiert');
+      print('[local_storage_service.dart] Die gefundene Datei hat Inhalt');
+      print(
+          '[local_storage_service.dart] Die gefundene Datei wurde erfolgreich validiert');
       final jsonList = json.decode(jsonString) as List<dynamic>;
 
       gameManager.gameList = jsonList
@@ -75,11 +77,12 @@ class LocalStorageService {
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
 
-      logger.i('Die Spieldaten wurden erfolgreich geladen und verarbeitet');
+      print(
+          '[local_storage_service.dart] Die Spieldaten wurden erfolgreich geladen und verarbeitet');
       return true;
     } catch (e) {
-      logger.e('Fehler beim Laden der Spieldaten:\n$e',
-          error: 'JSON nicht geladen');
+      print(
+          '[local_storage_service.dart] Fehler beim Laden der Spieldaten:\n$e');
       gameManager.gameList = [];
       return false;
     }
@@ -96,11 +99,12 @@ class LocalStorageService {
         ext: 'json',
         mimeType: MimeType.json,
       );
-      logger.i('Die Spieldaten wurden exportiert. Dateipfad: $result');
+      print(
+          '[local_storage_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $result');
       return true;
     } catch (e) {
-      logger.w('Fehler beim Exportieren der Spieldaten. Exception: $e',
-          error: 'JSON nicht exportiert');
+      print(
+          '[local_storage_service.dart] Fehler beim Exportieren der Spieldaten. Exception: $e');
       return false;
     }
   }
@@ -114,7 +118,8 @@ class LocalStorageService {
     );
 
     if (result == null) {
-      logger.d('Der Filepicker-Dialog wurde abgebrochen');
+      print(
+          '[local_storage_service.dart] Der Filepicker-Dialog wurde abgebrochen');
       return false;
     }
 
@@ -129,14 +134,16 @@ class LocalStorageService {
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
-      logger.i('Die Datei wurde erfolgreich Importiertn');
+      print(
+          '[local_storage_service.dart] Die Datei wurde erfolgreich Importiertn');
       return true;
     } on FormatException catch (e) {
-      logger.e('Ungültiges JSON-Format. Exception: $e', error: 'Formatfehler');
+      print(
+          '[local_storage_service.dart] Ungültiges JSON-Format. Exception: $e');
       return false;
     } on Exception catch (e) {
-      logger.e('Fehler beim Dateizugriff. Exception: $e',
-          error: 'Dateizugriffsfehler');
+      print(
+          '[local_storage_service.dart] Fehler beim Dateizugriff. Exception: $e');
       return false;
     }
   }
@@ -158,14 +165,15 @@ class LocalStorageService {
       final result = schema.validate(jsonData);
 
       if (result.isValid) {
-        logger.d('JSON ist erfolgreich validiert.');
+        print('[local_storage_service.dart] JSON ist erfolgreich validiert.');
         return true;
       }
-      logger.w('JSON ist nicht gültig.\nFehler: ${result.errors}');
+      print(
+          '[local_storage_service.dart] JSON ist nicht gültig.\nFehler: ${result.errors}');
       return false;
     } catch (e) {
-      logger.e('Fehler beim Validieren des JSON-Schemas: $e',
-          error: 'Validierung fehlgeschlagen');
+      print(
+          '[local_storage_service.dart] Fehler beim Validieren des JSON-Schemas: $e');
       return false;
     }
   }
@@ -174,11 +182,12 @@ class LocalStorageService {
     try {
       gameManager.gameList.clear();
       await saveGameSessions();
-      logger.i('Alle Runden wurden erfolgreich gelöscht.');
+      print(
+          '[local_storage_service.dart] Alle Runden wurden erfolgreich gelöscht.');
       return true;
     } catch (e) {
-      logger.e('Fehler beim Löschen aller Runden: $e',
-          error: 'Löschen fehlgeschlagen');
+      print(
+          '[local_storage_service.dart] Fehler beim Löschen aller Runden: $e');
       return false;
     }
   }
