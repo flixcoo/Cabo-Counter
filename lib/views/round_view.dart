@@ -59,10 +59,6 @@ class _RoundViewState extends State<RoundView> {
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
 
-    for (var controller in _scoreControllerList) {
-      controller.addListener(_updateButtonState);
-    }
-
     super.initState();
   }
 
@@ -220,6 +216,7 @@ class _RoundViewState extends State<RoundView> {
                                       textAlign: TextAlign.center,
                                       onSubmitted: (_) =>
                                           _focusNextTextfield(index),
+                                      onChanged: (_) => setState(() {}),
                                     ),
                                   ),
                                   const SizedBox(width: 50),
@@ -393,17 +390,10 @@ class _RoundViewState extends State<RoundView> {
     }
   }
 
-  void _updateButtonState() {
-    setState(() {}); // Erzwingt UI-Update
-  }
-
   @override
   void dispose() {
     for (final controller in _scoreControllerList) {
       controller.dispose();
-    }
-    for (var controller in _scoreControllerList) {
-      controller.removeListener(_updateButtonState);
     }
     for (final focusNode in _focusNodeList) {
       focusNode.dispose();
