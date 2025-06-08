@@ -8,8 +8,8 @@ import 'package:flutter/cupertino.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConfigService.initConfig();
-  globals.pointLimit = await ConfigService.getPointLimit();
-  globals.caboPenalty = await ConfigService.getCaboPenalty();
+  Globals.pointLimit = await ConfigService.getPointLimit();
+  Globals.caboPenalty = await ConfigService.getCaboPenalty();
   runApp(const App());
 }
 

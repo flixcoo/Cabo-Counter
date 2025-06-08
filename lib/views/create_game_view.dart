@@ -1,3 +1,4 @@
+import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
@@ -81,7 +82,7 @@ class _CreateGameState extends State<CreateGame> {
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
-                        pointLimit: globals.pointLimit,
+                        pointLimit: Globals.pointLimit,
                       ),
                     ),
                   );
@@ -285,8 +286,8 @@ class _CreateGameState extends State<CreateGame> {
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: globals.pointLimit,
-                    caboPenalty: globals.caboPenalty,
+                    pointLimit: Globals.pointLimit,
+                    caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
                   globals.addGameSession(gameSession);

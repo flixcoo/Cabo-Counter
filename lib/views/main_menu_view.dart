@@ -1,6 +1,6 @@
+import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/settings_view.dart';

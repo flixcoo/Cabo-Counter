@@ -50,14 +50,14 @@ class _SettingsViewState extends State<SettingsView> {
                     subtitle: const Text('... für falsches Cabo sagen'),
                     trailing: Stepper(
                       key: _stepperKey1,
-                      initialValue: globals.caboPenalty,
+                      initialValue: Globals.caboPenalty,
                       minValue: 0,
                       maxValue: 50,
                       step: 1,
                       onChanged: (newCaboPenalty) {
                         setState(() {
                           ConfigService.setCaboPenalty(newCaboPenalty);
-                          globals.caboPenalty = newCaboPenalty;
+                          Globals.caboPenalty = newCaboPenalty;
                         });
                       },
                     ),
@@ -70,14 +70,14 @@ class _SettingsViewState extends State<SettingsView> {
                     subtitle: const Text('... hier ist Schluss'),
                     trailing: Stepper(
                       key: _stepperKey2,
-                      initialValue: globals.pointLimit,
+                      initialValue: Globals.pointLimit,
                       minValue: 30,
                       maxValue: 1000,
                       step: 10,
                       onChanged: (newPointLimit) {
                         setState(() {
                           ConfigService.setPointLimit(newPointLimit);
-                          globals.pointLimit = newPointLimit;
+                          Globals.pointLimit = newPointLimit;
                         });
                       },
                     ),
@@ -201,7 +201,7 @@ class _SettingsViewState extends State<SettingsView> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Text(
-                          '${globals.appDevPhase} ${snapshot.data!.version} '
+                          '${Globals.appDevPhase} ${snapshot.data!.version} '
                           '(Build ${snapshot.data!.buildNumber})',
                           textAlign: TextAlign.center,
                         );

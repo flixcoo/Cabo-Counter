@@ -48,8 +48,8 @@ class ConfigService {
 
   /// Resets the configuration to default values.
   static Future<void> resetConfig() async {
-    globals.pointLimit = _defaultPointLimit;
-    globals.caboPenalty = _defaultCaboPenalty;
+    Globals.pointLimit = _defaultPointLimit;
+    Globals.caboPenalty = _defaultCaboPenalty;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, _defaultPointLimit);
     await prefs.setInt(_keyCaboPenalty, _defaultCaboPenalty);
