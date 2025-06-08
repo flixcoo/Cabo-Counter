@@ -118,7 +118,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   return await _showDeleteGamePopup(gameTitle);
                                 },
                                 onDismissed: (direction) {
-                                  _deleteSpecificGame(index);
+                                  gameManager.removeGameSession(index);
                                 },
                                 dismissThresholds: const {
                                   DismissDirection.startToEnd: 0.6
@@ -214,13 +214,5 @@ class _MainMenuViewState extends State<MainMenuView> {
         ) ??
         false;
     return shouldDelete;
-  }
-
-  /// Deletes a specific game session by its index.
-  /// This function takes an [index] as parameter and removes the game session at
-  /// that index from the global game list,
-  void _deleteSpecificGame(int index) {
-    gameManager.gameList.removeAt(index);
-    LocalStorageService.saveGameSessions();
   }
 }
