@@ -26,7 +26,7 @@ class _MainMenuViewState extends State<MainMenuView> {
         _isLoading = false;
       });
     });
-    globals.addListener(_updateView);
+    gameManager.addListener(_updateView);
   }
 
   void _updateView() {
@@ -39,7 +39,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     LocalStorageService.loadGameSessions();
 
     return ListenableBuilder(
-        listenable: globals,
+        listenable: gameManager,
         builder: (context, _) {
           return CupertinoPageScaffold(
             resizeToAvoidBottomInset: false,
@@ -70,7 +70,7 @@ class _MainMenuViewState extends State<MainMenuView> {
               child: SafeArea(
                 child: _isLoading
                     ? const Center(child: CupertinoActivityIndicator())
-                    : globals.gameList.isEmpty
+                    : gameManager.gameList.isEmpty
                         ? Column(
                             mainAxisAlignment:
                                 MainAxisAlignment.center, // Oben ausrichten
@@ -97,9 +97,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                             ],
                           )
                         : ListView.builder(
-                            itemCount: globals.gameList.length,
+                            itemCount: gameManager.gameList.length,
                             itemBuilder: (context, index) {
-                              final session = globals.gameList[index];
+                              final session = gameManager.gameList[index];
                               return Dismissible(
                                 key: Key(session.gameTitle),
                                 background: Container(
@@ -114,7 +114,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 direction: DismissDirection.startToEnd,
                                 confirmDismiss: (direction) async {
                                   final String gameTitle =
-                                      globals.gameList[index].gameTitle;
+                                      gameManager.gameList[index].gameTitle;
                                   return await _showDeleteGamePopup(gameTitle);
                                 },
                                 onDismissed: (direction) {
@@ -161,7 +161,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         CupertinoPageRoute(
                                           builder: (context) => ActiveGameView(
                                               gameSession:
-                                                  globals.gameList[index]),
+                                                  gameManager.gameList[index]),
                                         ),
                                       );
                                       setState(() {});
@@ -220,7 +220,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// This function takes an [index] as parameter and removes the game session at
   /// that index from the global game list,
   void _deleteSpecificGame(int index) {
-    globals.gameList.removeAt(index);
+    gameManager.gameList.removeAt(index);
     LocalStorageService.saveGameSessions();
   }
 }

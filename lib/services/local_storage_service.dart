@@ -19,7 +19,7 @@ class LocalStorageService {
   /// Writes the game session list to a  JSON file and returns it as string.
   static String getJsonFile() {
     final jsonFile =
-        globals.gameList.map((session) => session.toJson()).toList();
+        gameManager.gameList.map((session) => session.toJson()).toList();
     return json.encode(jsonFile);
   }
 
@@ -63,14 +63,14 @@ class LocalStorageService {
 
       if (!await validateJsonSchema(jsonString)) {
         logger.w('Die Datei konnte nicht validiert werden');
-        globals.gameList = [];
+        gameManager.gameList = [];
         return false;
       }
       logger.d('Die gefundene Datei hat Inhalt');
       logger.d('Die gefundene Datei wurde erfolgreich validiert');
       final jsonList = json.decode(jsonString) as List<dynamic>;
 
-      globals.gameList = jsonList
+      gameManager.gameList = jsonList
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
@@ -80,7 +80,7 @@ class LocalStorageService {
     } catch (e) {
       logger.e('Fehler beim Laden der Spieldaten:\n$e',
           error: 'JSON nicht geladen');
-      globals.gameList = [];
+      gameManager.gameList = [];
       return false;
     }
   }
@@ -125,7 +125,7 @@ class LocalStorageService {
         return false;
       }
       final jsonData = json.decode(jsonString) as List<dynamic>;
-      globals.gameList = jsonData
+      gameManager.gameList = jsonData
           .map((jsonItem) =>
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
@@ -172,7 +172,7 @@ class LocalStorageService {
 
   static Future<bool> deleteAllGames() async {
     try {
-      globals.gameList.clear();
+      gameManager.gameList.clear();
       await saveGameSessions();
       logger.i('Alle Runden wurden erfolgreich gelöscht.');
       return true;

@@ -27,4 +27,4 @@ class GameManager extends ChangeNotifier {
   }
 }
 
-final globals = GameManager();
+final gameManager = GameManager();
