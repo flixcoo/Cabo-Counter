@@ -4,9 +4,12 @@ import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/tab_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await ConfigService.initConfig();
   Globals.pointLimit = await ConfigService.getPointLimit();
   Globals.caboPenalty = await ConfigService.getCaboPenalty();
