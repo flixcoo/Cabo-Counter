@@ -1,3 +1,5 @@
+import 'package:cabo_counter/data/game_session.dart';
+
 /// This class represents a single round in the game.
 /// It is stored within the [GameSession] class.
 /// [roundNum] is the number of the round its reppresenting.
@@ -7,13 +9,40 @@
 /// kamikaze, this value is null.
 class Round {
   final int roundNum;
+  final int caboPlayerIndex;
+  final int? kamikazePlayerIndex;
   final List<int> scores;
   final List<int> scoreUpdates;
-  final int? kamikazePlayerIndex;
 
-  Round(
-      {required this.roundNum,
-      required this.scores,
-      required this.scoreUpdates,
-      this.kamikazePlayerIndex});
+  Round({
+    required this.roundNum,
+    required this.caboPlayerIndex,
+    this.kamikazePlayerIndex,
+    required this.scores,
+    required this.scoreUpdates,
+  });
+
+  @override
+  toString() {
+    return 'Round $roundNum, caboPlayerIndex: $caboPlayerIndex, '
+        'kamikazePlayerIndex: $kamikazePlayerIndex, scores: $scores, '
+        'scoreUpdates: $scoreUpdates, ';
+  }
+
+  /// Converts the Round object to a JSON map.
+  Map<String, dynamic> toJson() => {
+        'roundNum': roundNum,
+        'caboPlayerIndex': caboPlayerIndex,
+        'kamikazePlayerIndex': kamikazePlayerIndex,
+        'scores': scores,
+        'scoreUpdates': scoreUpdates,
+      };
+
+  /// Creates a Round object from a JSON map.
+  Round.fromJson(Map<String, dynamic> json)
+      : roundNum = json['roundNum'],
+        caboPlayerIndex = json['caboPlayerIndex'],
+        kamikazePlayerIndex = json['kamikazePlayerIndex'],
+        scores = List<int>.from(json['scores']),
+        scoreUpdates = List<int>.from(json['scoreUpdates']);
 }

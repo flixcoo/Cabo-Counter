@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/utility/theme.dart' as theme;
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,91 +15,98 @@ class ActiveGameView extends StatefulWidget {
 class _ActiveGameViewState extends State<ActiveGameView> {
   @override
   Widget build(BuildContext context) {
-    List<int> sortedPlayerIndices = _getSortedPlayerIndices();
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(widget.gameSession.gameTitle),
-      ),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Text(
-                'Spieler:innen',
-                style: theme.createGameTitle,
+    return ListenableBuilder(
+        listenable: widget.gameSession,
+        builder: (context, _) {
+          List<int> sortedPlayerIndices = _getSortedPlayerIndices();
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(widget.gameSession.gameTitle),
+            ),
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    child: Text(
+                      'Spieler:innen',
+                      style: CustomTheme.rowTitle,
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.gameSession.players.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      int playerIndex = sortedPlayerIndices[index];
+                      return CupertinoListTile(
+                        title: Row(
+                          children: [
+                            _getPlacementPrefix(index),
+                            const SizedBox(width: 5),
+                            Text(
+                              widget.gameSession.players[playerIndex],
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        trailing: Row(
+                          children: [
+                            const SizedBox(width: 5),
+                            Text(
+                                '${widget.gameSession.playerScores[playerIndex]} '
+                                'Punkte')
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    child: Text(
+                      'Runden',
+                      style: CustomTheme.rowTitle,
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.gameSession.roundNumber,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: CupertinoListTile(
+                            title: Text(
+                              'Runde ${index + 1}',
+                            ),
+                            trailing: index + 1 !=
+                                        widget.gameSession.roundNumber ||
+                                    widget.gameSession.isGameFinished == true
+                                ? (const Text('\u{2705}',
+                                    style: TextStyle(fontSize: 22)))
+                                : const Text('\u{23F3}',
+                                    style: TextStyle(fontSize: 22)),
+                            onTap: () async {
+                              // ignore: unused_local_variable
+                              final val = await Navigator.of(context,
+                                      rootNavigator: true)
+                                  .push(
+                                CupertinoPageRoute(
+                                  fullscreenDialog: true,
+                                  builder: (context) => RoundView(
+                                      gameSession: widget.gameSession,
+                                      roundNumber: index + 1),
+                                ),
+                              );
+                            },
+                          ));
+                    },
+                  ),
+                ],
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.gameSession.players.length,
-              itemBuilder: (BuildContext context, int index) {
-                int playerIndex = sortedPlayerIndices[index];
-                return CupertinoListTile(
-                  title: Row(
-                    children: [
-                      _getPlacementPrefix(index),
-                      const SizedBox(width: 5),
-                      Text(
-                        widget.gameSession.players[playerIndex],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  trailing: Row(
-                    children: [
-                      const SizedBox(width: 5),
-                      Text('${widget.gameSession.playerScores[playerIndex]} '
-                          'Punkte')
-                    ],
-                  ),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Text(
-                'Runden',
-                style: theme.createGameTitle,
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.gameSession.roundNumber,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                    padding: const EdgeInsets.all(1),
-                    child: CupertinoListTile(
-                      title: Text(
-                        'Runde ${index + 1}',
-                      ),
-                      trailing: index + 1 != widget.gameSession.roundNumber ||
-                              widget.gameSession.isGameFinished == true
-                          ? (const Text('\u{2705}',
-                              style: TextStyle(fontSize: 22)))
-                          : const Text('\u{23F3}',
-                              style: TextStyle(fontSize: 22)),
-                      onTap: () async {
-                        // ignore: unused_local_variable
-                        final val = await Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) => RoundView(
-                                gameSession: widget.gameSession,
-                                roundNumber: index + 1),
-                          ),
-                        );
-                        setState(() {});
-                      },
-                    ));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
   /// Returns a list of player indices sorted by their scores in

@@ -1,42 +1,76 @@
 import 'package:cabo_counter/data/round.dart';
+import 'package:flutter/cupertino.dart';
 
 /// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
 /// [gameTitle] is the title of the game.
-/// [gameHasPointLimit] is a boolean indicating if the game has the default
+/// [isPointsLimitEnabled] is a boolean indicating if the game has the default
 /// point limit of 101 points or not.
 /// [players] is a string list of player names.
 /// [playerScores] is a list of the summed scores of all players.
 /// [roundNumber] is the current round number.
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
-class GameSession {
-  final DateTime createdAt = DateTime.now();
+class GameSession extends ChangeNotifier {
+  final DateTime createdAt;
   final String gameTitle;
-  final bool gameHasPointLimit;
   final List<String> players;
-  late List<int> playerScores;
-  List<Round> roundList = [];
-  int roundNumber = 1;
+  final int pointLimit;
+  final int caboPenalty;
+  final bool isPointsLimitEnabled;
   bool isGameFinished = false;
   String winner = '';
+  int roundNumber = 1;
+  late List<int> playerScores;
+  List<Round> roundList = [];
 
   GameSession({
+    required this.createdAt,
     required this.gameTitle,
-    required this.gameHasPointLimit,
     required this.players,
+    required this.pointLimit,
+    required this.caboPenalty,
+    required this.isPointsLimitEnabled,
   }) {
     playerScores = List.filled(players.length, 0);
   }
 
   @override
-  String toString() {
+  toString() {
     return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
-        'gameHasPointLimit: $gameHasPointLimit, players: $players, '
-        'playerScores: $playerScores, roundList: $roundList, '
-        'roundNumber: $roundNumber, isGameFinished: $isGameFinished, '
-        'winner: $winner]');
+        'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
+        ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
   }
+
+  /// Converts the GameSession object to a JSON map.
+  Map<String, dynamic> toJson() => {
+        'createdAt': createdAt.toIso8601String(),
+        'gameTitle': gameTitle,
+        'players': players,
+        'pointLimit': pointLimit,
+        'caboPenalty': caboPenalty,
+        'isPointsLimitEnabled': isPointsLimitEnabled,
+        'isGameFinished': isGameFinished,
+        'winner': winner,
+        'roundNumber': roundNumber,
+        'playerScores': playerScores,
+        'roundList': roundList.map((e) => e.toJson()).toList()
+      };
+
+  /// Creates a GameSession object from a JSON map.
+  GameSession.fromJson(Map<String, dynamic> json)
+      : createdAt = DateTime.parse(json['createdAt']),
+        gameTitle = json['gameTitle'],
+        players = List<String>.from(json['players']),
+        pointLimit = json['pointLimit'],
+        caboPenalty = json['caboPenalty'],
+        isPointsLimitEnabled = json['isPointsLimitEnabled'],
+        isGameFinished = json['isGameFinished'],
+        winner = json['winner'],
+        roundNumber = json['roundNumber'],
+        playerScores = List<int>.from(json['playerScores']),
+        roundList =
+            (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
   /// Returns the length of all player names combined.
   int getLengthOfPlayerNames() {
@@ -52,13 +86,13 @@ class GameSession {
   void applyKamikaze(int roundNum, int kamikazePlayerIndex) {
     List<int> roundScores = List.generate(players.length, (_) => 0);
     List<int> scoreUpdates = List.generate(players.length, (_) => 0);
-    for (int i = 0; i < roundScores.length; i++) {
+    for (int i = 0; i < scoreUpdates.length; i++) {
       if (i != kamikazePlayerIndex) {
         scoreUpdates[i] += 50;
       }
     }
     addRoundScoresToList(
-        roundNum, roundScores, scoreUpdates, kamikazePlayerIndex);
+        roundNum, roundScores, scoreUpdates, 0, kamikazePlayerIndex);
   }
 
   /// Checks the scores of the current round and assigns points to the players.
@@ -92,7 +126,7 @@ class GameSession {
       print('${players[caboPlayerIndex]} hat CABO gesagt '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
-      _assignPoints(roundNum, roundScores, [caboPlayerIndex]);
+      _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
     } else {
       // A player other than the one who said CABO has the fewest points.
       print('${players[caboPlayerIndex]} hat CABO gesagt, '
@@ -101,9 +135,15 @@ class GameSession {
       for (int i in lowestScoreIndex) {
         print('${players[i]}: ${roundScores[i]} Punkte');
       }
-      _assignPoints(roundNum, roundScores, lowestScoreIndex, caboPlayerIndex);
+      _assignPoints(roundNum, roundScores, caboPlayerIndex, lowestScoreIndex,
+          caboPlayerIndex);
     }
   }
+
+  /// The _getLowestScoreIndex method but forwarded for testing purposes.
+  @visibleForTesting
+  List<int> testingGetLowestScoreIndex(List<int> roundScores) =>
+      _getLowestScoreIndex(roundScores);
 
   /// Returns the index of the player with the lowest score. If there are
   /// multiple players with the same lowest score, all of them are returned.
@@ -123,12 +163,19 @@ class GameSession {
     return lowestScoreIndex;
   }
 
+  @visibleForTesting
+  void testingAssignPoints(int roundNum, List<int> roundScores,
+          int caboPlayerIndex, List<int> winnerIndex, [int? loserIndex]) =>
+      _assignPoints(
+          roundNum, roundScores, caboPlayerIndex, winnerIndex, loserIndex);
+
   /// Assigns points to the players based on the scores of the current round.
   /// [roundNum] is the number of the current round.
   /// [roundScores] is the raw list of the scores of all players in the current round.
   /// [winnerIndex] is the index of the player who receives 5 extra points
-  void _assignPoints(int roundNum, List<int> roundScores, List<int> winnerIndex,
-      [int loserIndex = -1]) {
+  void _assignPoints(int roundNum, List<int> roundScores, int caboPlayerIndex,
+      List<int> winnerIndex,
+      [int? loserIndex]) {
     /// List of the updates for every player score
     List<int> scoreUpdates = [...roundScores];
     print('Folgende Punkte wurden aus der Runde übernommen:');
@@ -139,7 +186,7 @@ class GameSession {
       print('${players[i]} hat gewonnen und bekommt 0 Punkte');
       scoreUpdates[i] = 0;
     }
-    if (loserIndex != -1) {
+    if (loserIndex != null) {
       print('${players[loserIndex]} bekommt 5 Fehlerpunkte');
       scoreUpdates[loserIndex] += 5;
     }
@@ -148,7 +195,7 @@ class GameSession {
       print('${players[i]}: ${scoreUpdates[i]}');
     }
     print('scoreUpdates: $scoreUpdates, roundScores: $roundScores');
-    addRoundScoresToList(roundNum, roundScores, scoreUpdates);
+    addRoundScoresToList(roundNum, roundScores, scoreUpdates, caboPlayerIndex);
   }
 
   /// Sets the scores of the players for a specific round.
@@ -157,19 +204,25 @@ class GameSession {
   /// playerScores. Its important that each index of the [roundScores] list
   /// corresponds to the index of the player in the [playerScores] list.
   void addRoundScoresToList(
-      int roundNum, List<int> roundScores, List<int> scoreUpdates,
-      [int? kamikazePlayerIndex]) {
+    int roundNum,
+    List<int> roundScores,
+    List<int> scoreUpdates,
+    int caboPlayerIndex, [
+    int? kamikazePlayerIndex,
+  ]) {
     Round newRound = Round(
       roundNum: roundNum,
+      caboPlayerIndex: caboPlayerIndex,
+      kamikazePlayerIndex: kamikazePlayerIndex,
       scores: roundScores,
       scoreUpdates: scoreUpdates,
-      kamikazePlayerIndex: kamikazePlayerIndex,
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
     } else {
       roundList[roundNum - 1] = newRound;
     }
+    notifyListeners();
   }
 
   /// This method updates the points of each player after a round.
@@ -182,13 +235,13 @@ class GameSession {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
-  void updatePoints() {
+  Future<void> updatePoints() async {
     _sumPoints();
-    if (gameHasPointLimit) {
+    if (isPointsLimitEnabled) {
       _checkHundredPointsReached();
 
       for (int i = 0; i < playerScores.length; i++) {
-        if (playerScores[i] > 100) {
+        if (playerScores[i] > pointLimit) {
           isGameFinished = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
@@ -196,7 +249,11 @@ class GameSession {
         }
       }
     }
+    notifyListeners();
   }
+
+  @visibleForTesting
+  void testingSumPoints() => _sumPoints();
 
   /// Sums up the points of all players and stores the result in the
   /// playerScores list.
@@ -207,6 +264,7 @@ class GameSession {
         playerScores[i] += roundList[j].scoreUpdates[i];
       }
     }
+    notifyListeners();
   }
 
   /// Checks if a player has reached 100 points in the current round.
@@ -214,7 +272,7 @@ class GameSession {
   /// the corresponding round update.
   void _checkHundredPointsReached() {
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == 100) {
+      if (playerScores[i] == pointLimit) {
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
             'deswegen 50 Punkte abgezogen');
         roundList[roundNumber - 1].scoreUpdates[i] -= 50;
@@ -236,10 +294,14 @@ class GameSession {
       }
     }
     winner = lowestPlayer;
+    notifyListeners();
   }
 
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
+    print('roundNumber erhöht: $roundNumber — Hash: ${identityHashCode(this)}');
+
+    notifyListeners();
   }
 }
