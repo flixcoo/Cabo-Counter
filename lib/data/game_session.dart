@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 /// [roundNumber] is the current round number.
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
-class GameSession {
+class GameSession extends ChangeNotifier {
   final DateTime createdAt;
   final String gameTitle;
   final List<String> players;
@@ -222,6 +222,7 @@ class GameSession {
     } else {
       roundList[roundNum - 1] = newRound;
     }
+    notifyListeners();
   }
 
   /// This method updates the points of each player after a round.
@@ -248,6 +249,7 @@ class GameSession {
         }
       }
     }
+    notifyListeners();
   }
 
   @visibleForTesting
@@ -262,6 +264,7 @@ class GameSession {
         playerScores[i] += roundList[j].scoreUpdates[i];
       }
     }
+    notifyListeners();
   }
 
   /// Checks if a player has reached 100 points in the current round.
@@ -291,10 +294,14 @@ class GameSession {
       }
     }
     winner = lowestPlayer;
+    notifyListeners();
   }
 
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
+    print('roundNumber erhöht: $roundNumber — Hash: ${identityHashCode(this)}');
+
+    notifyListeners();
   }
 }
