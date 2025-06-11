@@ -9,11 +9,21 @@ class GameManager extends ChangeNotifier {
   /// Takes a [GameSession] object as input. It then adds the session to the `gameList`,
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
-  void addGameSession(GameSession session) {
+  /// Returns the index of the newly added session in the sorted list.
+  Future<int> addGameSession(GameSession session) async {
+    session.addListener(() {
+      notifyListeners(); // Propagate session changes
+    });
     gameList.add(session);
+    print(
+        '[game_manager.dart] Added game session: ${session.gameTitle} at ${session.createdAt}');
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    print(
+        '[game_manager.dart] Sorted game sessions by creation date. Total sessions: ${gameList.length}');
     notifyListeners();
-    LocalStorageService.saveGameSessions();
+    await LocalStorageService.saveGameSessions();
+    print('[game_manager.dart] Saved game sessions to local storage.');
+    return gameList.indexOf(session);
   }
 
   /// Removes a game session from the list and sorts it by creation date.
@@ -21,6 +31,7 @@ class GameManager extends ChangeNotifier {
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
   void removeGameSession(int index) {
+    gameList[index].removeListener(notifyListeners);
     gameList.removeAt(index);
     notifyListeners();
     LocalStorageService.saveGameSessions();

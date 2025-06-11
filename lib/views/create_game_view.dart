@@ -206,7 +206,7 @@ class _CreateGameState extends State<CreateGame> {
                     ),
                   ],
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_gameTitleTextController.text == '') {
                     showCupertinoDialog(
                       context: context,
@@ -289,13 +289,14 @@ class _CreateGameState extends State<CreateGame> {
                     caboPenalty: Globals.caboPenalty,
                     isPointsLimitEnabled: selectedMode!,
                   );
-                  gameManager.addGameSession(gameSession);
+                  final index = await gameManager.addGameSession(gameSession);
+                  print('index des spiels: $index');
                   if (context.mounted) {
                     Navigator.pushReplacement(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) =>
-                                ActiveGameView(gameSession: gameSession)));
+                            builder: (context) => ActiveGameView(
+                                gameSession: gameManager.gameList[index])));
                   } else {
                     print('Context is not mounted');
                   }
