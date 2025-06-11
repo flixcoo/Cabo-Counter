@@ -165,9 +165,9 @@ class _RoundViewState extends State<RoundView> {
                             SizedBox(
                                 width: 100,
                                 child: Center(child: Text('Punkte'))),
-                            SizedBox(width: 28),
+                            SizedBox(width: 20),
                             SizedBox(
-                                width: 70,
+                                width: 80,
                                 child: Center(child: Text('Kamikaze'))),
                           ],
                         ),
