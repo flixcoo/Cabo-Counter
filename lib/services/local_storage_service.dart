@@ -28,6 +28,7 @@ class LocalStorageService {
 
   /// Saves the game sessions to a local JSON file.
   static Future<void> saveGameSessions() async {
+    print('[local_storage_service.dart] Versuche, Daten zu speichern...');
     try {
       final file = await _getFilePath();
       final jsonFile = getJsonFile();
