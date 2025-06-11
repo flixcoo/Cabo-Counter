@@ -35,9 +35,6 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
-    print('MainMenuView build');
-    LocalStorageService.loadGameSessions();
-
     return ListenableBuilder(
         listenable: gameManager,
         builder: (context, _) {
@@ -100,75 +97,83 @@ class _MainMenuViewState extends State<MainMenuView> {
                             itemCount: gameManager.gameList.length,
                             itemBuilder: (context, index) {
                               final session = gameManager.gameList[index];
-                              return Dismissible(
-                                key: Key(session.gameTitle),
-                                background: Container(
-                                  color: CupertinoColors.destructiveRed,
-                                  alignment: Alignment.centerLeft,
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: const Icon(
-                                    CupertinoIcons.delete,
-                                    color: CupertinoColors.white,
-                                  ),
-                                ),
-                                direction: DismissDirection.startToEnd,
-                                confirmDismiss: (direction) async {
-                                  final String gameTitle =
-                                      gameManager.gameList[index].gameTitle;
-                                  return await _showDeleteGamePopup(gameTitle);
-                                },
-                                onDismissed: (direction) {
-                                  gameManager.removeGameSession(index);
-                                },
-                                dismissThresholds: const {
-                                  DismissDirection.startToEnd: 0.6
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0),
-                                  child: CupertinoListTile(
-                                    backgroundColorActivated:
-                                        CustomTheme.backgroundColor,
-                                    title: Text(session.gameTitle),
-                                    subtitle: session.isGameFinished == true
-                                        ? Text(
-                                            '\u{1F947} ${session.winner}',
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          )
-                                        : Text(
-                                            'Modus: ${_translateGameMode(session.isPointsLimitEnabled)}',
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          ),
-                                    trailing: Row(
-                                      children: [
-                                        Text('${session.roundNumber}'),
-                                        const SizedBox(width: 3),
-                                        const Icon(CupertinoIcons
-                                            .arrow_2_circlepath_circle_fill),
-                                        const SizedBox(width: 15),
-                                        Text('${session.players.length}'),
-                                        const SizedBox(width: 3),
-                                        const Icon(
-                                            CupertinoIcons.person_2_fill),
-                                      ],
-                                    ),
-                                    onTap: () async {
-                                      //ignore: unused_local_variable
-                                      final val = await Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => ActiveGameView(
-                                              gameSession:
-                                                  gameManager.gameList[index]),
+                              return ListenableBuilder(
+                                  listenable: session,
+                                  builder: (context, _) {
+                                    return Dismissible(
+                                      key: Key(session.gameTitle),
+                                      background: Container(
+                                        color: CupertinoColors.destructiveRed,
+                                        alignment: Alignment.centerLeft,
+                                        padding:
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: const Icon(
+                                          CupertinoIcons.delete,
+                                          color: CupertinoColors.white,
                                         ),
-                                      );
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              );
+                                      ),
+                                      direction: DismissDirection.startToEnd,
+                                      confirmDismiss: (direction) async {
+                                        final String gameTitle = gameManager
+                                            .gameList[index].gameTitle;
+                                        return await _showDeleteGamePopup(
+                                            gameTitle);
+                                      },
+                                      onDismissed: (direction) {
+                                        gameManager.removeGameSession(index);
+                                      },
+                                      dismissThresholds: const {
+                                        DismissDirection.startToEnd: 0.6
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: CupertinoListTile(
+                                          backgroundColorActivated:
+                                              CustomTheme.backgroundColor,
+                                          title: Text(session.gameTitle),
+                                          subtitle:
+                                              session.isGameFinished == true
+                                                  ? Text(
+                                                      '\u{1F947} ${session.winner}',
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
+                                                    )
+                                                  : Text(
+                                                      'Modus: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                          trailing: Row(
+                                            children: [
+                                              Text('${session.roundNumber}'),
+                                              const SizedBox(width: 3),
+                                              const Icon(CupertinoIcons
+                                                  .arrow_2_circlepath_circle_fill),
+                                              const SizedBox(width: 15),
+                                              Text('${session.players.length}'),
+                                              const SizedBox(width: 3),
+                                              const Icon(
+                                                  CupertinoIcons.person_2_fill),
+                                            ],
+                                          ),
+                                          onTap: () async {
+                                            //ignore: unused_local_variable
+                                            final val = await Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    ActiveGameView(
+                                                        gameSession: gameManager
+                                                            .gameList[index]),
+                                              ),
+                                            );
+                                            setState(() {});
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  });
                             },
                           ),
               ),
@@ -214,5 +219,11 @@ class _MainMenuViewState extends State<MainMenuView> {
         ) ??
         false;
     return shouldDelete;
+  }
+
+  @override
+  void dispose() {
+    gameManager.removeListener(_updateView);
+    super.dispose();
   }
 }
