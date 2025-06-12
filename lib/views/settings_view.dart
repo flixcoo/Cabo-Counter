@@ -93,7 +93,7 @@ class _SettingsViewState extends State<SettingsView> {
                         _stepperKey1 = UniqueKey();
                         _stepperKey2 = UniqueKey();
                       }),
-                      child: const Text('Standard zurücksetzten'),
+                      child: const Text('Auf Standard zurücksetzten'),
                     ),
                   )),
               Padding(
