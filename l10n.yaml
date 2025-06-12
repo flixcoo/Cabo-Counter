@@ -1,0 +1,4 @@
+arb-dir: assets/strings/arb
+template-arb-file: app_de.arb
+untranslated-messages-file: assets/strings/untranslated_messages.json
+nullable-getter: false
