@@ -1,4 +1,4 @@
-# [PR Title]: Brief Description of Changes
+# [PR Title]
 
 **Related Issue(s):**  
 Closes `<issue-no>`
@@ -10,16 +10,8 @@ Closes `<issue-no>`
 - [ ] Added new feature X  
 - [ ] Fixed bug in component Y  
 - [ ] Refactored module Z for better performance  
-- [ ] Updated dependencies  
-
-## Type of Change  
-- [ ] 🐛 Bug fix (non-breaking change)  
-- [ ] ✨ New feature (non-breaking change)  
-- [ ] 💥 Breaking change (fix/feature that may affect existing functionality)  
-- [ ] 📚 Documentation update  
-- [ ] 🧹 Code refactoring  
-- [ ] 🧪 Test updates  
-
+- [ ] Updated dependencies
+      
 ## Screenshots/GIFs (if applicable)  
 *Before:*  
 ![Before changes](url)  
