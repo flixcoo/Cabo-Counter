@@ -196,5 +196,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Hey :) Thanks for being one of the first users of my first app! I’ve put a lot of work into this project, and even though I (hopefully) thought of a lot, not everything will work 100% yet. If you discover any bugs or have feedback on the design or usability, please don’t hesitate to let me know. Thanks!';
+      'Hey :) Thanks for being one of the first users of my first app! I’ve put a lot of work into this project, and even though I (hopefully) thought of a lot, not everything will work 100% yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the Testflight app or a message / email. Thank you very much!';
 }
