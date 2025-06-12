@@ -18,7 +18,7 @@ class ModeSelectionMenu extends StatelessWidget {
             child: CupertinoListTile(
               title: Text('$pointLimit Punkte', style: CustomTheme.modeTitle),
               subtitle: Text(
-                'Es wird solange gespielt, bis einer Spieler mehr als $pointLimit Punkte erreicht',
+                'Es wird so lange gespielt, bis ein:e Spieler:in mehr als $pointLimit Punkte erreicht',
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
@@ -33,7 +33,7 @@ class ModeSelectionMenu extends StatelessWidget {
               title: Text('Unbegrenzt', style: CustomTheme.modeTitle),
               subtitle: const Text(
                 'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange '
-                'gespielt, bis Ihr keine Lust mehr habt.',
+                'gespielt, bis ihr keine Lust mehr habt.',
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
