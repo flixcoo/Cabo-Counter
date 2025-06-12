@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-# 🚀 Feature Request  
+# 🚀 Feature  
 
 ## Description
 [Detailed explanation of the proposed feature]  

@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-# ✨ Enhancement Request  
+# ✨ Enhancement  
 
 ## Current Behavior
 [Describe the existing functionality]  
