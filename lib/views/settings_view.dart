@@ -111,6 +111,37 @@ class _SettingsViewState extends State<SettingsView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CupertinoButton(
+                            color: CustomTheme.primaryColor,
+                            sizeStyle: CupertinoButtonSize.medium,
+                            child: Text(
+                              'Daten importieren',
+                              style:
+                                  TextStyle(color: CustomTheme.backgroundColor),
+                            ),
+                            onPressed: () async {
+                              final success =
+                                  await LocalStorageService.importJsonFile();
+                              if (!success && context.mounted) {
+                                showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                          title: const Text('Fehler'),
+                                          content: const Text(
+                                              'Datei konnte nicht importiert werden.'),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: const Text('OK'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                          ],
+                                        ));
+                              }
+                            }),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        CupertinoButton(
                           color: CustomTheme.primaryColor,
                           sizeStyle: CupertinoButtonSize.medium,
                           child: Text(
@@ -119,7 +150,6 @@ class _SettingsViewState extends State<SettingsView> {
                                 TextStyle(color: CustomTheme.backgroundColor),
                           ),
                           onPressed: () async {
-                            print('Export pressed');
                             final success =
                                 await LocalStorageService.exportJsonFile();
                             if (!success && context.mounted) {
@@ -140,38 +170,6 @@ class _SettingsViewState extends State<SettingsView> {
                             }
                           },
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        CupertinoButton(
-                            color: CustomTheme.primaryColor,
-                            sizeStyle: CupertinoButtonSize.medium,
-                            child: Text(
-                              'Daten importieren',
-                              style:
-                                  TextStyle(color: CustomTheme.backgroundColor),
-                            ),
-                            onPressed: () async {
-                              print('Import pressed');
-                              final success =
-                                  await LocalStorageService.importJsonFile();
-                              if (!success && context.mounted) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          title: const Text('Fehler'),
-                                          content: const Text(
-                                              'Datei konnte nicht importiert werden.'),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: const Text('OK'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ));
-                              }
-                            }),
                       ],
                     )),
               )
