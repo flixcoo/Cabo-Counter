@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,18 +11,18 @@ class InformationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         resizeToAvoidBottomInset: false,
-        navigationBar: const CupertinoNavigationBar(
-          middle: Text('Über'),
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(AppLocalizations.of(context).about),
         ),
         child: SafeArea(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Text(
-                'Cabo Counter',
-                style: TextStyle(
+                AppLocalizations.of(context).app_name,
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -34,18 +35,10 @@ class InformationView extends StatelessWidget {
                   height: 200,
                   child: Image.asset('assets/cabo_counter-logo_rounded.png'),
                 )),
-            const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
-                  'Hey :) Danke, dass du als eine:r der ersten User '
-                  'meiner ersten eigenen App dabei bist! Ich hab sehr '
-                  'viel Arbeit in dieses Projekt gesteckt und auch, '
-                  'wenn ich (hoffentlich) an vieles Gedacht hab, wird '
-                  'auf jeden Fall noch nicht alles 100% funktionieren. '
-                  'Solltest du also irgendwelche Fehler entdecken oder '
-                  'Feedback zum Design oder der Benutzerfreundlichkeit'
-                  ' haben, zögere bitte nicht sie mir auf den dir '
-                  'bekannten Wegen mitzuteilen. Danke! ',
+                  AppLocalizations.of(context).about_text,
                   textAlign: TextAlign.center,
                   softWrap: true,
                 )),

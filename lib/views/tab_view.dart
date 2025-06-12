@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/information_view.dart';
 import 'package:cabo_counter/views/main_menu_view.dart';
@@ -19,18 +20,18 @@ class _TabViewState extends State<TabView> {
           backgroundColor: CustomTheme.backgroundTintColor,
           iconSize: 27,
           height: 55,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.house_fill,
               ),
-              label: 'Home',
+              label: AppLocalizations.of(context).home,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.info,
               ),
-              label: 'About',
+              label: AppLocalizations.of(context).about,
             ),
           ]),
       tabBuilder: (BuildContext context, int index) {
