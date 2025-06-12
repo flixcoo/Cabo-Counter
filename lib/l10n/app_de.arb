@@ -1,0 +1,85 @@
+{
+  "@@locale": "de",
+
+  "app_name": "Cabo Counter",
+  "round": "Runde",
+  "rounds": "Runden",
+  "mode": "Modus",
+  "points": "Punkte",
+  "unlimited": "Unbegrenzt",
+  "delete": "Löschen",
+  "cancel": "Abbrechen",
+  "game": "Spiel",
+  "ok": "OK",
+  "player": "Spieler:in",
+    "players": "Spieler:innen",
+  "name": "Name",
+
+  "home": "Home",
+  "about": "Über",
+
+  "empty_text_1": "Ganz schön leer hier...",
+  "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
+  "delete_game_title": "Spiel löschen?",
+  "delete_game_message": "Bist du sicher, dass du die Runde {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "@delete_game_message": {
+    "placeholders": {
+      "gameTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "overview": "Übersicht",
+  "new_game": "Neues Spiel",
+  "game_title": "Titel des Spiels",
+  "select_mode": "Wähle einen Modus",
+  "add_player": "Spieler:in hinzufügen",
+  "create_game": "Spiel erstellen",
+  "max_players_title": "Maximale Anzahl erreicht",
+  "max_players_message": "Es können maximal 5 Spieler:innen hinzugefügt werden.",
+  "no_gameTitle_title": "Kein Titel",
+  "no_gameTitle_message": "Es muss ein Titel für das Spiel eingegeben werden.",
+  "no_mode_title": "Kein Modus",
+  "no_mode_message": "Es muss ein Spielmodus ausgewählt werden.",
+  "min_players_title": "Zu wenig Spieler:innen",
+  "min_players_message": "Es müssen mindestens 2 Spieler:innen hinzugefügt werden",
+  "no_name_title": "Kein Name",
+  "no_name_message": "Jeder Spieler muss einen Namen haben.",
+
+  "select_game_mode": "Spielmodus auswählen",
+  "point_limit_description": "Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht",
+  "@point_limit_description": {
+    "placeholders": {
+      "pointLimit": {
+        "type": "int"
+      }
+    }
+  },
+  "unlimited_description": "Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.",
+
+  "results": "Ergebnisse",
+  "who_said_cabo": "Wer hat CABO gesagt?",
+  "kamikaze": "Kamikaze",
+  "done": "Fertig",
+  "next_round": "Nächste Runde",
+
+  "settings": "Einstellungen",
+  "cabo_penalty": "Cabo-Strafe",
+  "cabo_penalty_subtitle": "... für falsches Cabo sagen",
+  "point_limit": "Punkte-Limit",
+  "point_limit_subtitle": "... hier ist Schluss",
+  "reset_to_default": "Auf Standard zurücksetzen",
+  "game_data": "Spieldaten",
+  "import_data": "Daten importieren",
+  "export_data": "Daten exportieren",
+  "error": "Fehler",
+  "error_import": "Datei konnte nicht importiert werden",
+  "error_export": "Datei konnte nicht exportiert werden",
+  "error_found": "Fehler gefunden?",
+  "create_issue": "Issue erstellen",
+  "app_version": "App-Version",
+  "build": "Build",
+  "load_version": "Lade Version...",
+
+  "about_text": "Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, zögere bitte nicht sie mir auf den dir bekannten Wegen mitzuteilen. Danke! "
+}

@@ -1,4 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +32,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: Text(
-                          'Spieler:innen',
+                          AppLocalizations.of(context).players,
                           style: CustomTheme.rowTitle,
                         ),
                       ),
@@ -58,7 +59,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 const SizedBox(width: 5),
                                 Text(
                                     '${widget.gameSession.playerScores[playerIndex]} '
-                                    'Punkte')
+                                    '${AppLocalizations.of(context).points}')
                               ],
                             ),
                           );
@@ -67,7 +68,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: Text(
-                          'Runden',
+                          AppLocalizations.of(context).rounds,
                           style: CustomTheme.rowTitle,
                         ),
                       ),
@@ -80,7 +81,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               padding: const EdgeInsets.all(1),
                               child: CupertinoListTile(
                                 title: Text(
-                                  'Runde ${index + 1}',
+                                  '${AppLocalizations.of(context).round} ${index + 1}',
                                 ),
                                 trailing: index + 1 !=
                                             widget.gameSession.roundNumber ||
