@@ -70,7 +70,9 @@ class _CreateGameState extends State<CreateGame> {
                     Text(
                       selectedMode == null
                           ? 'Wähle einen Modus'
-                          : (selectedMode! ? '101 Punkte' : 'Unbegrenzt'),
+                          : (selectedMode!
+                              ? '${Globals.pointLimit} Punkte'
+                              : 'Unbegrenzt'),
                     ),
                     const SizedBox(width: 3),
                     const CupertinoListTileChevron(),
@@ -290,16 +292,13 @@ class _CreateGameState extends State<CreateGame> {
                     isPointsLimitEnabled: selectedMode!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
-                  print('index des spiels: $index');
                   if (context.mounted) {
                     Navigator.pushReplacement(
                         context,
                         CupertinoPageRoute(
                             builder: (context) => ActiveGameView(
                                 gameSession: gameManager.gameList[index])));
-                  } else {
-                    print('Context is not mounted');
-                  }
+                  } else {}
                 },
               ),
             ),

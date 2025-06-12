@@ -1,6 +1,7 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/settings_view.dart';
@@ -185,7 +186,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Translates the game mode boolean into the corresponding String.
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
   String _translateGameMode(bool pointLimit) {
-    if (pointLimit) return '101 Punkte';
+    if (pointLimit) return '${Globals.pointLimit} Punkte';
     return 'Unbegrenzt';
   }
 
