@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
@@ -25,8 +26,8 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Einstellungen'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(AppLocalizations.of(context).settings),
       ),
       child: SafeArea(
           child: Stack(
@@ -38,7 +39,7 @@ class _SettingsViewState extends State<SettingsView> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
-                  'Punkte',
+                  AppLocalizations.of(context).points,
                   style: CustomTheme.rowTitle,
                 ),
               ),
@@ -46,8 +47,9 @@ class _SettingsViewState extends State<SettingsView> {
                   padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                   child: CupertinoListTile(
                     padding: EdgeInsets.zero,
-                    title: const Text('Cabo-Strafe'),
-                    subtitle: const Text('... für falsches Cabo sagen'),
+                    title: Text(AppLocalizations.of(context).cabo_penalty),
+                    subtitle: Text(
+                        AppLocalizations.of(context).cabo_penalty_subtitle),
                     trailing: Stepper(
                       key: _stepperKey1,
                       initialValue: Globals.caboPenalty,
@@ -66,8 +68,9 @@ class _SettingsViewState extends State<SettingsView> {
                   padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                   child: CupertinoListTile(
                     padding: EdgeInsets.zero,
-                    title: const Text('Punkte-Limit'),
-                    subtitle: const Text('... hier ist Schluss'),
+                    title: Text(AppLocalizations.of(context).point_limit),
+                    subtitle:
+                        Text(AppLocalizations.of(context).point_limit_subtitle),
                     trailing: Stepper(
                       key: _stepperKey2,
                       initialValue: Globals.pointLimit,
@@ -93,13 +96,14 @@ class _SettingsViewState extends State<SettingsView> {
                         _stepperKey1 = UniqueKey();
                         _stepperKey2 = UniqueKey();
                       }),
-                      child: const Text('Standard zurücksetzten'),
+                      child:
+                          Text(AppLocalizations.of(context).reset_to_default),
                     ),
                   )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
-                  'Spieldaten',
+                  AppLocalizations.of(context).game_data,
                   style: CustomTheme.rowTitle,
                 ),
               ),
@@ -111,27 +115,64 @@ class _SettingsViewState extends State<SettingsView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CupertinoButton(
+                            color: CustomTheme.primaryColor,
+                            sizeStyle: CupertinoButtonSize.medium,
+                            child: Text(
+                              AppLocalizations.of(context).import_data,
+                              style:
+                                  TextStyle(color: CustomTheme.backgroundColor),
+                            ),
+                            onPressed: () async {
+                              final success =
+                                  await LocalStorageService.importJsonFile();
+                              if (!success && context.mounted) {
+                                showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                          title: Text(
+                                              AppLocalizations.of(context)
+                                                  .error),
+                                          content: Text(
+                                              AppLocalizations.of(context)
+                                                  .error_import),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .ok),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                          ],
+                                        ));
+                              }
+                            }),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        CupertinoButton(
                           color: CustomTheme.primaryColor,
                           sizeStyle: CupertinoButtonSize.medium,
                           child: Text(
-                            'Daten exportieren',
+                            AppLocalizations.of(context).export_data,
                             style:
                                 TextStyle(color: CustomTheme.backgroundColor),
                           ),
                           onPressed: () async {
-                            print('Export pressed');
                             final success =
                                 await LocalStorageService.exportJsonFile();
                             if (!success && context.mounted) {
                               showCupertinoDialog(
                                 context: context,
                                 builder: (context) => CupertinoAlertDialog(
-                                  title: const Text('Fehler'),
-                                  content: const Text(
-                                      'Datei konnte nicht exportiert werden.'),
+                                  title:
+                                      Text(AppLocalizations.of(context).error),
+                                  content: Text(AppLocalizations.of(context)
+                                      .error_export),
                                   actions: [
                                     CupertinoDialogAction(
-                                      child: const Text('OK'),
+                                      child:
+                                          Text(AppLocalizations.of(context).ok),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                   ],
@@ -140,38 +181,6 @@ class _SettingsViewState extends State<SettingsView> {
                             }
                           },
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        CupertinoButton(
-                            color: CustomTheme.primaryColor,
-                            sizeStyle: CupertinoButtonSize.medium,
-                            child: Text(
-                              'Daten importieren',
-                              style:
-                                  TextStyle(color: CustomTheme.backgroundColor),
-                            ),
-                            onPressed: () async {
-                              print('Import pressed');
-                              final success =
-                                  await LocalStorageService.importJsonFile();
-                              if (!success && context.mounted) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          title: const Text('Fehler'),
-                                          content: const Text(
-                                              'Datei konnte nicht importiert werden.'),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: const Text('OK'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ));
-                              }
-                            }),
                       ],
                     )),
               )
@@ -183,8 +192,8 @@ class _SettingsViewState extends State<SettingsView> {
               right: 0,
               child: Column(
                 children: [
-                  const Center(
-                    child: Text('Fehler gefunden?'),
+                  Center(
+                    child: Text(AppLocalizations.of(context).error_found),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
@@ -192,7 +201,7 @@ class _SettingsViewState extends State<SettingsView> {
                       child: CupertinoButton(
                         onPressed: () => launchUrl(Uri.parse(
                             'https://github.com/flixcoo/Cabo-Counter/issues')),
-                        child: const Text('Issue erstellen'),
+                        child: Text(AppLocalizations.of(context).create_issue),
                       ),
                     ),
                   ),
@@ -202,17 +211,17 @@ class _SettingsViewState extends State<SettingsView> {
                       if (snapshot.hasData) {
                         return Text(
                           '${Globals.appDevPhase} ${snapshot.data!.version} '
-                          '(Build ${snapshot.data!.buildNumber})',
+                          '(${AppLocalizations.of(context).build} ${snapshot.data!.buildNumber})',
                           textAlign: TextAlign.center,
                         );
                       } else if (snapshot.hasError) {
-                        return const Text(
-                          'App-Version -.-.- (Build -)',
+                        return Text(
+                          '${AppLocalizations.of(context).app_version} -.-.- (${AppLocalizations.of(context).build} -)',
                           textAlign: TextAlign.center,
                         );
                       }
-                      return const Text(
-                        'Lade Version...',
+                      return Text(
+                        AppLocalizations.of(context).load_version,
                         textAlign: TextAlign.center,
                       );
                     },

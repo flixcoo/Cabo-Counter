@@ -1,6 +1,8 @@
 import 'package:cabo_counter/data/game_manager.dart';
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/settings_view.dart';
@@ -140,7 +142,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                                           fontSize: 14),
                                                     )
                                                   : Text(
-                                                      'Modus: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                                      '${AppLocalizations.of(context).mode}: ${_translateGameMode(session.isPointsLimitEnabled)}',
                                                       style: const TextStyle(
                                                           fontSize: 14),
                                                     ),
@@ -185,8 +187,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Translates the game mode boolean into the corresponding String.
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
   String _translateGameMode(bool pointLimit) {
-    if (pointLimit) return '101 Punkte';
-    return 'Unbegrenzt';
+    if (pointLimit) {
+      return '${Globals.pointLimit} ${AppLocalizations.of(context).points}';
+    }
+    return AppLocalizations.of(context).unlimited;
   }
 
   /// Shows a confirmation dialog to delete all game sessions.
@@ -197,21 +201,21 @@ class _MainMenuViewState extends State<MainMenuView> {
           context: context,
           builder: (context) {
             return CupertinoAlertDialog(
-              title: const Text('Spiel löschen?'),
+              title: Text(AppLocalizations.of(context).delete_game_title),
               content: Text(
-                  'Bist du sicher, dass du die Runde "$gameTitle" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+                  AppLocalizations.of(context).delete_game_message(gameTitle)),
               actions: [
                 CupertinoDialogAction(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: const Text('Abbrechen'),
+                  child: Text(AppLocalizations.of(context).cancel),
                 ),
                 CupertinoDialogAction(
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
-                  child: const Text('Löschen'),
+                  child: Text(AppLocalizations.of(context).delete),
                 ),
               ],
             );
