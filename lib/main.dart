@@ -56,6 +56,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         Locale('en'), // English
         Locale('de'), // German
       ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (final supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
       theme: CupertinoThemeData(
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,
