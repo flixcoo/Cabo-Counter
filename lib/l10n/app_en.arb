@@ -19,7 +19,7 @@
   "about": "About",
 
   "empty_text_1": "Pretty empty here...",
-  "empty_text_2": "Add a new round using the button in the top right corner",
+  "empty_text_2": "Add a new round using the button in the top right corner.",
   "delete_game_title": "Delete game?",
   "delete_game_message": "Are you sure you want to delete the game {gameTitle}? This action cannot be undone.",
   "@delete_game_message": {
@@ -65,9 +65,9 @@
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
-  "cabo_penalty_subtitle": "... for falsely calling Cabo",
+  "cabo_penalty_subtitle": "... for falsely calling Cabo.",
   "point_limit": "Point Limit",
-  "point_limit_subtitle": "... the game ends here",
+  "point_limit_subtitle": "... the game ends here.",
   "reset_to_default": "Reset to Default",
   "game_data": "Game Data",
   "import_data": "Import Data",
@@ -80,5 +80,5 @@
   "app_version": "App Version",
   "load_version": "Loading version...",
   "build": "Build",
-  "about_text": "Hey :) Thanks for being one of the first users of my first app! I’ve put a lot of work into this project, and even though I (hopefully) thought of a lot, not everything will work 100% yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the Testflight app or a message / email. Thank you very much!"
+  "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, not everything will work 100% yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"
 }
