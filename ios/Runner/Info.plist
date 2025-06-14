@@ -38,6 +38,12 @@
 	<string>Main</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app does not access your photo library. This message is required for technical reasons only.</string>
+	<key>CFBundleLocalizations</key>
+    <array>
+      <string>de</string>
+      <string>en</string>
+    </array>
+
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>

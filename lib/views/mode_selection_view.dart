@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -8,17 +9,19 @@ class ModeSelectionMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Spielmodus auswählen'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(AppLocalizations.of(context).select_game_mode),
       ),
       child: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
-              title: Text('$pointLimit Punkte', style: CustomTheme.modeTitle),
+              title: Text('$pointLimit ${AppLocalizations.of(context).points}',
+                  style: CustomTheme.modeTitle),
               subtitle: Text(
-                'Es wird so lange gespielt, bis ein:e Spieler:in mehr als $pointLimit Punkte erreicht',
+                AppLocalizations.of(context)
+                    .point_limit_description(pointLimit),
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
@@ -30,10 +33,10 @@ class ModeSelectionMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: CupertinoListTile(
-              title: Text('Unbegrenzt', style: CustomTheme.modeTitle),
-              subtitle: const Text(
-                'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange '
-                'gespielt, bis ihr keine Lust mehr habt.',
+              title: Text(AppLocalizations.of(context).unlimited,
+                  style: CustomTheme.modeTitle),
+              subtitle: Text(
+                AppLocalizations.of(context).unlimited_description,
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),

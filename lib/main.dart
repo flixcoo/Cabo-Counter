@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
@@ -50,6 +51,19 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     LocalStorageService.loadGameSessions();
 
     return CupertinoApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('de'), // German
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (final supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
       theme: CupertinoThemeData(
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,

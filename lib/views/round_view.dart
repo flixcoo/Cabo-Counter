@@ -1,4 +1,5 @@
 import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,15 +72,14 @@ class _RoundViewState extends State<RoundView> {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: true,
-        middle: const Text('Ergebnisse'),
-        previousPageTitle: 'Übersicht',
+        middle: Text(AppLocalizations.of(context).results),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => {
             LocalStorageService.saveGameSessions(),
             Navigator.pop(context, widget.gameSession)
           },
-          child: const Text('Abbrechen'),
+          child: Text(AppLocalizations.of(context).cancel),
         ),
       ),
       child: Stack(
@@ -92,12 +92,13 @@ class _RoundViewState extends State<RoundView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 40),
-                    Text('Runde ${widget.roundNumber}',
+                    Text(
+                        '${AppLocalizations.of(context).round} ${widget.roundNumber}',
                         style: CustomTheme.roundTitle),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Wer hat CABO gesagt?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      AppLocalizations.of(context).who_said_cabo,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -156,19 +157,23 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: CupertinoListTile(
-                        title: Text('Spieler:in'),
+                        title: Text(AppLocalizations.of(context).player),
                         trailing: Row(
                           children: [
                             SizedBox(
                                 width: 100,
-                                child: Center(child: Text('Punkte'))),
-                            SizedBox(width: 20),
+                                child: Center(
+                                    child: Text(
+                                        AppLocalizations.of(context).points))),
+                            const SizedBox(width: 20),
                             SizedBox(
                                 width: 80,
-                                child: Center(child: Text('Kamikaze'))),
+                                child: Center(
+                                    child: Text(AppLocalizations.of(context)
+                                        .kamikaze))),
                           ],
                         ),
                       ),
@@ -189,7 +194,7 @@ class _RoundViewState extends State<RoundView> {
                               title: Row(children: [Text(name)]),
                               subtitle: Text(
                                   '${widget.gameSession.playerScores[index]}'
-                                  ' Punkte'),
+                                  ' ${AppLocalizations.of(context).points}'),
                               trailing: Row(
                                 children: [
                                   SizedBox(
@@ -212,7 +217,8 @@ class _RoundViewState extends State<RoundView> {
                                           ? TextInputAction.done
                                           : TextInputAction.next,
                                       controller: _scoreControllerList[index],
-                                      placeholder: 'Punkte',
+                                      placeholder:
+                                          AppLocalizations.of(context).points,
                                       textAlign: TextAlign.center,
                                       onSubmitted: (_) =>
                                           _focusNextTextfield(index),
@@ -287,7 +293,7 @@ class _RoundViewState extends State<RoundView> {
                                 Navigator.pop(context, widget.gameSession);
                               }
                             : null,
-                        child: const Text('Fertig'),
+                        child: Text(AppLocalizations.of(context).done),
                       ),
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
@@ -309,7 +315,7 @@ class _RoundViewState extends State<RoundView> {
                                 }
                               }
                             : null,
-                        child: const Text('Nächste Runde'),
+                        child: Text(AppLocalizations.of(context).next_round),
                       ),
                     ],
                   ),
