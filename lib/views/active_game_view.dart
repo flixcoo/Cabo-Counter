@@ -82,6 +82,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return Padding(
                               padding: const EdgeInsets.all(1),
                               child: CupertinoListTile(
+                                backgroundColorActivated:
+                                    CustomTheme.backgroundColor,
                                 title: Text(
                                   '${AppLocalizations.of(context).round} ${index + 1}',
                                 ),
@@ -119,17 +121,39 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Column(
                         children: [
                           CupertinoListTile(
-                              title: const Text('Statistiken'),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              title: Text(
+                                AppLocalizations.of(context).statistics,
+                              ),
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const GraphView()))),
-                          const CupertinoListTile(title: Text('Spiel löschen')),
-                          const CupertinoListTile(
+                                      builder: (_) => GraphView(
+                                            gameSession: widget.gameSession,
+                                          )))),
+                          CupertinoListTile(
+                            title:
+                                Text(AppLocalizations.of(context).delete_game,
+                                    style: const TextStyle(
+                                      color: Colors.white30,
+                                    )),
+                            onTap: () {},
+                          ),
+                          CupertinoListTile(
                               title: Text(
-                                  'Neues Spiel mit gleichen Einstellungen')),
-                          const CupertinoListTile(
-                              title: Text('Spiel exportieren')),
+                                  AppLocalizations.of(context)
+                                      .new_game_same_settings,
+                                  style: const TextStyle(
+                                    color: Colors.white30,
+                                  ))),
+                          CupertinoListTile(
+                            title:
+                                Text(AppLocalizations.of(context).export_game,
+                                    style: const TextStyle(
+                                      color: Colors.white30,
+                                    )),
+                          ),
                         ],
                       )
                     ],

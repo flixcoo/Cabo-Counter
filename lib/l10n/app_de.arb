@@ -64,7 +64,12 @@
   "done": "Fertig",
   "next_round": "Nächste Runde",
 
-  "game_statistics": "Spielstatistiken",
+  "statistics": "Statistiken",
+  "delete_game": "Spiel löschen",
+  "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
+  "export_game": "Spiel exportieren",
+
+  "game_process": "Spielverlauf",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",

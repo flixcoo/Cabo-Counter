@@ -362,11 +362,35 @@ abstract class AppLocalizations {
   /// **'Nächste Runde'**
   String get next_round;
 
-  /// No description provided for @game_statistics.
+  /// No description provided for @statistics.
   ///
   /// In de, this message translates to:
-  /// **'Spielstatistiken'**
-  String get game_statistics;
+  /// **'Statistiken'**
+  String get statistics;
+
+  /// No description provided for @delete_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel löschen'**
+  String get delete_game;
+
+  /// No description provided for @new_game_same_settings.
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Spiel mit gleichen Einstellungen'**
+  String get new_game_same_settings;
+
+  /// No description provided for @export_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel exportieren'**
+  String get export_game;
+
+  /// No description provided for @game_process.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielverlauf'**
+  String get game_process;
 
   /// No description provided for @settings.
   ///
