@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/round.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:flutter/cupertino.dart';
 
 /// This class represents a game session for  Cabo game.

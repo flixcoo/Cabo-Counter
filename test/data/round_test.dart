@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/round.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:test/test.dart';
 
 void main() {

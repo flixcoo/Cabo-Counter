@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/game_manager.dart';
+import 'package:cabo_counter/data/models/game_manager.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';

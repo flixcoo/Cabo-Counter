@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/foundation.dart';
 
