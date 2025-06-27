@@ -14,6 +14,7 @@
   "player": "Spieler:in",
     "players": "Spieler:innen",
   "name": "Name",
+  "back": "Zurück",
 
   "home": "Home",
   "about": "Über",
@@ -62,6 +63,13 @@
   "kamikaze": "Kamikaze",
   "done": "Fertig",
   "next_round": "Nächste Runde",
+
+  "statistics": "Statistiken",
+  "delete_game": "Spiel löschen",
+  "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
+  "export_game": "Spiel exportieren",
+
+  "game_process": "Spielverlauf",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",

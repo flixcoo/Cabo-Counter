@@ -48,6 +48,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get back => 'Zurück';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -145,6 +148,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get next_round => 'Nächste Runde';
+
+  @override
+  String get statistics => 'Statistiken';
+
+  @override
+  String get delete_game => 'Spiel löschen';
+
+  @override
+  String get new_game_same_settings => 'Neues Spiel mit gleichen Einstellungen';
+
+  @override
+  String get export_game => 'Spiel exportieren';
+
+  @override
+  String get game_process => 'Spielverlauf';
 
   @override
   String get settings => 'Einstellungen';

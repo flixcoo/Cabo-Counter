@@ -1,8 +1,10 @@
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/views/graph_view.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ActiveGameView extends StatefulWidget {
   final GameSession gameSession;
@@ -80,6 +82,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return Padding(
                               padding: const EdgeInsets.all(1),
                               child: CupertinoListTile(
+                                backgroundColorActivated:
+                                    CustomTheme.backgroundColor,
                                 title: Text(
                                   '${AppLocalizations.of(context).round} ${index + 1}',
                                 ),
@@ -107,6 +111,51 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ));
                         },
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Text(
+                          AppLocalizations.of(context).game,
+                          style: CustomTheme.rowTitle,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          CupertinoListTile(
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              title: Text(
+                                AppLocalizations.of(context).statistics,
+                              ),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => GraphView(
+                                            gameSession: widget.gameSession,
+                                          )))),
+                          CupertinoListTile(
+                            title:
+                                Text(AppLocalizations.of(context).delete_game,
+                                    style: const TextStyle(
+                                      color: Colors.white30,
+                                    )),
+                            onTap: () {},
+                          ),
+                          CupertinoListTile(
+                              title: Text(
+                                  AppLocalizations.of(context)
+                                      .new_game_same_settings,
+                                  style: const TextStyle(
+                                    color: Colors.white30,
+                                  ))),
+                          CupertinoListTile(
+                            title:
+                                Text(AppLocalizations.of(context).export_game,
+                                    style: const TextStyle(
+                                      color: Colors.white30,
+                                    )),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

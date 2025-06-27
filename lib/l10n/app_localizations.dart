@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @back.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurück'**
+  String get back;
+
   /// No description provided for @home.
   ///
   /// In de, this message translates to:
@@ -355,6 +361,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Nächste Runde'**
   String get next_round;
+
+  /// No description provided for @statistics.
+  ///
+  /// In de, this message translates to:
+  /// **'Statistiken'**
+  String get statistics;
+
+  /// No description provided for @delete_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel löschen'**
+  String get delete_game;
+
+  /// No description provided for @new_game_same_settings.
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Spiel mit gleichen Einstellungen'**
+  String get new_game_same_settings;
+
+  /// No description provided for @export_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel exportieren'**
+  String get export_game;
+
+  /// No description provided for @game_process.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielverlauf'**
+  String get game_process;
 
   /// No description provided for @settings.
   ///

@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get back => 'Back';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -58,7 +61,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_text_2 =>
-      'Add a new round using the button in the top right corner';
+      'Add a new round using the button in the top right corner.';
 
   @override
   String get delete_game_title => 'Delete game?';
@@ -144,19 +147,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next_round => 'Next Round';
 
   @override
+  String get statistics => 'Statistics';
+
+  @override
+  String get delete_game => 'Delete Game';
+
+  @override
+  String get new_game_same_settings => 'New Game with same Settings';
+
+  @override
+  String get export_game => 'Export Game';
+
+  @override
+  String get game_process => 'Spielverlauf';
+
+  @override
   String get settings => 'Settings';
 
   @override
   String get cabo_penalty => 'Cabo Penalty';
 
   @override
-  String get cabo_penalty_subtitle => '... for falsely calling Cabo';
+  String get cabo_penalty_subtitle => '... for falsely calling Cabo.';
 
   @override
   String get point_limit => 'Point Limit';
 
   @override
-  String get point_limit_subtitle => '... the game ends here';
+  String get point_limit_subtitle => '... the game ends here.';
 
   @override
   String get reset_to_default => 'Reset to Default';
@@ -196,5 +214,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Hey :) Thanks for being one of the first users of my first app! I’ve put a lot of work into this project, and even though I (hopefully) thought of a lot, not everything will work 100% yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the Testflight app or a message / email. Thank you very much!';
+      'Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!';
 }
