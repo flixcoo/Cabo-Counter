@@ -1,8 +1,10 @@
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/views/graph_view.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ActiveGameView extends StatefulWidget {
   final GameSession gameSession;
@@ -107,6 +109,29 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ));
                         },
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Text(
+                          AppLocalizations.of(context).game,
+                          style: CustomTheme.rowTitle,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          CupertinoListTile(
+                              title: const Text('Statistiken'),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const GraphView()))),
+                          const CupertinoListTile(title: Text('Spiel löschen')),
+                          const CupertinoListTile(
+                              title: Text(
+                                  'Neues Spiel mit gleichen Einstellungen')),
+                          const CupertinoListTile(
+                              title: Text('Spiel exportieren')),
+                        ],
+                      )
                     ],
                   ),
                 ),

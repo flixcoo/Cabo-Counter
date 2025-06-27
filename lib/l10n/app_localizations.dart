@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @back.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurück'**
+  String get back;
+
   /// No description provided for @home.
   ///
   /// In de, this message translates to:
@@ -355,6 +361,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Nächste Runde'**
   String get next_round;
+
+  /// No description provided for @game_statistics.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielstatistiken'**
+  String get game_statistics;
 
   /// No description provided for @settings.
   ///
