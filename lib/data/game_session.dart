@@ -80,7 +80,6 @@ class GameSession extends ChangeNotifier {
         length = player.length;
       }
     }
-    print('Maximale Länge der Spielernamen: $length');
     return length;
   }
 
