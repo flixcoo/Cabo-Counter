@@ -230,7 +230,7 @@ class _SettingsViewState extends State<SettingsView> {
             content: Text(content.last),
             actions: [
               CupertinoDialogAction(
-                child: const Text('OK'),
+                child: Text(AppLocalizations.of(context).ok),
                 onPressed: () => Navigator.pop(context),
               ),
             ],

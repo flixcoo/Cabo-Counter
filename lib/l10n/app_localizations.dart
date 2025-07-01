@@ -452,11 +452,53 @@ abstract class AppLocalizations {
   /// **'Fehler'**
   String get error;
 
-  /// No description provided for @error_import.
+  /// No description provided for @import_sucess_title.
   ///
   /// In de, this message translates to:
-  /// **'Datei konnte nicht importiert werden'**
-  String get error_import;
+  /// **'Import erfolgreich'**
+  String get import_sucess_title;
+
+  /// No description provided for @import_sucess_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Spieldaten wurden erfolgreich importiert.'**
+  String get import_sucess_message;
+
+  /// No description provided for @import_validation_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Validierung fehlgeschlagen'**
+  String get import_validation_error_title;
+
+  /// No description provided for @import_validation_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.'**
+  String get import_validation_error_message;
+
+  /// No description provided for @import_format_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Falsches Format'**
+  String get import_format_error_title;
+
+  /// No description provided for @import_format_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.'**
+  String get import_format_error_message;
+
+  /// No description provided for @import_generic_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Import fehlgeschlagen'**
+  String get import_generic_error_title;
+
+  /// No description provided for @import_generic_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Import ist fehlgeschlagen.'**
+  String get import_generic_error_message;
 
   /// No description provided for @error_export.
   ///
