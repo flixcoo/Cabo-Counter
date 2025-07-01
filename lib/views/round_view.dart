@@ -124,7 +124,7 @@ class _RoundViewState extends State<RoundView> {
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 4 +
-                                      _getSegmendetControlPadding(maxLength),
+                                      _getSegmentedControlPadding(maxLength),
                                   vertical: 6,
                                 ),
                                 child: FittedBox(
@@ -135,7 +135,7 @@ class _RoundViewState extends State<RoundView> {
                                     maxLines: 1,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: _getSegmendetControlFontSize(
+                                      fontSize: _getSegmentedControlFontSize(
                                           maxLength),
                                     ),
                                   ),
@@ -395,7 +395,7 @@ class _RoundViewState extends State<RoundView> {
     }
   }
 
-  double _getSegmendetControlFontSize(int maxLength) {
+  double _getSegmentedControlFontSize(int maxLength) {
     if (maxLength > 8) {
       // 9 - 12 characters
       return 9.0;
@@ -408,7 +408,7 @@ class _RoundViewState extends State<RoundView> {
     }
   }
 
-  double _getSegmendetControlPadding(int maxLength) {
+  double _getSegmentedControlPadding(int maxLength) {
     if (maxLength > 8) {
       // 9 - 12 characters
       return 0.0;
