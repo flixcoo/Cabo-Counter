@@ -123,19 +123,21 @@ class _RoundViewState extends State<RoundView> {
                               index,
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal:
+                                  horizontal: 4 +
                                       _getSegmendetControlPadding(maxLength),
                                   vertical: 6,
                                 ),
-                                child: Text(
-                                  name,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: _getSegmendetControlFontSize(
-                                        widget.gameSession
-                                            .getMaxLengthOfPlayerNames()),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: _getSegmendetControlFontSize(
+                                          maxLength),
+                                    ),
                                   ),
                                 ),
                               ),
