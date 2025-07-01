@@ -82,8 +82,8 @@
   "export_data": "Export Data",
   "error": "Error",
 
-  "import_sucess_title": "Import successful",
-  "import_sucess_message":"The game data has been successfully imported.",
+  "import_success_title": "Import successful",
+  "import_success_message":"The game data has been successfully imported.",
   "import_validation_error_title": "Validation failed",
   "import_validation_error_message": "No Cabo-Counter game data was found. Please make sure that this is a valid Cabo-Counter export file.",
   "import_format_error_title": "Wrong format",

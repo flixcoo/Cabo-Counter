@@ -240,17 +240,17 @@ class _SettingsViewState extends State<SettingsView> {
 
   Pair<String, String> _getDialogContent(int success) {
     if (success == 1) {
-      return Pair(AppLocalizations.of(context).import_sucess_title,
-          AppLocalizations.of(context).import_sucess_message);
+      return Pair(AppLocalizations.of(context).import_success_title,
+          AppLocalizations.of(context).import_success_message);
     } else if (success == -1) {
       return Pair(AppLocalizations.of(context).import_validation_error_title,
-          AppLocalizations.of(context).import_validation_error_title);
+          AppLocalizations.of(context).import_validation_error_message);
     } else if (success == -2) {
       return Pair(AppLocalizations.of(context).import_format_error_title,
-          AppLocalizations.of(context).import_format_error_title);
+          AppLocalizations.of(context).import_format_error_message);
     } else {
       return Pair(AppLocalizations.of(context).import_generic_error_title,
-          AppLocalizations.of(context).import_generic_error_title);
+          AppLocalizations.of(context).import_generic_error_message);
     }
   }
 }

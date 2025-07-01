@@ -452,17 +452,17 @@ abstract class AppLocalizations {
   /// **'Fehler'**
   String get error;
 
-  /// No description provided for @import_sucess_title.
+  /// No description provided for @import_success_title.
   ///
   /// In de, this message translates to:
   /// **'Import erfolgreich'**
-  String get import_sucess_title;
+  String get import_success_title;
 
-  /// No description provided for @import_sucess_message.
+  /// No description provided for @import_success_message.
   ///
   /// In de, this message translates to:
   /// **'Die Spieldaten wurden erfolgreich importiert.'**
-  String get import_sucess_message;
+  String get import_success_message;
 
   /// No description provided for @import_validation_error_title.
   ///

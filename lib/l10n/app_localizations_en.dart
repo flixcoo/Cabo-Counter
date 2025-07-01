@@ -192,10 +192,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error => 'Error';
 
   @override
-  String get import_sucess_title => 'Import successful';
+  String get import_success_title => 'Import successful';
 
   @override
-  String get import_sucess_message =>
+  String get import_success_message =>
       'The game data has been successfully imported.';
 
   @override
