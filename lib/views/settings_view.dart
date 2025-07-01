@@ -219,14 +219,14 @@ class _SettingsViewState extends State<SettingsView> {
 
   void showFeedbackDialog(int success) {
     if (success == 0) return;
-    final content = _getDialogContent(success);
+    final (title, message) = _getDialogContent(success);
 
     showCupertinoDialog(
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text(content.$1),
-            content: Text(content.$2),
+            title: Text(title),
+            content: Text(message),
             actions: [
               CupertinoDialogAction(
                 child: Text(AppLocalizations.of(context).ok),
