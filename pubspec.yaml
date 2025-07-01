@@ -26,7 +26,6 @@ dependencies:
     sdk: flutter
   intl: any
   syncfusion_flutter_charts: ^30.1.37
-  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
