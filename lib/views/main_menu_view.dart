@@ -114,15 +114,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       key: Key(session.gameTitle),
                                       background: Container(
                                         color: CupertinoColors.destructiveRed,
-                                        alignment: Alignment.centerLeft,
+                                        alignment: Alignment.centerRight,
                                         padding:
-                                            const EdgeInsets.only(left: 20.0),
+                                            const EdgeInsets.only(right: 20.0),
                                         child: const Icon(
                                           CupertinoIcons.delete,
                                           color: CupertinoColors.white,
                                         ),
                                       ),
-                                      direction: DismissDirection.startToEnd,
+                                      direction: DismissDirection.endToStart,
                                       confirmDismiss: (direction) async {
                                         final String gameTitle = gameManager
                                             .gameList[index].gameTitle;
