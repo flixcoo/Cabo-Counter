@@ -1,3 +1,4 @@
+import 'package:analyzer_plugin/utilities/pair.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
@@ -125,27 +126,7 @@ class _SettingsViewState extends State<SettingsView> {
                             onPressed: () async {
                               final success =
                                   await LocalStorageService.importJsonFile();
-                              if (!success && context.mounted) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          title: Text(
-                                              AppLocalizations.of(context)
-                                                  .error),
-                                          content: Text(
-                                              AppLocalizations.of(context)
-                                                  .error_import),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .ok),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ));
-                              }
+                              showFeedbackDialog(success);
                             }),
                         const SizedBox(
                           width: 20,
@@ -235,5 +216,41 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<PackageInfo> _getPackageInfo() async {
     return await PackageInfo.fromPlatform();
+  }
+
+  void showFeedbackDialog(int success) {
+    if (success == 0) return;
+    final content = _getDialogContent(success);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(content.first),
+            content: Text(content.last),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('OK'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  Pair<String, String> _getDialogContent(int success) {
+    if (success == 1) {
+      return Pair(AppLocalizations.of(context).import_sucess_title,
+          AppLocalizations.of(context).import_sucess_message);
+    } else if (success == -1) {
+      return Pair(AppLocalizations.of(context).import_validation_error_title,
+          AppLocalizations.of(context).import_validation_error_title);
+    } else if (success == -2) {
+      return Pair(AppLocalizations.of(context).import_format_error_title,
+          AppLocalizations.of(context).import_format_error_title);
+    } else {
+      return Pair(AppLocalizations.of(context).import_generic_error_title,
+          AppLocalizations.of(context).import_generic_error_title);
+    }
   }
 }
