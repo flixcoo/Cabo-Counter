@@ -217,9 +217,9 @@ class _SettingsViewState extends State<SettingsView> {
     return await PackageInfo.fromPlatform();
   }
 
-  void showFeedbackDialog(ImportStatus success) {
-    if (success == 0) return;
-    final (title, message) = _getDialogContent(success);
+  void showFeedbackDialog(ImportStatus status) {
+    if (status == ImportStatus.canceled) return;
+    final (title, message) = _getDialogContent(status);
 
     showCupertinoDialog(
         context: context,
@@ -237,8 +237,8 @@ class _SettingsViewState extends State<SettingsView> {
         });
   }
 
-  (String, String) _getDialogContent(ImportStatus success) {
-    switch (success) {
+  (String, String) _getDialogContent(ImportStatus status) {
+    switch (status) {
       case ImportStatus.success:
         return (
           AppLocalizations.of(context).import_success_title,
