@@ -72,11 +72,13 @@ class GameSession extends ChangeNotifier {
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
-  /// Returns the length of all player names combined.
-  int getLengthOfPlayerNames() {
+  /// Returns the length of the longest player name.
+  int getMaxLengthOfPlayerNames() {
     int length = 0;
     for (String player in players) {
-      length += player.length;
+      if (player.length >= length) {
+        length = player.length;
+      }
     }
     return length;
   }
