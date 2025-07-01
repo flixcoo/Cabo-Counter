@@ -50,7 +50,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                       CupertinoPageRoute(
                         builder: (context) => const SettingsView(),
                       ),
-                    );
+                    ).then((_) {
+                      setState(() {});
+                    });
                   },
                   icon: const Icon(CupertinoIcons.settings, size: 30)),
               middle: const Text('Cabo Counter'),
@@ -77,7 +79,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                               const SizedBox(height: 30), // Abstand von oben
                               Center(
                                   child: GestureDetector(
-                                onTap: () => setState(() {}),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => const CreateGame(),
+                                  ),
+                                ),
                                 child: Icon(
                                   CupertinoIcons.plus,
                                   size: 60,
@@ -85,15 +92,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 ),
                               )),
                               const SizedBox(height: 10), // Abstand von oben
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 70),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 70),
                                 child: Text(
-                                  'Ganz schön leer hier...\nFüge über den Button oben rechts eine neue Runde hinzu.',
+                                  '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ),
-                            ],
+                            ], //Ganz schön leer hier... Füge über den Button oben rechts eine neue Runde hinzu.
                           )
                         : ListView.builder(
                             itemCount: gameManager.gameList.length,
