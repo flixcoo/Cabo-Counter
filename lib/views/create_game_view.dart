@@ -183,6 +183,7 @@ class _CreateGameState extends State<CreateGame> {
                           Expanded(
                             child: CupertinoTextField(
                               controller: _playerNameTextControllers[index],
+                              maxLength: 12,
                               placeholder:
                                   '${AppLocalizations.of(context).player} ${index + 1}',
                               padding: const EdgeInsets.all(12),
