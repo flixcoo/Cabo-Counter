@@ -1,4 +1,3 @@
-import 'package:analyzer_plugin/utilities/pair.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
@@ -226,8 +225,8 @@ class _SettingsViewState extends State<SettingsView> {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text(content.first),
-            content: Text(content.last),
+            title: Text(content.$1),
+            content: Text(content.$2),
             actions: [
               CupertinoDialogAction(
                 child: Text(AppLocalizations.of(context).ok),
@@ -238,19 +237,27 @@ class _SettingsViewState extends State<SettingsView> {
         });
   }
 
-  Pair<String, String> _getDialogContent(int success) {
+  (String, String) _getDialogContent(int success) {
     if (success == 1) {
-      return Pair(AppLocalizations.of(context).import_success_title,
-          AppLocalizations.of(context).import_success_message);
+      return (
+        AppLocalizations.of(context).import_success_title,
+        AppLocalizations.of(context).import_success_message
+      );
     } else if (success == -1) {
-      return Pair(AppLocalizations.of(context).import_validation_error_title,
-          AppLocalizations.of(context).import_validation_error_message);
+      return (
+        AppLocalizations.of(context).import_validation_error_title,
+        AppLocalizations.of(context).import_validation_error_message
+      );
     } else if (success == -2) {
-      return Pair(AppLocalizations.of(context).import_format_error_title,
-          AppLocalizations.of(context).import_format_error_message);
+      return (
+        AppLocalizations.of(context).import_format_error_title,
+        AppLocalizations.of(context).import_format_error_message
+      );
     } else {
-      return Pair(AppLocalizations.of(context).import_generic_error_title,
-          AppLocalizations.of(context).import_generic_error_message);
+      return (
+        AppLocalizations.of(context).import_generic_error_title,
+        AppLocalizations.of(context).import_generic_error_message
+      );
     }
   }
 }
