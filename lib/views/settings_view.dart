@@ -217,7 +217,7 @@ class _SettingsViewState extends State<SettingsView> {
     return await PackageInfo.fromPlatform();
   }
 
-  void showFeedbackDialog(int success) {
+  void showFeedbackDialog(ImportStatus success) {
     if (success == 0) return;
     final (title, message) = _getDialogContent(success);
 
@@ -237,27 +237,31 @@ class _SettingsViewState extends State<SettingsView> {
         });
   }
 
-  (String, String) _getDialogContent(int success) {
-    if (success == 1) {
-      return (
-        AppLocalizations.of(context).import_success_title,
-        AppLocalizations.of(context).import_success_message
-      );
-    } else if (success == -1) {
-      return (
-        AppLocalizations.of(context).import_validation_error_title,
-        AppLocalizations.of(context).import_validation_error_message
-      );
-    } else if (success == -2) {
-      return (
-        AppLocalizations.of(context).import_format_error_title,
-        AppLocalizations.of(context).import_format_error_message
-      );
-    } else {
-      return (
-        AppLocalizations.of(context).import_generic_error_title,
-        AppLocalizations.of(context).import_generic_error_message
-      );
+  (String, String) _getDialogContent(ImportStatus success) {
+    switch (success) {
+      case ImportStatus.success:
+        return (
+          AppLocalizations.of(context).import_success_title,
+          AppLocalizations.of(context).import_success_message
+        );
+      case ImportStatus.validationError:
+        return (
+          AppLocalizations.of(context).import_validation_error_title,
+          AppLocalizations.of(context).import_validation_error_message
+        );
+
+      case ImportStatus.formatError:
+        return (
+          AppLocalizations.of(context).import_format_error_title,
+          AppLocalizations.of(context).import_format_error_message
+        );
+      case ImportStatus.genericError:
+        return (
+          AppLocalizations.of(context).import_generic_error_title,
+          AppLocalizations.of(context).import_generic_error_message
+        );
+      case ImportStatus.canceled:
+        return ('', '');
     }
   }
 }

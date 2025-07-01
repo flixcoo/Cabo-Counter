@@ -9,6 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:json_schema/json_schema.dart';
 import 'package:path_provider/path_provider.dart';
 
+enum ImportStatus {
+  success,
+  canceled,
+  validationError,
+  formatError,
+  genericError
+}
+
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
 
@@ -111,7 +119,7 @@ class LocalStorageService {
   }
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
-  static Future<int> importJsonFile() async {
+  static Future<ImportStatus> importJsonFile() async {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
       type: FileType.custom,
@@ -121,14 +129,14 @@ class LocalStorageService {
     if (result == null) {
       print(
           '[local_storage_service.dart] Der Filepicker-Dialog wurde abgebrochen');
-      return 0;
+      return ImportStatus.canceled;
     }
 
     try {
       final jsonString = await _readFileContent(result.files.single);
 
       if (!await validateJsonSchema(jsonString)) {
-        return -1;
+        return ImportStatus.validationError;
       }
       final jsonData = json.decode(jsonString) as List<dynamic>;
       gameManager.gameList = jsonData
@@ -138,15 +146,15 @@ class LocalStorageService {
       print(
           '[local_storage_service.dart] Die Datei wurde erfolgreich Importiertn');
       await saveGameSessions();
-      return 1;
+      return ImportStatus.success;
     } on FormatException catch (e) {
       print(
           '[local_storage_service.dart] Ungültiges JSON-Format. Exception: $e');
-      return -2;
+      return ImportStatus.formatError;
     } on Exception catch (e) {
       print(
           '[local_storage_service.dart] Fehler beim Dateizugriff. Exception: $e');
-      return -3;
+      return ImportStatus.genericError;
     }
   }
 
