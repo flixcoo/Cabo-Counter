@@ -125,27 +125,7 @@ class _SettingsViewState extends State<SettingsView> {
                             onPressed: () async {
                               final success =
                                   await LocalStorageService.importJsonFile();
-                              if (!success && context.mounted) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          title: Text(
-                                              AppLocalizations.of(context)
-                                                  .error),
-                                          content: Text(
-                                              AppLocalizations.of(context)
-                                                  .error_import),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .ok),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ));
-                              }
+                              showFeedbackDialog(success);
                             }),
                         const SizedBox(
                           width: 20,
@@ -235,5 +215,53 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<PackageInfo> _getPackageInfo() async {
     return await PackageInfo.fromPlatform();
+  }
+
+  void showFeedbackDialog(ImportStatus status) {
+    if (status == ImportStatus.canceled) return;
+    final (title, message) = _getDialogContent(status);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  (String, String) _getDialogContent(ImportStatus status) {
+    switch (status) {
+      case ImportStatus.success:
+        return (
+          AppLocalizations.of(context).import_success_title,
+          AppLocalizations.of(context).import_success_message
+        );
+      case ImportStatus.validationError:
+        return (
+          AppLocalizations.of(context).import_validation_error_title,
+          AppLocalizations.of(context).import_validation_error_message
+        );
+
+      case ImportStatus.formatError:
+        return (
+          AppLocalizations.of(context).import_format_error_title,
+          AppLocalizations.of(context).import_format_error_message
+        );
+      case ImportStatus.genericError:
+        return (
+          AppLocalizations.of(context).import_generic_error_title,
+          AppLocalizations.of(context).import_generic_error_message
+        );
+      case ImportStatus.canceled:
+        return ('', '');
+    }
   }
 }

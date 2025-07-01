@@ -195,7 +195,31 @@ class AppLocalizationsDe extends AppLocalizations {
   String get error => 'Fehler';
 
   @override
-  String get error_import => 'Datei konnte nicht importiert werden';
+  String get import_success_title => 'Import erfolgreich';
+
+  @override
+  String get import_success_message =>
+      'Die Spieldaten wurden erfolgreich importiert.';
+
+  @override
+  String get import_validation_error_title => 'Validierung fehlgeschlagen';
+
+  @override
+  String get import_validation_error_message =>
+      'Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.';
+
+  @override
+  String get import_format_error_title => 'Falsches Format';
+
+  @override
+  String get import_format_error_message =>
+      'Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.';
+
+  @override
+  String get import_generic_error_title => 'Import fehlgeschlagen';
+
+  @override
+  String get import_generic_error_message => 'Der Import ist fehlgeschlagen.';
 
   @override
   String get error_export => 'Datei konnte nicht exportiert werden';

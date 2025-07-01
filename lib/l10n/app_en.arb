@@ -81,7 +81,16 @@
   "import_data": "Import Data",
   "export_data": "Export Data",
   "error": "Error",
-  "error_import": "Could not import file",
+
+  "import_success_title": "Import successful",
+  "import_success_message":"The game data has been successfully imported.",
+  "import_validation_error_title": "Validation failed",
+  "import_validation_error_message": "No Cabo-Counter game data was found. Please make sure that this is a valid Cabo-Counter export file.",
+  "import_format_error_title": "Wrong format",
+  "import_format_error_message": "The file is not a valid JSON format or contains invalid data.",
+  "import_generic_error_title": "Import failed",
+  "import_generic_error_message": "The import has failed.",
+
   "error_export": "Could not export file",
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",

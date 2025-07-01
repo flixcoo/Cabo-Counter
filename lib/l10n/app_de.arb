@@ -81,7 +81,16 @@
   "import_data": "Daten importieren",
   "export_data": "Daten exportieren",
   "error": "Fehler",
-  "error_import": "Datei konnte nicht importiert werden",
+
+  "import_success_title": "Import erfolgreich",
+  "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
+  "import_validation_error_title": "Validierung fehlgeschlagen",
+  "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
+  "import_format_error_title": "Falsches Format",
+  "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
+   "import_generic_error_title": "Import fehlgeschlagen",
+  "import_generic_error_message": "Der Import ist fehlgeschlagen.",
+
   "error_export": "Datei konnte nicht exportiert werden",
   "error_found": "Fehler gefunden?",
   "create_issue": "Issue erstellen",
