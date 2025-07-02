@@ -34,11 +34,13 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
-  /// Variable to store the selected game mode.
+  /// Variable to store whether the points limit feature is enabled.
   bool? _isPointsLimitEnabled;
 
   @override
   void initState() {
+    super.initState();
+
     _isPointsLimitEnabled = widget.isPointsLimitEnabled;
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
@@ -48,7 +50,6 @@ class _CreateGameViewState extends State<CreateGameView> {
         _playerNameTextControllers.add(TextEditingController(text: player));
       }
     }
-    super.initState();
   }
 
   @override
@@ -348,6 +349,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
     }
+
     super.dispose();
   }
 }
