@@ -33,11 +33,11 @@ class _CreateGameViewState extends State<CreateGameView> {
   final int maxPlayers = 5;
 
   /// Variable to store the selected game mode.
-  bool? selectedMode;
+  bool? _isPointsLimitEnabled;
 
   @override
   void initState() {
-    selectedMode = widget.isPointsLimitEnabled;
+    _isPointsLimitEnabled = widget.isPointsLimitEnabled;
     _gameTitleTextController.text = widget.gameTitle ?? '';
     if (widget.players != null) {
       _playerNameTextControllers = [];
@@ -91,9 +91,9 @@ class _CreateGameViewState extends State<CreateGameView> {
                 suffix: Row(
                   children: [
                     Text(
-                      selectedMode == null
+                      _isPointsLimitEnabled == null
                           ? AppLocalizations.of(context).select_mode
-                          : (selectedMode!
+                          : (_isPointsLimitEnabled!
                               ? '${Globals.pointLimit} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited),
                     ),
@@ -102,7 +102,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   ],
                 ),
                 onTap: () async {
-                  final selected = await Navigator.push(
+                  final selectedMode = await Navigator.push(
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
@@ -111,9 +111,9 @@ class _CreateGameViewState extends State<CreateGameView> {
                     ),
                   );
 
-                  if (selected != null) {
+                  if (selectedMode != null) {
                     setState(() {
-                      selectedMode = selected;
+                      _isPointsLimitEnabled = selectedMode;
                     });
                   }
                 },
@@ -252,7 +252,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     );
                     return;
                   }
-                  if (selectedMode == null) {
+                  if (_isPointsLimitEnabled == null) {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
@@ -315,7 +315,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     players: players,
                     pointLimit: Globals.pointLimit,
                     caboPenalty: Globals.caboPenalty,
-                    isPointsLimitEnabled: selectedMode!,
+                    isPointsLimitEnabled: _isPointsLimitEnabled!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
                   if (context.mounted) {
@@ -343,6 +343,7 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   @override
   void dispose() {
+    _gameTitleTextController.dispose();
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
     }
