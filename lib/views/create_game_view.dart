@@ -7,15 +7,24 @@ import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 
-class CreateGame extends StatefulWidget {
-  const CreateGame({super.key});
+class CreateGameView extends StatefulWidget {
+  final String? gameTitle;
+  final bool? isPointsLimitEnabled;
+  final List<String>? players;
+
+  const CreateGameView({
+    super.key,
+    this.gameTitle,
+    this.isPointsLimitEnabled,
+    this.players,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateGameState createState() => _CreateGameState();
+  _CreateGameViewState createState() => _CreateGameViewState();
 }
 
-class _CreateGameState extends State<CreateGame> {
+class _CreateGameViewState extends State<CreateGameView> {
   final List<TextEditingController> _playerNameTextControllers = [
     TextEditingController()
   ];
@@ -25,8 +34,23 @@ class _CreateGameState extends State<CreateGame> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
-  /// Variable to store the selected game mode.
-  bool? selectedMode;
+  /// Variable to store whether the points limit feature is enabled.
+  bool? _isPointsLimitEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    _gameTitleTextController.text = widget.gameTitle ?? '';
+
+    if (widget.players != null) {
+      _playerNameTextControllers.clear();
+      for (var player in widget.players!) {
+        _playerNameTextControllers.add(TextEditingController(text: player));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +93,9 @@ class _CreateGameState extends State<CreateGame> {
                 suffix: Row(
                   children: [
                     Text(
-                      selectedMode == null
+                      _isPointsLimitEnabled == null
                           ? AppLocalizations.of(context).select_mode
-                          : (selectedMode!
+                          : (_isPointsLimitEnabled!
                               ? '${Globals.pointLimit} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited),
                     ),
@@ -80,7 +104,7 @@ class _CreateGameState extends State<CreateGame> {
                   ],
                 ),
                 onTap: () async {
-                  final selected = await Navigator.push(
+                  final selectedMode = await Navigator.push(
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
@@ -89,9 +113,9 @@ class _CreateGameState extends State<CreateGame> {
                     ),
                   );
 
-                  if (selected != null) {
+                  if (selectedMode != null) {
                     setState(() {
-                      selectedMode = selected;
+                      _isPointsLimitEnabled = selectedMode;
                     });
                   }
                 },
@@ -230,7 +254,7 @@ class _CreateGameState extends State<CreateGame> {
                     );
                     return;
                   }
-                  if (selectedMode == null) {
+                  if (_isPointsLimitEnabled == null) {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) => CupertinoAlertDialog(
@@ -293,7 +317,7 @@ class _CreateGameState extends State<CreateGame> {
                     players: players,
                     pointLimit: Globals.pointLimit,
                     caboPenalty: Globals.caboPenalty,
-                    isPointsLimitEnabled: selectedMode!,
+                    isPointsLimitEnabled: _isPointsLimitEnabled!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
                   if (context.mounted) {
@@ -321,9 +345,11 @@ class _CreateGameState extends State<CreateGame> {
 
   @override
   void dispose() {
+    _gameTitleTextController.dispose();
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
     }
+
     super.dispose();
   }
 }

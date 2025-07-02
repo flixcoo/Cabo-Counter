@@ -1,6 +1,7 @@
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
+import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/graph_view.dart';
 import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -141,12 +142,24 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             onTap: () {},
                           ),
                           CupertinoListTile(
-                              title: Text(
-                                  AppLocalizations.of(context)
-                                      .new_game_same_settings,
-                                  style: const TextStyle(
-                                    color: Colors.white30,
-                                  ))),
+                            title: Text(
+                              AppLocalizations.of(context)
+                                  .new_game_same_settings,
+                            ),
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (_) => CreateGameView(
+                                            gameTitle:
+                                                widget.gameSession.gameTitle,
+                                            isPointsLimitEnabled: widget
+                                                .gameSession
+                                                .isPointsLimitEnabled,
+                                            players: widget.gameSession.players,
+                                          )));
+                            },
+                          ),
                           CupertinoListTile(
                             title:
                                 Text(AppLocalizations.of(context).export_game,
