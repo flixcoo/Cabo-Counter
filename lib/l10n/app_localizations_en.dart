@@ -61,14 +61,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_text_2 =>
-      'Add a new round using the button in the top right corner.';
+      'Create a new game using the button in the top right.';
 
   @override
   String get delete_game_title => 'Delete game?';
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Are you sure you want to delete the game $gameTitle? This action cannot be undone.';
+    return 'Are you sure you want to delete \"$gameTitle\"? This action cannot be undone.';
   }
 
   @override
@@ -90,31 +90,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_game => 'Create Game';
 
   @override
-  String get max_players_title => 'Maximum reached';
+  String get max_players_title => 'Player Limit Reached';
 
   @override
-  String get max_players_message => 'A maximum of 5 players can be added.';
+  String get max_players_message => 'You can add a maximum of 5 players.';
 
   @override
-  String get no_gameTitle_title => 'No Title';
+  String get no_gameTitle_title => 'Missing Game Title';
 
   @override
-  String get no_gameTitle_message => 'You must enter a title for the game.';
+  String get no_gameTitle_message => 'Please enter a title for your game.';
 
   @override
-  String get no_mode_title => 'No Mode';
+  String get no_mode_title => 'Game Mode Required';
 
   @override
-  String get no_mode_message => 'You must select a game mode.';
+  String get no_mode_message => 'Please select a game mode to continue';
 
   @override
-  String get min_players_title => 'Too few players';
+  String get min_players_title => 'Too Few Players';
 
   @override
-  String get min_players_message => 'At least 2 players must be added.';
+  String get min_players_message =>
+      'At least 2 players are required to start the game.';
 
   @override
-  String get no_name_title => 'No Name';
+  String get no_name_title => 'Missing Player Names';
 
   @override
   String get no_name_message => 'Each player must have a name.';
@@ -124,18 +125,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String point_limit_description(int pointLimit) {
-    return 'The game ends when a player reaches more than $pointLimit points.';
+    return 'The game ends when a player scores more than $pointLimit points.';
   }
 
   @override
   String get unlimited_description =>
-      'There is no limit. The game continues until you decide to stop.';
+      'The game continues until you decide to stop playing.';
 
   @override
   String get results => 'Results';
 
   @override
-  String get who_said_cabo => 'Who said CABO?';
+  String get who_said_cabo => 'Who called CABO?';
 
   @override
   String get kamikaze => 'Kamikaze';
@@ -159,7 +160,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_game => 'Export Game';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get game_process => 'Score Progression';
 
   @override
   String get settings => 'Settings';
@@ -168,13 +169,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cabo_penalty => 'Cabo Penalty';
 
   @override
-  String get cabo_penalty_subtitle => '... for falsely calling Cabo.';
+  String get cabo_penalty_subtitle =>
+      'A point penalty for incorrectly calling Cabo.';
 
   @override
   String get point_limit => 'Point Limit';
 
   @override
-  String get point_limit_subtitle => '... the game ends here.';
+  String get point_limit_subtitle => 'The required score to win the game.';
 
   @override
   String get reset_to_default => 'Reset to Default';
