@@ -7,18 +7,25 @@ import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 
-class CreateGame extends StatefulWidget {
-  const CreateGame({super.key});
+class CreateGameView extends StatefulWidget {
+  final String? gameTitle;
+  final bool? isPointsLimitEnabled;
+  final List<String>? players;
+
+  const CreateGameView({
+    super.key,
+    this.gameTitle,
+    this.isPointsLimitEnabled,
+    this.players,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateGameState createState() => _CreateGameState();
+  _CreateGameViewState createState() => _CreateGameViewState();
 }
 
-class _CreateGameState extends State<CreateGame> {
-  final List<TextEditingController> _playerNameTextControllers = [
-    TextEditingController()
-  ];
+class _CreateGameViewState extends State<CreateGameView> {
+  late List<TextEditingController> _playerNameTextControllers = [];
   final TextEditingController _gameTitleTextController =
       TextEditingController();
 
@@ -27,6 +34,21 @@ class _CreateGameState extends State<CreateGame> {
 
   /// Variable to store the selected game mode.
   bool? selectedMode;
+
+  @override
+  void initState() {
+    selectedMode = widget.isPointsLimitEnabled;
+    _gameTitleTextController.text = widget.gameTitle ?? '';
+    if (widget.players != null) {
+      _playerNameTextControllers = [];
+      for (var player in widget.players!) {
+        _playerNameTextControllers.add(TextEditingController(text: player));
+      }
+    } else {
+      _playerNameTextControllers = [TextEditingController()];
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

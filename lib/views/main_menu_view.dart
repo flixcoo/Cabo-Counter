@@ -61,7 +61,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => const CreateGame(),
+                            builder: (context) => const CreateGameView(),
                           ),
                         )
                       },
@@ -82,7 +82,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 onTap: () => Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                    builder: (context) => const CreateGame(),
+                                    builder: (context) =>
+                                        const CreateGameView(),
                                   ),
                                 ),
                                 child: Icon(
