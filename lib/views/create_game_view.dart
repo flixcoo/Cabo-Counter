@@ -25,7 +25,9 @@ class CreateGameView extends StatefulWidget {
 }
 
 class _CreateGameViewState extends State<CreateGameView> {
-  late List<TextEditingController> _playerNameTextControllers = [];
+  final List<TextEditingController> _playerNameTextControllers = [
+    TextEditingController()
+  ];
   final TextEditingController _gameTitleTextController =
       TextEditingController();
 
@@ -39,13 +41,12 @@ class _CreateGameViewState extends State<CreateGameView> {
   void initState() {
     _isPointsLimitEnabled = widget.isPointsLimitEnabled;
     _gameTitleTextController.text = widget.gameTitle ?? '';
+
     if (widget.players != null) {
-      _playerNameTextControllers = [];
+      _playerNameTextControllers.clear();
       for (var player in widget.players!) {
         _playerNameTextControllers.add(TextEditingController(text: player));
       }
-    } else {
-      _playerNameTextControllers = [TextEditingController()];
     }
     super.initState();
   }
