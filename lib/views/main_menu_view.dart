@@ -101,7 +101,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ),
-                            ], //Ganz schön leer hier... Füge über den Button oben rechts eine neue Runde hinzu.
+                            ],
                           )
                         : ListView.builder(
                             itemCount: gameManager.gameList.length,
