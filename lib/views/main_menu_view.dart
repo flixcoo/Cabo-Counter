@@ -131,7 +131,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                             gameTitle);
                                       },
                                       onDismissed: (direction) {
-                                        gameManager.removeGameSession(index);
+                                        gameManager
+                                            .removeGameSessionByIndex(index);
                                       },
                                       dismissThresholds: const {
                                         DismissDirection.startToEnd: 0.6
@@ -168,18 +169,19 @@ class _MainMenuViewState extends State<MainMenuView> {
                                                   CupertinoIcons.person_2_fill),
                                             ],
                                           ),
-                                          onTap: () async {
-                                            //ignore: unused_local_variable
-                                            final val = await Navigator.push(
+                                          onTap: () {
+                                            final session =
+                                                gameManager.gameList[index];
+                                            Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
                                                     ActiveGameView(
-                                                        gameSession: gameManager
-                                                            .gameList[index]),
+                                                        gameSession: session),
                                               ),
-                                            );
-                                            setState(() {});
+                                            ).then((_) {
+                                              setState(() {});
+                                            });
                                           },
                                         ),
                                       ),
@@ -224,7 +226,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
-                  child: Text(AppLocalizations.of(context).delete),
+                  child: Text(
+                    AppLocalizations.of(context).delete,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
                 ),
               ],
             );

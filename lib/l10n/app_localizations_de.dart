@@ -68,7 +68,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Bist du sicher, dass du die Runde $gameTitle löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+    return 'Bist du sicher, dass du das Spiel \"$gameTitle\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
   }
 
   @override
@@ -162,6 +162,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_game => 'Spiel exportieren';
 
   @override
+  String get id_error_title => 'ID Fehler';
+
+  @override
+  String get id_error_message =>
+      'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.';
+
+  @override
   String get game_process => 'Spielverlauf';
 
   @override
@@ -192,9 +199,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_data => 'Daten exportieren';
 
   @override
-  String get error => 'Fehler';
-
-  @override
   String get import_success_title => 'Import erfolgreich';
 
   @override
@@ -222,7 +226,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get import_generic_error_message => 'Der Import ist fehlgeschlagen.';
 
   @override
-  String get error_export => 'Datei konnte nicht exportiert werden';
+  String get export_error_title => 'Fehler';
+
+  @override
+  String get export_error_message => 'Datei konnte nicht exportiert werden';
 
   @override
   String get error_found => 'Fehler gefunden?';
