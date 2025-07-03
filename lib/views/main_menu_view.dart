@@ -226,7 +226,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
-                  child: Text(AppLocalizations.of(context).delete),
+                  child: Text(
+                    AppLocalizations.of(context).delete,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
                 ),
               ],
             );

@@ -244,7 +244,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   onPressed: () => Navigator.pop(context, false),
                 ),
                 CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).delete),
+                  child: Text(
+                    AppLocalizations.of(context).delete,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
