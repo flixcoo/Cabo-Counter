@@ -19,7 +19,6 @@ class ActiveGameView extends StatefulWidget {
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   late final GameSession gameSession;
-  bool _deleted = false;
 
   @override
   void initState() {
