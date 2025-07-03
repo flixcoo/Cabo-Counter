@@ -130,28 +130,70 @@ class _CreateGameViewState extends State<CreateGameView> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: _playerNameTextControllers.length +
-                    1, // +1 für den + Button
+                itemCount: _playerNameTextControllers.length + 2,
                 itemBuilder: (context, index) {
+                  if (index == _playerNameTextControllers.length + 1) {
+                    return CupertinoButton(
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).create_game,
+                            style: const TextStyle(
+                              color: CupertinoColors.activeGreen,
+                            ),
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        _checkAllGameAttributes();
+                      },
+                    );
+                  }
                   if (index == _playerNameTextControllers.length) {
-                    // + Button als letztes Element
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 5),
                       child: CupertinoButton(
                         padding: EdgeInsets.zero,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(
-                              CupertinoIcons.add_circled,
-                              color: CupertinoColors.activeGreen,
-                              size: 25,
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: null,
+                                child: Icon(
+                                  CupertinoIcons.add_circled_solid,
+                                  color: CustomTheme.primaryColor,
+                                  size: 25,
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              AppLocalizations.of(context).add_player,
-                              style: const TextStyle(
-                                color: CupertinoColors.activeGreen,
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  AppLocalizations.of(context).add_player,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: CupertinoColors.activeGreen,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: null,
+                                child: Icon(
+                                  CupertinoIcons.add_circled_solid,
+                                  color: CupertinoColors.transparent,
+                                  size: 25,
+                                ),
                               ),
                             ),
                           ],
@@ -187,7 +229,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     // Spieler-Einträge
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 5),
+                          vertical: 4.0, horizontal: 5),
                       child: Row(
                         children: [
                           CupertinoButton(
@@ -221,118 +263,87 @@ class _CreateGameViewState extends State<CreateGameView> {
                 },
               ),
             ),
-            Center(
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).create_game,
-                      style: const TextStyle(
-                        color: CupertinoColors.activeGreen,
-                      ),
-                    ),
-                  ],
-                ),
-                onPressed: () async {
-                  if (_gameTitleTextController.text == '') {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).no_gameTitle_title),
-                        content: Text(
-                            AppLocalizations.of(context).no_gameTitle_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
-                    return;
-                  }
-                  if (_isPointsLimitEnabled == null) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_mode_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_mode_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
-                    return;
-                  }
-                  if (_playerNameTextControllers.length < 2) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).min_players_title),
-                        content: Text(
-                            AppLocalizations.of(context).min_players_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
-                    return;
-                  }
-                  if (!everyPlayerHasAName()) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_name_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_name_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
-                    return;
-                  }
-
-                  List<String> players = [];
-                  for (var controller in _playerNameTextControllers) {
-                    players.add(controller.text);
-                  }
-                  GameSession gameSession = GameSession(
-                    createdAt: DateTime.now(),
-                    gameTitle: _gameTitleTextController.text,
-                    players: players,
-                    pointLimit: Globals.pointLimit,
-                    caboPenalty: Globals.caboPenalty,
-                    isPointsLimitEnabled: _isPointsLimitEnabled!,
-                  );
-                  final index = await gameManager.addGameSession(gameSession);
-                  final session = gameManager.gameList[index];
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ActiveGameView(gameSession: session)));
-                  }
-                },
-              ),
-            ),
           ],
         ))));
+  }
+
+  void _checkAllGameAttributes() {
+    if (_gameTitleTextController.text == '') {
+      _showDialog((
+        AppLocalizations.of(context).no_gameTitle_title,
+        AppLocalizations.of(context).no_gameTitle_message
+      ));
+      return;
+    }
+
+    if (_isPointsLimitEnabled == null) {
+      _showDialog(
+        (
+          AppLocalizations.of(context).no_mode_title,
+          AppLocalizations.of(context).no_mode_message
+        ),
+      );
+      return;
+    }
+
+    if (_playerNameTextControllers.length < 2) {
+      _showDialog(
+        (
+          AppLocalizations.of(context).min_players_title,
+          AppLocalizations.of(context).min_players_message
+        ),
+      );
+      return;
+    }
+
+    if (!everyPlayerHasAName()) {
+      _showDialog((
+        AppLocalizations.of(context).no_name_title,
+        AppLocalizations.of(context).no_name_message
+      ));
+      return;
+    }
+
+    _createGame();
+  }
+
+  void _showDialog((String, String) content) {
+    final (title, message) = content;
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(AppLocalizations.of(context).ok),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _createGame() async {
+    List<String> players = [];
+    for (var controller in _playerNameTextControllers) {
+      players.add(controller.text);
+    }
+    GameSession gameSession = GameSession(
+      createdAt: DateTime.now(),
+      gameTitle: _gameTitleTextController.text,
+      players: players,
+      pointLimit: Globals.pointLimit,
+      caboPenalty: Globals.caboPenalty,
+      isPointsLimitEnabled: _isPointsLimitEnabled!,
+    );
+    final index = await gameManager.addGameSession(gameSession);
+    final session = gameManager.gameList[index];
+
+    Navigator.pushReplacement(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => ActiveGameView(gameSession: session)));
   }
 
   bool everyPlayerHasAName() {
