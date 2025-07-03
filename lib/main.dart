@@ -65,6 +65,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return supportedLocales.first;
       },
       theme: CupertinoThemeData(
+        applyThemeToAll: true,
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,
         scaffoldBackgroundColor: CustomTheme.backgroundColor,

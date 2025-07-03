@@ -1,3 +1,4 @@
+import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
@@ -17,15 +18,24 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
+  late final GameSession gameSession;
+  bool _deleted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    gameSession = widget.gameSession;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: widget.gameSession,
+        listenable: gameSession,
         builder: (context, _) {
           List<int> sortedPlayerIndices = _getSortedPlayerIndices();
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                middle: Text(widget.gameSession.gameTitle),
+                middle: Text(gameSession.gameTitle),
               ),
               child: SafeArea(
                 child: SingleChildScrollView(
@@ -42,7 +52,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.gameSession.players.length,
+                        itemCount: gameSession.players.length,
                         itemBuilder: (BuildContext context, int index) {
                           int playerIndex = sortedPlayerIndices[index];
                           return CupertinoListTile(
@@ -51,7 +61,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 _getPlacementPrefix(index),
                                 const SizedBox(width: 5),
                                 Text(
-                                  widget.gameSession.players[playerIndex],
+                                  gameSession.players[playerIndex],
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -60,8 +70,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             trailing: Row(
                               children: [
                                 const SizedBox(width: 5),
-                                Text(
-                                    '${widget.gameSession.playerScores[playerIndex]} '
+                                Text('${gameSession.playerScores[playerIndex]} '
                                     '${AppLocalizations.of(context).points}')
                               ],
                             ),
@@ -78,7 +87,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.gameSession.roundNumber,
+                        itemCount: gameSession.roundNumber,
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                               padding: const EdgeInsets.all(1),
@@ -88,14 +97,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 title: Text(
                                   '${AppLocalizations.of(context).round} ${index + 1}',
                                 ),
-                                trailing: index + 1 !=
-                                            widget.gameSession.roundNumber ||
-                                        widget.gameSession.isGameFinished ==
-                                            true
-                                    ? (const Text('\u{2705}',
-                                        style: TextStyle(fontSize: 22)))
-                                    : const Text('\u{23F3}',
-                                        style: TextStyle(fontSize: 22)),
+                                trailing:
+                                    index + 1 != gameSession.roundNumber ||
+                                            gameSession.isGameFinished == true
+                                        ? (const Text('\u{2705}',
+                                            style: TextStyle(fontSize: 22)))
+                                        : const Text('\u{23F3}',
+                                            style: TextStyle(fontSize: 22)),
                                 onTap: () async {
                                   // ignore: unused_local_variable
                                   final val = await Navigator.of(context,
@@ -104,7 +112,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     CupertinoPageRoute(
                                       fullscreenDialog: true,
                                       builder: (context) => RoundView(
-                                          gameSession: widget.gameSession,
+                                          gameSession: gameSession,
                                           roundNumber: index + 1),
                                     ),
                                   );
@@ -129,17 +137,21 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                               onTap: () => Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                       builder: (_) => GraphView(
-                                            gameSession: widget.gameSession,
+                                            gameSession: gameSession,
                                           )))),
                           CupertinoListTile(
-                            title:
-                                Text(AppLocalizations.of(context).delete_game,
-                                    style: const TextStyle(
-                                      color: Colors.white30,
-                                    )),
-                            onTap: () {},
+                            title: Text(
+                              AppLocalizations.of(context).delete_game,
+                            ),
+                            onTap: () {
+                              _showDeleteGameDialog().then((value) {
+                                if (value) {
+                                  _removeGameSession(gameSession);
+                                }
+                              });
+                            },
                           ),
                           CupertinoListTile(
                             title: Text(
@@ -151,12 +163,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   context,
                                   CupertinoPageRoute(
                                       builder: (_) => CreateGameView(
-                                            gameTitle:
-                                                widget.gameSession.gameTitle,
+                                            gameTitle: gameSession.gameTitle,
                                             isPointsLimitEnabled: widget
                                                 .gameSession
                                                 .isPointsLimitEnabled,
-                                            players: widget.gameSession.players,
+                                            players: gameSession.players,
                                           )));
                             },
                           ),
@@ -180,11 +191,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// ascending order.
   List<int> _getSortedPlayerIndices() {
     List<int> playerIndices =
-        List<int>.generate(widget.gameSession.players.length, (index) => index);
+        List<int>.generate(gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
-      int scoreA = widget.gameSession.playerScores[a];
-      int scoreB = widget.gameSession.playerScores[b];
+      int scoreA = gameSession.playerScores[a];
+      int scoreB = gameSession.playerScores[b];
       return scoreA.compareTo(scoreB);
     });
     return playerIndices;
@@ -215,6 +226,58 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           ' ${index + 1}.',
           style: const TextStyle(fontWeight: FontWeight.bold),
         );
+    }
+  }
+
+  Future<bool> _showDeleteGameDialog() async {
+    return await showCupertinoDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: Text(AppLocalizations.of(context).delete_game),
+              content: Text(
+                  'Möchtes du das Spiel "${gameSession.gameTitle}" wirklich löschen?'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).cancel),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).delete),
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
+  Future<void> _removeGameSession(GameSession gameSession) async {
+    if (gameManager.gameExistsInGameList(gameSession.id)) {
+      Navigator.pop(context);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        gameManager.removeGameSessionById(gameSession.id);
+      });
+    } else {
+      showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: const Text('ID Fehler'),
+              content: const Text(
+                  'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          });
     }
   }
 }
