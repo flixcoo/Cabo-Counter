@@ -22,7 +22,7 @@
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
   "delete_game_title": "Spiel löschen?",
-  "delete_game_message": "Bist du sicher, dass du die Runde {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "delete_game_message": "Bist du sicher, dass du das Spiel {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "@delete_game_message": {
     "placeholders": {
       "gameTitle": {
@@ -68,6 +68,9 @@
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
   "export_game": "Spiel exportieren",
+  "id_error_title": "ID Fehler",
+  "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
+
 
   "game_process": "Spielverlauf",
 
@@ -80,7 +83,6 @@
   "game_data": "Spieldaten",
   "import_data": "Daten importieren",
   "export_data": "Daten exportieren",
-  "error": "Fehler",
 
   "import_success_title": "Import erfolgreich",
   "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
@@ -91,7 +93,8 @@
    "import_generic_error_title": "Import fehlgeschlagen",
   "import_generic_error_message": "Der Import ist fehlgeschlagen.",
 
-  "error_export": "Datei konnte nicht exportiert werden",
+  "export_error_title": "Fehler",
+  "export_error_message": "Datei konnte nicht exportiert werden",
   "error_found": "Fehler gefunden?",
   "create_issue": "Issue erstellen",
   "app_version": "App-Version",

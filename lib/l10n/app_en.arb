@@ -80,7 +80,8 @@
   "game_data": "Game Data",
   "import_data": "Import Data",
   "export_data": "Export Data",
-  "error": "Error",
+  "id_error_title": "ID Error",
+  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
 
   "import_success_title": "Import successful",
   "import_success_message":"The game data has been successfully imported.",
@@ -91,7 +92,8 @@
   "import_generic_error_title": "Import failed",
   "import_generic_error_message": "The import has failed.",
 
-  "error_export": "Could not export file",
+  "export_error_title": "Fehler",
+  "export_error_message": "Could not export file",
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",
   "app_version": "App Version",
