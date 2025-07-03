@@ -223,7 +223,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get import_generic_error_message => 'The import has failed.';
 
   @override
-  String get export_error_title => 'Fehler';
+  String get export_error_title => 'Export failed';
 
   @override
   String get export_error_message => 'Could not export file';
