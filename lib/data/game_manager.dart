@@ -15,14 +15,9 @@ class GameManager extends ChangeNotifier {
       notifyListeners(); // Propagate session changes
     });
     gameList.add(session);
-    print(
-        '[game_manager.dart] Added game session: ${session.gameTitle} at ${session.createdAt}');
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    print(
-        '[game_manager.dart] Sorted game sessions by creation date. Total sessions: ${gameList.length}');
     notifyListeners();
     await LocalStorageService.saveGameSessions();
-    print('[game_manager.dart] Saved game sessions to local storage.');
     return gameList.indexOf(session);
   }
 
@@ -40,12 +35,17 @@ class GameManager extends ChangeNotifier {
   /// Removes a game session by its ID.
   /// Takes a String [id] as input. It finds the index of the game session with the matching ID
   /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
-  bool removeGameSessionById(String id) {
+  void removeGameSessionById(String id) {
     final int index =
         gameList.indexWhere((session) => session.id.toString() == id);
-    if (index == -1) return false;
+    if (index == -1) return;
     removeGameSessionByIndex(index);
-    return true;
+  }
+
+  bool gameExistsInGameList(String id) {
+    return gameList.any((session) => session.id.toString() == id) == -1
+        ? false
+        : true;
   }
 }
 
