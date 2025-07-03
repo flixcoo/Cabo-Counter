@@ -145,10 +145,10 @@ class _SettingsViewState extends State<SettingsView> {
                               showCupertinoDialog(
                                 context: context,
                                 builder: (context) => CupertinoAlertDialog(
-                                  title:
-                                      Text(AppLocalizations.of(context).error),
+                                  title: Text(AppLocalizations.of(context)
+                                      .export_error_title),
                                   content: Text(AppLocalizations.of(context)
-                                      .error_export),
+                                      .export_error_message),
                                   actions: [
                                     CupertinoDialogAction(
                                       child:

@@ -233,9 +233,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           context: context,
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).delete_game),
+              title: Text(AppLocalizations.of(context).delete_game_title),
               content: Text(
-                  'Möchtes du das Spiel "${gameSession.gameTitle}" wirklich löschen?'),
+                AppLocalizations.of(context)
+                    .delete_game_message(gameSession.gameTitle),
+              ),
               actions: [
                 CupertinoDialogAction(
                   child: Text(AppLocalizations.of(context).cancel),
@@ -266,9 +268,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           context: context,
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
-              title: const Text('ID Fehler'),
-              content: const Text(
-                  'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.'),
+              title: Text(AppLocalizations.of(context).id_error_title),
+              content: Text(AppLocalizations.of(context).id_error_message),
               actions: [
                 CupertinoDialogAction(
                   child: Text(AppLocalizations.of(context).ok),
