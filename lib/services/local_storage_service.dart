@@ -86,6 +86,11 @@ class LocalStorageService {
               GameSession.fromJson(jsonItem as Map<String, dynamic>))
           .toList();
 
+      for (GameSession session in gameManager.gameList) {
+        print(
+            '[local_storage_service.dart] Geladene Session: ${session.gameTitle} - ${session.id}');
+      }
+
       print(
           '[local_storage_service.dart] Die Spieldaten wurden erfolgreich geladen und verarbeitet');
       return true;
