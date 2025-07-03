@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @delete_game_message.
   ///
   /// In de, this message translates to:
-  /// **'Bist du sicher, dass du das Spiel {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
+  /// **'Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
   String delete_game_message(String gameTitle);
 
   /// No description provided for @overview.

@@ -22,7 +22,7 @@
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
   "delete_game_title": "Spiel löschen?",
-  "delete_game_message": "Bist du sicher, dass du das Spiel {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "delete_game_message": "Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "@delete_game_message": {
     "placeholders": {
       "gameTitle": {

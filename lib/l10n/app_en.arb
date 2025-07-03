@@ -22,7 +22,7 @@
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Add a new round using the button in the top right corner.",
   "delete_game_title": "Delete game?",
-  "delete_game_message": "Are you sure you want to delete the game {gameTitle}? This action cannot be undone.",
+  "delete_game_message": "Are you sure you want to delete the game \"{gameTitle}\"? This action cannot be undone.",
   "@delete_game_message": {
     "placeholders": {
       "gameTitle": {

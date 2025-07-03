@@ -68,7 +68,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Bist du sicher, dass du das Spiel $gameTitle löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+    return 'Bist du sicher, dass du das Spiel \"$gameTitle\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
   }
 
   @override
