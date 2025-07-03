@@ -43,9 +43,7 @@ class GameManager extends ChangeNotifier {
   }
 
   bool gameExistsInGameList(String id) {
-    return gameList.any((session) => session.id.toString() == id) == -1
-        ? false
-        : true;
+    return gameList.any((session) => session.id.toString() == id);
   }
 }
 
