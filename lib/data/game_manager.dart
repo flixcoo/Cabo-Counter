@@ -40,8 +40,12 @@ class GameManager extends ChangeNotifier {
   /// Removes a game session by its ID.
   /// Takes a String [id] as input. It finds the index of the game session with the matching ID
   /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
-  int getGameSessionIndexById(String id) {
-    return gameList.indexWhere((session) => session.id.toString() == id);
+  bool removeGameSessionById(String id) {
+    final int index =
+        gameList.indexWhere((session) => session.id.toString() == id);
+    if (index == -1) return false;
+    removeGameSessionByIndex(index);
+    return true;
   }
 }
 
