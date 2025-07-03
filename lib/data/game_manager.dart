@@ -30,11 +30,18 @@ class GameManager extends ChangeNotifier {
   /// Takes a [index] as input. It then removes the session at the specified index from the `gameList`,
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
-  void removeGameSession(int index) {
+  void removeGameSessionByIndex(int index) {
     gameList[index].removeListener(notifyListeners);
     gameList.removeAt(index);
     notifyListeners();
     LocalStorageService.saveGameSessions();
+  }
+
+  /// Removes a game session by its ID.
+  /// Takes a String [id] as input. It finds the index of the game session with the matching ID
+  /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
+  int getGameSessionIndexById(String id) {
+    return gameList.indexWhere((session) => session.id.toString() == id);
   }
 }
 
