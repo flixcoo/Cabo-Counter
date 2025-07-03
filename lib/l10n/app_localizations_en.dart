@@ -68,7 +68,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Are you sure you want to delete the game $gameTitle? This action cannot be undone.';
+    return 'Are you sure you want to delete the game \"$gameTitle\"? This action cannot be undone.';
   }
 
   @override

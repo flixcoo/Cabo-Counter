@@ -37,7 +37,6 @@ class GameSession extends ChangeNotifier {
     playerScores = List.filled(players.length, 0);
     var uuid = const Uuid();
     id = uuid.v1();
-    print('GameSession created with ID: $id');
   }
 
   @override
