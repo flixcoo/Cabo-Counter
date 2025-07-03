@@ -320,12 +320,13 @@ class _CreateGameViewState extends State<CreateGameView> {
                     isPointsLimitEnabled: _isPointsLimitEnabled!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
+                  final session = gameManager.gameList[index];
                   if (context.mounted) {
                     Navigator.pushReplacement(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => ActiveGameView(
-                                gameSession: gameManager.gameList[index])));
+                            builder: (context) =>
+                                ActiveGameView(gameSession: session)));
                   }
                 },
               ),
