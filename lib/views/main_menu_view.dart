@@ -169,18 +169,19 @@ class _MainMenuViewState extends State<MainMenuView> {
                                                   CupertinoIcons.person_2_fill),
                                             ],
                                           ),
-                                          onTap: () async {
-                                            //ignore: unused_local_variable
-                                            final val = await Navigator.push(
+                                          onTap: () {
+                                            final session =
+                                                gameManager.gameList[index];
+                                            Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
                                                     ActiveGameView(
-                                                        gameSession: gameManager
-                                                            .gameList[index]),
+                                                        gameSession: session),
                                               ),
-                                            );
-                                            setState(() {});
+                                            ).then((_) {
+                                              setState(() {});
+                                            });
                                           },
                                         ),
                                       ),
