@@ -72,7 +72,7 @@
   "id_error_title": "ID Fehler",
   "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
   "end_game_title": "Spiel beenden?",
-  "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht forgeführt werden.",
+  "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "game_process": "Spielverlauf",
 
