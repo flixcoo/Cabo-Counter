@@ -56,7 +56,7 @@ class GameManager extends ChangeNotifier {
         gameList.indexWhere((session) => session.id.toString() == id);
 
     // Game session not found or not in unlimited mode
-    if (index == -1 || gameList[index].isPointsLimitEnabled == false) return;
+    if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
 
     gameList[index].roundNumber--;
     gameList[index].isGameFinished = true;

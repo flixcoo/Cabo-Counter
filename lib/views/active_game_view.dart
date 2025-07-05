@@ -227,8 +227,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               ),
               onPressed: () {
                 setState(() {
-                  gameSession.isGameFinished = true;
-                  gameSession.roundNumber--;
                   gameManager.endGame(gameSession.id);
                 });
                 Navigator.pop(context);
