@@ -176,7 +176,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get end_game_message =>
-      'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht forgeführt werden.';
+      'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.';
 
   @override
   String get game_process => 'Spielverlauf';

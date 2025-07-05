@@ -413,7 +413,7 @@ abstract class AppLocalizations {
   /// No description provided for @end_game_message.
   ///
   /// In de, this message translates to:
-  /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht forgeführt werden.'**
+  /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
   String get end_game_message;
 
   /// No description provided for @game_process.
