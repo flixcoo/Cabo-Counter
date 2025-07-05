@@ -368,6 +368,12 @@ abstract class AppLocalizations {
   /// **'Statistiken'**
   String get statistics;
 
+  /// No description provided for @end_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden'**
+  String get end_game;
+
   /// No description provided for @delete_game.
   ///
   /// In de, this message translates to:
@@ -397,6 +403,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.'**
   String get id_error_message;
+
+  /// No description provided for @end_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden?'**
+  String get end_game_title;
+
+  /// No description provided for @end_game_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
+  String get end_game_message;
 
   /// No description provided for @game_process.
   ///

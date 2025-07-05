@@ -65,12 +65,14 @@
   "next_round": "Nächste Runde",
 
   "statistics": "Statistiken",
+  "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
   "export_game": "Spiel exportieren",
   "id_error_title": "ID Fehler",
   "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
-
+  "end_game_title": "Spiel beenden?",
+  "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "game_process": "Spielverlauf",
 

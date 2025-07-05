@@ -129,21 +129,40 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Column(
                         children: [
                           CupertinoListTile(
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
                               title: Text(
                                 AppLocalizations.of(context).statistics,
                               ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
                               onTap: () => Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                       builder: (_) => GraphView(
                                             gameSession: gameSession,
                                           )))),
+                          if (!gameSession.isPointsLimitEnabled)
+                            CupertinoListTile(
+                                title: Text(
+                                  AppLocalizations.of(context).end_game,
+                                  style: gameSession.roundNumber > 1 &&
+                                          !gameSession.isGameFinished
+                                      ? const TextStyle(color: Colors.white)
+                                      : const TextStyle(color: Colors.white30),
+                                ),
+                                backgroundColorActivated:
+                                    CustomTheme.backgroundColor,
+                                onTap: () {
+                                  if (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished) {
+                                    _showEndGameDialog();
+                                  }
+                                }),
                           CupertinoListTile(
                             title: Text(
                               AppLocalizations.of(context).delete_game,
                             ),
+                            backgroundColorActivated:
+                                CustomTheme.backgroundColor,
                             onTap: () {
                               _showDeleteGameDialog().then((value) {
                                 if (value) {
@@ -157,6 +176,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               AppLocalizations.of(context)
                                   .new_game_same_settings,
                             ),
+                            backgroundColorActivated:
+                                CustomTheme.backgroundColor,
                             onTap: () {
                               Navigator.pushReplacement(
                                   context,
@@ -176,6 +197,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     style: const TextStyle(
                                       color: Colors.white30,
                                     )),
+                            backgroundColorActivated:
+                                CustomTheme.backgroundColor,
                           ),
                         ],
                       )
@@ -184,6 +207,39 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                 ),
               ));
         });
+  }
+
+  /// Shows a dialog to confirm ending the game.
+  /// If the user confirms, it calls the `endGame` method on the game manager
+  void _showEndGameDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context).end_game_title),
+          content: Text(AppLocalizations.of(context).end_game_message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                AppLocalizations.of(context).end_game,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.red),
+              ),
+              onPressed: () {
+                setState(() {
+                  gameManager.endGame(gameSession.id);
+                });
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Returns a list of player indices sorted by their scores in
