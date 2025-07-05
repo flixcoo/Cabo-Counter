@@ -153,6 +153,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
+  String get end_game => 'Spiel beenden';
+
+  @override
   String get delete_game => 'Spiel löschen';
 
   @override
@@ -167,6 +170,13 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get id_error_message =>
       'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.';
+
+  @override
+  String get end_game_title => 'Spiel beenden?';
+
+  @override
+  String get end_game_message =>
+      'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht forgeführt werden.';
 
   @override
   String get game_process => 'Spielverlauf';
