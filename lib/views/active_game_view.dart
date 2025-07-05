@@ -151,12 +151,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 ),
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
-                                onTap: () => {
-                                      gameSession.roundNumber > 1 &&
-                                              !gameSession.isGameFinished
-                                          ? _showEndGameDialog()
-                                          : null
-                                    }),
+                                onTap: () {
+                                  if (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished) {
+                                    _showEndGameDialog();
+                                  }
+                                }),
                           CupertinoListTile(
                             title: Text(
                               AppLocalizations.of(context).delete_game,
