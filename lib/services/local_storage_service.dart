@@ -196,7 +196,8 @@ class LocalStorageService {
   /// Validates the JSON data against the schema.
   static Future<bool> validateJsonSchema(String jsonString) async {
     try {
-      final schemaString = await rootBundle.loadString('assets/schema.json');
+      final schemaString =
+          await rootBundle.loadString('assets/game_list-schema.json');
       final schema = JsonSchema.create(json.decode(schemaString));
       final jsonData = json.decode(jsonString);
       final result = schema.validate(jsonData);
