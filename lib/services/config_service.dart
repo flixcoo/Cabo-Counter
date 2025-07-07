@@ -1,4 +1,3 @@
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// This class handles the configuration settings for the app.
@@ -7,8 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ConfigService {
   static const String _keyPointLimit = 'pointLimit';
   static const String _keyCaboPenalty = 'caboPenalty';
-  static const int _defaultPointLimit = 100; // Default Value
-  static const int _defaultCaboPenalty = 5; // Default Value
+  // Actual values used in the app
+  static int pointLimit = 100;
+  static int caboPenalty = 5;
+  // Default values
+  static const int _defaultPointLimit = 100;
+  static const int _defaultCaboPenalty = 5;
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,8 +51,8 @@ class ConfigService {
 
   /// Resets the configuration to default values.
   static Future<void> resetConfig() async {
-    Globals.pointLimit = _defaultPointLimit;
-    Globals.caboPenalty = _defaultCaboPenalty;
+    ConfigService.pointLimit = _defaultPointLimit;
+    ConfigService.caboPenalty = _defaultCaboPenalty;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, _defaultPointLimit);
     await prefs.setInt(_keyCaboPenalty, _defaultCaboPenalty);

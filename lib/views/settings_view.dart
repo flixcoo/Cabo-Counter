@@ -52,14 +52,14 @@ class _SettingsViewState extends State<SettingsView> {
                         AppLocalizations.of(context).cabo_penalty_subtitle),
                     trailing: Stepper(
                       key: _stepperKey1,
-                      initialValue: Globals.caboPenalty,
+                      initialValue: ConfigService.caboPenalty,
                       minValue: 0,
                       maxValue: 50,
                       step: 1,
                       onChanged: (newCaboPenalty) {
                         setState(() {
                           ConfigService.setCaboPenalty(newCaboPenalty);
-                          Globals.caboPenalty = newCaboPenalty;
+                          ConfigService.caboPenalty = newCaboPenalty;
                         });
                       },
                     ),
@@ -73,14 +73,14 @@ class _SettingsViewState extends State<SettingsView> {
                         Text(AppLocalizations.of(context).point_limit_subtitle),
                     trailing: Stepper(
                       key: _stepperKey2,
-                      initialValue: Globals.pointLimit,
+                      initialValue: ConfigService.pointLimit,
                       minValue: 30,
                       maxValue: 1000,
                       step: 10,
                       onChanged: (newPointLimit) {
                         setState(() {
                           ConfigService.setPointLimit(newPointLimit);
-                          Globals.pointLimit = newPointLimit;
+                          ConfigService.pointLimit = newPointLimit;
                         });
                       },
                     ),
