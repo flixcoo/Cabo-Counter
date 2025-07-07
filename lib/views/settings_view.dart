@@ -140,7 +140,7 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                           onPressed: () async {
                             final success =
-                                await LocalStorageService.exportJsonFile();
+                                await LocalStorageService.exportGameData();
                             if (!success && context.mounted) {
                               showCupertinoDialog(
                                 context: context,

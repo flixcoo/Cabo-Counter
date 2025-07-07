@@ -20,8 +20,8 @@ enum ImportStatus {
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
 
-  /// Writes the game session list to a  JSON file and returns it as string.
-  static String getJsonFile() {
+  /// Writes the game session list to a JSON file and returns it as string.
+  static String getGameDataAsJsonFile() {
     final jsonFile =
         gameManager.gameList.map((session) => session.toJson()).toList();
     return json.encode(jsonFile);
@@ -39,7 +39,7 @@ class LocalStorageService {
     print('[local_storage_service.dart] Versuche, Daten zu speichern...');
     try {
       final file = await _getFilePath();
-      final jsonFile = getJsonFile();
+      final jsonFile = getGameDataAsJsonFile();
       await file.writeAsString(jsonFile);
       print(
           '[local_storage_service.dart] Die Spieldaten wurden zwischengespeichert.');
@@ -102,19 +102,27 @@ class LocalStorageService {
     }
   }
 
-  /// Opens the file picker to save a JSON file with the current game data.
-  static Future<bool> exportJsonFile() async {
-    final jsonString = getJsonFile();
+  /// Opens the file picker to export game data as a JSON file.
+  /// This method will export the given [jsonString] as a JSON file. It opens
+  /// the file picker with the choosen [fileName].
+  static Future<bool> exportJsonData(
+    String jsonString,
+    String fileName,
+  ) async {
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
-      final result = await FileSaver.instance.saveAs(
-        name: 'cabo_counter_data',
+      final path = await FileSaver.instance.saveAs(
+        name: fileName,
         bytes: bytes,
         ext: 'json',
         mimeType: MimeType.json,
       );
-      print(
-          '[local_storage_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $result');
+      if (path == null) {
+        print('[local_storage_service.dart]: Export abgebrochen');
+      } else {
+        print(
+            '[local_storage_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $path');
+      }
       return true;
     } catch (e) {
       print(
@@ -123,22 +131,36 @@ class LocalStorageService {
     }
   }
 
+  /// Opens the file picker to export all game sessions as a JSON file.
+  static Future<bool> exportGameData() async {
+    String jsonString = getGameDataAsJsonFile();
+    String fileName = 'cabo_counter-game_data';
+    return exportJsonData(jsonString, fileName);
+  }
+
+  /// Opens the file picker to save a single game session as a JSON file.
+  static Future<bool> exportSingleGameSession(GameSession session) async {
+    String jsonString = json.encode(session.toJson());
+    String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
+    return exportJsonData(jsonString, fileName);
+  }
+
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<ImportStatus> importJsonFile() async {
-    final result = await FilePicker.platform.pickFiles(
+    final path = await FilePicker.platform.pickFiles(
       dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
 
-    if (result == null) {
+    if (path == null) {
       print(
           '[local_storage_service.dart] Der Filepicker-Dialog wurde abgebrochen');
       return ImportStatus.canceled;
     }
 
     try {
-      final jsonString = await _readFileContent(result.files.single);
+      final jsonString = await _readFileContent(path.files.single);
 
       if (!await validateJsonSchema(jsonString)) {
         return ImportStatus.validationError;

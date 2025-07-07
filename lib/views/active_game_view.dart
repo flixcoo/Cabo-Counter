@@ -1,6 +1,7 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/graph_view.dart';
@@ -192,14 +193,35 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             },
                           ),
                           CupertinoListTile(
-                            title:
-                                Text(AppLocalizations.of(context).export_game,
-                                    style: const TextStyle(
-                                      color: Colors.white30,
-                                    )),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
-                          ),
+                              title: Text(
+                                AppLocalizations.of(context).export_game,
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () async {
+                                final success = await LocalStorageService
+                                    .exportSingleGameSession(
+                                        widget.gameSession);
+                                if (!success && context.mounted) {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                      title: Text(AppLocalizations.of(context)
+                                          .export_error_title),
+                                      content: Text(AppLocalizations.of(context)
+                                          .export_error_message),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                              AppLocalizations.of(context).ok),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              }),
                         ],
                       )
                     ],
