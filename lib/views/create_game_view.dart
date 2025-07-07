@@ -7,6 +7,14 @@ import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 
+enum CreateStatus {
+  noGameTitle,
+  noModeSelected,
+  minPlayers,
+  maxPlayers,
+  noPlayerName,
+}
+
 class CreateGameView extends StatefulWidget {
   final String? gameTitle;
   final bool? isPointsLimitEnabled;
@@ -163,22 +171,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                   .add(TextEditingController());
                             });
                           } else {
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (context) => CupertinoAlertDialog(
-                                title: Text(AppLocalizations.of(context)
-                                    .max_players_title),
-                                content: Text(AppLocalizations.of(context)
-                                    .max_players_message),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child:
-                                        Text(AppLocalizations.of(context).ok),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ),
-                            );
+                            showFeedbackDialog(CreateStatus.maxPlayers);
                           }
                         },
                       ),
@@ -237,73 +230,19 @@ class _CreateGameViewState extends State<CreateGameView> {
                 ),
                 onPressed: () async {
                   if (_gameTitleTextController.text == '') {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).no_gameTitle_title),
-                        content: Text(
-                            AppLocalizations.of(context).no_gameTitle_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.noGameTitle);
                     return;
                   }
                   if (_isPointsLimitEnabled == null) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_mode_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_mode_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.noModeSelected);
                     return;
                   }
                   if (_playerNameTextControllers.length < 2) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).min_players_title),
-                        content: Text(
-                            AppLocalizations.of(context).min_players_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.minPlayers);
                     return;
                   }
                   if (!everyPlayerHasAName()) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_name_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_name_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.noPlayerName);
                     return;
                   }
 
@@ -335,6 +274,60 @@ class _CreateGameViewState extends State<CreateGameView> {
         ))));
   }
 
+  /// Displays a feedback dialog based on the [CreateStatus].
+  void showFeedbackDialog(CreateStatus status) {
+    final (title, message) = _getDialogContent(status);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  /// Returns the title and message for the dialog based on the [CreateStatus].
+  (String, String) _getDialogContent(CreateStatus status) {
+    switch (status) {
+      case CreateStatus.noGameTitle:
+        return (
+          AppLocalizations.of(context).no_gameTitle_title,
+          AppLocalizations.of(context).no_gameTitle_message
+        );
+      case CreateStatus.noModeSelected:
+        return (
+          AppLocalizations.of(context).no_mode_title,
+          AppLocalizations.of(context).no_mode_message
+        );
+
+      case CreateStatus.minPlayers:
+        return (
+          AppLocalizations.of(context).min_players_title,
+          AppLocalizations.of(context).min_players_message
+        );
+      case CreateStatus.maxPlayers:
+        return (
+          AppLocalizations.of(context).max_players_title,
+          AppLocalizations.of(context).max_players_message
+        );
+      case CreateStatus.noPlayerName:
+        return (
+          AppLocalizations.of(context).no_name_title,
+          AppLocalizations.of(context).no_name_message
+        );
+    }
+  }
+
+  /// Checks if every player has a name.
+  /// Returns true if all players have a name, false otherwise.
   bool everyPlayerHasAName() {
     for (var controller in _playerNameTextControllers) {
       if (controller.text == '') {
