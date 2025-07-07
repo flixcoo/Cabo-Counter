@@ -103,12 +103,12 @@ class LocalStorageService {
   }
 
   /// Opens the file picker to save a JSON file with the current game data.
-  static Future<bool> exportJsonFile() async {
+  static Future<bool> exportGameData() async {
     final jsonString = getJsonFile();
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
       final result = await FileSaver.instance.saveAs(
-        name: 'cabo_counter_data',
+        name: 'cabo_counter-game_data',
         bytes: bytes,
         ext: 'json',
         mimeType: MimeType.json,
@@ -119,6 +119,27 @@ class LocalStorageService {
     } catch (e) {
       print(
           '[local_storage_service.dart] Fehler beim Exportieren der Spieldaten. Exception: $e');
+      return false;
+    }
+  }
+
+  /// Opens the file picker to save a single game session as a JSON file.
+  static Future<bool> exportSingleGameSession(GameSession session) async {
+    final jsonString = json.encode(session.toJson());
+    try {
+      final bytes = Uint8List.fromList(utf8.encode(jsonString));
+      final result = await FileSaver.instance.saveAs(
+        name: 'cabo_counter-game_${session.id.substring(0, 7)}',
+        bytes: bytes,
+        ext: 'json',
+        mimeType: MimeType.json,
+      );
+      print(
+          '[local_storage_service.dart] Die Spieldaten der Session wurden exportiert. Dateipfad: $result');
+      return true;
+    } catch (e) {
+      print(
+          '[local_storage_service.dart] Fehler beim Exportieren der Spieldaten der Session. Exception: $e');
       return false;
     }
   }
