@@ -1,8 +1,8 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -96,7 +96,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                       _isPointsLimitEnabled == null
                           ? AppLocalizations.of(context).select_mode
                           : (_isPointsLimitEnabled!
-                              ? '${Globals.pointLimit} ${AppLocalizations.of(context).points}'
+                              ? '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited),
                     ),
                     const SizedBox(width: 3),
@@ -108,7 +108,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
-                        pointLimit: Globals.pointLimit,
+                        pointLimit: ConfigService.pointLimit,
                       ),
                     ),
                   );
@@ -315,8 +315,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: Globals.pointLimit,
-                    caboPenalty: Globals.caboPenalty,
+                    pointLimit: ConfigService.pointLimit,
+                    caboPenalty: ConfigService.caboPenalty,
                     isPointsLimitEnabled: _isPointsLimitEnabled!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
