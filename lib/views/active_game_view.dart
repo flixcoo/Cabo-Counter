@@ -198,9 +198,29 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
-                              onTap: () {
-                                LocalStorageService.exportSingleGameSession(
-                                    widget.gameSession);
+                              onTap: () async {
+                                final success = await LocalStorageService
+                                    .exportSingleGameSession(
+                                        widget.gameSession);
+                                if (!success && context.mounted) {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                      title: Text(AppLocalizations.of(context)
+                                          .export_error_title),
+                                      content: Text(AppLocalizations.of(context)
+                                          .export_error_message),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                              AppLocalizations.of(context).ok),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               }),
                         ],
                       )
