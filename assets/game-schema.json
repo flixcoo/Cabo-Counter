@@ -1,0 +1,291 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Generated schema for a single cabo counter game",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "gameTitle": {
+      "type": "string"
+    },
+    "players": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "pointLimit": {
+      "type": "integer"
+    },
+    "caboPenalty": {
+      "type": "integer"
+    },
+    "isPointsLimitEnabled": {
+      "type": "boolean"
+    },
+    "isGameFinished": {
+      "type": "boolean"
+    },
+    "winner": {
+      "type": "string"
+    },
+    "roundNumber": {
+      "type": "integer"
+    },
+    "playerScores": {
+      "type": "array",
+      "items": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ]
+    },
+    "roundList": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "integer"
+            },
+            "caboPlayerIndex": {
+              "type": "integer"
+            },
+            "kamikazePlayerIndex": {
+              "type": "null"
+            },
+            "scores": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "integer"
+            },
+            "caboPlayerIndex": {
+              "type": "integer"
+            },
+            "kamikazePlayerIndex": {
+              "type": "null"
+            },
+            "scores": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "integer"
+            },
+            "caboPlayerIndex": {
+              "type": "integer"
+            },
+            "kamikazePlayerIndex": {
+              "type": "null"
+            },
+            "scores": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "integer"
+            },
+            "caboPlayerIndex": {
+              "type": "integer"
+            },
+            "kamikazePlayerIndex": {
+              "type": "null"
+            },
+            "scores": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "roundNum": {
+              "type": "integer"
+            },
+            "caboPlayerIndex": {
+              "type": "integer"
+            },
+            "kamikazePlayerIndex": {
+              "type": "null"
+            },
+            "scores": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "scoreUpdates": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "required": [
+            "roundNum",
+            "caboPlayerIndex",
+            "kamikazePlayerIndex",
+            "scores",
+            "scoreUpdates"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "createdAt",
+    "gameTitle",
+    "players",
+    "pointLimit",
+    "caboPenalty",
+    "isPointsLimitEnabled",
+    "isGameFinished",
+    "winner",
+    "roundNumber",
+    "playerScores",
+    "roundList"
+  ]
+}
+
