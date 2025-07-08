@@ -105,17 +105,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         : const Text('\u{23F3}',
                                             style: TextStyle(fontSize: 22)),
                                 onTap: () async {
-                                  // ignore: unused_local_variable
-                                  final val = await Navigator.of(context,
-                                          rootNavigator: true)
-                                      .push(
-                                    CupertinoPageRoute(
-                                      fullscreenDialog: true,
-                                      builder: (context) => RoundView(
-                                          gameSession: gameSession,
-                                          roundNumber: index + 1),
-                                    ),
-                                  );
+                                  _openRoundView(index + 1);
                                 },
                               ));
                         },
@@ -360,6 +350,27 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               ],
             );
           });
+    }
+  }
+
+  /// Recursively opens the RoundView for the specified round number.
+  /// It starts with the given [roundNumber] and continues to open the next round
+  /// until the user navigates back or the round number is invalid.
+  void _openRoundView(int roundNumber) async {
+    final val = await Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => RoundView(
+          gameSession: gameSession,
+          roundNumber: roundNumber,
+        ),
+      ),
+    );
+    if (val != null && val >= 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await Future.delayed(const Duration(milliseconds: 600));
+        _openRoundView(val);
+      });
     }
   }
 }

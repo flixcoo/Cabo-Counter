@@ -290,7 +290,7 @@ class _RoundViewState extends State<RoundView> {
                             ? () {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
-                                Navigator.pop(context, widget.gameSession);
+                                Navigator.pop(context, -1);
                               }
                             : null,
                         child: Text(AppLocalizations.of(context).done),
@@ -301,17 +301,10 @@ class _RoundViewState extends State<RoundView> {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
                                 if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context, widget.gameSession);
+                                  Navigator.pop(context, -1);
                                 } else {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pushReplacement(
-                                    CupertinoPageRoute(
-                                      builder: (context) => RoundView(
-                                        gameSession: widget.gameSession,
-                                        roundNumber: widget.roundNumber + 1,
-                                      ),
-                                    ),
-                                  );
+                                  Navigator.pop(
+                                      context, widget.roundNumber + 1);
                                 }
                               }
                             : null,
