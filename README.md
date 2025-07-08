@@ -1,6 +1,6 @@
 # CABO Counter
 
-![Version](https://img.shields.io/badge/Version-0.3.0-orange)
+![Version](https://img.shields.io/badge/Version-0.3.8-orange)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.1-blue?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.8.1-blue?logo=dart)
 ![iOS](https://img.shields.io/badge/iOS-18.5-white?logo=apple)
