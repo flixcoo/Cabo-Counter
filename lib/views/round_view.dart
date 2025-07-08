@@ -76,10 +76,8 @@ class _RoundViewState extends State<RoundView> {
         middle: Text(AppLocalizations.of(context).results),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => {
-            LocalStorageService.saveGameSessions(),
-            Navigator.pop(context, widget.gameSession)
-          },
+          onPressed: () =>
+              {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
           child: Text(AppLocalizations.of(context).cancel),
         ),
       ),
@@ -290,7 +288,7 @@ class _RoundViewState extends State<RoundView> {
                             ? () {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
-                                Navigator.pop(context, -1);
+                                Navigator.pop(context);
                               }
                             : null,
                         child: Text(AppLocalizations.of(context).done),
@@ -301,7 +299,7 @@ class _RoundViewState extends State<RoundView> {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
                                 if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context, -1);
+                                  Navigator.pop(context);
                                 } else {
                                   Navigator.pop(
                                       context, widget.roundNumber + 1);
