@@ -1,8 +1,8 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/create_game_view.dart';
 import 'package:cabo_counter/views/settings_view.dart';
@@ -50,7 +50,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                       CupertinoPageRoute(
                         builder: (context) => const SettingsView(),
                       ),
-                    );
+                    ).then((_) {
+                      setState(() {});
+                    });
                   },
                   icon: const Icon(CupertinoIcons.settings, size: 30)),
               middle: const Text('Cabo Counter'),
@@ -59,7 +61,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => const CreateGame(),
+                            builder: (context) => const CreateGameView(),
                           ),
                         )
                       },
@@ -77,7 +79,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                               const SizedBox(height: 30), // Abstand von oben
                               Center(
                                   child: GestureDetector(
-                                onTap: () => setState(() {}),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const CreateGameView(),
+                                  ),
+                                ),
                                 child: Icon(
                                   CupertinoIcons.plus,
                                   size: 60,
@@ -85,12 +93,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 ),
                               )),
                               const SizedBox(height: 10), // Abstand von oben
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 70),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 70),
                                 child: Text(
-                                  'Ganz schön leer hier...\nFüge über den Button oben rechts eine neue Runde hinzu.',
+                                  '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ),
                             ],
@@ -106,15 +115,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       key: Key(session.gameTitle),
                                       background: Container(
                                         color: CupertinoColors.destructiveRed,
-                                        alignment: Alignment.centerLeft,
+                                        alignment: Alignment.centerRight,
                                         padding:
-                                            const EdgeInsets.only(left: 20.0),
+                                            const EdgeInsets.only(right: 20.0),
                                         child: const Icon(
                                           CupertinoIcons.delete,
                                           color: CupertinoColors.white,
                                         ),
                                       ),
-                                      direction: DismissDirection.startToEnd,
+                                      direction: DismissDirection.endToStart,
                                       confirmDismiss: (direction) async {
                                         final String gameTitle = gameManager
                                             .gameList[index].gameTitle;
@@ -122,7 +131,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                             gameTitle);
                                       },
                                       onDismissed: (direction) {
-                                        gameManager.removeGameSession(index);
+                                        gameManager
+                                            .removeGameSessionByIndex(index);
                                       },
                                       dismissThresholds: const {
                                         DismissDirection.startToEnd: 0.6
@@ -159,18 +169,19 @@ class _MainMenuViewState extends State<MainMenuView> {
                                                   CupertinoIcons.person_2_fill),
                                             ],
                                           ),
-                                          onTap: () async {
-                                            //ignore: unused_local_variable
-                                            final val = await Navigator.push(
+                                          onTap: () {
+                                            final session =
+                                                gameManager.gameList[index];
+                                            Navigator.push(
                                               context,
                                               CupertinoPageRoute(
                                                 builder: (context) =>
                                                     ActiveGameView(
-                                                        gameSession: gameManager
-                                                            .gameList[index]),
+                                                        gameSession: session),
                                               ),
-                                            );
-                                            setState(() {});
+                                            ).then((_) {
+                                              setState(() {});
+                                            });
                                           },
                                         ),
                                       ),
@@ -188,7 +199,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
   String _translateGameMode(bool pointLimit) {
     if (pointLimit) {
-      return '${Globals.pointLimit} ${AppLocalizations.of(context).points}';
+      return '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}';
     }
     return AppLocalizations.of(context).unlimited;
   }
@@ -215,7 +226,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
-                  child: Text(AppLocalizations.of(context).delete),
+                  child: Text(
+                    AppLocalizations.of(context).delete,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
                 ),
               ],
             );

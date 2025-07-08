@@ -61,9 +61,8 @@ void main() {
   });
 
   group('Helper Functions', () {
-    test('getLengthOfPlayerNames', () {
-      expect(session.getLengthOfPlayerNames(),
-          equals(15)); // Alice(5) + Bob(3) + Charlie(7)
+    test('getMaxLengthOfPlayerNames', () {
+      expect(session.getMaxLengthOfPlayerNames(), equals(7)); // Charlie (7)
     });
 
     test('increaseRound', () {

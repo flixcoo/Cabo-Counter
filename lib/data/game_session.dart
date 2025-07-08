@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/round.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 
 /// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
@@ -12,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
+  late String id;
   final DateTime createdAt;
   final String gameTitle;
   final List<String> players;
@@ -33,17 +35,20 @@ class GameSession extends ChangeNotifier {
     required this.isPointsLimitEnabled,
   }) {
     playerScores = List.filled(players.length, 0);
+    var uuid = const Uuid();
+    id = uuid.v1();
   }
 
   @override
   toString() {
-    return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
+    return ('GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
         'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
         ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
   }
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
+        'id': id,
         'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
         'players': players,
@@ -59,7 +64,8 @@ class GameSession extends ChangeNotifier {
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : createdAt = DateTime.parse(json['createdAt']),
+      : id = json['id'] ?? const Uuid().v1(),
+        createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
         players = List<String>.from(json['players']),
         pointLimit = json['pointLimit'],
@@ -72,11 +78,13 @@ class GameSession extends ChangeNotifier {
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
-  /// Returns the length of all player names combined.
-  int getLengthOfPlayerNames() {
+  /// Returns the length of the longest player name.
+  int getMaxLengthOfPlayerNames() {
     int length = 0;
     for (String player in players) {
-      length += player.length;
+      if (player.length >= length) {
+        length = player.length;
+      }
     }
     return length;
   }

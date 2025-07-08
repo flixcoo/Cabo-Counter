@@ -2,7 +2,7 @@ name: cabo_counter
 description: "Mobile app for the card game Cabo"
 publish_to: 'none'
 
-version: 0.3.0+232
+version: 0.3.9+331
 
 environment:
   sdk: ^3.5.4
@@ -25,6 +25,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  syncfusion_flutter_charts: ^30.1.37
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:
@@ -37,4 +39,5 @@ flutter:
   uses-material-design: false
   assets:
     - assets/cabo_counter-logo_rounded.png
-    - assets/schema.json
+    - assets/game_list-schema.json
+    - assets/game-schema.json

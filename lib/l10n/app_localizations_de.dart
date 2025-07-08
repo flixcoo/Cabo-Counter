@@ -48,6 +48,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get back => 'Zurück';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -65,7 +68,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Bist du sicher, dass du die Runde $gameTitle löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+    return 'Bist du sicher, dass du das Spiel \"$gameTitle\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
   }
 
   @override
@@ -147,6 +150,38 @@ class AppLocalizationsDe extends AppLocalizations {
   String get next_round => 'Nächste Runde';
 
   @override
+  String get statistics => 'Statistiken';
+
+  @override
+  String get end_game => 'Spiel beenden';
+
+  @override
+  String get delete_game => 'Spiel löschen';
+
+  @override
+  String get new_game_same_settings => 'Neues Spiel mit gleichen Einstellungen';
+
+  @override
+  String get export_game => 'Spiel exportieren';
+
+  @override
+  String get id_error_title => 'ID Fehler';
+
+  @override
+  String get id_error_message =>
+      'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.';
+
+  @override
+  String get end_game_title => 'Spiel beenden?';
+
+  @override
+  String get end_game_message =>
+      'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.';
+
+  @override
+  String get game_process => 'Spielverlauf';
+
+  @override
   String get settings => 'Einstellungen';
 
   @override
@@ -174,13 +209,37 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_data => 'Daten exportieren';
 
   @override
-  String get error => 'Fehler';
+  String get import_success_title => 'Import erfolgreich';
 
   @override
-  String get error_import => 'Datei konnte nicht importiert werden';
+  String get import_success_message =>
+      'Die Spieldaten wurden erfolgreich importiert.';
 
   @override
-  String get error_export => 'Datei konnte nicht exportiert werden';
+  String get import_validation_error_title => 'Validierung fehlgeschlagen';
+
+  @override
+  String get import_validation_error_message =>
+      'Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.';
+
+  @override
+  String get import_format_error_title => 'Falsches Format';
+
+  @override
+  String get import_format_error_message =>
+      'Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.';
+
+  @override
+  String get import_generic_error_title => 'Import fehlgeschlagen';
+
+  @override
+  String get import_generic_error_message => 'Der Import ist fehlgeschlagen.';
+
+  @override
+  String get export_error_title => 'Fehler';
+
+  @override
+  String get export_error_message => 'Datei konnte nicht exportiert werden';
 
   @override
   String get error_found => 'Fehler gefunden?';

@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get back => 'Back';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -58,14 +61,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_text_2 =>
-      'Add a new round using the button in the top right corner';
+      'Add a new round using the button in the top right corner.';
 
   @override
   String get delete_game_title => 'Delete game?';
 
   @override
   String delete_game_message(String gameTitle) {
-    return 'Are you sure you want to delete the game $gameTitle? This action cannot be undone.';
+    return 'Are you sure you want to delete the game \"$gameTitle\"? This action cannot be undone.';
   }
 
   @override
@@ -144,19 +147,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next_round => 'Next Round';
 
   @override
+  String get statistics => 'Statistics';
+
+  @override
+  String get end_game => 'End Game';
+
+  @override
+  String get delete_game => 'Delete Game';
+
+  @override
+  String get new_game_same_settings => 'New Game with same Settings';
+
+  @override
+  String get export_game => 'Export Game';
+
+  @override
+  String get id_error_title => 'ID Error';
+
+  @override
+  String get id_error_message =>
+      'The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.';
+
+  @override
+  String get end_game_title => 'End the game?';
+
+  @override
+  String get end_game_message =>
+      'Do you want to end the game? The game gets marked as finished and cannot be continued.';
+
+  @override
+  String get game_process => 'Spielverlauf';
+
+  @override
   String get settings => 'Settings';
 
   @override
   String get cabo_penalty => 'Cabo Penalty';
 
   @override
-  String get cabo_penalty_subtitle => '... for falsely calling Cabo';
+  String get cabo_penalty_subtitle => '... for falsely calling Cabo.';
 
   @override
   String get point_limit => 'Point Limit';
 
   @override
-  String get point_limit_subtitle => '... the game ends here';
+  String get point_limit_subtitle => '... the game ends here.';
 
   @override
   String get reset_to_default => 'Reset to Default';
@@ -171,13 +206,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_data => 'Export Data';
 
   @override
-  String get error => 'Error';
+  String get import_success_title => 'Import successful';
 
   @override
-  String get error_import => 'Could not import file';
+  String get import_success_message =>
+      'The game data has been successfully imported.';
 
   @override
-  String get error_export => 'Could not export file';
+  String get import_validation_error_title => 'Validation failed';
+
+  @override
+  String get import_validation_error_message =>
+      'No Cabo-Counter game data was found. Please make sure that this is a valid Cabo-Counter export file.';
+
+  @override
+  String get import_format_error_title => 'Wrong format';
+
+  @override
+  String get import_format_error_message =>
+      'The file is not a valid JSON format or contains invalid data.';
+
+  @override
+  String get import_generic_error_title => 'Import failed';
+
+  @override
+  String get import_generic_error_message => 'The import has failed.';
+
+  @override
+  String get export_error_title => 'Export failed';
+
+  @override
+  String get export_error_message => 'Could not export file';
 
   @override
   String get error_found => 'Found a bug?';
@@ -196,5 +255,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Hey :) Thanks for being one of the first users of my first app! I’ve put a lot of work into this project, and even though I (hopefully) thought of a lot, not everything will work 100% yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the Testflight app or a message / email. Thank you very much!';
+      'Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!';
 }

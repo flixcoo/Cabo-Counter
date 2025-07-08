@@ -52,14 +52,14 @@ class _SettingsViewState extends State<SettingsView> {
                         AppLocalizations.of(context).cabo_penalty_subtitle),
                     trailing: Stepper(
                       key: _stepperKey1,
-                      initialValue: Globals.caboPenalty,
+                      initialValue: ConfigService.caboPenalty,
                       minValue: 0,
                       maxValue: 50,
                       step: 1,
                       onChanged: (newCaboPenalty) {
                         setState(() {
                           ConfigService.setCaboPenalty(newCaboPenalty);
-                          Globals.caboPenalty = newCaboPenalty;
+                          ConfigService.caboPenalty = newCaboPenalty;
                         });
                       },
                     ),
@@ -73,14 +73,14 @@ class _SettingsViewState extends State<SettingsView> {
                         Text(AppLocalizations.of(context).point_limit_subtitle),
                     trailing: Stepper(
                       key: _stepperKey2,
-                      initialValue: Globals.pointLimit,
+                      initialValue: ConfigService.pointLimit,
                       minValue: 30,
                       maxValue: 1000,
                       step: 10,
                       onChanged: (newPointLimit) {
                         setState(() {
                           ConfigService.setPointLimit(newPointLimit);
-                          Globals.pointLimit = newPointLimit;
+                          ConfigService.pointLimit = newPointLimit;
                         });
                       },
                     ),
@@ -125,27 +125,7 @@ class _SettingsViewState extends State<SettingsView> {
                             onPressed: () async {
                               final success =
                                   await LocalStorageService.importJsonFile();
-                              if (!success && context.mounted) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          title: Text(
-                                              AppLocalizations.of(context)
-                                                  .error),
-                                          content: Text(
-                                              AppLocalizations.of(context)
-                                                  .error_import),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .ok),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ));
-                              }
+                              showFeedbackDialog(success);
                             }),
                         const SizedBox(
                           width: 20,
@@ -160,15 +140,15 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                           onPressed: () async {
                             final success =
-                                await LocalStorageService.exportJsonFile();
+                                await LocalStorageService.exportGameData();
                             if (!success && context.mounted) {
                               showCupertinoDialog(
                                 context: context,
                                 builder: (context) => CupertinoAlertDialog(
-                                  title:
-                                      Text(AppLocalizations.of(context).error),
+                                  title: Text(AppLocalizations.of(context)
+                                      .export_error_title),
                                   content: Text(AppLocalizations.of(context)
-                                      .error_export),
+                                      .export_error_message),
                                   actions: [
                                     CupertinoDialogAction(
                                       child:
@@ -235,5 +215,53 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<PackageInfo> _getPackageInfo() async {
     return await PackageInfo.fromPlatform();
+  }
+
+  void showFeedbackDialog(ImportStatus status) {
+    if (status == ImportStatus.canceled) return;
+    final (title, message) = _getDialogContent(status);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  (String, String) _getDialogContent(ImportStatus status) {
+    switch (status) {
+      case ImportStatus.success:
+        return (
+          AppLocalizations.of(context).import_success_title,
+          AppLocalizations.of(context).import_success_message
+        );
+      case ImportStatus.validationError:
+        return (
+          AppLocalizations.of(context).import_validation_error_title,
+          AppLocalizations.of(context).import_validation_error_message
+        );
+
+      case ImportStatus.formatError:
+        return (
+          AppLocalizations.of(context).import_format_error_title,
+          AppLocalizations.of(context).import_format_error_message
+        );
+      case ImportStatus.genericError:
+        return (
+          AppLocalizations.of(context).import_generic_error_title,
+          AppLocalizations.of(context).import_generic_error_message
+        );
+      case ImportStatus.canceled:
+        return ('', '');
+    }
   }
 }

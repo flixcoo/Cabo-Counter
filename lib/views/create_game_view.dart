@@ -1,21 +1,38 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/active_game_view.dart';
 import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 
-class CreateGame extends StatefulWidget {
-  const CreateGame({super.key});
+enum CreateStatus {
+  noGameTitle,
+  noModeSelected,
+  minPlayers,
+  maxPlayers,
+  noPlayerName,
+}
+
+class CreateGameView extends StatefulWidget {
+  final String? gameTitle;
+  final bool? isPointsLimitEnabled;
+  final List<String>? players;
+
+  const CreateGameView({
+    super.key,
+    this.gameTitle,
+    this.isPointsLimitEnabled,
+    this.players,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateGameState createState() => _CreateGameState();
+  _CreateGameViewState createState() => _CreateGameViewState();
 }
 
-class _CreateGameState extends State<CreateGame> {
+class _CreateGameViewState extends State<CreateGameView> {
   final List<TextEditingController> _playerNameTextControllers = [
     TextEditingController()
   ];
@@ -25,8 +42,23 @@ class _CreateGameState extends State<CreateGame> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
-  /// Variable to store the selected game mode.
-  bool? selectedMode;
+  /// Variable to store whether the points limit feature is enabled.
+  bool? _isPointsLimitEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    _gameTitleTextController.text = widget.gameTitle ?? '';
+
+    if (widget.players != null) {
+      _playerNameTextControllers.clear();
+      for (var player in widget.players!) {
+        _playerNameTextControllers.add(TextEditingController(text: player));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +101,10 @@ class _CreateGameState extends State<CreateGame> {
                 suffix: Row(
                   children: [
                     Text(
-                      selectedMode == null
+                      _isPointsLimitEnabled == null
                           ? AppLocalizations.of(context).select_mode
-                          : (selectedMode!
-                              ? '${Globals.pointLimit} ${AppLocalizations.of(context).points}'
+                          : (_isPointsLimitEnabled!
+                              ? '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited),
                     ),
                     const SizedBox(width: 3),
@@ -80,18 +112,18 @@ class _CreateGameState extends State<CreateGame> {
                   ],
                 ),
                 onTap: () async {
-                  final selected = await Navigator.push(
+                  final selectedMode = await Navigator.push(
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
-                        pointLimit: Globals.pointLimit,
+                        pointLimit: ConfigService.pointLimit,
                       ),
                     ),
                   );
 
-                  if (selected != null) {
+                  if (selectedMode != null) {
                     setState(() {
-                      selectedMode = selected;
+                      _isPointsLimitEnabled = selectedMode;
                     });
                   }
                 },
@@ -139,22 +171,7 @@ class _CreateGameState extends State<CreateGame> {
                                   .add(TextEditingController());
                             });
                           } else {
-                            showCupertinoDialog(
-                              context: context,
-                              builder: (context) => CupertinoAlertDialog(
-                                title: Text(AppLocalizations.of(context)
-                                    .max_players_title),
-                                content: Text(AppLocalizations.of(context)
-                                    .max_players_message),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child:
-                                        Text(AppLocalizations.of(context).ok),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ),
-                            );
+                            showFeedbackDialog(CreateStatus.maxPlayers);
                           }
                         },
                       ),
@@ -183,6 +200,7 @@ class _CreateGameState extends State<CreateGame> {
                           Expanded(
                             child: CupertinoTextField(
                               controller: _playerNameTextControllers[index],
+                              maxLength: 12,
                               placeholder:
                                   '${AppLocalizations.of(context).player} ${index + 1}',
                               padding: const EdgeInsets.all(12),
@@ -212,73 +230,19 @@ class _CreateGameState extends State<CreateGame> {
                 ),
                 onPressed: () async {
                   if (_gameTitleTextController.text == '') {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).no_gameTitle_title),
-                        content: Text(
-                            AppLocalizations.of(context).no_gameTitle_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.noGameTitle);
                     return;
                   }
-                  if (selectedMode == null) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_mode_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_mode_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                  if (_isPointsLimitEnabled == null) {
+                    showFeedbackDialog(CreateStatus.noModeSelected);
                     return;
                   }
                   if (_playerNameTextControllers.length < 2) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context).min_players_title),
-                        content: Text(
-                            AppLocalizations.of(context).min_players_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.minPlayers);
                     return;
                   }
                   if (!everyPlayerHasAName()) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Text(AppLocalizations.of(context).no_name_title),
-                        content:
-                            Text(AppLocalizations.of(context).no_name_message),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text(AppLocalizations.of(context).ok),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    );
+                    showFeedbackDialog(CreateStatus.noPlayerName);
                     return;
                   }
 
@@ -290,17 +254,18 @@ class _CreateGameState extends State<CreateGame> {
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: Globals.pointLimit,
-                    caboPenalty: Globals.caboPenalty,
-                    isPointsLimitEnabled: selectedMode!,
+                    pointLimit: ConfigService.pointLimit,
+                    caboPenalty: ConfigService.caboPenalty,
+                    isPointsLimitEnabled: _isPointsLimitEnabled!,
                   );
                   final index = await gameManager.addGameSession(gameSession);
+                  final session = gameManager.gameList[index];
                   if (context.mounted) {
                     Navigator.pushReplacement(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => ActiveGameView(
-                                gameSession: gameManager.gameList[index])));
+                            builder: (context) =>
+                                ActiveGameView(gameSession: session)));
                   }
                 },
               ),
@@ -309,6 +274,60 @@ class _CreateGameState extends State<CreateGame> {
         ))));
   }
 
+  /// Displays a feedback dialog based on the [CreateStatus].
+  void showFeedbackDialog(CreateStatus status) {
+    final (title, message) = _getDialogContent(status);
+
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+  }
+
+  /// Returns the title and message for the dialog based on the [CreateStatus].
+  (String, String) _getDialogContent(CreateStatus status) {
+    switch (status) {
+      case CreateStatus.noGameTitle:
+        return (
+          AppLocalizations.of(context).no_gameTitle_title,
+          AppLocalizations.of(context).no_gameTitle_message
+        );
+      case CreateStatus.noModeSelected:
+        return (
+          AppLocalizations.of(context).no_mode_title,
+          AppLocalizations.of(context).no_mode_message
+        );
+
+      case CreateStatus.minPlayers:
+        return (
+          AppLocalizations.of(context).min_players_title,
+          AppLocalizations.of(context).min_players_message
+        );
+      case CreateStatus.maxPlayers:
+        return (
+          AppLocalizations.of(context).max_players_title,
+          AppLocalizations.of(context).max_players_message
+        );
+      case CreateStatus.noPlayerName:
+        return (
+          AppLocalizations.of(context).no_name_title,
+          AppLocalizations.of(context).no_name_message
+        );
+    }
+  }
+
+  /// Checks if every player has a name.
+  /// Returns true if all players have a name, false otherwise.
   bool everyPlayerHasAName() {
     for (var controller in _playerNameTextControllers) {
       if (controller.text == '') {
@@ -320,9 +339,11 @@ class _CreateGameState extends State<CreateGame> {
 
   @override
   void dispose() {
+    _gameTitleTextController.dispose();
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
     }
+
     super.dispose();
   }
 }

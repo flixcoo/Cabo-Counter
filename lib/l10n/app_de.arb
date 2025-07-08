@@ -14,6 +14,7 @@
   "player": "Spieler:in",
     "players": "Spieler:innen",
   "name": "Name",
+  "back": "Zurück",
 
   "home": "Home",
   "about": "Über",
@@ -21,7 +22,7 @@
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
   "delete_game_title": "Spiel löschen?",
-  "delete_game_message": "Bist du sicher, dass du die Runde {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "delete_game_message": "Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "@delete_game_message": {
     "placeholders": {
       "gameTitle": {
@@ -63,6 +64,18 @@
   "done": "Fertig",
   "next_round": "Nächste Runde",
 
+  "statistics": "Statistiken",
+  "end_game": "Spiel beenden",
+  "delete_game": "Spiel löschen",
+  "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
+  "export_game": "Spiel exportieren",
+  "id_error_title": "ID Fehler",
+  "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
+  "end_game_title": "Spiel beenden?",
+  "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
+
+  "game_process": "Spielverlauf",
+
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
   "cabo_penalty_subtitle": "... für falsches Cabo sagen",
@@ -72,9 +85,18 @@
   "game_data": "Spieldaten",
   "import_data": "Daten importieren",
   "export_data": "Daten exportieren",
-  "error": "Fehler",
-  "error_import": "Datei konnte nicht importiert werden",
-  "error_export": "Datei konnte nicht exportiert werden",
+
+  "import_success_title": "Import erfolgreich",
+  "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
+  "import_validation_error_title": "Validierung fehlgeschlagen",
+  "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
+  "import_format_error_title": "Falsches Format",
+  "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
+   "import_generic_error_title": "Import fehlgeschlagen",
+  "import_generic_error_message": "Der Import ist fehlgeschlagen.",
+
+  "export_error_title": "Fehler",
+  "export_error_message": "Datei konnte nicht exportiert werden",
   "error_found": "Fehler gefunden?",
   "create_issue": "Issue erstellen",
   "app_version": "App-Version",

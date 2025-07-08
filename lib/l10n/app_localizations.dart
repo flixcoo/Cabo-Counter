@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @back.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurück'**
+  String get back;
+
   /// No description provided for @home.
   ///
   /// In de, this message translates to:
@@ -209,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @delete_game_message.
   ///
   /// In de, this message translates to:
-  /// **'Bist du sicher, dass du die Runde {gameTitle} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
+  /// **'Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
   String delete_game_message(String gameTitle);
 
   /// No description provided for @overview.
@@ -356,6 +362,66 @@ abstract class AppLocalizations {
   /// **'Nächste Runde'**
   String get next_round;
 
+  /// No description provided for @statistics.
+  ///
+  /// In de, this message translates to:
+  /// **'Statistiken'**
+  String get statistics;
+
+  /// No description provided for @end_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden'**
+  String get end_game;
+
+  /// No description provided for @delete_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel löschen'**
+  String get delete_game;
+
+  /// No description provided for @new_game_same_settings.
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Spiel mit gleichen Einstellungen'**
+  String get new_game_same_settings;
+
+  /// No description provided for @export_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel exportieren'**
+  String get export_game;
+
+  /// No description provided for @id_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'ID Fehler'**
+  String get id_error_title;
+
+  /// No description provided for @id_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.'**
+  String get id_error_message;
+
+  /// No description provided for @end_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden?'**
+  String get end_game_title;
+
+  /// No description provided for @end_game_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
+  String get end_game_message;
+
+  /// No description provided for @game_process.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielverlauf'**
+  String get game_process;
+
   /// No description provided for @settings.
   ///
   /// In de, this message translates to:
@@ -410,23 +476,65 @@ abstract class AppLocalizations {
   /// **'Daten exportieren'**
   String get export_data;
 
-  /// No description provided for @error.
+  /// No description provided for @import_success_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Import erfolgreich'**
+  String get import_success_title;
+
+  /// No description provided for @import_success_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Spieldaten wurden erfolgreich importiert.'**
+  String get import_success_message;
+
+  /// No description provided for @import_validation_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Validierung fehlgeschlagen'**
+  String get import_validation_error_title;
+
+  /// No description provided for @import_validation_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.'**
+  String get import_validation_error_message;
+
+  /// No description provided for @import_format_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Falsches Format'**
+  String get import_format_error_title;
+
+  /// No description provided for @import_format_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.'**
+  String get import_format_error_message;
+
+  /// No description provided for @import_generic_error_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Import fehlgeschlagen'**
+  String get import_generic_error_title;
+
+  /// No description provided for @import_generic_error_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Import ist fehlgeschlagen.'**
+  String get import_generic_error_message;
+
+  /// No description provided for @export_error_title.
   ///
   /// In de, this message translates to:
   /// **'Fehler'**
-  String get error;
+  String get export_error_title;
 
-  /// No description provided for @error_import.
-  ///
-  /// In de, this message translates to:
-  /// **'Datei konnte nicht importiert werden'**
-  String get error_import;
-
-  /// No description provided for @error_export.
+  /// No description provided for @export_error_message.
   ///
   /// In de, this message translates to:
   /// **'Datei konnte nicht exportiert werden'**
-  String get error_export;
+  String get export_error_message;
 
   /// No description provided for @error_found.
   ///

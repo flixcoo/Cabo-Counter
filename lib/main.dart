@@ -2,7 +2,6 @@ import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:cabo_counter/views/tab_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +11,8 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await ConfigService.initConfig();
-  Globals.pointLimit = await ConfigService.getPointLimit();
-  Globals.caboPenalty = await ConfigService.getCaboPenalty();
+  ConfigService.pointLimit = await ConfigService.getPointLimit();
+  ConfigService.caboPenalty = await ConfigService.getCaboPenalty();
   runApp(const App());
 }
 
@@ -56,7 +55,16 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         Locale('en'), // English
         Locale('de'), // German
       ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (final supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
       theme: CupertinoThemeData(
+        applyThemeToAll: true,
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,
         scaffoldBackgroundColor: CustomTheme.backgroundColor,

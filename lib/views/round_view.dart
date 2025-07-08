@@ -67,6 +67,7 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final maxLength = widget.gameSession.getMaxLengthOfPlayerNames();
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -75,10 +76,8 @@ class _RoundViewState extends State<RoundView> {
         middle: Text(AppLocalizations.of(context).results),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => {
-            LocalStorageService.saveGameSessions(),
-            Navigator.pop(context, widget.gameSession)
-          },
+          onPressed: () =>
+              {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
           child: Text(AppLocalizations.of(context).cancel),
         ),
       ),
@@ -122,28 +121,21 @@ class _RoundViewState extends State<RoundView> {
                               index,
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: widget.gameSession
-                                              .getLengthOfPlayerNames() >
-                                          20
-                                      ? (widget.gameSession
-                                                  .getLengthOfPlayerNames() >
-                                              32
-                                          ? 5
-                                          : 10)
-                                      : 15,
+                                  horizontal: 4 +
+                                      _getSegmentedControlPadding(maxLength),
                                   vertical: 6,
                                 ),
-                                child: Text(
-                                  name,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: widget.gameSession
-                                                .getLengthOfPlayerNames() >
-                                            28
-                                        ? 14
-                                        : 18,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: _getSegmentedControlFontSize(
+                                          maxLength),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -191,7 +183,13 @@ class _RoundViewState extends State<RoundView> {
                             borderRadius: BorderRadius.circular(12),
                             child: CupertinoListTile(
                               backgroundColor: CupertinoColors.secondaryLabel,
-                              title: Row(children: [Text(name)]),
+                              title: Row(children: [
+                                Expanded(
+                                    child: Text(
+                                  name,
+                                  overflow: TextOverflow.ellipsis,
+                                ))
+                              ]),
                               subtitle: Text(
                                   '${widget.gameSession.playerScores[index]}'
                                   ' ${AppLocalizations.of(context).points}'),
@@ -290,7 +288,7 @@ class _RoundViewState extends State<RoundView> {
                             ? () {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
-                                Navigator.pop(context, widget.gameSession);
+                                Navigator.pop(context);
                               }
                             : null,
                         child: Text(AppLocalizations.of(context).done),
@@ -301,17 +299,10 @@ class _RoundViewState extends State<RoundView> {
                                 _finishRound();
                                 LocalStorageService.saveGameSessions();
                                 if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context, widget.gameSession);
+                                  Navigator.pop(context);
                                 } else {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pushReplacement(
-                                    CupertinoPageRoute(
-                                      builder: (context) => RoundView(
-                                        gameSession: widget.gameSession,
-                                        roundNumber: widget.roundNumber + 1,
-                                      ),
-                                    ),
-                                  );
+                                  Navigator.pop(
+                                      context, widget.roundNumber + 1);
                                 }
                               }
                             : null,
@@ -392,6 +383,32 @@ class _RoundViewState extends State<RoundView> {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
+    }
+  }
+
+  double _getSegmentedControlFontSize(int maxLength) {
+    if (maxLength > 8) {
+      // 9 - 12 characters
+      return 9.0;
+    } else if (maxLength > 4) {
+      // 5 - 8 characters
+      return 15.0;
+    } else {
+      // 0 - 4 characters
+      return 18.0;
+    }
+  }
+
+  double _getSegmentedControlPadding(int maxLength) {
+    if (maxLength > 8) {
+      // 9 - 12 characters
+      return 0.0;
+    } else if (maxLength > 4) {
+      // 5 - 8 characters
+      return 5.0;
+    } else {
+      // 0 - 4 characters
+      return 8.0;
     }
   }
 

@@ -15,14 +15,9 @@ class GameManager extends ChangeNotifier {
       notifyListeners(); // Propagate session changes
     });
     gameList.add(session);
-    print(
-        '[game_manager.dart] Added game session: ${session.gameTitle} at ${session.createdAt}');
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    print(
-        '[game_manager.dart] Sorted game sessions by creation date. Total sessions: ${gameList.length}');
     notifyListeners();
     await LocalStorageService.saveGameSessions();
-    print('[game_manager.dart] Saved game sessions to local storage.');
     return gameList.indexOf(session);
   }
 
@@ -30,9 +25,41 @@ class GameManager extends ChangeNotifier {
   /// Takes a [index] as input. It then removes the session at the specified index from the `gameList`,
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
-  void removeGameSession(int index) {
+  void removeGameSessionByIndex(int index) {
     gameList[index].removeListener(notifyListeners);
     gameList.removeAt(index);
+    notifyListeners();
+    LocalStorageService.saveGameSessions();
+  }
+
+  /// Removes a game session by its ID.
+  /// Takes a String [id] as input. It finds the index of the game session with the matching ID
+  /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
+  void removeGameSessionById(String id) {
+    final int index =
+        gameList.indexWhere((session) => session.id.toString() == id);
+    if (index == -1) return;
+    removeGameSessionByIndex(index);
+  }
+
+  /// Retrieves a game session by its ID.
+  /// Takes a String [id] as input. It finds the game session with the matching id
+  bool gameExistsInGameList(String id) {
+    return gameList.any((session) => session.id.toString() == id);
+  }
+
+  /// Ends a game session if its in unlimited mode.
+  /// Takes a String [id] as input. It finds the index of the game
+  /// session with the matching ID marks it as finished,
+  void endGame(String id) {
+    final int index =
+        gameList.indexWhere((session) => session.id.toString() == id);
+
+    // Game session not found or not in unlimited mode
+    if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
+
+    gameList[index].roundNumber--;
+    gameList[index].isGameFinished = true;
     notifyListeners();
     LocalStorageService.saveGameSessions();
   }
