@@ -9,7 +9,7 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' as url;
+import 'package:url_launcher/url_launcher.dart';
 
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
@@ -304,9 +304,10 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     switch (decision) {
       case RATING_DIALOG_YES:
-        Globals.rateMyApp.showStarRateDialog(context);
+        if (context.mounted) Globals.rateMyApp.showStarRateDialog(context);
+        break;
       case RATING_DIALOG_NO:
-        url.launchUrl(emailUri, mode: url.LaunchMode.externalApplication);
+        launchUrl(emailUri, mode: LaunchMode.externalApplication);
       case RATING_DIALOG_CANCEL:
         break;
     }
