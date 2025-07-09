@@ -93,7 +93,7 @@
   "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
   "import_format_error_title": "Falsches Format",
   "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
-   "import_generic_error_title": "Import fehlgeschlagen",
+  "import_generic_error_title": "Import fehlgeschlagen",
   "import_generic_error_message": "Der Import ist fehlgeschlagen.",
 
   "export_error_title": "Fehler",

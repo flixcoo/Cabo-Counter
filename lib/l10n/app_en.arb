@@ -98,6 +98,7 @@
 
   "export_error_title": "Export failed",
   "export_error_message": "Could not export file",
+
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",
   "wiki": "Wiki",
