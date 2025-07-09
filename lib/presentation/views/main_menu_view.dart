@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/globals.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
@@ -29,6 +30,13 @@ class _MainMenuViewState extends State<MainMenuView> {
       });
     });
     gameManager.addListener(_updateView);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Globals.rateMyApp.init();
+      if (mounted && Globals.rateMyApp.shouldOpenDialog) {
+        Globals.rateMyApp.showStarRateDialog(context);
+      }
+    });
   }
 
   void _updateView() {
