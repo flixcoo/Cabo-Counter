@@ -107,7 +107,7 @@ class _SettingsViewState extends State<SettingsView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Center(
                     heightFactor: 1,
@@ -163,7 +163,42 @@ class _SettingsViewState extends State<SettingsView> {
                         ),
                       ],
                     )),
-              )
+              ),*/
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                  child: CupertinoFormSection.insetGrouped(
+                      backgroundColor: CustomTheme.backgroundColor,
+                      margin: EdgeInsets.zero,
+                      children: [
+                        CupertinoFormRow(
+                            prefix: Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.square_arrow_up,
+                                  color: CustomTheme.primaryColor,
+                                ),
+                                const SizedBox(width: 10),
+                                const Text('Spieldaten exportieren'),
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: const CupertinoListTileChevron()),
+                        CupertinoFormRow(
+                            prefix: Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.square_arrow_down,
+                                  color: CustomTheme.primaryColor,
+                                ),
+                                const SizedBox(width: 10),
+                                const Text('Spieldaten importieren'),
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: const CupertinoListTileChevron())
+                      ])),
             ],
           ),
           Positioned(

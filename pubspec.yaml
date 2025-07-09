@@ -2,7 +2,7 @@ name: cabo_counter
 description: "Mobile app for the card game Cabo"
 publish_to: 'none'
 
-version: 0.3.9+331
+version: 0.3.9+333
 
 environment:
   sdk: ^3.5.4
