@@ -114,7 +114,11 @@ class _SettingsViewState extends State<SettingsView> {
                         CustomFormRow(
                           prefixText: AppLocalizations.of(context).import_data,
                           prefixIcon: CupertinoIcons.square_arrow_down,
-                          onPressed: () => LocalStorageService.importJsonFile(),
+                          onPressed: () async {
+                            final status =
+                                await LocalStorageService.importJsonFile();
+                            showFeedbackDialog(status);
+                          },
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
