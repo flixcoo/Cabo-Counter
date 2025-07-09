@@ -82,7 +82,7 @@
   "point_limit": "Point Limit",
   "point_limit_subtitle": "... the game ends here.",
   "reset_to_default": "Reset to Default",
-  "data": "Data",
+  "game_data": "Game Data",
   "import_data": "Import Data",
   "export_data": "Export Data",
   "app": "App",
@@ -100,9 +100,10 @@
   "export_error_message": "Could not export file",
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",
+  "wiki": "Wiki",
   "app_version": "App Version",
   "loading": "Loading...",
-  "build": "Build",
+  "build": "Build No.",
 
   "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"
 }

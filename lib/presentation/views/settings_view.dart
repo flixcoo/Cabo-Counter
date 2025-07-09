@@ -101,7 +101,7 @@ class _SettingsViewState extends State<SettingsView> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
-                  AppLocalizations.of(context).data,
+                  AppLocalizations.of(context).game_data,
                   style: CustomTheme.rowTitle,
                 ),
               ),
@@ -145,16 +145,24 @@ class _SettingsViewState extends State<SettingsView> {
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
-                            prefixText: 'App-Version',
-                            prefixIcon: CupertinoIcons.info,
+                          prefixText: AppLocalizations.of(context).wiki,
+                          prefixIcon: CupertinoIcons.book,
+                          onPressed: () => launchUrl(Uri.parse(
+                              'https://github.com/flixcoo/Cabo-Counter/wiki')),
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
+                        CustomFormRow(
+                            prefixText:
+                                AppLocalizations.of(context).app_version,
+                            prefixIcon: CupertinoIcons.number,
                             onPressed: null,
                             suffixWidget: Text(VersionService.getVersion(),
                                 style: TextStyle(
                                   color: CustomTheme.primaryColor,
                                 ))),
                         CustomFormRow(
-                            prefixText: 'Build-Nr.',
-                            prefixIcon: CupertinoIcons.info,
+                            prefixText: AppLocalizations.of(context).build,
+                            prefixIcon: CupertinoIcons.number,
                             onPressed: null,
                             suffixWidget: Text(VersionService.getBuildNumber(),
                                 style: TextStyle(

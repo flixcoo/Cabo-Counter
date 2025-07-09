@@ -200,7 +200,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reset_to_default => 'Auf Standard zurücksetzen';
 
   @override
-  String get data => 'Daten';
+  String get game_data => 'Spieldaten';
 
   @override
   String get import_data => 'Spieldaten importieren';
@@ -251,10 +251,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get create_issue => 'Issue erstellen';
 
   @override
+  String get wiki => 'Wiki';
+
+  @override
   String get app_version => 'App-Version';
 
   @override
-  String get build => 'Build';
+  String get build => 'Build-Nr.';
 
   @override
   String get loading => 'Lädt...';
