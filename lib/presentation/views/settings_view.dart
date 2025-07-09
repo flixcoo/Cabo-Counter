@@ -1,9 +1,9 @@
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/presentation/widgets/stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
-import 'package:cabo_counter/widgets/stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
