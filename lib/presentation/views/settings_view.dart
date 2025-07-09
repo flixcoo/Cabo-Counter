@@ -3,11 +3,10 @@ import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:cabo_counter/services/version_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatefulWidget {
@@ -149,69 +148,24 @@ class _SettingsViewState extends State<SettingsView> {
                             prefixText: 'App-Version',
                             prefixIcon: CupertinoIcons.info,
                             onPressed: null,
-                            suffixWidget: FutureBuilder<PackageInfo>(
-                              future: _getPackageInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    '${Globals.appDevPhase} ${snapshot.data!.version} ',
-                                    style: TextStyle(
-                                      color: CustomTheme.primaryColor,
-                                    ),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text(
-                                    '${AppLocalizations.of(context).app_version} -.-.-',
-                                    style: TextStyle(
-                                      color: CustomTheme.primaryColor,
-                                    ),
-                                  );
-                                }
-                                return Text(
-                                  AppLocalizations.of(context).loading,
-                                  style: TextStyle(
-                                    color: CustomTheme.primaryColor,
-                                  ),
-                                );
-                              },
-                            )),
+                            suffixWidget: Text(VersionService.getVersion(),
+                                style: TextStyle(
+                                  color: CustomTheme.primaryColor,
+                                ))),
                         CustomFormRow(
                             prefixText: 'Build-Nr.',
                             prefixIcon: CupertinoIcons.info,
                             onPressed: null,
-                            suffixWidget: FutureBuilder<PackageInfo>(
-                              future: _getPackageInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data!.buildNumber,
-                                    style: TextStyle(
-                                      color: CustomTheme.primaryColor,
-                                    ),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text(
-                                    '-',
-                                    style: TextStyle(
-                                      color: CustomTheme.primaryColor,
-                                    ),
-                                  );
-                                }
-                                return Text(
-                                  AppLocalizations.of(context).loading,
-                                );
-                              },
-                            )),
+                            suffixWidget: Text(VersionService.getBuildNumber(),
+                                style: TextStyle(
+                                  color: CustomTheme.primaryColor,
+                                ))),
                       ])),
             ],
           ),
         ],
       )),
     );
-  }
-
-  Future<PackageInfo> _getPackageInfo() async {
-    return await PackageInfo.fromPlatform();
   }
 
   void showFeedbackDialog(ImportStatus status) {
