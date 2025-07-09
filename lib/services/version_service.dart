@@ -1,4 +1,4 @@
-import 'package:cabo_counter/utility/globals.dart';
+import 'package:cabo_counter/core/globals.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class VersionService {
