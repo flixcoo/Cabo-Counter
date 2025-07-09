@@ -71,6 +71,10 @@
   "export_game": "Export Game",
 
   "game_process": "Spielverlauf",
+  "id_error_title": "ID Error",
+  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
+  "end_game_title": "End the game?",
+  "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
@@ -78,13 +82,10 @@
   "point_limit": "Point Limit",
   "point_limit_subtitle": "... the game ends here.",
   "reset_to_default": "Reset to Default",
-  "app": "App",
+  "data": "Data",
   "import_data": "Import Data",
   "export_data": "Export Data",
-  "id_error_title": "ID Error",
-  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
-  "end_game_title": "End the game?",
-  "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
+  "app": "App",
 
   "import_success_title": "Import successful",
   "import_success_message":"The game data has been successfully imported.",
@@ -100,7 +101,7 @@
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",
   "app_version": "App Version",
-  "load_version": "Loading version...",
+  "loading": "Loading...",
   "build": "Build",
 
   "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"

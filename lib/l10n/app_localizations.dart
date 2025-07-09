@@ -458,23 +458,29 @@ abstract class AppLocalizations {
   /// **'Auf Standard zurücksetzen'**
   String get reset_to_default;
 
-  /// No description provided for @game_data.
+  /// No description provided for @data.
   ///
   /// In de, this message translates to:
-  /// **'Spieldaten'**
-  String get game_data;
+  /// **'Daten'**
+  String get data;
 
   /// No description provided for @import_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten importieren'**
+  /// **'Spieldaten importieren'**
   String get import_data;
 
   /// No description provided for @export_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten exportieren'**
+  /// **'Spieldaten exportieren'**
   String get export_data;
+
+  /// No description provided for @app.
+  ///
+  /// In de, this message translates to:
+  /// **'App'**
+  String get app;
 
   /// No description provided for @import_success_title.
   ///
@@ -560,11 +566,11 @@ abstract class AppLocalizations {
   /// **'Build'**
   String get build;
 
-  /// No description provided for @load_version.
+  /// No description provided for @loading.
   ///
   /// In de, this message translates to:
-  /// **'Lade Version...'**
-  String get load_version;
+  /// **'Lädt...'**
+  String get loading;
 
   /// No description provided for @about_text.
   ///

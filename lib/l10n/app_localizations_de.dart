@@ -200,13 +200,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reset_to_default => 'Auf Standard zurücksetzen';
 
   @override
-  String get game_data => 'Spieldaten';
+  String get data => 'Daten';
 
   @override
-  String get import_data => 'Daten importieren';
+  String get import_data => 'Spieldaten importieren';
 
   @override
-  String get export_data => 'Daten exportieren';
+  String get export_data => 'Spieldaten exportieren';
+
+  @override
+  String get app => 'App';
 
   @override
   String get import_success_title => 'Import erfolgreich';
@@ -254,7 +257,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get build => 'Build';
 
   @override
-  String get load_version => 'Lade Version...';
+  String get loading => 'Lädt...';
 
   @override
   String get about_text =>

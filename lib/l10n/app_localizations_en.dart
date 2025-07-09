@@ -197,13 +197,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reset_to_default => 'Reset to Default';
 
   @override
-  String get game_data => 'Game Data';
+  String get data => 'Data';
 
   @override
   String get import_data => 'Import Data';
 
   @override
   String get export_data => 'Export Data';
+
+  @override
+  String get app => 'App';
 
   @override
   String get import_success_title => 'Import successful';
@@ -251,7 +254,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get build => 'Build';
 
   @override
-  String get load_version => 'Loading version...';
+  String get loading => 'Loading...';
 
   @override
   String get about_text =>
