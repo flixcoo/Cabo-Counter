@@ -82,9 +82,9 @@
   "point_limit": "Punkte-Limit",
   "point_limit_subtitle": "... hier ist Schluss",
   "reset_to_default": "Auf Standard zurücksetzen",
-  "game_data": "Spieldaten",
-  "import_data": "Daten importieren",
-  "export_data": "Daten exportieren",
+  "app": "App",
+  "import_data": "Spieldaten importieren",
+  "export_data": "Spieldaten exportieren",
 
   "import_success_title": "Import erfolgreich",
   "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
