@@ -1,11 +1,11 @@
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/active_game_view.dart';
+import 'package:cabo_counter/presentation/views/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/active_game_view.dart';
-import 'package:cabo_counter/views/create_game_view.dart';
-import 'package:cabo_counter/views/settings_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
