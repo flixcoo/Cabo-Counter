@@ -53,16 +53,19 @@ class InformationView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: () =>
-                        launchUrl(Uri.parse('https://www.instagram.com/fx.kr')),
+                    onPressed: () => launchUrl(
+                        Uri.parse('https://www.instagram.com/flixcoo'),
+                        mode: LaunchMode.externalApplication),
                     icon: const Icon(FontAwesomeIcons.instagram)),
                 IconButton(
                     onPressed: () => launchUrl(
-                        Uri.parse('mailto:felix.kirchner.fk@gmail.com')),
+                        Uri.parse('mailto:felix.kirchner.fk@gmail.com'),
+                        mode: LaunchMode.externalApplication),
                     icon: const Icon(CupertinoIcons.envelope)),
                 IconButton(
-                    onPressed: () =>
-                        launchUrl(Uri.parse('https://www.github.com/flixcoo')),
+                    onPressed: () => launchUrl(
+                        Uri.parse('https://www.github.com/flixcoo'),
+                        mode: LaunchMode.externalApplication),
                     icon: const Icon(FontAwesomeIcons.github)),
               ],
             ),
