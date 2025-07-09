@@ -144,15 +144,19 @@ class _SettingsViewState extends State<SettingsView> {
                         CustomFormRow(
                           prefixText: AppLocalizations.of(context).create_issue,
                           prefixIcon: FontAwesomeIcons.github,
-                          onPressed: () => launchUrl(Uri.parse(
-                              'https://github.com/flixcoo/Cabo-Counter/issues')),
+                          onPressed: () => launchUrl(
+                              Uri.parse(
+                                  'https://github.com/flixcoo/Cabo-Counter/issues'),
+                              mode: LaunchMode.externalApplication),
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
                           prefixText: AppLocalizations.of(context).wiki,
                           prefixIcon: CupertinoIcons.book,
-                          onPressed: () => launchUrl(Uri.parse(
-                              'https://github.com/flixcoo/Cabo-Counter/wiki')),
+                          onPressed: () => launchUrl(
+                              Uri.parse(
+                                  'https://github.com/flixcoo/Cabo-Counter/wiki'),
+                              mode: LaunchMode.externalApplication),
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
