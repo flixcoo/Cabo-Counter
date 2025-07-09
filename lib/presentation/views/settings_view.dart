@@ -141,44 +141,28 @@ class _SettingsViewState extends State<SettingsView> {
               bottom: 30,
               left: 0,
               right: 0,
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(AppLocalizations.of(context).error_found),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                    child: Center(
-                      child: CupertinoButton(
-                        onPressed: () => launchUrl(Uri.parse(
-                            'https://github.com/flixcoo/Cabo-Counter/issues')),
-                        child: Text(AppLocalizations.of(context).create_issue),
-                      ),
-                    ),
-                  ),
-                  FutureBuilder<PackageInfo>(
-                    future: _getPackageInfo(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(
-                          '${Globals.appDevPhase} ${snapshot.data!.version} '
-                          '(${AppLocalizations.of(context).build} ${snapshot.data!.buildNumber})',
-                          textAlign: TextAlign.center,
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                          '${AppLocalizations.of(context).app_version} -.-.- (${AppLocalizations.of(context).build} -)',
-                          textAlign: TextAlign.center,
-                        );
-                      }
-                      return Text(
-                        AppLocalizations.of(context).load_version,
-                        textAlign: TextAlign.center,
-                      );
-                    },
-                  )
-                ],
-              )),
+              child: Center(
+                  child: FutureBuilder<PackageInfo>(
+                future: _getPackageInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      '${Globals.appDevPhase} ${snapshot.data!.version} '
+                      '(${AppLocalizations.of(context).build} ${snapshot.data!.buildNumber})',
+                      textAlign: TextAlign.center,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text(
+                      '${AppLocalizations.of(context).app_version} -.-.- (${AppLocalizations.of(context).build} -)',
+                      textAlign: TextAlign.center,
+                    );
+                  }
+                  return Text(
+                    AppLocalizations.of(context).load_version,
+                    textAlign: TextAlign.center,
+                  );
+                },
+              ))),
         ],
       )),
     );
