@@ -9,6 +9,7 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart' as url;
 
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
@@ -20,6 +21,9 @@ class MainMenuView extends StatefulWidget {
 
 class _MainMenuViewState extends State<MainMenuView> {
   bool _isLoading = true;
+  static const int RATING_DIALOG_YES = 1;
+  static const int RATING_DIALOG_NO = 0;
+  static const int RATING_DIALOG_CANCEL = -1;
 
   @override
   initState() {
@@ -33,8 +37,11 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Globals.rateMyApp.init();
-      if (mounted && Globals.rateMyApp.shouldOpenDialog) {
-        Globals.rateMyApp.showStarRateDialog(context);
+
+      if (Globals.rateMyApp.shouldOpenDialog) {
+        await Future.delayed(const Duration(milliseconds: 600));
+        if (!mounted) return;
+        _handleFeedbackDialog(context);
       }
     });
   }
@@ -246,6 +253,63 @@ class _MainMenuViewState extends State<MainMenuView> {
         ) ??
         false;
     return shouldDelete;
+  }
+
+  Future<int> _showPreRatingDialog(BuildContext context) async {
+    int? answer = await showCupertinoDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('Gefällt dir die App?'),
+          content: const Text('Dein Feedback hilft uns weiter.'),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              child: const Text('Ja'),
+              onPressed: () {
+                Navigator.of(context).pop(RATING_DIALOG_YES);
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('Nein'),
+              onPressed: () {
+                Navigator.of(context).pop(RATING_DIALOG_NO);
+              },
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop(RATING_DIALOG_CANCEL);
+              },
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+          ],
+        );
+      },
+    );
+    return answer ?? RATING_DIALOG_CANCEL;
+  }
+
+  /// Handles the feedback dialog when the conditions for rating are met.
+  /// It shows a dialog asking the user if they like the app,
+  /// and based on their response, it either opens the rating dialog or an email client for feedback.
+  Future<void> _handleFeedbackDialog(BuildContext context) async {
+    int decision = await _showPreRatingDialog(context);
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'cabo-counter@felixkirchner.de',
+      query: 'subject=Feedback: Cabo Counter App'
+          '&body=Ich habe folgendes Feedback...',
+    );
+
+    switch (decision) {
+      case RATING_DIALOG_YES:
+        Globals.rateMyApp.showStarRateDialog(context);
+      case RATING_DIALOG_NO:
+        url.launchUrl(emailUri, mode: url.LaunchMode.externalApplication);
+      case RATING_DIALOG_CANCEL:
+        break;
+    }
   }
 
   @override
