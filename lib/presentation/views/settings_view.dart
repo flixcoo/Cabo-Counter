@@ -52,7 +52,7 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         CustomFormRow(
                           prefixText: 'Cabo-Strafe',
-                          prefixIcon: CupertinoIcons.minus_square,
+                          prefixIcon: CupertinoIcons.bolt_fill,
                           suffixWidget: Stepper(
                             key: _stepperKey1,
                             initialValue: ConfigService.caboPenalty,
@@ -158,7 +158,7 @@ class _SettingsViewState extends State<SettingsView> {
                         CustomFormRow(
                             prefixText:
                                 AppLocalizations.of(context).app_version,
-                            prefixIcon: CupertinoIcons.number,
+                            prefixIcon: CupertinoIcons.tag,
                             onPressed: null,
                             suffixWidget: Text(VersionService.getVersion(),
                                 style: TextStyle(
