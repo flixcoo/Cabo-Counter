@@ -51,10 +51,10 @@ class _SettingsViewState extends State<SettingsView> {
                       margin: EdgeInsets.zero,
                       children: [
                         CustomFormRow(
-                          key: _stepperKey1,
                           prefixText: 'Cabo-Strafe',
                           prefixIcon: CupertinoIcons.minus_square,
                           suffixWidget: Stepper(
+                            key: _stepperKey1,
                             initialValue: ConfigService.caboPenalty,
                             minValue: 0,
                             maxValue: 50,
@@ -68,10 +68,10 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                         ),
                         CustomFormRow(
-                          key: _stepperKey2,
                           prefixText: 'Punkte-Limit',
                           prefixIcon: FontAwesomeIcons.bullseye,
                           suffixWidget: Stepper(
+                            key: _stepperKey2,
                             initialValue: ConfigService.pointLimit,
                             minValue: 30,
                             maxValue: 1000,

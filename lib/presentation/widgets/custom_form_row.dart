@@ -24,11 +24,11 @@ class _CustomFormRowState extends State<CustomFormRow> {
   @override
   void initState() {
     super.initState();
-    suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
+    suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: widget.onPressed,
