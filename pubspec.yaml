@@ -1,5 +1,5 @@
 name: cabo_counter
-description: "Mobile game_data for the card game Cabo"
+description: "Mobile app for the card game Cabo"
 publish_to: 'none'
 
 version: 0.4.0+378
