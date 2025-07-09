@@ -1,3 +1,4 @@
+import 'package:cabo_counter/presentation/widgets/stepper.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -5,12 +6,12 @@ class CustomFormRow extends StatefulWidget {
   final String prefixText;
   final IconData prefixIcon;
   final Widget? suffixWidget;
-  final void Function()? onTap;
+  final void Function()? onPressed;
   const CustomFormRow({
     super.key,
     required this.prefixText,
     required this.prefixIcon,
-    required this.onTap,
+    this.onPressed,
     this.suffixWidget,
   });
 
@@ -28,8 +29,9 @@ class _CustomFormRowState extends State<CustomFormRow> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: widget.onPressed,
       child: CupertinoFormRow(
         prefix: Row(
           children: [
@@ -41,7 +43,9 @@ class _CustomFormRowState extends State<CustomFormRow> {
             Text(widget.prefixText),
           ],
         ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: suffixWidget is Stepper
+            ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
+            : const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: suffixWidget,
       ),
     );
