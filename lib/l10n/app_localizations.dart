@@ -467,14 +467,20 @@ abstract class AppLocalizations {
   /// No description provided for @import_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten importieren'**
+  /// **'Spieldaten importieren'**
   String get import_data;
 
   /// No description provided for @export_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten exportieren'**
+  /// **'Spieldaten exportieren'**
   String get export_data;
+
+  /// No description provided for @app.
+  ///
+  /// In de, this message translates to:
+  /// **'App'**
+  String get app;
 
   /// No description provided for @import_success_title.
   ///
@@ -548,6 +554,12 @@ abstract class AppLocalizations {
   /// **'Issue erstellen'**
   String get create_issue;
 
+  /// No description provided for @wiki.
+  ///
+  /// In de, this message translates to:
+  /// **'Wiki'**
+  String get wiki;
+
   /// No description provided for @app_version.
   ///
   /// In de, this message translates to:
@@ -557,14 +569,14 @@ abstract class AppLocalizations {
   /// No description provided for @build.
   ///
   /// In de, this message translates to:
-  /// **'Build'**
+  /// **'Build-Nr.'**
   String get build;
 
-  /// No description provided for @load_version.
+  /// No description provided for @loading.
   ///
   /// In de, this message translates to:
-  /// **'Lade Version...'**
-  String get load_version;
+  /// **'Lädt...'**
+  String get loading;
 
   /// No description provided for @about_text.
   ///

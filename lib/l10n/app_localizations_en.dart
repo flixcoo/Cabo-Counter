@@ -206,6 +206,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_data => 'Export Data';
 
   @override
+  String get app => 'App';
+
+  @override
   String get import_success_title => 'Import successful';
 
   @override
@@ -245,13 +248,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_issue => 'Create Issue';
 
   @override
+  String get wiki => 'Wiki';
+
+  @override
   String get app_version => 'App Version';
 
   @override
-  String get build => 'Build';
+  String get build => 'Build No.';
 
   @override
-  String get load_version => 'Loading version...';
+  String get loading => 'Loading...';
 
   @override
   String get about_text =>
