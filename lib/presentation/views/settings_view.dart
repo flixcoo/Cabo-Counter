@@ -1,10 +1,12 @@
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:cabo_counter/utility/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -107,97 +109,31 @@ class _SettingsViewState extends State<SettingsView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              /*Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Center(
-                    heightFactor: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CupertinoButton(
-                            color: CustomTheme.primaryColor,
-                            sizeStyle: CupertinoButtonSize.medium,
-                            child: Text(
-                              AppLocalizations.of(context).import_data,
-                              style:
-                                  TextStyle(color: CustomTheme.backgroundColor),
-                            ),
-                            onPressed: () async {
-                              final success =
-                                  await LocalStorageService.importJsonFile();
-                              showFeedbackDialog(success);
-                            }),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        CupertinoButton(
-                          color: CustomTheme.primaryColor,
-                          sizeStyle: CupertinoButtonSize.medium,
-                          child: Text(
-                            AppLocalizations.of(context).export_data,
-                            style:
-                                TextStyle(color: CustomTheme.backgroundColor),
-                          ),
-                          onPressed: () async {
-                            final success =
-                                await LocalStorageService.exportGameData();
-                            if (!success && context.mounted) {
-                              showCupertinoDialog(
-                                context: context,
-                                builder: (context) => CupertinoAlertDialog(
-                                  title: Text(AppLocalizations.of(context)
-                                      .export_error_title),
-                                  content: Text(AppLocalizations.of(context)
-                                      .export_error_message),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child:
-                                          Text(AppLocalizations.of(context).ok),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    )),
-              ),*/
               Padding(
                   padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                   child: CupertinoFormSection.insetGrouped(
                       backgroundColor: CustomTheme.backgroundColor,
                       margin: EdgeInsets.zero,
                       children: [
-                        CupertinoFormRow(
-                            prefix: Row(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.square_arrow_up,
-                                  color: CustomTheme.primaryColor,
-                                ),
-                                const SizedBox(width: 10),
-                                const Text('Spieldaten exportieren'),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            child: const CupertinoListTileChevron()),
-                        CupertinoFormRow(
-                            prefix: Row(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.square_arrow_down,
-                                  color: CustomTheme.primaryColor,
-                                ),
-                                const SizedBox(width: 10),
-                                const Text('Spieldaten importieren'),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            child: const CupertinoListTileChevron())
+                        CustomFormRow(
+                          prefixText: 'Spieldaten importieren',
+                          prefixIcon: CupertinoIcons.square_arrow_down,
+                          onTap: () {},
+                          suffixWidget: CupertinoListTileChevron(),
+                        ),
+                        CustomFormRow(
+                          prefixText: 'Spieldaten exportieren',
+                          prefixIcon: CupertinoIcons.square_arrow_up,
+                          onTap: () {},
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
+                        CustomFormRow(
+                          prefixText: AppLocalizations.of(context).create_issue,
+                          prefixIcon: FontAwesomeIcons.github,
+                          onTap: () => launchUrl(Uri.parse(
+                              'https://github.com/flixcoo/Cabo-Counter/issues')),
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
                       ])),
             ],
           ),
