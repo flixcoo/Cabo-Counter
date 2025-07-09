@@ -46,66 +46,89 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                  child: CupertinoListTile(
-                    padding: EdgeInsets.zero,
-                    title: Text(AppLocalizations.of(context).cabo_penalty),
-                    subtitle: Text(
-                        AppLocalizations.of(context).cabo_penalty_subtitle),
-                    trailing: Stepper(
-                      key: _stepperKey1,
-                      initialValue: ConfigService.caboPenalty,
-                      minValue: 0,
-                      maxValue: 50,
-                      step: 1,
-                      onChanged: (newCaboPenalty) {
-                        setState(() {
-                          ConfigService.setCaboPenalty(newCaboPenalty);
-                          ConfigService.caboPenalty = newCaboPenalty;
-                        });
-                      },
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                  child: CupertinoListTile(
-                    padding: EdgeInsets.zero,
-                    title: Text(AppLocalizations.of(context).point_limit),
-                    subtitle:
-                        Text(AppLocalizations.of(context).point_limit_subtitle),
-                    trailing: Stepper(
-                      key: _stepperKey2,
-                      initialValue: ConfigService.pointLimit,
-                      minValue: 30,
-                      maxValue: 1000,
-                      step: 10,
-                      onChanged: (newPointLimit) {
-                        setState(() {
-                          ConfigService.setPointLimit(newPointLimit);
-                          ConfigService.pointLimit = newPointLimit;
-                        });
-                      },
-                    ),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Center(
-                    heightFactor: 0.9,
-                    child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => setState(() {
-                        ConfigService.resetConfig();
-                        _stepperKey1 = UniqueKey();
-                        _stepperKey2 = UniqueKey();
-                      }),
-                      child:
-                          Text(AppLocalizations.of(context).reset_to_default),
-                    ),
-                  )),
+                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  child: CupertinoFormSection.insetGrouped(
+                      backgroundColor: CustomTheme.backgroundColor,
+                      margin: EdgeInsets.zero,
+                      children: [
+                        CustomFormRow(
+                          key: _stepperKey1,
+                          prefixText: 'Cabo-Strafe',
+                          prefixIcon: CupertinoIcons.minus_square,
+                          suffixWidget: Stepper(
+                            initialValue: ConfigService.caboPenalty,
+                            minValue: 0,
+                            maxValue: 50,
+                            step: 1,
+                            onChanged: (newCaboPenalty) {
+                              setState(() {
+                                ConfigService.setCaboPenalty(newCaboPenalty);
+                                ConfigService.caboPenalty = newCaboPenalty;
+                              });
+                            },
+                          ),
+                        ),
+                        CustomFormRow(
+                          key: _stepperKey2,
+                          prefixText: 'Punkte-Limit',
+                          prefixIcon: FontAwesomeIcons.bullseye,
+                          suffixWidget: Stepper(
+                            initialValue: ConfigService.pointLimit,
+                            minValue: 30,
+                            maxValue: 1000,
+                            step: 10,
+                            onChanged: (newPointLimit) {
+                              setState(() {
+                                ConfigService.setPointLimit(newPointLimit);
+                                ConfigService.pointLimit = newPointLimit;
+                              });
+                            },
+                          ),
+                        ),
+                        CustomFormRow(
+                          prefixText:
+                              AppLocalizations.of(context).reset_to_default,
+                          prefixIcon: CupertinoIcons.arrow_counterclockwise,
+                          onPressed: () {
+                            ConfigService.resetConfig();
+                            setState(() {
+                              _stepperKey1 = UniqueKey();
+                              _stepperKey2 = UniqueKey();
+                              print('Config reset to default');
+                            });
+                          },
+                        )
+                      ])),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
-                  AppLocalizations.of(context).game_data,
+                  AppLocalizations.of(context).data,
+                  style: CustomTheme.rowTitle,
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  child: CupertinoFormSection.insetGrouped(
+                      backgroundColor: CustomTheme.backgroundColor,
+                      margin: EdgeInsets.zero,
+                      children: [
+                        CustomFormRow(
+                          prefixText: AppLocalizations.of(context).import_data,
+                          prefixIcon: CupertinoIcons.square_arrow_down,
+                          onPressed: () => LocalStorageService.importJsonFile(),
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
+                        CustomFormRow(
+                          prefixText: AppLocalizations.of(context).export_data,
+                          prefixIcon: CupertinoIcons.square_arrow_up,
+                          onPressed: () => LocalStorageService.importJsonFile(),
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
+                      ])),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                child: Text(
+                  AppLocalizations.of(context).app,
                   style: CustomTheme.rowTitle,
                 ),
               ),
@@ -116,53 +139,72 @@ class _SettingsViewState extends State<SettingsView> {
                       margin: EdgeInsets.zero,
                       children: [
                         CustomFormRow(
-                          prefixText: 'Spieldaten importieren',
-                          prefixIcon: CupertinoIcons.square_arrow_down,
-                          onTap: () {},
-                          suffixWidget: CupertinoListTileChevron(),
-                        ),
-                        CustomFormRow(
-                          prefixText: 'Spieldaten exportieren',
-                          prefixIcon: CupertinoIcons.square_arrow_up,
-                          onTap: () {},
-                          suffixWidget: const CupertinoListTileChevron(),
-                        ),
-                        CustomFormRow(
                           prefixText: AppLocalizations.of(context).create_issue,
                           prefixIcon: FontAwesomeIcons.github,
-                          onTap: () => launchUrl(Uri.parse(
+                          onPressed: () => launchUrl(Uri.parse(
                               'https://github.com/flixcoo/Cabo-Counter/issues')),
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
+                        CustomFormRow(
+                            prefixText: 'App-Version',
+                            prefixIcon: CupertinoIcons.info,
+                            onPressed: null,
+                            suffixWidget: FutureBuilder<PackageInfo>(
+                              future: _getPackageInfo(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    '${Globals.appDevPhase} ${snapshot.data!.version} ',
+                                    style: TextStyle(
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                    '${AppLocalizations.of(context).app_version} -.-.-',
+                                    style: TextStyle(
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  );
+                                }
+                                return Text(
+                                  AppLocalizations.of(context).loading,
+                                  style: TextStyle(
+                                    color: CustomTheme.primaryColor,
+                                  ),
+                                );
+                              },
+                            )),
+                        CustomFormRow(
+                            prefixText: 'Build-Nr.',
+                            prefixIcon: CupertinoIcons.info,
+                            onPressed: null,
+                            suffixWidget: FutureBuilder<PackageInfo>(
+                              future: _getPackageInfo(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    snapshot.data!.buildNumber,
+                                    style: TextStyle(
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                    '-',
+                                    style: TextStyle(
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  );
+                                }
+                                return Text(
+                                  AppLocalizations.of(context).loading,
+                                );
+                              },
+                            )),
                       ])),
             ],
           ),
-          Positioned(
-              bottom: 30,
-              left: 0,
-              right: 0,
-              child: Center(
-                  child: FutureBuilder<PackageInfo>(
-                future: _getPackageInfo(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      '${Globals.appDevPhase} ${snapshot.data!.version} '
-                      '(${AppLocalizations.of(context).build} ${snapshot.data!.buildNumber})',
-                      textAlign: TextAlign.center,
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text(
-                      '${AppLocalizations.of(context).app_version} -.-.- (${AppLocalizations.of(context).build} -)',
-                      textAlign: TextAlign.center,
-                    );
-                  }
-                  return Text(
-                    AppLocalizations.of(context).load_version,
-                    textAlign: TextAlign.center,
-                  );
-                },
-              ))),
         ],
       )),
     );
