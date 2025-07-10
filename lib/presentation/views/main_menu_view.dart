@@ -1,5 +1,5 @@
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/core/globals.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
@@ -36,9 +36,9 @@ class _MainMenuViewState extends State<MainMenuView> {
     gameManager.addListener(_updateView);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Globals.rateMyApp.init();
+      await Constants.rateMyApp.init();
 
-      if (Globals.rateMyApp.shouldOpenDialog) {
+      if (Constants.rateMyApp.shouldOpenDialog) {
         await Future.delayed(const Duration(milliseconds: 600));
         if (!mounted) return;
         _handleFeedbackDialog(context);
@@ -304,7 +304,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     switch (decision) {
       case RATING_DIALOG_YES:
-        if (context.mounted) Globals.rateMyApp.showStarRateDialog(context);
+        if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
         break;
       case RATING_DIALOG_NO:
         launchUrl(emailUri, mode: LaunchMode.externalApplication);
