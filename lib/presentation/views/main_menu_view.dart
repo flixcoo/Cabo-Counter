@@ -265,7 +265,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   Future<T?> _showCupertinoChoiceDialog<T>({
     required String title,
     required String content,
-    required List<({String label, VoidCallback onPressed})> actions,
+    required List<({Widget content, VoidCallback onPressed})> actions,
   }) {
     return showCupertinoDialog<T>(
       context: context,
@@ -276,7 +276,7 @@ class _MainMenuViewState extends State<MainMenuView> {
           actions: actions
               .map((action) => CupertinoDialogAction(
                     onPressed: action.onPressed,
-                    child: Text(action.label),
+                    child: action.content,
                   ))
               .toList(),
         );
@@ -293,13 +293,17 @@ class _MainMenuViewState extends State<MainMenuView> {
           content: AppLocalizations.of(context).delete_game_message(gameTitle),
           actions: [
             (
-              label: AppLocalizations.of(context).cancel,
+              content: Text(AppLocalizations.of(context).cancel),
               onPressed: () => Navigator.of(context).pop(false)
             ),
             (
-              label: AppLocalizations.of(context).delete,
-              onPressed: () => Navigator.of(context).pop(true)
-            ),
+              content: Text(AppLocalizations.of(context).delete,
+                  style: const TextStyle(
+                    color: CupertinoColors.destructiveRed,
+                    fontWeight: FontWeight.bold,
+                  )),
+              onPressed: () => Navigator.of(context).pop(false)
+            )
           ],
         ) ??
         false;
@@ -316,15 +320,15 @@ class _MainMenuViewState extends State<MainMenuView> {
           content: AppLocalizations.of(context).pre_rating_message,
           actions: [
             (
-              label: AppLocalizations.of(context).yes,
+              content: Text(AppLocalizations.of(context).yes),
               onPressed: () => Navigator.of(context).pop(PRE_RATING_DIALOG_YES)
             ),
             (
-              label: AppLocalizations.of(context).no,
+              content: Text(AppLocalizations.of(context).no),
               onPressed: () => Navigator.of(context).pop(PRE_RATING_DIALOG_NO)
             ),
             (
-              label: AppLocalizations.of(context).cancel,
+              content: Text(AppLocalizations.of(context).cancel),
               onPressed: () =>
                   Navigator.of(context).pop(PRE_RATING_DIALOG_CANCEL)
             ),
@@ -343,12 +347,12 @@ class _MainMenuViewState extends State<MainMenuView> {
           content: AppLocalizations.of(context).bad_rating_message,
           actions: [
             (
-              label: AppLocalizations.of(context).contact_email,
+              content: Text(AppLocalizations.of(context).contact_email),
               onPressed: () =>
                   Navigator.of(context).pop(BAD_RATING_DIALOG_EMAIL)
             ),
             (
-              label: AppLocalizations.of(context).cancel,
+              content: Text(AppLocalizations.of(context).cancel),
               onPressed: () =>
                   Navigator.of(context).pop(BAD_RATING_DIALOG_CANCEL)
             ),
