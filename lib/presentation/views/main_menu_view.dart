@@ -75,14 +75,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                   icon: const Icon(CupertinoIcons.settings, size: 30)),
               middle: const Text('Cabo Counter'),
               trailing: IconButton(
-                  onPressed: () => {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => const CreateGameView(),
-                          ),
-                        )
-                      },
+                  onPressed: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => const CreateGameView(),
+                        ),
+                      ),
                   icon: const Icon(CupertinoIcons.add)),
             ),
             child: CupertinoPageScaffold(
@@ -146,7 +144,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         final String gameTitle = gameManager
                                             .gameList[index].gameTitle;
                                         return await _showDeleteGamePopup(
-                                            gameTitle);
+                                            gameTitle, context);
                                       },
                                       onDismissed: (direction) {
                                         gameManager
@@ -261,50 +259,37 @@ class _MainMenuViewState extends State<MainMenuView> {
     }
   }
 
-  /// Shows a Cupertino dialog with a title, content, and a list of actions.
-  Future<T?> _showCupertinoChoiceDialog<T>({
-    required String title,
-    required String content,
-    required List<({Widget content, VoidCallback onPressed})> actions,
-  }) {
-    return showCupertinoDialog<T>(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: actions
-              .map((action) => CupertinoDialogAction(
-                    onPressed: action.onPressed,
-                    child: action.content,
-                  ))
-              .toList(),
-        );
-      },
-    );
-  }
-
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
-  Future<bool> _showDeleteGamePopup(String gameTitle) async {
-    return await _showCupertinoChoiceDialog<bool>(
-          title: AppLocalizations.of(context).delete_game_title,
-          content: AppLocalizations.of(context).delete_game_message(gameTitle),
-          actions: [
-            (
-              content: Text(AppLocalizations.of(context).delete,
-                  style: const TextStyle(
-                    color: CupertinoColors.destructiveRed,
-                    fontWeight: FontWeight.bold,
-                  )),
-              onPressed: () => Navigator.of(context).pop(true)
-            ),
-            (
-              content: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.of(context).pop(false)
-            )
-          ],
+  Future<bool?> _showDeleteGamePopup(
+      String gameTitle, BuildContext context) async {
+    return await showCupertinoDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+                title: Text(
+                  AppLocalizations.of(context).delete_game_title,
+                ),
+                content: Text(AppLocalizations.of(context)
+                    .delete_game_message(gameTitle)),
+                actions: [
+                  CupertinoDialogAction(
+                      child: Text(AppLocalizations.of(context).cancel),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      }),
+                  CupertinoDialogAction(
+                      isDestructiveAction: true,
+                      isDefaultAction: true,
+                      child: Text(
+                        AppLocalizations.of(context).delete,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      })
+                ]);
+          },
         ) ??
         false;
   }
@@ -315,25 +300,32 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// - PRE_RATING_DIALOG_NO: User does not like the app and wants to provide feedback.
   /// - PRE_RATING_DIALOG_CANCEL: User cancels the dialog.
   Future<int> _showPreRatingDialog(BuildContext context) async {
-    return await _showCupertinoChoiceDialog<int>(
-          title: AppLocalizations.of(context).pre_rating_title,
-          content: AppLocalizations.of(context).pre_rating_message,
-          actions: [
-            (
-              content: Text(AppLocalizations.of(context).yes),
-              onPressed: () => Navigator.of(context).pop(PRE_RATING_DIALOG_YES)
-            ),
-            (
-              content: Text(AppLocalizations.of(context).no),
-              onPressed: () => Navigator.of(context).pop(PRE_RATING_DIALOG_NO)
-            ),
-            (
-              content: Text(AppLocalizations.of(context).cancel),
-              onPressed: () =>
-                  Navigator.of(context).pop(PRE_RATING_DIALOG_CANCEL)
-            ),
-          ],
-        ) ??
+    return await showCupertinoDialog<int>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text(AppLocalizations.of(context).pre_rating_title),
+                  content:
+                      Text(AppLocalizations.of(context).pre_rating_message),
+                  actions: [
+                    CupertinoDialogAction(
+                      onPressed: () =>
+                          Navigator.of(context).pop(PRE_RATING_DIALOG_YES),
+                      isDefaultAction: true,
+                      child: Text(AppLocalizations.of(context).yes),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () =>
+                          Navigator.of(context).pop(PRE_RATING_DIALOG_NO),
+                      child: Text(AppLocalizations.of(context).no),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () =>
+                          Navigator.of(context).pop(PRE_RATING_DIALOG_CANCEL),
+                      isDestructiveAction: true,
+                      child: Text(AppLocalizations.of(context).cancel),
+                    )
+                  ],
+                )) ??
         PRE_RATING_DIALOG_CANCEL;
   }
 
@@ -342,22 +334,26 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// - BAD_RATING_DIALOG_EMAIL: User wants to send an email with feedback.
   /// - BAD_RATING_DIALOG_CANCEL: User cancels the dialog.
   Future<int> _showBadRatingDialog(BuildContext context) async {
-    return await _showCupertinoChoiceDialog<int>(
-          title: AppLocalizations.of(context).bad_rating_title,
-          content: AppLocalizations.of(context).bad_rating_message,
-          actions: [
-            (
-              content: Text(AppLocalizations.of(context).contact_email),
-              onPressed: () =>
-                  Navigator.of(context).pop(BAD_RATING_DIALOG_EMAIL)
-            ),
-            (
-              content: Text(AppLocalizations.of(context).cancel),
-              onPressed: () =>
-                  Navigator.of(context).pop(BAD_RATING_DIALOG_CANCEL)
-            ),
-          ],
-        ) ??
+    return await showCupertinoDialog<int>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text(AppLocalizations.of(context).bad_rating_title),
+                  content:
+                      Text(AppLocalizations.of(context).bad_rating_message),
+                  actions: [
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () =>
+                          Navigator.of(context).pop(BAD_RATING_DIALOG_EMAIL),
+                      child: Text(AppLocalizations.of(context).contact_email),
+                    ),
+                    CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () =>
+                            Navigator.of(context).pop(BAD_RATING_DIALOG_CANCEL),
+                        child: Text(AppLocalizations.of(context).cancel))
+                  ],
+                )) ??
         BAD_RATING_DIALOG_CANCEL;
   }
 
