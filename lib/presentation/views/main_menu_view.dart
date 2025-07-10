@@ -275,19 +275,21 @@ class _MainMenuViewState extends State<MainMenuView> {
                     .delete_game_message(gameTitle)),
                 actions: [
                   CupertinoDialogAction(
-                      child: Text(AppLocalizations.of(context).cancel),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      }),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(AppLocalizations.of(context).cancel),
+                  ),
                   CupertinoDialogAction(
-                      isDestructiveAction: true,
-                      isDefaultAction: true,
-                      child: Text(
-                        AppLocalizations.of(context).delete,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      })
+                    isDestructiveAction: true,
+                    isDefaultAction: true,
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).delete,
+                    ),
+                  )
                 ]);
           },
         ) ??
