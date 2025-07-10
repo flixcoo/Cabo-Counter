@@ -21,9 +21,11 @@ class MainMenuView extends StatefulWidget {
 
 class _MainMenuViewState extends State<MainMenuView> {
   bool _isLoading = true;
-  static const int RATING_DIALOG_YES = 1;
-  static const int RATING_DIALOG_NO = 0;
-  static const int RATING_DIALOG_CANCEL = -1;
+  static const int PRE_RATING_DIALOG_YES = 10;
+  static const int PRE_RATING_DIALOG_NO = 11;
+  static const int PRE_RATING_DIALOG_CANCEL = 12;
+  static const int BAD_RATING_DIALOG_EMAIL = 20;
+  static const int BAD_RATING_DIALOG_CANCEL = 21;
 
   @override
   initState() {
@@ -94,13 +96,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                               const SizedBox(height: 30), // Abstand von oben
                               Center(
                                   child: GestureDetector(
-                                onTap: () => Navigator.push(
+                                onTap: () => _handleFeedbackDialog(
+                                    context) /*Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                     builder: (context) =>
                                         const CreateGameView(),
                                   ),
-                                ),
+                                )*/
+                                ,
                                 child: Icon(
                                   CupertinoIcons.plus,
                                   size: 60,
@@ -255,6 +259,48 @@ class _MainMenuViewState extends State<MainMenuView> {
     return shouldDelete;
   }
 
+  /// Handles the feedback dialog when the conditions for rating are met.
+  /// It shows a dialog asking the user if they like the app,
+  /// and based on their response, it either opens the rating dialog or an email client for feedback.
+  Future<void> _handleFeedbackDialog(BuildContext context) async {
+    final String emailSubject = AppLocalizations.of(context).email_subject;
+    final String emailBody = AppLocalizations.of(context).email_body;
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: Constants.EMAIL,
+      query: 'subject=$emailSubject'
+          '&body=$emailBody',
+    );
+
+    int decision = await _showPreRatingDialog(context);
+    int decision2 = 0;
+
+    // so that the bad rating dialog is not shown immediately
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    switch (decision) {
+      case PRE_RATING_DIALOG_YES:
+        if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
+        break;
+      case PRE_RATING_DIALOG_NO:
+        if (context.mounted) decision2 = await _showBadRatingDialog(context);
+        if (decision2 == BAD_RATING_DIALOG_EMAIL) {
+          if (context.mounted) {
+            launchUrl(emailUri);
+          }
+        }
+        break;
+      case PRE_RATING_DIALOG_CANCEL:
+        break;
+    }
+  }
+
+  /// Shows a dialog asking the user if they like the app.
+  /// Returns the user's decision as an integer.
+  /// - PRE_RATING_DIALOG_YES: User likes the app and wants to rate it.
+  /// - PRE_RATING_DIALOG_NO: User does not like the app and wants to provide feedback.
+  /// - PRE_RATING_DIALOG_CANCEL: User cancels the dialog.
   Future<int> _showPreRatingDialog(BuildContext context) async {
     int? answer = await showCupertinoDialog<int>(
       context: context,
@@ -266,19 +312,19 @@ class _MainMenuViewState extends State<MainMenuView> {
             CupertinoDialogAction(
               child: Text(AppLocalizations.of(context).yes),
               onPressed: () {
-                Navigator.of(context).pop(RATING_DIALOG_YES);
+                Navigator.of(context).pop(PRE_RATING_DIALOG_YES);
               },
             ),
             CupertinoDialogAction(
               child: Text(AppLocalizations.of(context).no),
               onPressed: () {
-                Navigator.of(context).pop(RATING_DIALOG_NO);
+                Navigator.of(context).pop(PRE_RATING_DIALOG_NO);
               },
             ),
             CupertinoDialogAction(
               isDestructiveAction: true,
               onPressed: () {
-                Navigator.of(context).pop(RATING_DIALOG_CANCEL);
+                Navigator.of(context).pop(PRE_RATING_DIALOG_CANCEL);
               },
               child: Text(AppLocalizations.of(context).cancel),
             ),
@@ -286,32 +332,41 @@ class _MainMenuViewState extends State<MainMenuView> {
         );
       },
     );
-    return answer ?? RATING_DIALOG_CANCEL;
+    return answer ?? PRE_RATING_DIALOG_CANCEL;
   }
 
-  /// Handles the feedback dialog when the conditions for rating are met.
-  /// It shows a dialog asking the user if they like the app,
-  /// and based on their response, it either opens the rating dialog or an email client for feedback.
-  Future<void> _handleFeedbackDialog(BuildContext context) async {
-    int decision = await _showPreRatingDialog(context);
-
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'cabo-counter@felixkirchner.de',
-      query: 'subject=Feedback: Cabo Counter App'
-          '&body=Ich habe folgendes Feedback...',
+  /// Shows a dialog asking the user for feedback if they do not like the app.
+  /// Returns the user's decision as an integer.
+  /// - BAD_RATING_DIALOG_EMAIL: User wants to send an email with feedback.
+  /// - BAD_RATING_DIALOG_CANCEL: User cancels the dialog.
+  Future<int> _showBadRatingDialog(BuildContext context) async {
+    int? answer = await showCupertinoDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context).bad_rating_title),
+          content: Text(AppLocalizations.of(context).bad_rating_message),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).contact_email,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop(BAD_RATING_DIALOG_EMAIL);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).cancel,
+                  style:
+                      const TextStyle(color: CupertinoColors.destructiveRed)),
+              onPressed: () {
+                Navigator.of(context).pop(BAD_RATING_DIALOG_CANCEL);
+              },
+            ),
+          ],
+        );
+      },
     );
-
-    switch (decision) {
-      case RATING_DIALOG_YES:
-        if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
-        break;
-      case RATING_DIALOG_NO:
-        launchUrl(emailUri, mode: LaunchMode.externalApplication);
-        break;
-      case RATING_DIALOG_CANCEL:
-        break;
-    }
+    return answer ?? PRE_RATING_DIALOG_CANCEL;
   }
 
   @override
