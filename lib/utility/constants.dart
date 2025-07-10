@@ -1,8 +1,7 @@
 class Constants {
   static String appDevPhase = 'Beta';
   static const String INSTAGRAM_LINK = 'https://instagram.felixkirchner.de';
-  static const String GITHUB_LINK = 'https://github.felixkirchner.de';
-  static const String GITHUB_REPO_LINK = 'https://github.felixkirchner.de';
+  static const String GITHUB_LINK = 'https://github1.felixkirchner.de';
   static const String GITHUB_ISSUES_LINK =
       'https://github.com/flixcoo/Cabo-Counter/issues';
   static const String GITHUB_WIKI_LINK =
