@@ -11,5 +11,5 @@ class Constants {
       'https://github.com/flixcoo/Cabo-Counter/issues';
   static const String EMAIL = 'cabocounter@felixkirchner.de';
   static const String PRIVACY_POLICY_LINK =
-      'https://github.felixkirchner.de/Cabo-Counter/wiki/Privacy-Policy';
+      'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
 }
