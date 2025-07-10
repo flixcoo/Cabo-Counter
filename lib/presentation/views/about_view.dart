@@ -1,12 +1,13 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InformationView extends StatelessWidget {
-  const InformationView({super.key});
+class AboutView extends StatelessWidget {
+  const AboutView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +30,13 @@ class InformationView extends StatelessWidget {
                 ),
               ),
             ),
+            Text(
+              '${AppLocalizations.of(context).app_version} ${VersionService.getVersionWithBuild()}',
+              style: TextStyle(fontSize: 15, color: Colors.grey[300]),
+            ),
             Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: SizedBox(
                   height: 200,
                   child: Image.asset('assets/cabo_counter-logo_rounded.png'),
