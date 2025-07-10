@@ -30,6 +30,11 @@
       }
     }
   },
+  "rating_title": "Gefällt dir die App?",
+  "rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
+  "yes": "Ja",
+  "no": "Nein",
+
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
   "game_title": "Titel des Spiels",

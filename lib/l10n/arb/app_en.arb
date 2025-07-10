@@ -30,6 +30,11 @@
       }
     }
   },
+  "rating_title": "Do you like the app?",
+  "rating_message": "Feedback helps me to continuously improve the app. Thank you!",
+  "yes": "Yes",
+  "no": "No",
+
   "overview": "Overview",
   "new_game": "New Game",
   "game_title": "Game Title",

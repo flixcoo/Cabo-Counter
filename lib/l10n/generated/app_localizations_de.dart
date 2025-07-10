@@ -72,6 +72,19 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get rating_title => 'Gefällt dir die App?';
+
+  @override
+  String get rating_message =>
+      'Feedback hilft mir, die App zu verbessern. Vielen Dank!';
+
+  @override
+  String get yes => 'Ja';
+
+  @override
+  String get no => 'Nein';
+
+  @override
   String get overview => 'Übersicht';
 
   @override

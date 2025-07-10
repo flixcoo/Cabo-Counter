@@ -260,17 +260,17 @@ class _MainMenuViewState extends State<MainMenuView> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text('Gefällt dir die App?'),
-          content: const Text('Dein Feedback hilft uns weiter.'),
+          title: Text(AppLocalizations.of(context).rating_title),
+          content: Text(AppLocalizations.of(context).rating_message),
           actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
-              child: const Text('Ja'),
+              child: Text(AppLocalizations.of(context).yes),
               onPressed: () {
                 Navigator.of(context).pop(RATING_DIALOG_YES);
               },
             ),
             CupertinoDialogAction(
-              child: const Text('Nein'),
+              child: Text(AppLocalizations.of(context).no),
               onPressed: () {
                 Navigator.of(context).pop(RATING_DIALOG_NO);
               },
