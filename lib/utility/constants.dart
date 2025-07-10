@@ -1,5 +1,3 @@
-import 'dart:core';
-
 class Constants {
   static String appDevPhase = 'Beta';
   static const String INSTAGRAM_LINK = 'https://instagram.felixkirchner.de';
