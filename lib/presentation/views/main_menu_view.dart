@@ -143,7 +143,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         final String gameTitle = gameManager
                                             .gameList[index].gameTitle;
                                         return await _showDeleteGamePopup(
-                                            gameTitle, context);
+                                            context, gameTitle);
                                       },
                                       onDismissed: (direction) {
                                         gameManager
@@ -263,7 +263,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
   Future<bool> _showDeleteGamePopup(
-      String gameTitle, BuildContext context) async {
+      BuildContext context, String gameTitle) async {
     return await showCupertinoDialog<bool>(
           context: context,
           builder: (BuildContext context) {
