@@ -293,15 +293,15 @@ class _MainMenuViewState extends State<MainMenuView> {
           content: AppLocalizations.of(context).delete_game_message(gameTitle),
           actions: [
             (
-              content: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.of(context).pop(false)
-            ),
-            (
               content: Text(AppLocalizations.of(context).delete,
                   style: const TextStyle(
                     color: CupertinoColors.destructiveRed,
                     fontWeight: FontWeight.bold,
                   )),
+              onPressed: () => Navigator.of(context).pop(true)
+            ),
+            (
+              content: Text(AppLocalizations.of(context).cancel),
               onPressed: () => Navigator.of(context).pop(false)
             )
           ],
