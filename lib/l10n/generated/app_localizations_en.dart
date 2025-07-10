@@ -92,7 +92,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
 
   @override
-  String get contact_email => 'Contac vía E-Mail';
+  String get contact_email => 'Contac via E-Mail';
 
   @override
   String get email_subject => 'Feedback: Cabo Counter App';
