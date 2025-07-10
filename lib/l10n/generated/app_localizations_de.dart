@@ -257,6 +257,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get app_version => 'App-Version';
 
   @override
+  String get privacy_policy => 'Datenschutzerklärung';
+
+  @override
   String get build => 'Build-Nr.';
 
   @override

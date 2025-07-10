@@ -18,7 +18,7 @@ import 'app_localizations_en.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/app_localizations.dart';
+/// import 'generated/app_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -565,6 +565,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'App-Version'**
   String get app_version;
+
+  /// No description provided for @privacy_policy.
+  ///
+  /// In de, this message translates to:
+  /// **'Datenschutzerklärung'**
+  String get privacy_policy;
 
   /// No description provided for @build.
   ///

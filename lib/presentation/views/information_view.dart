@@ -1,4 +1,5 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -53,19 +54,16 @@ class InformationView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: () => launchUrl(
-                        Uri.parse('https://www.instagram.com/flixcoo'),
-                        mode: LaunchMode.externalApplication),
+                    onPressed: () =>
+                        launchUrl(Uri.parse(Constants.INSTAGRAM_LINK)),
                     icon: const Icon(FontAwesomeIcons.instagram)),
                 IconButton(
-                    onPressed: () => launchUrl(
-                        Uri.parse('mailto:felix.kirchner.fk@gmail.com'),
-                        mode: LaunchMode.externalApplication),
+                    onPressed: () =>
+                        launchUrl(Uri.parse('mailto:${Constants.EMAIL}')),
                     icon: const Icon(CupertinoIcons.envelope)),
                 IconButton(
-                    onPressed: () => launchUrl(
-                        Uri.parse('https://www.github.com/flixcoo'),
-                        mode: LaunchMode.externalApplication),
+                    onPressed: () =>
+                        launchUrl(Uri.parse(Constants.GITHUB_LINK)),
                     icon: const Icon(FontAwesomeIcons.github)),
               ],
             ),

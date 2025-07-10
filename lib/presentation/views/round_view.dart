@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';

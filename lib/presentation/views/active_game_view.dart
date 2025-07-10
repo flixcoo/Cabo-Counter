@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/graph_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';

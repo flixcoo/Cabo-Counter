@@ -12,4 +12,3 @@ linter:
     unnecessary_const: true
     lines_longer_than_80_chars: false
     constant_identifier_names: false
-

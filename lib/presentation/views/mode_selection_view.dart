@@ -1,5 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
 class ModeSelectionMenu extends StatelessWidget {
