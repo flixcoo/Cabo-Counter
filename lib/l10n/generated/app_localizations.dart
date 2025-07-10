@@ -18,7 +18,7 @@ import 'app_localizations_en.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/app_localizations.dart';
+/// import 'generated/app_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -217,6 +217,60 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
   String delete_game_message(String gameTitle);
+
+  /// No description provided for @pre_rating_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Gefällt dir die App?'**
+  String get pre_rating_title;
+
+  /// No description provided for @pre_rating_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Feedback hilft mir, die App zu verbessern. Vielen Dank!'**
+  String get pre_rating_message;
+
+  /// No description provided for @yes.
+  ///
+  /// In de, this message translates to:
+  /// **'Ja'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In de, this message translates to:
+  /// **'Nein'**
+  String get no;
+
+  /// No description provided for @bad_rating_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Unzufrieden mit der App?'**
+  String get bad_rating_title;
+
+  /// No description provided for @bad_rating_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!'**
+  String get bad_rating_message;
+
+  /// No description provided for @contact_email.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail schreiben'**
+  String get contact_email;
+
+  /// No description provided for @email_subject.
+  ///
+  /// In de, this message translates to:
+  /// **'Feedback: Cabo Counter App'**
+  String get email_subject;
+
+  /// No description provided for @email_body.
+  ///
+  /// In de, this message translates to:
+  /// **'Ich habe folgendes Feedback...'**
+  String get email_body;
 
   /// No description provided for @overview.
   ///
@@ -565,6 +619,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'App-Version'**
   String get app_version;
+
+  /// No description provided for @privacy_policy.
+  ///
+  /// In de, this message translates to:
+  /// **'Datenschutzerklärung'**
+  String get privacy_policy;
 
   /// No description provided for @build.
   ///

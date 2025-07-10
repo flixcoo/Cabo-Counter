@@ -1,13 +1,19 @@
+import 'package:cabo_counter/core/constants.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+enum PreRatingDialogDecision { yes, no, cancel }
+
+enum BadRatingDialogDecision { email, cancel }
 
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
@@ -29,6 +35,17 @@ class _MainMenuViewState extends State<MainMenuView> {
       });
     });
     gameManager.addListener(_updateView);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Constants.rateMyApp.init();
+
+      if (Constants.rateMyApp.shouldOpenDialog &&
+          Constants.appDevPhase != 'Beta') {
+        await Future.delayed(const Duration(milliseconds: 600));
+        if (!mounted) return;
+        _handleFeedbackDialog(context);
+      }
+    });
   }
 
   void _updateView() {
@@ -57,14 +74,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                   icon: const Icon(CupertinoIcons.settings, size: 30)),
               middle: const Text('Cabo Counter'),
               trailing: IconButton(
-                  onPressed: () => {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => const CreateGameView(),
-                          ),
-                        )
-                      },
+                  onPressed: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => const CreateGameView(),
+                        ),
+                      ),
                   icon: const Icon(CupertinoIcons.add)),
             ),
             child: CupertinoPageScaffold(
@@ -128,7 +143,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         final String gameTitle = gameManager
                                             .gameList[index].gameTitle;
                                         return await _showDeleteGamePopup(
-                                            gameTitle);
+                                            context, gameTitle);
                                       },
                                       onDismissed: (direction) {
                                         gameManager
@@ -204,40 +219,144 @@ class _MainMenuViewState extends State<MainMenuView> {
     return AppLocalizations.of(context).unlimited;
   }
 
+  /// Handles the feedback dialog when the conditions for rating are met.
+  /// It shows a dialog asking the user if they like the app,
+  /// and based on their response, it either opens the rating dialog or an email client for feedback.
+  Future<void> _handleFeedbackDialog(BuildContext context) async {
+    final String emailSubject = AppLocalizations.of(context).email_subject;
+    final String emailBody = AppLocalizations.of(context).email_body;
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: Constants.EMAIL,
+      query: 'subject=$emailSubject'
+          '&body=$emailBody',
+    );
+
+    PreRatingDialogDecision preRatingDecision =
+        await _showPreRatingDialog(context);
+    BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
+
+    // so that the bad rating dialog is not shown immediately
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    switch (preRatingDecision) {
+      case PreRatingDialogDecision.yes:
+        if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
+        break;
+      case PreRatingDialogDecision.no:
+        if (context.mounted) {
+          badRatingDecision = await _showBadRatingDialog(context);
+        }
+        if (badRatingDecision == BadRatingDialogDecision.email) {
+          if (context.mounted) {
+            launchUrl(emailUri);
+          }
+        }
+        break;
+      case PreRatingDialogDecision.cancel:
+        break;
+    }
+  }
+
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
-  Future<bool> _showDeleteGamePopup(String gameTitle) async {
-    bool? shouldDelete = await showCupertinoDialog<bool>(
+  Future<bool> _showDeleteGamePopup(
+      BuildContext context, String gameTitle) async {
+    return await showCupertinoDialog<bool>(
           context: context,
-          builder: (context) {
+          builder: (BuildContext context) {
             return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).delete_game_title),
-              content: Text(
-                  AppLocalizations.of(context).delete_game_message(gameTitle)),
-              actions: [
-                CupertinoDialogAction(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text(AppLocalizations.of(context).cancel),
+                title: Text(
+                  AppLocalizations.of(context).delete_game_title,
                 ),
-                CupertinoDialogAction(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).delete,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.red),
+                content: Text(AppLocalizations.of(context)
+                    .delete_game_message(gameTitle)),
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(AppLocalizations.of(context).cancel),
                   ),
-                ),
-              ],
-            );
+                  CupertinoDialogAction(
+                    isDestructiveAction: true,
+                    isDefaultAction: true,
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).delete,
+                    ),
+                  )
+                ]);
           },
         ) ??
         false;
-    return shouldDelete;
+  }
+
+  /// Shows a dialog asking the user if they like the app.
+  /// Returns the user's decision as an integer.
+  /// - PRE_RATING_DIALOG_YES: User likes the app and wants to rate it.
+  /// - PRE_RATING_DIALOG_NO: User does not like the app and wants to provide feedback.
+  /// - PRE_RATING_DIALOG_CANCEL: User cancels the dialog.
+  Future<PreRatingDialogDecision> _showPreRatingDialog(
+      BuildContext context) async {
+    return await showCupertinoDialog<PreRatingDialogDecision>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text(AppLocalizations.of(context).pre_rating_title),
+                  content:
+                      Text(AppLocalizations.of(context).pre_rating_message),
+                  actions: [
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context)
+                          .pop(PreRatingDialogDecision.yes),
+                      isDefaultAction: true,
+                      child: Text(AppLocalizations.of(context).yes),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () =>
+                          Navigator.of(context).pop(PreRatingDialogDecision.no),
+                      child: Text(AppLocalizations.of(context).no),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      isDestructiveAction: true,
+                      child: Text(AppLocalizations.of(context).cancel),
+                    )
+                  ],
+                )) ??
+        PreRatingDialogDecision.cancel;
+  }
+
+  /// Shows a dialog asking the user for feedback if they do not like the app.
+  /// Returns the user's decision as an integer.
+  /// - BAD_RATING_DIALOG_EMAIL: User wants to send an email with feedback.
+  /// - BAD_RATING_DIALOG_CANCEL: User cancels the dialog.
+  Future<BadRatingDialogDecision> _showBadRatingDialog(
+      BuildContext context) async {
+    return await showCupertinoDialog<BadRatingDialogDecision>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+                  title: Text(AppLocalizations.of(context).bad_rating_title),
+                  content:
+                      Text(AppLocalizations.of(context).bad_rating_message),
+                  actions: [
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () => Navigator.of(context)
+                          .pop(BadRatingDialogDecision.email),
+                      child: Text(AppLocalizations.of(context).contact_email),
+                    ),
+                    CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(AppLocalizations.of(context).cancel))
+                  ],
+                )) ??
+        BadRatingDialogDecision.cancel;
   }
 
   @override

@@ -72,6 +72,35 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get pre_rating_title => 'Do you like the app?';
+
+  @override
+  String get pre_rating_message =>
+      'Feedback helps me to continuously improve the app. Thank you!';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get bad_rating_title => 'Not satisfied?';
+
+  @override
+  String get bad_rating_message =>
+      'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
+
+  @override
+  String get contact_email => 'Contac via E-Mail';
+
+  @override
+  String get email_subject => 'Feedback: Cabo Counter App';
+
+  @override
+  String get email_body => 'I have the following feedback...';
+
+  @override
   String get overview => 'Overview';
 
   @override
@@ -252,6 +281,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get app_version => 'App Version';
+
+  @override
+  String get privacy_policy => 'Privacy Policy';
 
   @override
   String get build => 'Build No.';

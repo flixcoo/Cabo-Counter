@@ -1,7 +1,7 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/information_view.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/about_view.dart';
 import 'package:cabo_counter/presentation/views/main_menu_view.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 
 class TabView extends StatefulWidget {
@@ -39,7 +39,7 @@ class _TabViewState extends State<TabView> {
           if (index == 0) {
             return const MainMenuView();
           } else {
-            return const InformationView();
+            return const AboutView();
           }
         });
       },
