@@ -236,19 +236,21 @@ class _MainMenuViewState extends State<MainMenuView> {
           '&body=$emailBody',
     );
 
-    int decision = await _showPreRatingDialog(context);
-    int decision2 = 0;
+    int preRatingDecision = await _showPreRatingDialog(context);
+    int badRatingDecision = BAD_RATING_DIALOG_CANCEL;
 
     // so that the bad rating dialog is not shown immediately
     await Future.delayed(const Duration(milliseconds: 300));
 
-    switch (decision) {
+    switch (preRatingDecision) {
       case PRE_RATING_DIALOG_YES:
         if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
         break;
       case PRE_RATING_DIALOG_NO:
-        if (context.mounted) decision2 = await _showBadRatingDialog(context);
-        if (decision2 == BAD_RATING_DIALOG_EMAIL) {
+        if (context.mounted) {
+          badRatingDecision = await _showBadRatingDialog(context);
+        }
+        if (badRatingDecision == BAD_RATING_DIALOG_EMAIL) {
           if (context.mounted) {
             launchUrl(emailUri);
           }
