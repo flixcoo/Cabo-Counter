@@ -235,7 +235,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               child: Text(
                 AppLocalizations.of(context).end_game,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.red),
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.destructiveRed),
               ),
               onPressed: () {
                 setState(() {
