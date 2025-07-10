@@ -308,6 +308,7 @@ class _MainMenuViewState extends State<MainMenuView> {
         break;
       case RATING_DIALOG_NO:
         launchUrl(emailUri, mode: LaunchMode.externalApplication);
+        break;
       case RATING_DIALOG_CANCEL:
         break;
     }
