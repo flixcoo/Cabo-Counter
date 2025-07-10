@@ -30,8 +30,8 @@
       }
     }
   },
-  "rating_title": "Gefällt dir die App?",
-  "rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
+  "pre_rating_title": "Gefällt dir die App?",
+  "pre_rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
   "yes": "Ja",
   "no": "Nein",
 

@@ -260,8 +260,8 @@ class _MainMenuViewState extends State<MainMenuView> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).rating_title),
-          content: Text(AppLocalizations.of(context).rating_message),
+          title: Text(AppLocalizations.of(context).pre_rating_title),
+          content: Text(AppLocalizations.of(context).pre_rating_message),
           actions: <CupertinoDialogAction>[
             CupertinoDialogAction(
               child: Text(AppLocalizations.of(context).yes),

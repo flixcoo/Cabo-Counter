@@ -72,10 +72,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rating_title => 'Do you like the app?';
+  String get pre_rating_title => 'Do you like the app?';
 
   @override
-  String get rating_message =>
+  String get pre_rating_message =>
       'Feedback helps me to continuously improve the app. Thank you!';
 
   @override

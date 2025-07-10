@@ -218,17 +218,17 @@ abstract class AppLocalizations {
   /// **'Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
   String delete_game_message(String gameTitle);
 
-  /// No description provided for @rating_title.
+  /// No description provided for @pre_rating_title.
   ///
   /// In de, this message translates to:
   /// **'Gefällt dir die App?'**
-  String get rating_title;
+  String get pre_rating_title;
 
-  /// No description provided for @rating_message.
+  /// No description provided for @pre_rating_message.
   ///
   /// In de, this message translates to:
   /// **'Feedback hilft mir, die App zu verbessern. Vielen Dank!'**
-  String get rating_message;
+  String get pre_rating_message;
 
   /// No description provided for @yes.
   ///
