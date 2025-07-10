@@ -85,6 +85,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no => 'No';
 
   @override
+  String get bad_rating_title => 'Not satisfied?';
+
+  @override
+  String get bad_rating_message =>
+      'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
+
+  @override
+  String get contact_email => 'Contac vía E-Mail';
+
+  @override
+  String get email_subject => 'Feedback: Cabo Counter App';
+
+  @override
+  String get email_body => 'I have the following feedback...';
+
+  @override
   String get overview => 'Overview';
 
   @override

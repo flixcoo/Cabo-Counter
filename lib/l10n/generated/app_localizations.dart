@@ -242,6 +242,36 @@ abstract class AppLocalizations {
   /// **'Nein'**
   String get no;
 
+  /// No description provided for @bad_rating_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Unzufrieden mit der App?'**
+  String get bad_rating_title;
+
+  /// No description provided for @bad_rating_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!'**
+  String get bad_rating_message;
+
+  /// No description provided for @contact_email.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail schreiben'**
+  String get contact_email;
+
+  /// No description provided for @email_subject.
+  ///
+  /// In de, this message translates to:
+  /// **'Feedback: Cabo Counter App'**
+  String get email_subject;
+
+  /// No description provided for @email_body.
+  ///
+  /// In de, this message translates to:
+  /// **'Ich habe folgendes Feedback...'**
+  String get email_body;
+
   /// No description provided for @overview.
   ///
   /// In de, this message translates to:

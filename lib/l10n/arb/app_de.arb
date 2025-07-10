@@ -34,6 +34,11 @@
   "pre_rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
   "yes": "Ja",
   "no": "Nein",
+  "bad_rating_title": "Unzufrieden mit der App?",
+  "bad_rating_message": "Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!",
+  "contact_email": "E-Mail schreiben",
+  "email_subject": "Feedback: Cabo Counter App",
+  "email_body": "Ich habe folgendes Feedback...",
 
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
