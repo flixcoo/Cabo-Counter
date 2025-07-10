@@ -1,13 +1,13 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/cupertino.dart'; // Für iOS-Style
 
-class Stepper extends StatefulWidget {
+class CustomStepper extends StatefulWidget {
   final int minValue;
   final int maxValue;
   final int? initialValue;
   final int step;
   final ValueChanged<int> onChanged;
-  const Stepper({
+  const CustomStepper({
     super.key,
     required this.minValue,
     required this.maxValue,
@@ -18,10 +18,10 @@ class Stepper extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _StepperState createState() => _StepperState();
+  _CustomStepperState createState() => _CustomStepperState();
 }
 
-class _StepperState extends State<Stepper> {
+class _CustomStepperState extends State<CustomStepper> {
   late int _value;
 
   @override

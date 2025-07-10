@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/widgets/stepper.dart';
+import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
 
 class CustomFormRow extends StatefulWidget {
@@ -43,7 +43,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
             Text(widget.prefixText),
           ],
         ),
-        padding: suffixWidget is Stepper
+        padding: suffixWidget is CustomStepper
             ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
             : const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: suffixWidget,

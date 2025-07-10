@@ -2,7 +2,7 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
-import 'package:cabo_counter/presentation/widgets/stepper.dart';
+import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
@@ -54,7 +54,7 @@ class _SettingsViewState extends State<SettingsView> {
                         CustomFormRow(
                           prefixText: 'Cabo-Strafe',
                           prefixIcon: CupertinoIcons.bolt_fill,
-                          suffixWidget: Stepper(
+                          suffixWidget: CustomStepper(
                             key: _stepperKey1,
                             initialValue: ConfigService.caboPenalty,
                             minValue: 0,
@@ -71,7 +71,7 @@ class _SettingsViewState extends State<SettingsView> {
                         CustomFormRow(
                           prefixText: 'Punkte-Limit',
                           prefixIcon: FontAwesomeIcons.bullseye,
-                          suffixWidget: Stepper(
+                          suffixWidget: CustomStepper(
                             key: _stepperKey2,
                             initialValue: ConfigService.pointLimit,
                             minValue: 30,
