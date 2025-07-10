@@ -1,9 +1,10 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
+import 'package:cabo_counter/utility/constants.dart';
 import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -93,7 +94,6 @@ class _SettingsViewState extends State<SettingsView> {
                             setState(() {
                               _stepperKey1 = UniqueKey();
                               _stepperKey2 = UniqueKey();
-                              print('Config reset to default');
                             });
                           },
                         )
@@ -142,17 +142,25 @@ class _SettingsViewState extends State<SettingsView> {
                       margin: EdgeInsets.zero,
                       children: [
                         CustomFormRow(
-                          prefixText: AppLocalizations.of(context).create_issue,
-                          prefixIcon: FontAwesomeIcons.github,
-                          onPressed: () => launchUrl(Uri.parse(
-                              'https://github.com/flixcoo/Cabo-Counter/issues')),
+                          prefixText: AppLocalizations.of(context).wiki,
+                          prefixIcon: CupertinoIcons.book,
+                          onPressed: () =>
+                              launchUrl(Uri.parse(Constants.GITHUB_WIKI_LINK)),
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
-                          prefixText: AppLocalizations.of(context).wiki,
-                          prefixIcon: CupertinoIcons.book,
-                          onPressed: () => launchUrl(Uri.parse(
-                              'https://github.com/flixcoo/Cabo-Counter/wiki')),
+                          prefixText:
+                              AppLocalizations.of(context).privacy_policy,
+                          prefixIcon: CupertinoIcons.doc_append,
+                          onPressed: () => launchUrl(
+                              Uri.parse(Constants.PRIVACY_POLICY_LINK)),
+                          suffixWidget: const CupertinoListTileChevron(),
+                        ),
+                        CustomFormRow(
+                          prefixText: AppLocalizations.of(context).error_found,
+                          prefixIcon: FontAwesomeIcons.github,
+                          onPressed: () => launchUrl(
+                              Uri.parse(Constants.GITHUB_ISSUES_LINK)),
                           suffixWidget: const CupertinoListTileChevron(),
                         ),
                         CustomFormRow(
