@@ -40,7 +40,8 @@ class _MainMenuViewState extends State<MainMenuView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Constants.rateMyApp.init();
 
-      if (Constants.rateMyApp.shouldOpenDialog) {
+      if (Constants.rateMyApp.shouldOpenDialog &&
+          Constants.appDevPhase != 'Beta') {
         await Future.delayed(const Duration(milliseconds: 600));
         if (!mounted) return;
         _handleFeedbackDialog(context);
@@ -96,15 +97,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                               const SizedBox(height: 30), // Abstand von oben
                               Center(
                                   child: GestureDetector(
-                                onTap: () => _handleFeedbackDialog(
-                                    context) /*Navigator.push(
+                                onTap: () => Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                     builder: (context) =>
                                         const CreateGameView(),
                                   ),
-                                )*/
-                                ,
+                                ),
                                 child: Icon(
                                   CupertinoIcons.plus,
                                   size: 60,
