@@ -6,11 +6,11 @@ class CustomTheme {
   static Color backgroundColor = const Color(0xFF101010);
   static Color backgroundTintColor = CupertinoColors.darkBackgroundGray;
 
-  // graph colors
+  // Line Colors for GraphView
   static const Color graphColor1 = Color(0xFFF44336);
-  static const Color graphColor2 = Color(0xFF2196F3); //FF2196F3
-  static const Color graphColor3 = Color(0xFFFFA726); //FFFFA726
-  static const Color graphColor4 = Color(0xFF9C27B0); //9C27B0
+  static const Color graphColor2 = Color(0xFF2196F3);
+  static const Color graphColor3 = Color(0xFFFFA726);
+  static const Color graphColor4 = Color(0xFF9C27B0);
   static final Color graphColor5 = primaryColor;
 
   static TextStyle modeTitle = TextStyle(
