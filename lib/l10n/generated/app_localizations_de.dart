@@ -211,6 +211,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game_process => 'Spielverlauf';
 
   @override
+  String get empty_graph_text =>
+      'Du musst mindestens zwei Runden spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
+
+  @override
   String get settings => 'Einstellungen';
 
   @override

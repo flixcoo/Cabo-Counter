@@ -92,7 +92,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
 
   @override
-  String get contact_email => 'Contac via E-Mail';
+  String get contact_email => 'Contact via E-Mail';
 
   @override
   String get email_subject => 'Feedback: Cabo Counter App';
@@ -205,7 +205,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get game_process => 'Scoring History';
+
+  @override
+  String get empty_graph_text =>
+      'You must play at least two rounds for the game progress graph to be displayed.';
 
   @override
   String get settings => 'Settings';

@@ -26,21 +26,39 @@ class _GraphViewState extends State<GraphView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).game_process),
-        previousPageTitle: AppLocalizations.of(context).back,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-        child: SfCartesianChart(
-          legend:
-              const Legend(isVisible: true, position: LegendPosition.bottom),
-          primaryXAxis: const NumericAxis(),
-          primaryYAxis: const NumericAxis(),
-          series: getCumulativeScores(),
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(AppLocalizations.of(context).game_process),
+          previousPageTitle: AppLocalizations.of(context).back,
         ),
-      ),
-    );
+        child: widget.gameSession.roundNumber > 2
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                child: SfCartesianChart(
+                  legend: const Legend(
+                      isVisible: true, position: LegendPosition.bottom),
+                  primaryXAxis: const NumericAxis(),
+                  primaryYAxis: const NumericAxis(),
+                  series: getCumulativeScores(),
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Center(
+                    child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
+                  ),
+                  const SizedBox(height: 10), // Abstand von oben
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(
+                      AppLocalizations.of(context).empty_graph_text,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ));
   }
 
   /// Returns a list of LineSeries representing the cumulative scores of each player.
