@@ -73,14 +73,19 @@ class _RoundViewState extends State<RoundView> {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: true,
-        middle: Text(
-            '${AppLocalizations.of(context).results}${gameSession.isGameFinished ? ' \u{1F512}' : ''}'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () =>
               {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
           child: Text(AppLocalizations.of(context).cancel),
         ),
+        middle: Text(AppLocalizations.of(context).results),
+        trailing: widget.gameSession.isGameFinished
+            ? const Icon(
+                CupertinoIcons.lock,
+                size: 25,
+              )
+            : null,
       ),
       child: Stack(
         children: [
