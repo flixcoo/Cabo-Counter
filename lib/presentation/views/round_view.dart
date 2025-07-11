@@ -67,7 +67,6 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final maxLength = widget.gameSession.getMaxLengthOfPlayerNames();
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -126,9 +125,8 @@ class _RoundViewState extends State<RoundView> {
                             return MapEntry(
                               index,
                               Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4 +
-                                      _getSegmentedControlPadding(maxLength),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
                                   vertical: 6,
                                 ),
                                 child: FittedBox(
@@ -137,10 +135,8 @@ class _RoundViewState extends State<RoundView> {
                                     name,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: _getSegmentedControlFontSize(
-                                          maxLength),
                                     ),
                                   ),
                                 ),
@@ -390,32 +386,6 @@ class _RoundViewState extends State<RoundView> {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
-    }
-  }
-
-  double _getSegmentedControlFontSize(int maxLength) {
-    if (maxLength > 8) {
-      // 9 - 12 characters
-      return 9.0;
-    } else if (maxLength > 4) {
-      // 5 - 8 characters
-      return 15.0;
-    } else {
-      // 0 - 4 characters
-      return 18.0;
-    }
-  }
-
-  double _getSegmentedControlPadding(int maxLength) {
-    if (maxLength > 8) {
-      // 9 - 12 characters
-      return 0.0;
-    } else if (maxLength > 4) {
-      // 5 - 8 characters
-      return 5.0;
-    } else {
-      // 0 - 4 characters
-      return 8.0;
     }
   }
 
