@@ -246,7 +246,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete_data_message =>
-      'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+      'Are you sure you want to delete all game data? This action cannot be undone.';
 
   @override
   String get app => 'App';
