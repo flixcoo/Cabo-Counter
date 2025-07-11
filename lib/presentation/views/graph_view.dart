@@ -91,6 +91,9 @@ class _GraphViewState extends State<GraphView> {
         cumulativeScores[i].length,
         (j) => (
           j + 1,
+
+          // Add a small jitter to the cumulative scores to prevent overlapping data points in the graph.
+          // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
           cumulativeScores[i][j] + (i - playerCount ~/ 2) * jitterStep
         ),
       );
