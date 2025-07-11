@@ -242,6 +242,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_data => 'Spieldaten exportieren';
 
   @override
+  String get delete_data => 'Alle Spieldaten löschen';
+
+  @override
+  String get delete_data_title => 'Spieldaten löschen?';
+
+  @override
+  String get delete_data_message =>
+      'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
   String get app => 'App';
 
   @override

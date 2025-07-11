@@ -96,6 +96,9 @@
   "game_data": "Spieldaten",
   "import_data": "Spieldaten importieren",
   "export_data": "Spieldaten exportieren",
+  "delete_data": "Alle Spieldaten löschen",
+  "delete_data_title": "Spieldaten löschen?",
+  "delete_data_message": "Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "app": "App",
 
   "import_success_title": "Import erfolgreich",

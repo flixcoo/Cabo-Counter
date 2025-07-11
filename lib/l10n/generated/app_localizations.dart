@@ -536,6 +536,24 @@ abstract class AppLocalizations {
   /// **'Spieldaten exportieren'**
   String get export_data;
 
+  /// No description provided for @delete_data.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Spieldaten löschen'**
+  String get delete_data;
+
+  /// No description provided for @delete_data_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spieldaten löschen?'**
+  String get delete_data_title;
+
+  /// No description provided for @delete_data_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
+  String get delete_data_message;
+
   /// No description provided for @app.
   ///
   /// In de, this message translates to:

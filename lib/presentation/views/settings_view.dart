@@ -32,159 +32,190 @@ class _SettingsViewState extends State<SettingsView> {
         middle: Text(AppLocalizations.of(context).settings),
       ),
       child: SafeArea(
-          child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).points,
-                  style: CustomTheme.rowTitle,
-                ),
+          child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Text(
+                AppLocalizations.of(context).points,
+                style: CustomTheme.rowTitle,
               ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                  child: CupertinoFormSection.insetGrouped(
-                      backgroundColor: CustomTheme.backgroundColor,
-                      margin: EdgeInsets.zero,
-                      children: [
-                        CustomFormRow(
-                          prefixText: 'Cabo-Strafe',
-                          prefixIcon: CupertinoIcons.bolt_fill,
-                          suffixWidget: CustomStepper(
-                            key: _stepperKey1,
-                            initialValue: ConfigService.caboPenalty,
-                            minValue: 0,
-                            maxValue: 50,
-                            step: 1,
-                            onChanged: (newCaboPenalty) {
-                              setState(() {
-                                ConfigService.setCaboPenalty(newCaboPenalty);
-                                ConfigService.caboPenalty = newCaboPenalty;
-                              });
-                            },
-                          ),
-                        ),
-                        CustomFormRow(
-                          prefixText: 'Punkte-Limit',
-                          prefixIcon: FontAwesomeIcons.bullseye,
-                          suffixWidget: CustomStepper(
-                            key: _stepperKey2,
-                            initialValue: ConfigService.pointLimit,
-                            minValue: 30,
-                            maxValue: 1000,
-                            step: 10,
-                            onChanged: (newPointLimit) {
-                              setState(() {
-                                ConfigService.setPointLimit(newPointLimit);
-                                ConfigService.pointLimit = newPointLimit;
-                              });
-                            },
-                          ),
-                        ),
-                        CustomFormRow(
-                          prefixText:
-                              AppLocalizations.of(context).reset_to_default,
-                          prefixIcon: CupertinoIcons.arrow_counterclockwise,
-                          onPressed: () {
-                            ConfigService.resetConfig();
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                child: CupertinoFormSection.insetGrouped(
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).cabo_penalty,
+                        prefixIcon: CupertinoIcons.bolt_fill,
+                        suffixWidget: CustomStepper(
+                          key: _stepperKey1,
+                          initialValue: ConfigService.caboPenalty,
+                          minValue: 0,
+                          maxValue: 50,
+                          step: 1,
+                          onChanged: (newCaboPenalty) {
                             setState(() {
-                              _stepperKey1 = UniqueKey();
-                              _stepperKey2 = UniqueKey();
+                              ConfigService.setCaboPenalty(newCaboPenalty);
+                              ConfigService.caboPenalty = newCaboPenalty;
                             });
                           },
-                        )
-                      ])),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).game_data,
-                  style: CustomTheme.rowTitle,
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                  child: CupertinoFormSection.insetGrouped(
-                      backgroundColor: CustomTheme.backgroundColor,
-                      margin: EdgeInsets.zero,
-                      children: [
-                        CustomFormRow(
-                          prefixText: AppLocalizations.of(context).import_data,
-                          prefixIcon: CupertinoIcons.square_arrow_down,
-                          onPressed: () async {
-                            final status =
-                                await LocalStorageService.importJsonFile();
-                            showFeedbackDialog(status);
+                        ),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).point_limit,
+                        prefixIcon: FontAwesomeIcons.bullseye,
+                        suffixWidget: CustomStepper(
+                          key: _stepperKey2,
+                          initialValue: ConfigService.pointLimit,
+                          minValue: 30,
+                          maxValue: 1000,
+                          step: 10,
+                          onChanged: (newPointLimit) {
+                            setState(() {
+                              ConfigService.setPointLimit(newPointLimit);
+                              ConfigService.pointLimit = newPointLimit;
+                            });
                           },
-                          suffixWidget: const CupertinoListTileChevron(),
                         ),
-                        CustomFormRow(
-                          prefixText: AppLocalizations.of(context).export_data,
-                          prefixIcon: CupertinoIcons.square_arrow_up,
-                          onPressed: () => LocalStorageService.exportGameData(),
-                          suffixWidget: const CupertinoListTileChevron(),
-                        ),
-                      ])),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).app,
-                  style: CustomTheme.rowTitle,
-                ),
+                      ),
+                      CustomFormRow(
+                        prefixText:
+                            AppLocalizations.of(context).reset_to_default,
+                        prefixIcon: CupertinoIcons.arrow_counterclockwise,
+                        onPressed: () {
+                          ConfigService.resetConfig();
+                          setState(() {
+                            _stepperKey1 = UniqueKey();
+                            _stepperKey2 = UniqueKey();
+                          });
+                        },
+                      )
+                    ])),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Text(
+                AppLocalizations.of(context).game_data,
+                style: CustomTheme.rowTitle,
               ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  child: CupertinoFormSection.insetGrouped(
-                      backgroundColor: CustomTheme.backgroundColor,
-                      margin: EdgeInsets.zero,
-                      children: [
-                        CustomFormRow(
-                          prefixText: AppLocalizations.of(context).wiki,
-                          prefixIcon: CupertinoIcons.book,
-                          onPressed: () =>
-                              launchUrl(Uri.parse(Constants.GITHUB_WIKI_LINK)),
-                          suffixWidget: const CupertinoListTileChevron(),
-                        ),
-                        CustomFormRow(
-                          prefixText:
-                              AppLocalizations.of(context).privacy_policy,
-                          prefixIcon: CupertinoIcons.doc_append,
-                          onPressed: () => launchUrl(
-                              Uri.parse(Constants.PRIVACY_POLICY_LINK)),
-                          suffixWidget: const CupertinoListTileChevron(),
-                        ),
-                        CustomFormRow(
-                          prefixText: AppLocalizations.of(context).error_found,
-                          prefixIcon: FontAwesomeIcons.github,
-                          onPressed: () => launchUrl(
-                              Uri.parse(Constants.GITHUB_ISSUES_LINK)),
-                          suffixWidget: const CupertinoListTileChevron(),
-                        ),
-                        CustomFormRow(
-                            prefixText:
-                                AppLocalizations.of(context).app_version,
-                            prefixIcon: CupertinoIcons.tag,
-                            onPressed: null,
-                            suffixWidget: Text(VersionService.getVersion(),
-                                style: TextStyle(
-                                  color: CustomTheme.primaryColor,
-                                ))),
-                        CustomFormRow(
-                            prefixText: AppLocalizations.of(context).build,
-                            prefixIcon: CupertinoIcons.number,
-                            onPressed: null,
-                            suffixWidget: Text(VersionService.getBuildNumber(),
-                                style: TextStyle(
-                                  color: CustomTheme.primaryColor,
-                                ))),
-                      ])),
-            ],
-          ),
-        ],
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                child: CupertinoFormSection.insetGrouped(
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).import_data,
+                        prefixIcon: CupertinoIcons.square_arrow_down,
+                        onPressed: () async {
+                          final status =
+                              await LocalStorageService.importJsonFile();
+                          showFeedbackDialog(status);
+                        },
+                        suffixWidget: const CupertinoListTileChevron(),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).export_data,
+                        prefixIcon: CupertinoIcons.square_arrow_up,
+                        onPressed: () => LocalStorageService.exportGameData(),
+                        suffixWidget: const CupertinoListTileChevron(),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).delete_data,
+                        prefixIcon: CupertinoIcons.trash,
+                        onPressed: () => _deleteAllGames(),
+                      ),
+                    ])),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Text(
+                AppLocalizations.of(context).app,
+                style: CustomTheme.rowTitle,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                child: CupertinoFormSection.insetGrouped(
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).wiki,
+                        prefixIcon: CupertinoIcons.book,
+                        onPressed: () =>
+                            launchUrl(Uri.parse(Constants.GITHUB_WIKI_LINK)),
+                        suffixWidget: const CupertinoListTileChevron(),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).privacy_policy,
+                        prefixIcon: CupertinoIcons.doc_append,
+                        onPressed: () =>
+                            launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
+                        suffixWidget: const CupertinoListTileChevron(),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).error_found,
+                        prefixIcon: FontAwesomeIcons.github,
+                        onPressed: () =>
+                            launchUrl(Uri.parse(Constants.GITHUB_ISSUES_LINK)),
+                        suffixWidget: const CupertinoListTileChevron(),
+                      ),
+                      CustomFormRow(
+                          prefixText: AppLocalizations.of(context).app_version,
+                          prefixIcon: CupertinoIcons.tag,
+                          onPressed: null,
+                          suffixWidget: Text(VersionService.getVersion(),
+                              style: TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ))),
+                      CustomFormRow(
+                          prefixText: AppLocalizations.of(context).build,
+                          prefixIcon: CupertinoIcons.number,
+                          onPressed: null,
+                          suffixWidget: Text(VersionService.getBuildNumber(),
+                              style: TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ))),
+                    ])),
+            const SizedBox(height: 50)
+          ],
+        ),
       )),
+    );
+  }
+
+  /// Shows a dialog to confirm the deletion of all game data.
+  /// When confirmed, it deletes all game data from local storage.
+  void _deleteAllGames() {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context).delete_data_title),
+          content: Text(AppLocalizations.of(context).delete_data_message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              isDefaultAction: true,
+              child: Text(AppLocalizations.of(context).delete),
+              onPressed: () {
+                LocalStorageService.deleteAllGames();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

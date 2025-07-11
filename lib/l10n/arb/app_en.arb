@@ -97,6 +97,9 @@
   "game_data": "Game Data",
   "import_data": "Import Data",
   "export_data": "Export Data",
+  "delete_data": "Delete all Game Data",
+  "delete_data_title": "Delete game data?",
+  "delete_data_message": "Are you sure you want to delete all game data? This action cannot be undone.",
   "app": "App",
 
   "import_success_title": "Import successful",

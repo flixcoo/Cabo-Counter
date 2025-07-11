@@ -239,6 +239,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_data => 'Export Data';
 
   @override
+  String get delete_data => 'Delete all Game Data';
+
+  @override
+  String get delete_data_title => 'Delete game data?';
+
+  @override
+  String get delete_data_message =>
+      'Are you sure you want to delete all game data? This action cannot be undone.';
+
+  @override
   String get app => 'App';
 
   @override
