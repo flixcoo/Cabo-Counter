@@ -205,7 +205,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get game_process => 'Scoring History';
+
+  @override
+  String get empty_graph_text =>
+      'You must play at least two rounds for the game progress graph to be displayed.';
 
   @override
   String get settings => 'Settings';

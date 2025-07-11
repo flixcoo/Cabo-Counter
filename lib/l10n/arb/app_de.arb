@@ -85,6 +85,7 @@
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "game_process": "Spielverlauf",
+  "empty_graph_text": "Du musst mindestens zwei Runden spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",

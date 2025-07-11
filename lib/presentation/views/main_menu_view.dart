@@ -88,10 +88,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                     ? const Center(child: CupertinoActivityIndicator())
                     : gameManager.gameList.isEmpty
                         ? Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center, // Oben ausrichten
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(height: 30), // Abstand von oben
+                              const SizedBox(height: 30),
                               Center(
                                   child: GestureDetector(
                                 onTap: () => Navigator.push(
@@ -107,7 +106,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   color: CustomTheme.primaryColor,
                                 ),
                               )),
-                              const SizedBox(height: 10), // Abstand von oben
+                              const SizedBox(height: 10),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 70),

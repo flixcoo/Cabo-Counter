@@ -74,17 +74,19 @@
   "done": "Done",
   "next_round": "Next Round",
 
+
   "statistics": "Statistics",
   "end_game": "End Game",
   "delete_game": "Delete Game",
   "new_game_same_settings": "New Game with same Settings",
   "export_game": "Export Game",
-
-  "game_process": "Spielverlauf",
   "id_error_title": "ID Error",
   "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
   "end_game_title": "End the game?",
   "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
+
+  "game_process": "Scoring History",
+  "empty_graph_text": "You must play at least two rounds for the game progress graph to be displayed.",
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
