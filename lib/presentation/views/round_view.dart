@@ -305,8 +305,7 @@ class _RoundViewState extends State<RoundView> {
                               ? () {
                                   _finishRound();
                                   LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished ==
-                                      true) {
+                                  if (widget.gameSession.isGameFinished) {
                                     Navigator.pop(context);
                                   } else {
                                     Navigator.pop(
