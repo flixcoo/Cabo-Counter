@@ -51,7 +51,7 @@ class _GraphViewState extends State<GraphView> {
                   const Center(
                     child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
                   ),
-                  const SizedBox(height: 10), // Abstand von oben
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Text(
