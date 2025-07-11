@@ -73,13 +73,19 @@ class _RoundViewState extends State<RoundView> {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: true,
-        middle: Text(AppLocalizations.of(context).results),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () =>
               {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
           child: Text(AppLocalizations.of(context).cancel),
         ),
+        middle: Text(AppLocalizations.of(context).results),
+        trailing: widget.gameSession.isGameFinished
+            ? const Icon(
+                CupertinoIcons.lock,
+                size: 25,
+              )
+            : null,
       ),
       child: Stack(
         children: [
@@ -293,21 +299,22 @@ class _RoundViewState extends State<RoundView> {
                             : null,
                         child: Text(AppLocalizations.of(context).done),
                       ),
-                      CupertinoButton(
-                        onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
-                                LocalStorageService.saveGameSessions();
-                                if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context);
-                                } else {
-                                  Navigator.pop(
-                                      context, widget.roundNumber + 1);
+                      if (!widget.gameSession.isGameFinished)
+                        CupertinoButton(
+                          onPressed: _areRoundInputsValid()
+                              ? () {
+                                  _finishRound();
+                                  LocalStorageService.saveGameSessions();
+                                  if (widget.gameSession.isGameFinished) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pop(
+                                        context, widget.roundNumber + 1);
+                                  }
                                 }
-                              }
-                            : null,
-                        child: Text(AppLocalizations.of(context).next_round),
-                      ),
+                              : null,
+                          child: Text(AppLocalizations.of(context).next_round),
+                        ),
                     ],
                   ),
                 );
