@@ -92,7 +92,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
 
   @override
-  String get contact_email => 'Contac via E-Mail';
+  String get contact_email => 'Contact via E-Mail';
 
   @override
   String get email_subject => 'Feedback: Cabo Counter App';
@@ -233,6 +233,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get export_data => 'Export Data';
+
+  @override
+  String get delete_data => 'Delete all Game Data';
+
+  @override
+  String get delete_data_title => 'Delete game data?';
+
+  @override
+  String get delete_data_message =>
+      'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
 
   @override
   String get app => 'App';
