@@ -149,21 +149,21 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixText: AppLocalizations.of(context).wiki,
                         prefixIcon: CupertinoIcons.book,
                         onPressed: () =>
-                            launchUrl(Uri.parse(Constants.GITHUB_WIKI_LINK)),
+                            launchUrl(Uri.parse(Constants.kGithubWikiLink)),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).privacy_policy,
                         prefixIcon: CupertinoIcons.doc_append,
                         onPressed: () =>
-                            launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
+                            launchUrl(Uri.parse(Constants.kPrivacyPolicyLink)),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).error_found,
                         prefixIcon: FontAwesomeIcons.github,
                         onPressed: () =>
-                            launchUrl(Uri.parse(Constants.GITHUB_ISSUES_LINK)),
+                            launchUrl(Uri.parse(Constants.kGithubIssuesLink)),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
