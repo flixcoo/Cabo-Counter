@@ -60,15 +60,15 @@ class AboutView extends StatelessWidget {
               children: [
                 IconButton(
                     onPressed: () =>
-                        launchUrl(Uri.parse(Constants.INSTAGRAM_LINK)),
+                        launchUrl(Uri.parse(Constants.kInstagramLink)),
                     icon: const Icon(FontAwesomeIcons.instagram)),
                 IconButton(
                     onPressed: () =>
-                        launchUrl(Uri.parse('mailto:${Constants.EMAIL}')),
+                        launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
                     icon: const Icon(CupertinoIcons.envelope)),
                 IconButton(
                     onPressed: () =>
-                        launchUrl(Uri.parse(Constants.GITHUB_LINK)),
+                        launchUrl(Uri.parse(Constants.kGithubLink)),
                     icon: const Icon(FontAwesomeIcons.github)),
               ],
             ),

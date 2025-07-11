@@ -3,14 +3,14 @@ import 'package:rate_my_app/rate_my_app.dart';
 class Constants {
   static const String appDevPhase = 'Beta';
 
-  static const String INSTAGRAM_LINK = 'https://instagram.felixkirchner.de';
-  static const String GITHUB_LINK = 'https://github.felixkirchner.de';
-  static const String GITHUB_ISSUES_LINK =
+  static const String kInstagramLink = 'https://instagram.felixkirchner.de';
+  static const String kGithubLink = 'https://github.felixkirchner.de';
+  static const String kGithubIssuesLink =
       'https://cabocounter-issues.felixkirchner.de';
-  static const String GITHUB_WIKI_LINK =
+  static const String kGithubWikiLink =
       'https://cabocounter-wiki.felixkirchner.de';
-  static const String EMAIL = 'cabocounter@felixkirchner.de';
-  static const String PRIVACY_POLICY_LINK =
+  static const String kEmail = 'cabocounter@felixkirchner.de';
+  static const String kPrivacyPolicyLink =
       'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
 
   static RateMyApp rateMyApp = RateMyApp(

@@ -227,7 +227,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     final Uri emailUri = Uri(
       scheme: 'mailto',
-      path: Constants.EMAIL,
+      path: Constants.kEmail,
       query: 'subject=$emailSubject'
           '&body=$emailBody',
     );
