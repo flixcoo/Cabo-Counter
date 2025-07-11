@@ -73,7 +73,8 @@ class _RoundViewState extends State<RoundView> {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: true,
-        middle: Text(AppLocalizations.of(context).results),
+        middle: Text(
+            '${AppLocalizations.of(context).results}${gameSession.isGameFinished ? ' \u{1F512}' : ''}'),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () =>
@@ -293,21 +294,23 @@ class _RoundViewState extends State<RoundView> {
                             : null,
                         child: Text(AppLocalizations.of(context).done),
                       ),
-                      CupertinoButton(
-                        onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
-                                LocalStorageService.saveGameSessions();
-                                if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context);
-                                } else {
-                                  Navigator.pop(
-                                      context, widget.roundNumber + 1);
+                      if (!widget.gameSession.isGameFinished)
+                        CupertinoButton(
+                          onPressed: _areRoundInputsValid()
+                              ? () {
+                                  _finishRound();
+                                  LocalStorageService.saveGameSessions();
+                                  if (widget.gameSession.isGameFinished ==
+                                      true) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pop(
+                                        context, widget.roundNumber + 1);
+                                  }
                                 }
-                              }
-                            : null,
-                        child: Text(AppLocalizations.of(context).next_round),
-                      ),
+                              : null,
+                          child: Text(AppLocalizations.of(context).next_round),
+                        ),
                     ],
                   ),
                 );
