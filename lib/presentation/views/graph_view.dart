@@ -77,7 +77,7 @@ class _GraphViewState extends State<GraphView> {
 
     for (var round in rounds) {
       for (int i = 0; i < playerCount; i++) {
-        runningTotals[i] += round.scores[i];
+        runningTotals[i] += round.scoreUpdates[i];
         cumulativeScores[i].add(runningTotals[i]);
       }
     }
