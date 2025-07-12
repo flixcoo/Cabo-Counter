@@ -40,7 +40,10 @@ class _GraphViewState extends State<GraphView> {
                     interval: 1,
                     decimalPlaces: 0,
                   ),
-                  primaryYAxis: const NumericAxis(),
+                  primaryYAxis: const NumericAxis(
+                    interval: 1,
+                    decimalPlaces: 0,
+                  ),
                   series: getCumulativeScores(),
                 ),
               )
@@ -82,7 +85,7 @@ class _GraphViewState extends State<GraphView> {
       }
     }
 
-    const double jitterStep = 0.05;
+    const double jitterStep = 0.03;
 
     /// Create a list of LineSeries for each player
     /// Each series contains data points for each round
@@ -91,8 +94,8 @@ class _GraphViewState extends State<GraphView> {
         cumulativeScores[i].length + 1,
         (j) => (
           j,
-          j == 0
-              ? 0 // 0 Points at at the start of the game
+          j == 0 || cumulativeScores[i][j - 1] == 0
+              ? 0 // 0 Points at at the start of the game OR value is 0 (dont subtract jitter step)
 
               // Adds a small jitter to the cumulative scores to prevent overlapping data points in the graph.
               // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
