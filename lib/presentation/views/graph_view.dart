@@ -82,7 +82,7 @@ class _GraphViewState extends State<GraphView> {
       }
     }
 
-    const double jitterStep = 0.15;
+    const double jitterStep = 0.05;
 
     /// Create a list of LineSeries for each player
     /// Each series contains data points for each round
