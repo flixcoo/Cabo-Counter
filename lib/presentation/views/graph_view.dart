@@ -30,7 +30,7 @@ class _GraphViewState extends State<GraphView> {
           middle: Text(AppLocalizations.of(context).game_process),
           previousPageTitle: AppLocalizations.of(context).back,
         ),
-        child: widget.gameSession.roundNumber > 2
+        child: widget.gameSession.roundNumber > 1
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: SfCartesianChart(
