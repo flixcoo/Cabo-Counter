@@ -88,15 +88,28 @@ class _GraphViewState extends State<GraphView> {
     /// Each series contains data points for each round
     return List.generate(playerCount, (i) {
       final data = List.generate(
+        cumulativeScores[i].length + 1,
+        (j) => (
+          j,
+          j == 0
+              ? 0 // 0 Points at at the start of the game
+
+              // Adds a small jitter to the cumulative scores to prevent overlapping data points in the graph.
+              // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
+              : cumulativeScores[i][j - 1] + (i - playerCount ~/ 2) * jitterStep
+        ),
+      ); /*List.generate(
         cumulativeScores[i].length,
         (j) => (
-          j + 1,
-
-          // Add a small jitter to the cumulative scores to prevent overlapping data points in the graph.
-          // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
-          cumulativeScores[i][j] + (i - playerCount ~/ 2) * jitterStep
+          j,
+          j == 0
+              ? 0 // In Runde 0 immer 0 Punkte
+              :
+              // Add a small jitter to the cumulative scores to prevent overlapping data points in the graph.
+              // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
+              cumulativeScores[i][j] + (i - playerCount ~/ 2) * jitterStep
         ),
-      );
+      );*/
 
       /// Create a LineSeries for the player
       /// The xValueMapper maps the round number, and the yValueMapper maps the cumulative score.
