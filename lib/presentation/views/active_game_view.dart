@@ -121,7 +121,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         children: [
                           CupertinoListTile(
                               title: Text(
-                                AppLocalizations.of(context).statistics,
+                                AppLocalizations.of(context).game_process,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
@@ -131,8 +131,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       builder: (_) => GraphView(
                                             gameSession: gameSession,
                                           )))),
-                          if (!gameSession.isPointsLimitEnabled)
-                            CupertinoListTile(
+                          Visibility(
+                            visible: !gameSession.isPointsLimitEnabled,
+                            child: CupertinoListTile(
                                 title: Text(
                                   AppLocalizations.of(context).end_game,
                                   style: gameSession.roundNumber > 1 &&
@@ -148,6 +149,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     _showEndGameDialog();
                                   }
                                 }),
+                          ),
                           CupertinoListTile(
                             title: Text(
                               AppLocalizations.of(context).delete_game,
