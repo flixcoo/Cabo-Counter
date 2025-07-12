@@ -35,7 +35,9 @@ class _GraphViewState extends State<GraphView> {
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: SfCartesianChart(
                   legend: const Legend(
-                      isVisible: true, position: LegendPosition.bottom),
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      isVisible: true,
+                      position: LegendPosition.bottom),
                   primaryXAxis: const NumericAxis(
                     interval: 1,
                     decimalPlaces: 0,
