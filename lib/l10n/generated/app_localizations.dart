@@ -479,7 +479,7 @@ abstract class AppLocalizations {
   /// No description provided for @empty_graph_text.
   ///
   /// In de, this message translates to:
-  /// **'Du musst mindestens zwei Runden spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
+  /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
   String get empty_graph_text;
 
   /// No description provided for @settings.
