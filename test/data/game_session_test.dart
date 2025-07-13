@@ -114,15 +114,15 @@ void main() {
       expect(session.roundList[0].caboPlayerIndex, 0);
     });
 
-    test('updatePoints - game not finished', () async {
+    test('updatePoints - game not finished', () {
       session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
-      await session.updatePoints();
+      session.updatePoints();
       expect(session.isGameFinished, isFalse);
     });
 
-    test('updatePoints - game finished', () async {
+    test('updatePoints - game finished', () {
       session.addRoundScoresToList(1, [101, 20, 30], [101, 20, 30], 0);
-      await session.updatePoints();
+      session.updatePoints();
       expect(session.isGameFinished, isTrue);
     });
 
@@ -154,9 +154,9 @@ void main() {
       expect(session.playerScores, equals([50, 0, 30]));
     });
 
-    test('_setWinner via updatePoints', () async {
+    test('_setWinner via updatePoints', () {
       session.addRoundScoresToList(1, [101, 20, 30], [101, 0, 30], 1);
-      await session.updatePoints();
+      session.updatePoints();
       expect(session.winner, 'Bob'); // Bob has lowest score (20)
     });
   });

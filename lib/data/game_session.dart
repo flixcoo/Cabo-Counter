@@ -243,10 +243,11 @@ class GameSession extends ChangeNotifier {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
-  Future<void> updatePoints() async {
+  List<int> updatePoints() {
+    List<int> bonusPlayers = [];
     _sumPoints();
     if (isPointsLimitEnabled) {
-      _checkHundredPointsReached();
+      bonusPlayers = _checkHundredPointsReached();
 
       for (int i = 0; i < playerScores.length; i++) {
         if (playerScores[i] > pointLimit) {
@@ -258,6 +259,7 @@ class GameSession extends ChangeNotifier {
       }
     }
     notifyListeners();
+    return bonusPlayers;
   }
 
   @visibleForTesting
@@ -278,15 +280,18 @@ class GameSession extends ChangeNotifier {
   /// Checks if a player has reached 100 points in the current round.
   /// If so, it updates the [scoreUpdate] List by subtracting 50 points from
   /// the corresponding round update.
-  void _checkHundredPointsReached() {
+  List<int> _checkHundredPointsReached() {
+    List<int> bonusPlayers = [];
     for (int i = 0; i < players.length; i++) {
       if (playerScores[i] == pointLimit) {
+        bonusPlayers.add(i);
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
             'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
         roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
       }
     }
     _sumPoints();
+    return bonusPlayers;
   }
 
   /// Determines the winner of the game session.

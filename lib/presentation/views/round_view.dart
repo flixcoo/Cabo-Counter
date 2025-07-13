@@ -287,8 +287,11 @@ class _RoundViewState extends State<RoundView> {
                     children: [
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
+                            ? () async {
+                                List<int> boni = _finishRound();
+                                if (boni.isNotEmpty) {
+                                  await _showBonusPopup(context, boni);
+                                }
                                 LocalStorageService.saveGameSessions();
                                 Navigator.pop(context);
                               }
@@ -298,8 +301,11 @@ class _RoundViewState extends State<RoundView> {
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () {
-                                  _finishRound();
+                              ? () async {
+                                  List<int> boni = _finishRound();
+                                  if (boni.isNotEmpty) {
+                                    await _showBonusPopup(context, boni);
+                                  }
                                   LocalStorageService.saveGameSessions();
                                   if (widget.gameSession.isGameFinished) {
                                     Navigator.pop(context);
@@ -359,7 +365,7 @@ class _RoundViewState extends State<RoundView> {
   /// every player. If the round is the highest round played in this game,
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
-  void _finishRound() {
+  List<int> _finishRound() {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
     // The shown round is smaller than the newest round
@@ -381,12 +387,59 @@ class _RoundViewState extends State<RoundView> {
       widget.gameSession.calculateScoredPoints(
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
-    widget.gameSession.updatePoints();
+    List<int> bonusPlayers = widget.gameSession.updatePoints();
     if (widget.gameSession.isGameFinished == true) {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
     }
+    return bonusPlayers;
+  }
+
+  /// Shows a popup dialog with the bonus information.
+  Future<bool> _showBonusPopup(
+      BuildContext context, List<int> bonusPlayers) async {
+    print('Bonus Popup wird angezeigt');
+    int pointLimit = widget.gameSession.pointLimit;
+    int bonusPoints = (pointLimit / 2).round();
+
+    String resultText = _getPopupString(pointLimit, bonusPoints, bonusPlayers);
+
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Bonus!'),
+        content: Text(resultText),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+    return true;
+  }
+
+  /// Generates the string for the bonus popup.
+  /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
+  /// and returns a formatted string.
+  String _getPopupString(
+      int pointLimit, int bonusPoints, List<int> bonusPlayers) {
+    List<String> nameList =
+        bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
+    String resultText = '';
+    if (nameList.length == 1) {
+      resultText =
+          '${nameList.first} hat exakt das Punktelimit von $pointLimit Punkten erreicht und bekommt deshalb $bonusPoints Punkte abgezogen!';
+    } else {
+      resultText = nameList.length == 2
+          ? '${nameList[0]} & ${nameList[1]}'
+          : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
+      resultText +=
+          ' haben exakt das Punktelimit von $pointLimit Punkten erreicht und bekommen deshalb $bonusPoints Punkte abgezogen!';
+    }
+    return resultText;
   }
 
   @override
