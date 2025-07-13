@@ -179,9 +179,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get next_round => 'Nächste Runde';
 
   @override
-  String get statistics => 'Statistiken';
-
-  @override
   String get end_game => 'Spiel beenden';
 
   @override

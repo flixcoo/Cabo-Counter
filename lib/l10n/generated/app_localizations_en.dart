@@ -176,9 +176,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next_round => 'Next Round';
 
   @override
-  String get statistics => 'Statistics';
-
-  @override
   String get end_game => 'End Game';
 
   @override

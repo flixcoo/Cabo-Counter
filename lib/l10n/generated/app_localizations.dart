@@ -416,12 +416,6 @@ abstract class AppLocalizations {
   /// **'Nächste Runde'**
   String get next_round;
 
-  /// No description provided for @statistics.
-  ///
-  /// In de, this message translates to:
-  /// **'Statistiken'**
-  String get statistics;
-
   /// No description provided for @end_game.
   ///
   /// In de, this message translates to:
