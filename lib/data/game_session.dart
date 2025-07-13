@@ -282,8 +282,8 @@ class GameSession extends ChangeNotifier {
     for (int i = 0; i < players.length; i++) {
       if (playerScores[i] == pointLimit) {
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
-            'deswegen 50 Punkte abgezogen');
-        roundList[roundNumber - 1].scoreUpdates[i] -= 50;
+            'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
+        roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
       }
     }
     _sumPoints();
