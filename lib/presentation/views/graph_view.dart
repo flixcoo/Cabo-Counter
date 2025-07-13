@@ -97,7 +97,7 @@ class _GraphViewState extends State<GraphView> {
         (j) => (
           j,
           j == 0 || cumulativeScores[i][j - 1] == 0
-              ? 0 // 0 Points at at the start of the game OR value is 0 (dont subtract jitter step)
+              ? 0 // 0 points at the start of the game or when the value is 0 (don't subtract jitter step)
 
               // Adds a small jitter to the cumulative scores to prevent overlapping data points in the graph.
               // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
