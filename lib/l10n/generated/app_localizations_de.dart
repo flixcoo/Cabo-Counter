@@ -179,9 +179,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get next_round => 'Nächste Runde';
 
   @override
-  String get statistics => 'Statistiken';
-
-  @override
   String get end_game => 'Spiel beenden';
 
   @override
@@ -212,7 +209,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get empty_graph_text =>
-      'Du musst mindestens zwei Runden spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
+      'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
 
   @override
   String get settings => 'Einstellungen';

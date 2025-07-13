@@ -416,12 +416,6 @@ abstract class AppLocalizations {
   /// **'Nächste Runde'**
   String get next_round;
 
-  /// No description provided for @statistics.
-  ///
-  /// In de, this message translates to:
-  /// **'Statistiken'**
-  String get statistics;
-
   /// No description provided for @end_game.
   ///
   /// In de, this message translates to:
@@ -479,7 +473,7 @@ abstract class AppLocalizations {
   /// No description provided for @empty_graph_text.
   ///
   /// In de, this message translates to:
-  /// **'Du musst mindestens zwei Runden spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
+  /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
   String get empty_graph_text;
 
   /// No description provided for @settings.

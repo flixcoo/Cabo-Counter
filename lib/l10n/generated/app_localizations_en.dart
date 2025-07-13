@@ -176,9 +176,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next_round => 'Next Round';
 
   @override
-  String get statistics => 'Statistics';
-
-  @override
   String get end_game => 'End Game';
 
   @override
@@ -209,7 +206,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_graph_text =>
-      'You must play at least two rounds for the game progress graph to be displayed.';
+      'You must play at least one round for the game progress graph to be displayed.';
 
   @override
   String get settings => 'Settings';

@@ -30,17 +30,22 @@ class _GraphViewState extends State<GraphView> {
           middle: Text(AppLocalizations.of(context).game_process),
           previousPageTitle: AppLocalizations.of(context).back,
         ),
-        child: widget.gameSession.roundNumber > 2
+        child: widget.gameSession.roundNumber > 1
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: SfCartesianChart(
                   legend: const Legend(
-                      isVisible: true, position: LegendPosition.bottom),
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      isVisible: true,
+                      position: LegendPosition.bottom),
                   primaryXAxis: const NumericAxis(
                     interval: 1,
                     decimalPlaces: 0,
                   ),
-                  primaryYAxis: const NumericAxis(),
+                  primaryYAxis: const NumericAxis(
+                    interval: 1,
+                    decimalPlaces: 0,
+                  ),
                   series: getCumulativeScores(),
                 ),
               )
@@ -82,19 +87,21 @@ class _GraphViewState extends State<GraphView> {
       }
     }
 
-    const double jitterStep = 0.15;
+    const double jitterStep = 0.03;
 
     /// Create a list of LineSeries for each player
     /// Each series contains data points for each round
     return List.generate(playerCount, (i) {
       final data = List.generate(
-        cumulativeScores[i].length,
+        cumulativeScores[i].length + 1,
         (j) => (
-          j + 1,
+          j,
+          j == 0 || cumulativeScores[i][j - 1] == 0
+              ? 0 // 0 points at the start of the game or when the value is 0 (don't subtract jitter step)
 
-          // Add a small jitter to the cumulative scores to prevent overlapping data points in the graph.
-          // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
-          cumulativeScores[i][j] + (i - playerCount ~/ 2) * jitterStep
+              // Adds a small jitter to the cumulative scores to prevent overlapping data points in the graph.
+              // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
+              : cumulativeScores[i][j - 1] + (i - playerCount ~/ 2) * jitterStep
         ),
       );
 
