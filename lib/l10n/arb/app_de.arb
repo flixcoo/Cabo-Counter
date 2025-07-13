@@ -30,6 +30,16 @@
       }
     }
   },
+  "pre_rating_title": "Gefällt dir die App?",
+  "pre_rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
+  "yes": "Ja",
+  "no": "Nein",
+  "bad_rating_title": "Unzufrieden mit der App?",
+  "bad_rating_message": "Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!",
+  "contact_email": "E-Mail schreiben",
+  "email_subject": "Feedback: Cabo Counter App",
+  "email_body": "Ich habe folgendes Feedback...",
+
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
   "game_title": "Titel des Spiels",
@@ -64,7 +74,6 @@
   "done": "Fertig",
   "next_round": "Nächste Runde",
 
-  "statistics": "Statistiken",
   "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
@@ -75,6 +84,7 @@
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "game_process": "Spielverlauf",
+  "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
@@ -83,8 +93,12 @@
   "point_limit_subtitle": "... hier ist Schluss",
   "reset_to_default": "Auf Standard zurücksetzen",
   "game_data": "Spieldaten",
-  "import_data": "Daten importieren",
-  "export_data": "Daten exportieren",
+  "import_data": "Spieldaten importieren",
+  "export_data": "Spieldaten exportieren",
+  "delete_data": "Alle Spieldaten löschen",
+  "delete_data_title": "Spieldaten löschen?",
+  "delete_data_message": "Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "app": "App",
 
   "import_success_title": "Import erfolgreich",
   "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
@@ -92,16 +106,19 @@
   "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
   "import_format_error_title": "Falsches Format",
   "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
-   "import_generic_error_title": "Import fehlgeschlagen",
+  "import_generic_error_title": "Import fehlgeschlagen",
   "import_generic_error_message": "Der Import ist fehlgeschlagen.",
 
   "export_error_title": "Fehler",
   "export_error_message": "Datei konnte nicht exportiert werden",
+
   "error_found": "Fehler gefunden?",
   "create_issue": "Issue erstellen",
+  "wiki": "Wiki",
   "app_version": "App-Version",
-  "build": "Build",
-  "load_version": "Lade Version...",
+  "privacy_policy": "Datenschutzerklärung",
+  "build": "Build-Nr.",
+  "loading": "Lädt...",
 
   "about_text": "Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! "
 }

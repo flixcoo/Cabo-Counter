@@ -1,7 +1,7 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -67,19 +67,24 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final maxLength = widget.gameSession.getMaxLengthOfPlayerNames();
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: true,
-        middle: Text(AppLocalizations.of(context).results),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () =>
               {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
           child: Text(AppLocalizations.of(context).cancel),
         ),
+        middle: Text(AppLocalizations.of(context).results),
+        trailing: widget.gameSession.isGameFinished
+            ? const Icon(
+                CupertinoIcons.lock,
+                size: 25,
+              )
+            : null,
       ),
       child: Stack(
         children: [
@@ -120,9 +125,8 @@ class _RoundViewState extends State<RoundView> {
                             return MapEntry(
                               index,
                               Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4 +
-                                      _getSegmentedControlPadding(maxLength),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
                                   vertical: 6,
                                 ),
                                 child: FittedBox(
@@ -131,10 +135,8 @@ class _RoundViewState extends State<RoundView> {
                                     name,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: _getSegmentedControlFontSize(
-                                          maxLength),
                                     ),
                                   ),
                                 ),
@@ -293,21 +295,22 @@ class _RoundViewState extends State<RoundView> {
                             : null,
                         child: Text(AppLocalizations.of(context).done),
                       ),
-                      CupertinoButton(
-                        onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
-                                LocalStorageService.saveGameSessions();
-                                if (widget.gameSession.isGameFinished == true) {
-                                  Navigator.pop(context);
-                                } else {
-                                  Navigator.pop(
-                                      context, widget.roundNumber + 1);
+                      if (!widget.gameSession.isGameFinished)
+                        CupertinoButton(
+                          onPressed: _areRoundInputsValid()
+                              ? () {
+                                  _finishRound();
+                                  LocalStorageService.saveGameSessions();
+                                  if (widget.gameSession.isGameFinished) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pop(
+                                        context, widget.roundNumber + 1);
+                                  }
                                 }
-                              }
-                            : null,
-                        child: Text(AppLocalizations.of(context).next_round),
-                      ),
+                              : null,
+                          child: Text(AppLocalizations.of(context).next_round),
+                        ),
                     ],
                   ),
                 );
@@ -383,32 +386,6 @@ class _RoundViewState extends State<RoundView> {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
-    }
-  }
-
-  double _getSegmentedControlFontSize(int maxLength) {
-    if (maxLength > 8) {
-      // 9 - 12 characters
-      return 9.0;
-    } else if (maxLength > 4) {
-      // 5 - 8 characters
-      return 15.0;
-    } else {
-      // 0 - 4 characters
-      return 18.0;
-    }
-  }
-
-  double _getSegmentedControlPadding(int maxLength) {
-    if (maxLength > 8) {
-      // 9 - 12 characters
-      return 0.0;
-    } else if (maxLength > 4) {
-      // 5 - 8 characters
-      return 5.0;
-    } else {
-      // 0 - 4 characters
-      return 8.0;
     }
   }
 

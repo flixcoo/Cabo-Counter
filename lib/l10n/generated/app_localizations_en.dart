@@ -72,6 +72,35 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get pre_rating_title => 'Do you like the app?';
+
+  @override
+  String get pre_rating_message =>
+      'Feedback helps me to continuously improve the app. Thank you!';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get bad_rating_title => 'Not satisfied?';
+
+  @override
+  String get bad_rating_message =>
+      'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
+
+  @override
+  String get contact_email => 'Contact via E-Mail';
+
+  @override
+  String get email_subject => 'Feedback: Cabo Counter App';
+
+  @override
+  String get email_body => 'I have the following feedback...';
+
+  @override
   String get overview => 'Overview';
 
   @override
@@ -147,9 +176,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next_round => 'Next Round';
 
   @override
-  String get statistics => 'Statistics';
-
-  @override
   String get end_game => 'End Game';
 
   @override
@@ -176,7 +202,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get game_process => 'Scoring History';
+
+  @override
+  String get empty_graph_text =>
+      'You must play at least one round for the game progress graph to be displayed.';
 
   @override
   String get settings => 'Settings';
@@ -204,6 +234,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get export_data => 'Export Data';
+
+  @override
+  String get delete_data => 'Delete all Game Data';
+
+  @override
+  String get delete_data_title => 'Delete game data?';
+
+  @override
+  String get delete_data_message =>
+      'Are you sure you want to delete all game data? This action cannot be undone.';
+
+  @override
+  String get app => 'App';
 
   @override
   String get import_success_title => 'Import successful';
@@ -245,13 +288,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_issue => 'Create Issue';
 
   @override
+  String get wiki => 'Wiki';
+
+  @override
   String get app_version => 'App Version';
 
   @override
-  String get build => 'Build';
+  String get privacy_policy => 'Privacy Policy';
 
   @override
-  String get load_version => 'Loading version...';
+  String get build => 'Build No.';
+
+  @override
+  String get loading => 'Loading...';
 
   @override
   String get about_text =>

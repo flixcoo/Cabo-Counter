@@ -1,8 +1,9 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/tab_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/tab_view.dart';
+import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -13,6 +14,7 @@ Future<void> main() async {
   await ConfigService.initConfig();
   ConfigService.pointLimit = await ConfigService.getPointLimit();
   ConfigService.caboPenalty = await ConfigService.getCaboPenalty();
+  await VersionService.init();
   runApp(const App());
 }
 

@@ -30,6 +30,16 @@
       }
     }
   },
+  "pre_rating_title": "Do you like the app?",
+  "pre_rating_message": "Feedback helps me to continuously improve the app. Thank you!",
+  "yes": "Yes",
+  "no": "No",
+  "bad_rating_title": "Not satisfied?",
+  "bad_rating_message": "If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.",
+  "contact_email": "Contact via E-Mail",
+  "email_subject": "Feedback: Cabo Counter App",
+  "email_body": "I have the following feedback...",
+
   "overview": "Overview",
   "new_game": "New Game",
   "game_title": "Game Title",
@@ -64,13 +74,17 @@
   "done": "Done",
   "next_round": "Next Round",
 
-  "statistics": "Statistics",
   "end_game": "End Game",
   "delete_game": "Delete Game",
   "new_game_same_settings": "New Game with same Settings",
   "export_game": "Export Game",
+  "id_error_title": "ID Error",
+  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
+  "end_game_title": "End the game?",
+  "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
 
-  "game_process": "Spielverlauf",
+  "game_process": "Scoring History",
+  "empty_graph_text": "You must play at least one round for the game progress graph to be displayed.",
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
@@ -81,10 +95,10 @@
   "game_data": "Game Data",
   "import_data": "Import Data",
   "export_data": "Export Data",
-  "id_error_title": "ID Error",
-  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
-  "end_game_title": "End the game?",
-  "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
+  "delete_data": "Delete all Game Data",
+  "delete_data_title": "Delete game data?",
+  "delete_data_message": "Are you sure you want to delete all game data? This action cannot be undone.",
+  "app": "App",
 
   "import_success_title": "Import successful",
   "import_success_message":"The game data has been successfully imported.",
@@ -97,11 +111,14 @@
 
   "export_error_title": "Export failed",
   "export_error_message": "Could not export file",
+
   "error_found": "Found a bug?",
   "create_issue": "Create Issue",
+  "wiki": "Wiki",
   "app_version": "App Version",
-  "load_version": "Loading version...",
-  "build": "Build",
+  "privacy_policy": "Privacy Policy",
+  "loading": "Loading...",
+  "build": "Build No.",
 
   "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"
 }

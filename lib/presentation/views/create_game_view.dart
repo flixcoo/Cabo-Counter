@@ -1,10 +1,10 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/active_game_view.dart';
+import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/active_game_view.dart';
-import 'package:cabo_counter/views/mode_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 
 enum CreateStatus {

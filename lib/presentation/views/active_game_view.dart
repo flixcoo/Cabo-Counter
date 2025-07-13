@@ -1,11 +1,11 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/graph_view.dart';
+import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/create_game_view.dart';
-import 'package:cabo_counter/views/graph_view.dart';
-import 'package:cabo_counter/views/round_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -121,7 +121,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         children: [
                           CupertinoListTile(
                               title: Text(
-                                AppLocalizations.of(context).statistics,
+                                AppLocalizations.of(context).game_process,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
@@ -131,8 +131,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       builder: (_) => GraphView(
                                             gameSession: gameSession,
                                           )))),
-                          if (!gameSession.isPointsLimitEnabled)
-                            CupertinoListTile(
+                          Visibility(
+                            visible: !gameSession.isPointsLimitEnabled,
+                            child: CupertinoListTile(
                                 title: Text(
                                   AppLocalizations.of(context).end_game,
                                   style: gameSession.roundNumber > 1 &&
@@ -148,6 +149,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     _showEndGameDialog();
                                   }
                                 }),
+                          ),
                           CupertinoListTile(
                             title: Text(
                               AppLocalizations.of(context).delete_game,
@@ -235,7 +237,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               child: Text(
                 AppLocalizations.of(context).end_game,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.red),
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.destructiveRed),
               ),
               onPressed: () {
                 setState(() {

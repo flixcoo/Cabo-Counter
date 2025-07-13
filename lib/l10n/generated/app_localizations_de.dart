@@ -72,6 +72,35 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get pre_rating_title => 'Gefällt dir die App?';
+
+  @override
+  String get pre_rating_message =>
+      'Feedback hilft mir, die App zu verbessern. Vielen Dank!';
+
+  @override
+  String get yes => 'Ja';
+
+  @override
+  String get no => 'Nein';
+
+  @override
+  String get bad_rating_title => 'Unzufrieden mit der App?';
+
+  @override
+  String get bad_rating_message =>
+      'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!';
+
+  @override
+  String get contact_email => 'E-Mail schreiben';
+
+  @override
+  String get email_subject => 'Feedback: Cabo Counter App';
+
+  @override
+  String get email_body => 'Ich habe folgendes Feedback...';
+
+  @override
   String get overview => 'Übersicht';
 
   @override
@@ -150,9 +179,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get next_round => 'Nächste Runde';
 
   @override
-  String get statistics => 'Statistiken';
-
-  @override
   String get end_game => 'Spiel beenden';
 
   @override
@@ -182,6 +208,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game_process => 'Spielverlauf';
 
   @override
+  String get empty_graph_text =>
+      'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
+
+  @override
   String get settings => 'Einstellungen';
 
   @override
@@ -203,10 +233,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game_data => 'Spieldaten';
 
   @override
-  String get import_data => 'Daten importieren';
+  String get import_data => 'Spieldaten importieren';
 
   @override
-  String get export_data => 'Daten exportieren';
+  String get export_data => 'Spieldaten exportieren';
+
+  @override
+  String get delete_data => 'Alle Spieldaten löschen';
+
+  @override
+  String get delete_data_title => 'Spieldaten löschen?';
+
+  @override
+  String get delete_data_message =>
+      'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get app => 'App';
 
   @override
   String get import_success_title => 'Import erfolgreich';
@@ -248,13 +291,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get create_issue => 'Issue erstellen';
 
   @override
+  String get wiki => 'Wiki';
+
+  @override
   String get app_version => 'App-Version';
 
   @override
-  String get build => 'Build';
+  String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get load_version => 'Lade Version...';
+  String get build => 'Build-Nr.';
+
+  @override
+  String get loading => 'Lädt...';
 
   @override
   String get about_text =>
