@@ -32,7 +32,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return ListenableBuilder(
         listenable: gameSession,
         builder: (context, _) {
-          List<int> sortedPlayerIndices = _getSortedPlayerIndices();
+          List<int> playerIndices =
+              List<int>.generate(gameSession.players.length, (index) => index);
+          List<int> sortedPlayerIndices =
+              _getSortedPlayerIndices(playerIndices);
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: Text(gameSession.gameTitle),
@@ -260,9 +263,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Returns a list of player indices sorted by their scores in
   /// ascending order.
-  List<int> _getSortedPlayerIndices() {
-    List<int> playerIndices =
-        List<int>.generate(gameSession.players.length, (index) => index);
+  List<int> _getSortedPlayerIndices(List<int> playerIndices) {
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
       int scoreA = gameSession.playerScores[a];
@@ -285,7 +286,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Calculates the dense rank for a player based on their index in the sorted list of players.
   int _calculateDenseRank(int index, List<int> playerScores) {
-    List<int> sortedIndices = _getSortedPlayerIndices();
+    List<int> sortedIndices = _getSortedPlayerIndices(playerScores);
     List<int> denseRanks = [];
     int rank = 1;
     for (int i = 0; i < sortedIndices.length; i++) {
