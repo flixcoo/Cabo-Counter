@@ -288,9 +288,10 @@ class _RoundViewState extends State<RoundView> {
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
                             ? () async {
-                                List<int> boni = _finishRound();
-                                if (boni.isNotEmpty) {
-                                  await _showBonusPopup(context, boni);
+                                List<int> bonusPlayersIndices = _finishRound();
+                                if (bonusPlayersIndices.isNotEmpty) {
+                                  await _showBonusPopup(
+                                      context, bonusPlayersIndices);
                                 }
                                 LocalStorageService.saveGameSessions();
                                 if (!context.mounted) return;
@@ -303,9 +304,11 @@ class _RoundViewState extends State<RoundView> {
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
                               ? () async {
-                                  List<int> boni = _finishRound();
-                                  if (boni.isNotEmpty) {
-                                    await _showBonusPopup(context, boni);
+                                  List<int> bonusPlayersIndices =
+                                      _finishRound();
+                                  if (bonusPlayersIndices.isNotEmpty) {
+                                    await _showBonusPopup(
+                                        context, bonusPlayersIndices);
                                   }
                                   LocalStorageService.saveGameSessions();
                                   if (widget.gameSession.isGameFinished &&
