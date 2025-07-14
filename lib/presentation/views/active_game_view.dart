@@ -278,7 +278,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Returns a widget representing the placement prefix for a player based on their index.
   /// [index] is the index of the player in [players] list,
   /// [playerScores] is a list of the players scores.
-  Widget _getPlacementPrefix(int index, playerScores) {
+  Widget _getPlacementPrefix(int index, List<int> playerScores) {
     int placement = _calculateDenseRank(index, playerScores);
     return _getPlacementTextWidget(placement);
   }
