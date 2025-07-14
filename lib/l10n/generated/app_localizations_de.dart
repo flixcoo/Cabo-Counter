@@ -183,7 +183,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-      String names, int pointLimit, int bonusPoints, num playerCount) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,

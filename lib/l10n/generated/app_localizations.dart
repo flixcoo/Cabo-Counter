@@ -427,7 +427,7 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{playerCount, plural, =1{{names} hat exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommt deshalb {bonusPoints} Punkte abgezogen!} other{{names} haben exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommen deshalb jeweils {bonusPoints} Punkte abgezogen!}}'**
   String bonus_points_message(
-      String names, int pointLimit, int bonusPoints, num playerCount);
+      int playerCount, String names, int pointLimit, int bonusPoints);
 
   /// No description provided for @end_game.
   ///
