@@ -248,7 +248,7 @@ class _RoundViewState extends State<RoundView> {
                                             (_kamikazePlayerIndex ==
                                                     originalIndex)
                                                 ? null
-                                                : index;
+                                                : originalIndex;
                                       });
                                     },
                                     child: Container(
