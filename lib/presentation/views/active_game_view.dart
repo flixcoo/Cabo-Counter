@@ -58,7 +58,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return CupertinoListTile(
                             title: Row(
                               children: [
-                                _getPlacementPrefix(index),
+                                _getPlacementPrefix(
+                                    index, gameSession.playerScores),
                                 const SizedBox(width: 5),
                                 Text(
                                   gameSession.players[playerIndex],
@@ -266,36 +267,52 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     playerIndices.sort((a, b) {
       int scoreA = gameSession.playerScores[a];
       int scoreB = gameSession.playerScores[b];
-      return scoreA.compareTo(scoreB);
+      if (scoreA != scoreB) {
+        return scoreA.compareTo(scoreB);
+      }
+      return a.compareTo(b);
     });
     return playerIndices;
   }
 
-  /// Returns a widget that displays the placement prefix based on the index.
-  /// First three places are represented by medals, and the rest are numbered.
-  /// [index] is the index of the player in the descending sorted list.
-  Widget _getPlacementPrefix(int index) {
-    switch (index) {
-      case 0:
-        return const Text(
-          '\u{1F947}',
-          style: TextStyle(fontSize: 22),
-        );
+  /// Returns a widget representing the placement prefix for a player based on their index.
+  /// [index] is the index of the player in [players] list,
+  /// [playerScores] is a list of the players scores.
+  Widget _getPlacementPrefix(int index, playerScores) {
+    int placement = _calculateDenseRank(index, playerScores);
+    return _getPlacementTextWidget(placement);
+  }
+
+  /// Calculates the dense rank for a player based on their index in the sorted list of players.
+  int _calculateDenseRank(int index, List<int> playerScores) {
+    List<int> sortedIndices = _getSortedPlayerIndices();
+    List<int> denseRanks = [];
+    int rank = 1;
+    for (int i = 0; i < sortedIndices.length; i++) {
+      if (i > 0) {
+        int prevScore = playerScores[sortedIndices[i - 1]];
+        int currScore = playerScores[sortedIndices[i]];
+        if (currScore != prevScore) {
+          rank++;
+        }
+      }
+      denseRanks.add(rank);
+    }
+    return denseRanks[index];
+  }
+
+  /// Returns a text widget representing the placement text based on the given placement number.
+  Text _getPlacementTextWidget(int placement) {
+    switch (placement) {
       case 1:
-        return const Text(
-          '\u{1F948}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
       case 2:
-        return const Text(
-          '\u{1F949}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+      case 3:
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
       default:
-        return Text(
-          ' ${index + 1}.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        );
+        return Text('$placement.',
+            style: const TextStyle(fontWeight: FontWeight.bold));
     }
   }
 
