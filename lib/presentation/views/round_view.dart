@@ -293,6 +293,7 @@ class _RoundViewState extends State<RoundView> {
                                   await _showBonusPopup(context, boni);
                                 }
                                 LocalStorageService.saveGameSessions();
+                                if (!context.mounted) return;
                                 Navigator.pop(context);
                               }
                             : null,
@@ -307,9 +308,10 @@ class _RoundViewState extends State<RoundView> {
                                     await _showBonusPopup(context, boni);
                                   }
                                   LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished) {
+                                  if (widget.gameSession.isGameFinished &&
+                                      context.mounted) {
                                     Navigator.pop(context);
-                                  } else {
+                                  } else if (context.mounted) {
                                     Navigator.pop(
                                         context, widget.roundNumber + 1);
                                   }
@@ -397,7 +399,7 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Shows a popup dialog with the bonus information.
-  Future<bool> _showBonusPopup(
+  Future<void> _showBonusPopup(
       BuildContext context, List<int> bonusPlayers) async {
     print('Bonus Popup wird angezeigt');
     int pointLimit = widget.gameSession.pointLimit;
@@ -419,7 +421,6 @@ class _RoundViewState extends State<RoundView> {
         ],
       ),
     );
-    return true;
   }
 
   /// Generates the message string for the bonus popup.
