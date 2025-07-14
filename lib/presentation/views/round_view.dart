@@ -403,17 +403,18 @@ class _RoundViewState extends State<RoundView> {
     int pointLimit = widget.gameSession.pointLimit;
     int bonusPoints = (pointLimit / 2).round();
 
-    String resultText = _getPopupString(pointLimit, bonusPoints, bonusPlayers);
+    String resultText =
+        _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
 
     await showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Bonus!'),
+        title: Text(AppLocalizations.of(context).bonus_points_title),
         content: Text(resultText),
         actions: [
           CupertinoDialogAction(
-            child: const Text('OK'),
-            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(AppLocalizations.of(context).ok),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
@@ -421,23 +422,23 @@ class _RoundViewState extends State<RoundView> {
     return true;
   }
 
-  /// Generates the string for the bonus popup.
+  /// Generates the message string for the bonus popup.
   /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
   /// and returns a formatted string.
-  String _getPopupString(
+  String _getBonusPopupMessageString(
       int pointLimit, int bonusPoints, List<int> bonusPlayers) {
     List<String> nameList =
         bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
     String resultText = '';
     if (nameList.length == 1) {
-      resultText =
-          '${nameList.first} hat exakt das Punktelimit von $pointLimit Punkten erreicht und bekommt deshalb $bonusPoints Punkte abgezogen!';
+      resultText = AppLocalizations.of(context).bonus_points_message(
+          nameList.first, pointLimit, bonusPoints, nameList.length);
     } else {
       resultText = nameList.length == 2
           ? '${nameList[0]} & ${nameList[1]}'
           : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
-      resultText +=
-          ' haben exakt das Punktelimit von $pointLimit Punkten erreicht und bekommen deshalb $bonusPoints Punkte abgezogen!';
+      resultText = AppLocalizations.of(context).bonus_points_message(
+          resultText, pointLimit, bonusPoints, nameList.length);
     }
     return resultText;
   }

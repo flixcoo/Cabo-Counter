@@ -73,6 +73,22 @@
   "kamikaze": "Kamikaze",
   "done": "Done",
   "next_round": "Next Round",
+  "bonus_points_title": "Bonus-Points!",
+  "bonus_points_message": "{playerCount, plural, =1{{names} has reached exactly the point limit of {pointLimit} points and therefore gets {bonusPoints} points deducted!} other{{names} have reached exactly the point limit of {pointLimit} points and therefore get {bonusPoints} points deducted!}}",
+  "@bonus_points_message": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      },
+      "pointLimit": {
+        "type": "int"
+      },
+      "bonusPoints": {
+        "type": "int"
+      }
+    }
+  },
+
 
   "end_game": "End Game",
   "delete_game": "Delete Game",
