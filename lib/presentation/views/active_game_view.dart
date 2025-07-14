@@ -316,6 +316,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     }
   }
 
+  /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
     return await showCupertinoDialog<bool>(
           context: context,
@@ -348,6 +349,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         false;
   }
 
+  /// Removes the game session in the game manager and navigates back to the previous screen.
+  /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
     if (gameManager.gameExistsInGameList(gameSession.id)) {
       Navigator.pop(context);
