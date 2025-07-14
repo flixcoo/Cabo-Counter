@@ -308,7 +308,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       case 3:
         return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
       default:
-        return Text('$placement.',
+        return Text(' $placement.',
             style: const TextStyle(fontWeight: FontWeight.bold));
     }
   }
