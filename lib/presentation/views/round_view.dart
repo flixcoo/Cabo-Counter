@@ -354,6 +354,51 @@ class _RoundViewState extends State<RoundView> {
     );
   }
 
+  /// Gets the index of the player who won the previous round.
+  int _getPreviousRoundWinnerIndex() {
+    if (widget.roundNumber == 1) {
+      return 0; // If it's the first round, there's no previous round, so return 0.
+    }
+
+    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
+    final scores = previousRound.scoreUpdates;
+
+    // Find the index of the player with the minimum score
+    int minScore = scores[0];
+    int winnerIndex = 0;
+
+    // Iterate through the scores to find the player with the minimum score
+    for (int i = 1; i < scores.length; i++) {
+      if (scores[i] < minScore) {
+        minScore = scores[i];
+        winnerIndex = i;
+      }
+    }
+
+    return winnerIndex;
+  }
+
+  /// Rotates the players list based on the previous round's winner.
+  List<String> _getRotatedPlayers() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      widget.gameSession.players[winnerIndex],
+      ...widget.gameSession.players.sublist(winnerIndex + 1),
+      ...widget.gameSession.players.sublist(0, winnerIndex)
+    ];
+  }
+
+  /// Gets the original indices of the players by recalculating it from the rotated list.
+  List<int> _getOriginalIndices() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      winnerIndex,
+      ...List.generate(widget.gameSession.players.length - winnerIndex - 1,
+          (i) => winnerIndex + i + 1),
+      ...List.generate(winnerIndex, (i) => i)
+    ];
+  }
+
   /// Focuses the next text field in the list of text fields.
   /// [index] is the index of the current text field.
   void _focusNextTextfield(int index) {
@@ -472,47 +517,6 @@ class _RoundViewState extends State<RoundView> {
       );
     }
     return resultText;
-  }
-
-  List<String> _getRotatedPlayers() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
-    return [
-      widget.gameSession.players[winnerIndex],
-      ...widget.gameSession.players.sublist(winnerIndex + 1),
-      ...widget.gameSession.players.sublist(0, winnerIndex)
-    ];
-  }
-
-  List<int> _getOriginalIndices() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
-    return [
-      winnerIndex,
-      ...List.generate(widget.gameSession.players.length - winnerIndex - 1,
-          (i) => winnerIndex + i + 1),
-      ...List.generate(winnerIndex, (i) => i)
-    ];
-  }
-
-  int _getPreviousRoundWinnerIndex() {
-    if (widget.roundNumber == 1) {
-      return 0; // In der ersten Runde einfach den ersten Spieler nehmen
-    }
-
-    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
-    final scores = previousRound.scores;
-
-    // Finde den niedrigsten Score (Gewinner)
-    int minScore = scores[0];
-    int winnerIndex = 0;
-
-    for (int i = 1; i < scores.length; i++) {
-      if (scores[i] < minScore) {
-        minScore = scores[i];
-        winnerIndex = i;
-      }
-    }
-
-    return winnerIndex;
   }
 
   @override
