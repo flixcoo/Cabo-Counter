@@ -5,6 +5,7 @@ import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
@@ -67,6 +68,8 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final rotatedPlayers = _getRotatedPlayers();
+    final originalIndices = _getOriginalIndices();
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -175,9 +178,10 @@ class _RoundViewState extends State<RoundView> {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.gameSession.players.length,
+                      itemCount: rotatedPlayers.length,
                       itemBuilder: (context, index) {
-                        final name = widget.gameSession.players[index];
+                        final originalIndex = originalIndices[index];
+                        final name = rotatedPlayers[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -187,13 +191,23 @@ class _RoundViewState extends State<RoundView> {
                               backgroundColor: CupertinoColors.secondaryLabel,
                               title: Row(children: [
                                 Expanded(
-                                    child: Text(
-                                  name,
-                                  overflow: TextOverflow.ellipsis,
-                                ))
+                                    child: Row(children: [
+                                  Text(
+                                    name,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Visibility(
+                                    visible: index == 0,
+                                    child: const SizedBox(width: 10),
+                                  ),
+                                  Visibility(
+                                      visible: index == 0,
+                                      child: const Icon(FontAwesomeIcons.medal,
+                                          size: 15))
+                                ]))
                               ]),
                               subtitle: Text(
-                                  '${widget.gameSession.playerScores[index]}'
+                                  '${widget.gameSession.playerScores[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: Row(
                                 children: [
@@ -201,7 +215,7 @@ class _RoundViewState extends State<RoundView> {
                                     width: 100,
                                     child: CupertinoTextField(
                                       maxLength: 3,
-                                      focusNode: _focusNodeList[index],
+                                      focusNode: _focusNodeList[originalIndex],
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
                                         signed: true,
@@ -216,12 +230,13 @@ class _RoundViewState extends State<RoundView> {
                                                   1
                                           ? TextInputAction.done
                                           : TextInputAction.next,
-                                      controller: _scoreControllerList[index],
+                                      controller:
+                                          _scoreControllerList[originalIndex],
                                       placeholder:
                                           AppLocalizations.of(context).points,
                                       textAlign: TextAlign.center,
                                       onSubmitted: (_) =>
-                                          _focusNextTextfield(index),
+                                          _focusNextTextfield(originalIndex),
                                       onChanged: (_) => setState(() {}),
                                     ),
                                   ),
@@ -230,7 +245,8 @@ class _RoundViewState extends State<RoundView> {
                                     onTap: () {
                                       setState(() {
                                         _kamikazePlayerIndex =
-                                            (_kamikazePlayerIndex == index)
+                                            (_kamikazePlayerIndex ==
+                                                    originalIndex)
                                                 ? null
                                                 : index;
                                       });
@@ -240,17 +256,20 @@ class _RoundViewState extends State<RoundView> {
                                       height: 24,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: _kamikazePlayerIndex == index
+                                        color: _kamikazePlayerIndex ==
+                                                originalIndex
                                             ? CupertinoColors.systemRed
                                             : CupertinoColors
                                                 .tertiarySystemFill,
                                         border: Border.all(
-                                          color: _kamikazePlayerIndex == index
+                                          color: _kamikazePlayerIndex ==
+                                                  originalIndex
                                               ? CupertinoColors.systemRed
                                               : CupertinoColors.systemGrey,
                                         ),
                                       ),
-                                      child: _kamikazePlayerIndex == index
+                                      child: _kamikazePlayerIndex ==
+                                              originalIndex
                                           ? const Icon(
                                               CupertinoIcons.exclamationmark,
                                               size: 16,
@@ -338,8 +357,12 @@ class _RoundViewState extends State<RoundView> {
   /// Focuses the next text field in the list of text fields.
   /// [index] is the index of the current text field.
   void _focusNextTextfield(int index) {
-    if (index < widget.gameSession.players.length - 1) {
-      FocusScope.of(context).requestFocus(_focusNodeList[index + 1]);
+    final originalIndices = _getOriginalIndices();
+    final currentPos = originalIndices.indexOf(index);
+
+    if (currentPos < originalIndices.length - 1) {
+      FocusScope.of(context)
+          .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
     } else {
       _focusNodeList[index].unfocus();
     }
@@ -449,6 +472,47 @@ class _RoundViewState extends State<RoundView> {
       );
     }
     return resultText;
+  }
+
+  List<String> _getRotatedPlayers() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      widget.gameSession.players[winnerIndex],
+      ...widget.gameSession.players.sublist(winnerIndex + 1),
+      ...widget.gameSession.players.sublist(0, winnerIndex)
+    ];
+  }
+
+  List<int> _getOriginalIndices() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      winnerIndex,
+      ...List.generate(widget.gameSession.players.length - winnerIndex - 1,
+          (i) => winnerIndex + i + 1),
+      ...List.generate(winnerIndex, (i) => i)
+    ];
+  }
+
+  int _getPreviousRoundWinnerIndex() {
+    if (widget.roundNumber == 1) {
+      return 0; // In der ersten Runde einfach den ersten Spieler nehmen
+    }
+
+    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
+    final scores = previousRound.scores;
+
+    // Finde den niedrigsten Score (Gewinner)
+    int minScore = scores[0];
+    int winnerIndex = 0;
+
+    for (int i = 1; i < scores.length; i++) {
+      if (scores[i] < minScore) {
+        minScore = scores[i];
+        winnerIndex = i;
+      }
+    }
+
+    return winnerIndex;
   }
 
   @override
