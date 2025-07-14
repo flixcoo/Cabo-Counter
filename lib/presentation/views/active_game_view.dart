@@ -20,6 +20,8 @@ class ActiveGameView extends StatefulWidget {
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   late final GameSession gameSession;
+  late final List<int> denseRanks;
+  late List<int> sortedPlayerIndices;
 
   @override
   void initState() {
@@ -29,13 +31,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> playerIndices =
-        List<int>.generate(gameSession.players.length, (index) => index);
-    List<int> sortedPlayerIndices = _getSortedPlayerIndices(playerIndices);
-
     return ListenableBuilder(
         listenable: gameSession,
         builder: (context, _) {
+          sortedPlayerIndices = _getSortedPlayerIndices();
+          denseRanks = _calculateDenseRank(gameSession.playerScores);
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: Text(gameSession.gameTitle),
@@ -61,8 +61,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return CupertinoListTile(
                             title: Row(
                               children: [
-                                _getPlacementPrefix(
-                                    index, gameSession.playerScores),
+                                _getPlacementTextWidget(index),
                                 const SizedBox(width: 5),
                                 Text(
                                   gameSession.players[playerIndex],
@@ -263,7 +262,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Returns a list of player indices sorted by their scores in
   /// ascending order.
-  List<int> _getSortedPlayerIndices(List<int> playerIndices) {
+  List<int> _getSortedPlayerIndices() {
+    List<int> playerIndices =
+        List<int>.generate(gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
       int scoreA = gameSession.playerScores[a];
@@ -276,17 +277,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return playerIndices;
   }
 
-  /// Returns a widget representing the placement prefix for a player based on their index.
-  /// [index] is the index of the player in [players] list,
-  /// [playerScores] is a list of the players scores.
-  Widget _getPlacementPrefix(int index, List<int> playerScores) {
-    int placement = _calculateDenseRank(index, playerScores);
-    return _getPlacementTextWidget(placement);
-  }
-
   /// Calculates the dense rank for a player based on their index in the sorted list of players.
-  int _calculateDenseRank(int index, List<int> playerScores) {
-    List<int> sortedIndices = _getSortedPlayerIndices(playerScores);
+  List<int> _calculateDenseRank(List<int> playerScores) {
+    List<int> sortedIndices = _getSortedPlayerIndices();
     List<int> denseRanks = [];
     int rank = 1;
     for (int i = 0; i < sortedIndices.length; i++) {
@@ -299,11 +292,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       }
       denseRanks.add(rank);
     }
-    return denseRanks[index];
+    return denseRanks;
   }
 
   /// Returns a text widget representing the placement text based on the given placement number.
-  Text _getPlacementTextWidget(int placement) {
+  /// [index] is the index of the player in [players] list,
+  Text _getPlacementTextWidget(int index) {
+    int placement = denseRanks[index];
     switch (placement) {
       case 1:
         return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
