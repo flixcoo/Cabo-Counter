@@ -179,6 +179,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get next_round => 'Nächste Runde';
 
   @override
+  String get bonus_points_title => 'Bonus-Punkte!';
+
+  @override
+  String bonus_points_message(
+      int playerCount, String names, int pointLimit, int bonusPoints) {
+    String _temp0 = intl.Intl.pluralLogic(
+      playerCount,
+      locale: localeName,
+      other:
+          '$names haben exakt das Punktelimit von $pointLimit Punkten erreicht und bekommen deshalb jeweils $bonusPoints Punkte abgezogen!',
+      one:
+          '$names hat exakt das Punktelimit von $pointLimit Punkten erreicht und bekommt deshalb $bonusPoints Punkte abgezogen!',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get end_game => 'Spiel beenden';
 
   @override

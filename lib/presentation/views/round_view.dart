@@ -287,9 +287,14 @@ class _RoundViewState extends State<RoundView> {
                     children: [
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
+                            ? () async {
+                                List<int> bonusPlayersIndices = _finishRound();
+                                if (bonusPlayersIndices.isNotEmpty) {
+                                  await _showBonusPopup(
+                                      context, bonusPlayersIndices);
+                                }
                                 LocalStorageService.saveGameSessions();
+                                if (!context.mounted) return;
                                 Navigator.pop(context);
                               }
                             : null,
@@ -298,12 +303,18 @@ class _RoundViewState extends State<RoundView> {
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () {
-                                  _finishRound();
+                              ? () async {
+                                  List<int> bonusPlayersIndices =
+                                      _finishRound();
+                                  if (bonusPlayersIndices.isNotEmpty) {
+                                    await _showBonusPopup(
+                                        context, bonusPlayersIndices);
+                                  }
                                   LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished) {
+                                  if (widget.gameSession.isGameFinished &&
+                                      context.mounted) {
                                     Navigator.pop(context);
-                                  } else {
+                                  } else if (context.mounted) {
                                     Navigator.pop(
                                         context, widget.roundNumber + 1);
                                   }
@@ -359,7 +370,7 @@ class _RoundViewState extends State<RoundView> {
   /// every player. If the round is the highest round played in this game,
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
-  void _finishRound() {
+  List<int> _finishRound() {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
     // The shown round is smaller than the newest round
@@ -381,12 +392,63 @@ class _RoundViewState extends State<RoundView> {
       widget.gameSession.calculateScoredPoints(
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
-    widget.gameSession.updatePoints();
+    List<int> bonusPlayers = widget.gameSession.updatePoints();
     if (widget.gameSession.isGameFinished == true) {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
     }
+    return bonusPlayers;
+  }
+
+  /// Shows a popup dialog with the bonus information.
+  Future<void> _showBonusPopup(
+      BuildContext context, List<int> bonusPlayers) async {
+    print('Bonus Popup wird angezeigt');
+    int pointLimit = widget.gameSession.pointLimit;
+    int bonusPoints = (pointLimit / 2).round();
+
+    String resultText =
+        _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
+
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(AppLocalizations.of(context).bonus_points_title),
+        content: Text(resultText),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(AppLocalizations.of(context).ok),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Generates the message string for the bonus popup.
+  /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
+  /// and returns a formatted string.
+  String _getBonusPopupMessageString(
+      int pointLimit, int bonusPoints, List<int> bonusPlayers) {
+    List<String> nameList =
+        bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
+    String resultText = '';
+    if (nameList.length == 1) {
+      resultText = AppLocalizations.of(context).bonus_points_message(
+          nameList.length, nameList.first, pointLimit, bonusPoints);
+    } else {
+      resultText = nameList.length == 2
+          ? '${nameList[0]} & ${nameList[1]}'
+          : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
+      resultText = AppLocalizations.of(context).bonus_points_message(
+        nameList.length,
+        resultText,
+        pointLimit,
+        bonusPoints,
+      );
+    }
+    return resultText;
   }
 
   @override
