@@ -436,13 +436,17 @@ class _RoundViewState extends State<RoundView> {
     String resultText = '';
     if (nameList.length == 1) {
       resultText = AppLocalizations.of(context).bonus_points_message(
-          nameList.first, pointLimit, bonusPoints, nameList.length);
+          nameList.length, nameList.first, pointLimit, bonusPoints);
     } else {
       resultText = nameList.length == 2
           ? '${nameList[0]} & ${nameList[1]}'
           : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
       resultText = AppLocalizations.of(context).bonus_points_message(
-          resultText, pointLimit, bonusPoints, nameList.length);
+        nameList.length,
+        resultText,
+        pointLimit,
+        bonusPoints,
+      );
     }
     return resultText;
   }
