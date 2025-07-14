@@ -20,6 +20,8 @@ class ActiveGameView extends StatefulWidget {
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   late final GameSession gameSession;
+  late List<int> denseRanks;
+  late List<int> sortedPlayerIndices;
 
   @override
   void initState() {
@@ -32,7 +34,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return ListenableBuilder(
         listenable: gameSession,
         builder: (context, _) {
-          List<int> sortedPlayerIndices = _getSortedPlayerIndices();
+          sortedPlayerIndices = _getSortedPlayerIndices();
+          denseRanks = _calculateDenseRank(
+              gameSession.playerScores, sortedPlayerIndices);
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: Text(gameSession.gameTitle),
@@ -58,7 +62,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return CupertinoListTile(
                             title: Row(
                               children: [
-                                _getPlacementPrefix(index),
+                                _getPlacementTextWidget(index),
                                 const SizedBox(width: 5),
                                 Text(
                                   gameSession.players[playerIndex],
@@ -266,39 +270,50 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     playerIndices.sort((a, b) {
       int scoreA = gameSession.playerScores[a];
       int scoreB = gameSession.playerScores[b];
-      return scoreA.compareTo(scoreB);
+      if (scoreA != scoreB) {
+        return scoreA.compareTo(scoreB);
+      }
+      return a.compareTo(b);
     });
     return playerIndices;
   }
 
-  /// Returns a widget that displays the placement prefix based on the index.
-  /// First three places are represented by medals, and the rest are numbered.
-  /// [index] is the index of the player in the descending sorted list.
-  Widget _getPlacementPrefix(int index) {
-    switch (index) {
-      case 0:
-        return const Text(
-          '\u{1F947}',
-          style: TextStyle(fontSize: 22),
-        );
+  /// Calculates the dense rank for a player based on their index in the sorted list of players.
+  List<int> _calculateDenseRank(
+      List<int> playerScores, List<int> sortedIndices) {
+    List<int> denseRanks = [];
+    int rank = 1;
+    for (int i = 0; i < sortedIndices.length; i++) {
+      if (i > 0) {
+        int prevScore = playerScores[sortedIndices[i - 1]];
+        int currScore = playerScores[sortedIndices[i]];
+        if (currScore != prevScore) {
+          rank++;
+        }
+      }
+      denseRanks.add(rank);
+    }
+    return denseRanks;
+  }
+
+  /// Returns a text widget representing the placement text based on the given placement number.
+  /// [index] is the index of the player in [players] list,
+  Text _getPlacementTextWidget(int index) {
+    int placement = denseRanks[index];
+    switch (placement) {
       case 1:
-        return const Text(
-          '\u{1F948}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
       case 2:
-        return const Text(
-          '\u{1F949}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+      case 3:
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
       default:
-        return Text(
-          ' ${index + 1}.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        );
+        return Text(' $placement.',
+            style: const TextStyle(fontWeight: FontWeight.bold));
     }
   }
 
+  /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
     return await showCupertinoDialog<bool>(
           context: context,
@@ -331,6 +346,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         false;
   }
 
+  /// Removes the game session in the game manager and navigates back to the previous screen.
+  /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
     if (gameManager.gameExistsInGameList(gameSession.id)) {
       Navigator.pop(context);
