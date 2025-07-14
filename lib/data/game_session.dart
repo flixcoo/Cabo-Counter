@@ -235,7 +235,7 @@ class GameSession extends ChangeNotifier {
 
   /// This method updates the points of each player after a round.
   /// It first uses the _sumPoints() method to calculate the total points of each player.
-  /// Then, it checks if any player has reached 100 points. If so, it marks
+  /// Then, it checks if any player has reached 100 points. If so, saves their indices and marks
   /// that player as having reached 100 points in that corresponding [Round] object.
   /// If the game has the point limit activated, it first applies the
   /// _subtractPointsForReachingHundred() method to subtract 50 points
@@ -243,6 +243,8 @@ class GameSession extends ChangeNotifier {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
+  /// It returns a list of players indices who reached 100 points in the current
+  /// round for the [RoundView] to show a popup
   List<int> updatePoints() {
     List<int> bonusPlayers = [];
     _sumPoints();
