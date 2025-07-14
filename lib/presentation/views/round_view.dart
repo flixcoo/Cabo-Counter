@@ -5,6 +5,7 @@ import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
@@ -67,6 +68,8 @@ class _RoundViewState extends State<RoundView> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final rotatedPlayers = _getRotatedPlayers();
+    final originalIndices = _getOriginalIndices();
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -175,9 +178,10 @@ class _RoundViewState extends State<RoundView> {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.gameSession.players.length,
+                      itemCount: rotatedPlayers.length,
                       itemBuilder: (context, index) {
-                        final name = widget.gameSession.players[index];
+                        final originalIndex = originalIndices[index];
+                        final name = rotatedPlayers[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -187,13 +191,23 @@ class _RoundViewState extends State<RoundView> {
                               backgroundColor: CupertinoColors.secondaryLabel,
                               title: Row(children: [
                                 Expanded(
-                                    child: Text(
-                                  name,
-                                  overflow: TextOverflow.ellipsis,
-                                ))
+                                    child: Row(children: [
+                                  Text(
+                                    name,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Visibility(
+                                    visible: index == 0,
+                                    child: const SizedBox(width: 10),
+                                  ),
+                                  Visibility(
+                                      visible: index == 0,
+                                      child: const Icon(FontAwesomeIcons.medal,
+                                          size: 15))
+                                ]))
                               ]),
                               subtitle: Text(
-                                  '${widget.gameSession.playerScores[index]}'
+                                  '${widget.gameSession.playerScores[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: Row(
                                 children: [
@@ -201,7 +215,7 @@ class _RoundViewState extends State<RoundView> {
                                     width: 100,
                                     child: CupertinoTextField(
                                       maxLength: 3,
-                                      focusNode: _focusNodeList[index],
+                                      focusNode: _focusNodeList[originalIndex],
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
                                         signed: true,
@@ -216,12 +230,13 @@ class _RoundViewState extends State<RoundView> {
                                                   1
                                           ? TextInputAction.done
                                           : TextInputAction.next,
-                                      controller: _scoreControllerList[index],
+                                      controller:
+                                          _scoreControllerList[originalIndex],
                                       placeholder:
                                           AppLocalizations.of(context).points,
                                       textAlign: TextAlign.center,
                                       onSubmitted: (_) =>
-                                          _focusNextTextfield(index),
+                                          _focusNextTextfield(originalIndex),
                                       onChanged: (_) => setState(() {}),
                                     ),
                                   ),
@@ -230,9 +245,10 @@ class _RoundViewState extends State<RoundView> {
                                     onTap: () {
                                       setState(() {
                                         _kamikazePlayerIndex =
-                                            (_kamikazePlayerIndex == index)
+                                            (_kamikazePlayerIndex ==
+                                                    originalIndex)
                                                 ? null
-                                                : index;
+                                                : originalIndex;
                                       });
                                     },
                                     child: Container(
@@ -240,17 +256,20 @@ class _RoundViewState extends State<RoundView> {
                                       height: 24,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: _kamikazePlayerIndex == index
+                                        color: _kamikazePlayerIndex ==
+                                                originalIndex
                                             ? CupertinoColors.systemRed
                                             : CupertinoColors
                                                 .tertiarySystemFill,
                                         border: Border.all(
-                                          color: _kamikazePlayerIndex == index
+                                          color: _kamikazePlayerIndex ==
+                                                  originalIndex
                                               ? CupertinoColors.systemRed
                                               : CupertinoColors.systemGrey,
                                         ),
                                       ),
-                                      child: _kamikazePlayerIndex == index
+                                      child: _kamikazePlayerIndex ==
+                                              originalIndex
                                           ? const Icon(
                                               CupertinoIcons.exclamationmark,
                                               size: 16,
@@ -287,9 +306,14 @@ class _RoundViewState extends State<RoundView> {
                     children: [
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
-                            ? () {
-                                _finishRound();
+                            ? () async {
+                                List<int> bonusPlayersIndices = _finishRound();
+                                if (bonusPlayersIndices.isNotEmpty) {
+                                  await _showBonusPopup(
+                                      context, bonusPlayersIndices);
+                                }
                                 LocalStorageService.saveGameSessions();
+                                if (!context.mounted) return;
                                 Navigator.pop(context);
                               }
                             : null,
@@ -298,12 +322,18 @@ class _RoundViewState extends State<RoundView> {
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () {
-                                  _finishRound();
+                              ? () async {
+                                  List<int> bonusPlayersIndices =
+                                      _finishRound();
+                                  if (bonusPlayersIndices.isNotEmpty) {
+                                    await _showBonusPopup(
+                                        context, bonusPlayersIndices);
+                                  }
                                   LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished) {
+                                  if (widget.gameSession.isGameFinished &&
+                                      context.mounted) {
                                     Navigator.pop(context);
-                                  } else {
+                                  } else if (context.mounted) {
                                     Navigator.pop(
                                         context, widget.roundNumber + 1);
                                   }
@@ -324,11 +354,60 @@ class _RoundViewState extends State<RoundView> {
     );
   }
 
+  /// Gets the index of the player who won the previous round.
+  int _getPreviousRoundWinnerIndex() {
+    if (widget.roundNumber == 1) {
+      return 0; // If it's the first round, there's no previous round, so return 0.
+    }
+
+    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
+    final scores = previousRound.scoreUpdates;
+
+    // Find the index of the player with the minimum score
+    int minScore = scores[0];
+    int winnerIndex = 0;
+
+    // Iterate through the scores to find the player with the minimum score
+    for (int i = 1; i < scores.length; i++) {
+      if (scores[i] < minScore) {
+        minScore = scores[i];
+        winnerIndex = i;
+      }
+    }
+
+    return winnerIndex;
+  }
+
+  /// Rotates the players list based on the previous round's winner.
+  List<String> _getRotatedPlayers() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      widget.gameSession.players[winnerIndex],
+      ...widget.gameSession.players.sublist(winnerIndex + 1),
+      ...widget.gameSession.players.sublist(0, winnerIndex)
+    ];
+  }
+
+  /// Gets the original indices of the players by recalculating it from the rotated list.
+  List<int> _getOriginalIndices() {
+    final winnerIndex = _getPreviousRoundWinnerIndex();
+    return [
+      winnerIndex,
+      ...List.generate(widget.gameSession.players.length - winnerIndex - 1,
+          (i) => winnerIndex + i + 1),
+      ...List.generate(winnerIndex, (i) => i)
+    ];
+  }
+
   /// Focuses the next text field in the list of text fields.
   /// [index] is the index of the current text field.
   void _focusNextTextfield(int index) {
-    if (index < widget.gameSession.players.length - 1) {
-      FocusScope.of(context).requestFocus(_focusNodeList[index + 1]);
+    final originalIndices = _getOriginalIndices();
+    final currentPos = originalIndices.indexOf(index);
+
+    if (currentPos < originalIndices.length - 1) {
+      FocusScope.of(context)
+          .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
     } else {
       _focusNodeList[index].unfocus();
     }
@@ -359,7 +438,7 @@ class _RoundViewState extends State<RoundView> {
   /// every player. If the round is the highest round played in this game,
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
-  void _finishRound() {
+  List<int> _finishRound() {
     print('====================================');
     print('Runde ${widget.roundNumber} beendet');
     // The shown round is smaller than the newest round
@@ -381,12 +460,63 @@ class _RoundViewState extends State<RoundView> {
       widget.gameSession.calculateScoredPoints(
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
-    widget.gameSession.updatePoints();
+    List<int> bonusPlayers = widget.gameSession.updatePoints();
     if (widget.gameSession.isGameFinished == true) {
       print('Das Spiel ist beendet');
     } else if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
     }
+    return bonusPlayers;
+  }
+
+  /// Shows a popup dialog with the bonus information.
+  Future<void> _showBonusPopup(
+      BuildContext context, List<int> bonusPlayers) async {
+    print('Bonus Popup wird angezeigt');
+    int pointLimit = widget.gameSession.pointLimit;
+    int bonusPoints = (pointLimit / 2).round();
+
+    String resultText =
+        _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
+
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(AppLocalizations.of(context).bonus_points_title),
+        content: Text(resultText),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(AppLocalizations.of(context).ok),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Generates the message string for the bonus popup.
+  /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
+  /// and returns a formatted string.
+  String _getBonusPopupMessageString(
+      int pointLimit, int bonusPoints, List<int> bonusPlayers) {
+    List<String> nameList =
+        bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
+    String resultText = '';
+    if (nameList.length == 1) {
+      resultText = AppLocalizations.of(context).bonus_points_message(
+          nameList.length, nameList.first, pointLimit, bonusPoints);
+    } else {
+      resultText = nameList.length == 2
+          ? '${nameList[0]} & ${nameList[1]}'
+          : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
+      resultText = AppLocalizations.of(context).bonus_points_message(
+        nameList.length,
+        resultText,
+        pointLimit,
+        bonusPoints,
+      );
+    }
+    return resultText;
   }
 
   @override
