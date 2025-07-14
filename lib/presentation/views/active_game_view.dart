@@ -20,7 +20,7 @@ class ActiveGameView extends StatefulWidget {
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   late final GameSession gameSession;
-  late final List<int> denseRanks;
+  late List<int> denseRanks;
   late List<int> sortedPlayerIndices;
 
   @override
