@@ -29,13 +29,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   @override
   Widget build(BuildContext context) {
+    List<int> playerIndices =
+        List<int>.generate(gameSession.players.length, (index) => index);
+    List<int> sortedPlayerIndices = _getSortedPlayerIndices(playerIndices);
+
     return ListenableBuilder(
         listenable: gameSession,
         builder: (context, _) {
-          List<int> playerIndices =
-              List<int>.generate(gameSession.players.length, (index) => index);
-          List<int> sortedPlayerIndices =
-              _getSortedPlayerIndices(playerIndices);
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: Text(gameSession.gameTitle),
