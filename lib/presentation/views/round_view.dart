@@ -182,6 +182,8 @@ class _RoundViewState extends State<RoundView> {
                       itemBuilder: (context, index) {
                         final originalIndex = originalIndices[index];
                         final name = rotatedPlayers[index];
+                        bool shouldShowMedal =
+                            index == 0 && widget.roundNumber > 1;
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -197,13 +199,11 @@ class _RoundViewState extends State<RoundView> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Visibility(
-                                    visible:
-                                        index == 0 && widget.roundNumber > 1,
+                                    visible: shouldShowMedal,
                                     child: const SizedBox(width: 10),
                                   ),
                                   Visibility(
-                                      visible:
-                                          index == 0 && widget.roundNumber > 1,
+                                      visible: shouldShowMedal,
                                       child: const Icon(FontAwesomeIcons.medal,
                                           size: 15))
                                 ]))
