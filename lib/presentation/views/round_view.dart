@@ -198,12 +198,12 @@ class _RoundViewState extends State<RoundView> {
                                   ),
                                   Visibility(
                                     visible:
-                                        index == 0 && widget.roundNumber != 1,
+                                        index == 0 && widget.roundNumber > 1,
                                     child: const SizedBox(width: 10),
                                   ),
                                   Visibility(
                                       visible:
-                                          index == 0 && widget.roundNumber != 1,
+                                          index == 0 && widget.roundNumber > 1,
                                       child: const Icon(FontAwesomeIcons.medal,
                                           size: 15))
                                 ]))
