@@ -4,6 +4,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/graph_view.dart';
+import 'package:cabo_counter/presentation/views/point_overview_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -133,6 +134,18 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   context,
                                   CupertinoPageRoute(
                                       builder: (_) => GraphView(
+                                            gameSession: gameSession,
+                                          )))),
+                          CupertinoListTile(
+                              title: Text(
+                                'Übersicht',
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (_) => PointOverviewView(
                                             gameSession: gameSession,
                                           )))),
                           Visibility(
