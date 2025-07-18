@@ -72,7 +72,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     });
                   },
                   icon: const Icon(CupertinoIcons.settings, size: 30)),
-              middle: const Text('Cabo Counter'),
+              middle: Text(AppLocalizations.of(context).app_name),
               trailing: IconButton(
                   onPressed: () => Navigator.push(
                         context,

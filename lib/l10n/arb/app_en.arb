@@ -14,13 +14,13 @@
   "player": "Player",
   "players": "Players",
   "name": "Name",
-    "back": "Back",
+  "back": "Back",
 
   "home": "Home",
   "about": "About",
 
   "empty_text_1": "Pretty empty here...",
-  "empty_text_2": "Add a new round using the button in the top right corner.",
+  "empty_text_2": "Create a new game using the button in the top right.",
   "delete_game_title": "Delete game?",
   "delete_game_message": "Are you sure you want to delete the game \"{gameTitle}\"? This action cannot be undone.",
   "@delete_game_message": {
@@ -46,19 +46,19 @@
   "select_mode": "Select a mode",
   "add_player": "Add Player",
   "create_game": "Create Game",
-  "max_players_title": "Maximum reached",
-  "max_players_message": "A maximum of 5 players can be added.",
-  "no_gameTitle_title": "No Title",
-  "no_gameTitle_message": "You must enter a title for the game.",
-  "no_mode_title": "No Mode",
-  "no_mode_message": "You must select a game mode.",
-  "min_players_title": "Too few players",
-  "min_players_message": "At least 2 players must be added.",
-  "no_name_title": "No Name",
+  "max_players_title": "Player Limit Reached",
+  "max_players_message": "You can add a maximum of 5 players.",
+  "no_gameTitle_title": "Missing Game Title",
+  "no_gameTitle_message": "Please enter a title for your game.",
+  "no_mode_title": "Game Mode Required",
+  "no_mode_message": "Please select a game mode to continue",
+  "min_players_title": "Too Few Players",
+  "min_players_message": "At least 2 players are required to start the game.",
+  "no_name_title": "Missing Player Names",
   "no_name_message": "Each player must have a name.",
 
   "select_game_mode": "Select game mode",
-  "point_limit_description": "The game ends when a player reaches more than {pointLimit} points.",
+  "point_limit_description": "The game ends when a player scores more than {pointLimit} points.",
   "@point_limit_description": {
     "placeholders": {
       "pointLimit": {
@@ -66,10 +66,10 @@
       }
     }
   },
-  "unlimited_description": "There is no limit. The game continues until you decide to stop.",
+  "unlimited_description": "The game continues until you decide to stop playing",
 
   "results": "Results",
-  "who_said_cabo": "Who said CABO?",
+  "who_said_cabo": "Who called Cabo?",
   "kamikaze": "Kamikaze",
   "done": "Done",
   "next_round": "Next Round",
@@ -107,9 +107,9 @@
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
-  "cabo_penalty_subtitle": "... for falsely calling Cabo.",
+  "cabo_penalty_subtitle": "A point penalty for incorrectly calling Cabo.",
   "point_limit": "Point Limit",
-  "point_limit_subtitle": "... the game ends here.",
+  "point_limit_subtitle": "The required score to win the game.",
   "reset_to_default": "Reset to Default",
   "game_data": "Game Data",
   "import_data": "Import Data",
