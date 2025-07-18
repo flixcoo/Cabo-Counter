@@ -126,7 +126,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   listenable: session,
                                   builder: (context, _) {
                                     return Dismissible(
-                                      key: Key(session.gameTitle),
+                                      key: Key(session.id),
                                       background: Container(
                                         color: CupertinoColors.destructiveRed,
                                         alignment: Alignment.centerRight,
@@ -139,14 +139,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       ),
                                       direction: DismissDirection.endToStart,
                                       confirmDismiss: (direction) async {
-                                        final String gameTitle = gameManager
-                                            .gameList[index].gameTitle;
                                         return await _showDeleteGamePopup(
-                                            context, gameTitle);
+                                            context, session.gameTitle);
                                       },
                                       onDismissed: (direction) {
                                         gameManager
-                                            .removeGameSessionByIndex(index);
+                                            .removeGameSessionById(session.id);
                                       },
                                       dismissThresholds: const {
                                         DismissDirection.startToEnd: 0.6
