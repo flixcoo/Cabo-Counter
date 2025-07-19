@@ -64,7 +64,6 @@ class _SettingsViewState extends State<SettingsView> {
                           onChanged: (newCaboPenalty) {
                             setState(() {
                               ConfigService.setCaboPenalty(newCaboPenalty);
-                              ConfigService.caboPenalty = newCaboPenalty;
                             });
                           },
                         ),
@@ -81,14 +80,13 @@ class _SettingsViewState extends State<SettingsView> {
                           onChanged: (newPointLimit) {
                             setState(() {
                               ConfigService.setPointLimit(newPointLimit);
-                              ConfigService.pointLimit = newPointLimit;
                             });
                           },
                         ),
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).standard_mode,
-                        prefixIcon: CupertinoIcons.airplane,
+                        prefixIcon: CupertinoIcons.square_stack,
                         suffixWidget: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
