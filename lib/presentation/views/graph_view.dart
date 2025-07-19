@@ -34,17 +34,29 @@ class _GraphViewState extends State<GraphView> {
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: SfCartesianChart(
+                  enableAxisAnimation: true,
                   legend: const Legend(
                       overflowMode: LegendItemOverflowMode.wrap,
                       isVisible: true,
                       position: LegendPosition.bottom),
                   primaryXAxis: const NumericAxis(
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     interval: 1,
                     decimalPlaces: 0,
                   ),
-                  primaryYAxis: const NumericAxis(
+                  primaryYAxis: NumericAxis(
+                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    labelAlignment: LabelAlignment.center,
+                    labelPosition: ChartDataLabelPosition.inside,
                     interval: 1,
                     decimalPlaces: 0,
+                    axisLabelFormatter: (AxisLabelRenderDetails details) {
+                      if (details.value == 0) {
+                        return ChartAxisLabel('', const TextStyle());
+                      }
+                      return ChartAxisLabel(
+                          '${details.value.toInt()}', const TextStyle());
+                    },
                   ),
                   series: getCumulativeScores(),
                 ),
