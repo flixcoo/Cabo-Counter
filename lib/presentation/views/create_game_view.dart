@@ -48,8 +48,15 @@ class _CreateGameViewState extends State<CreateGameView> {
   @override
   void initState() {
     super.initState();
+    print('pointLimit: $_isPointsLimitEnabled');
 
-    _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    if (widget.isPointsLimitEnabled == null) {
+      _isPointsLimitEnabled =
+          ConfigService.gameMode == -1 ? null : ConfigService.gameMode == 1;
+    } else {
+      _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    }
+
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
     if (widget.players != null) {
@@ -91,7 +98,6 @@ class _CreateGameViewState extends State<CreateGameView> {
                 controller: _gameTitleTextController,
               ),
             ),
-            // Spielmodus-Auswahl mit Chevron
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
