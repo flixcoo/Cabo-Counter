@@ -54,14 +54,14 @@ class _PointsViewState extends State<PointsView> {
             rows: [
               ...List<DataRow>.generate(
                 widget.gameSession.roundList.length,
-                (roundNumber) {
-                  final round = widget.gameSession.roundList[roundNumber];
+                (roundIndex) {
+                  final round = widget.gameSession.roundList[roundIndex];
                   return DataRow(
                     cells: [
                       DataCell(Align(
                         alignment: Alignment.center,
                         child: Text(
-                          '$roundNumber',
+                          '${roundIndex + 1}',
                           style: const TextStyle(fontSize: 20),
                         ),
                       )),
