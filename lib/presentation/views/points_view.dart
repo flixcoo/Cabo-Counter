@@ -67,10 +67,10 @@ class _PointsViewState extends State<PointsView> {
                       )),
                       ...List.generate(widget.gameSession.players.length,
                           (playerIndex) {
-                        final score = round.scores[playerIndex];
-                        final update = round.scoreUpdates[playerIndex];
-                        final saidCabo =
-                            round.caboPlayerIndex == playerIndex ? true : false;
+                        final int score = round.scores[playerIndex];
+                        final int update = round.scoreUpdates[playerIndex];
+                        final bool saidCabo =
+                            round.caboPlayerIndex == playerIndex;
                         return DataCell(
                           Center(
                             child: Column(
