@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 class ModeSelectionMenu extends StatelessWidget {
   final int pointLimit;
-  const ModeSelectionMenu({super.key, required this.pointLimit});
+  final bool showDeselection;
+  const ModeSelectionMenu(
+      {super.key, required this.pointLimit, required this.showDeselection});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,23 @@ class ModeSelectionMenu extends StatelessWidget {
       ),
       child: ListView(
         children: [
+          Visibility(
+              visible: showDeselection,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                child: CupertinoListTile(
+                  title:
+                      Text('Kein Standardmodus', style: CustomTheme.modeTitle),
+                  subtitle: const Text(
+                    'Dein Standardmodus wird zurückgesetzt.',
+                    style: CustomTheme.modeDescription,
+                    maxLines: 3,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              )),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
