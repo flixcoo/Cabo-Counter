@@ -155,28 +155,6 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
-                    Center(
-                      heightFactor: 1,
-                      child: CupertinoButton(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 0),
-                        borderRadius: BorderRadius.circular(12),
-                        color: CupertinoColors.systemRed,
-                        onPressed: () async {
-                          if (await _showKamikazeSheet(context)) {
-                            if (!context.mounted) return;
-                            _endOfRoundNavigation(context, true);
-                          }
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).kamikaze,
-                          style: const TextStyle(
-                            color: CupertinoColors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: CupertinoListTile(
@@ -310,6 +288,29 @@ class _RoundViewState extends State<RoundView> {
                           ),
                         );
                       },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Center(
+                        heightFactor: 1,
+                        child: CupertinoButton(
+                          sizeStyle: CupertinoButtonSize.medium,
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color(0xFF202020),
+                          onPressed: () async {
+                            if (await _showKamikazeSheet(context)) {
+                              if (!context.mounted) return;
+                              _endOfRoundNavigation(context, true);
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).kamikaze,
+                            style: const TextStyle(
+                              color: CupertinoColors.destructiveRed,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
