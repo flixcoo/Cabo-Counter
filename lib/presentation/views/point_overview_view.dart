@@ -86,7 +86,7 @@ class _PointOverviewViewState extends State<PointOverviewView> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
-                                    '${update >= 0 ? '+' : '-'}$update',
+                                    '${update >= 0 ? '+' : ''}$update',
                                     style: const TextStyle(
                                       color: CupertinoColors.white,
                                       fontWeight: FontWeight.bold,
