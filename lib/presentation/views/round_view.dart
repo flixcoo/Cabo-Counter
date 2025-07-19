@@ -339,6 +339,8 @@ class _RoundViewState extends State<RoundView> {
     ];
   }
 
+  /// Shows a Cupertino action sheet to select the player who has Kamikaze.
+  /// It returns true if a player was selected, false if the action was cancelled.
   Future<bool> _showKamikazeSheet(BuildContext context) async {
     return await showCupertinoModalPopup<bool?>(
           context: context,
