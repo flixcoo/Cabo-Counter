@@ -115,7 +115,7 @@ class _RoundViewState extends State<RoundView> {
                         vertical: 10,
                       ),
                       child: SizedBox(
-                        height: 40,
+                        height: 60,
                         child: CupertinoSegmentedControl<int>(
                           unselectedColor: CustomTheme.backgroundTintColor,
                           selectedColor: CustomTheme.primaryColor,
@@ -131,7 +131,7 @@ class _RoundViewState extends State<RoundView> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
-                                  vertical: 6,
+                                  vertical: 8,
                                 ),
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
@@ -152,27 +152,6 @@ class _RoundViewState extends State<RoundView> {
                               _caboPlayerIndex = value;
                             });
                           },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).player),
-                        trailing: Row(
-                          children: [
-                            SizedBox(
-                                width: 100,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context).points))),
-                            const SizedBox(width: 20),
-                            SizedBox(
-                                width: 80,
-                                child: Center(
-                                    child: Text(AppLocalizations.of(context)
-                                        .kamikaze))),
-                          ],
                         ),
                       ),
                     ),
@@ -212,77 +191,32 @@ class _RoundViewState extends State<RoundView> {
                               subtitle: Text(
                                   '${widget.gameSession.playerScores[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
-                              trailing: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    child: CupertinoTextField(
-                                      maxLength: 3,
-                                      focusNode: _focusNodeList[originalIndex],
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                        signed: true,
-                                        decimal: false,
-                                      ),
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      textInputAction: index ==
-                                              widget.gameSession.players
-                                                      .length -
-                                                  1
-                                          ? TextInputAction.done
-                                          : TextInputAction.next,
-                                      controller:
-                                          _scoreControllerList[originalIndex],
-                                      placeholder:
-                                          AppLocalizations.of(context).points,
-                                      textAlign: TextAlign.center,
-                                      onSubmitted: (_) =>
-                                          _focusNextTextfield(originalIndex),
-                                      onChanged: (_) => setState(() {}),
-                                    ),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: CupertinoTextField(
+                                  maxLength: 3,
+                                  focusNode: _focusNodeList[originalIndex],
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                    signed: true,
+                                    decimal: false,
                                   ),
-                                  const SizedBox(width: 50),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _kamikazePlayerIndex =
-                                            (_kamikazePlayerIndex ==
-                                                    originalIndex)
-                                                ? null
-                                                : originalIndex;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: _kamikazePlayerIndex ==
-                                                originalIndex
-                                            ? CupertinoColors.systemRed
-                                            : CupertinoColors
-                                                .tertiarySystemFill,
-                                        border: Border.all(
-                                          color: _kamikazePlayerIndex ==
-                                                  originalIndex
-                                              ? CupertinoColors.systemRed
-                                              : CupertinoColors.systemGrey,
-                                        ),
-                                      ),
-                                      child: _kamikazePlayerIndex ==
-                                              originalIndex
-                                          ? const Icon(
-                                              CupertinoIcons.exclamationmark,
-                                              size: 16,
-                                              color: CupertinoColors.white,
-                                            )
-                                          : null,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 22),
-                                ],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  textInputAction: index ==
+                                          widget.gameSession.players.length - 1
+                                      ? TextInputAction.done
+                                      : TextInputAction.next,
+                                  controller:
+                                      _scoreControllerList[originalIndex],
+                                  placeholder:
+                                      AppLocalizations.of(context).points,
+                                  textAlign: TextAlign.center,
+                                  onSubmitted: (_) =>
+                                      _focusNextTextfield(originalIndex),
+                                  onChanged: (_) => setState(() {}),
+                                ),
                               ),
                             ),
                           ),
