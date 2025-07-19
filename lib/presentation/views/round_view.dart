@@ -351,8 +351,7 @@ class _RoundViewState extends State<RoundView> {
                 final name = entry.value;
                 return CupertinoActionSheetAction(
                   onPressed: () {
-                    _kamikazePlayerIndex =
-                        _kamikazePlayerIndex == index ? null : index;
+                    _kamikazePlayerIndex = index;
                     Navigator.pop(context, true);
                   },
                   child: Text(name),
@@ -504,12 +503,19 @@ class _RoundViewState extends State<RoundView> {
     LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
-      if (!navigateToNextRound || widget.gameSession.isGameFinished) {
+      // If the game is finished, pop the context and return to the previous screen.
+      if (widget.gameSession.isGameFinished) {
         Navigator.pop(context);
         return;
-      } else {
-        Navigator.pop(context, widget.roundNumber + 1);
       }
+      // If navigateToNextRound is false, pop the context and return to the previous screen.
+      if (!navigateToNextRound) {
+        Navigator.pop(context);
+        return;
+      }
+      // If navigateToNextRound is true and the game isn't finished yet,
+      // pop the context and navigate to the next round.
+      Navigator.pop(context, widget.roundNumber + 1);
     }
   }
 
