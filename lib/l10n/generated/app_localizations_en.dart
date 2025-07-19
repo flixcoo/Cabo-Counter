@@ -220,7 +220,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
-  String get game_process => 'Scoring History';
+  String get statistics => 'Statistics';
+
+  @override
+  String get point_overview => 'Point Overview';
+
+  @override
+  String get scoring_history => 'Scoring History';
 
   @override
   String get empty_graph_text =>

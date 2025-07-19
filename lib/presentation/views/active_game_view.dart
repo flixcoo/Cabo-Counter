@@ -4,6 +4,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/graph_view.dart';
+import 'package:cabo_counter/presentation/views/points_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,7 +118,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: Text(
-                          AppLocalizations.of(context).game,
+                          AppLocalizations.of(context).statistics,
                           style: CustomTheme.rowTitle,
                         ),
                       ),
@@ -125,7 +126,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         children: [
                           CupertinoListTile(
                               title: Text(
-                                AppLocalizations.of(context).game_process,
+                                AppLocalizations.of(context).scoring_history,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
@@ -135,6 +136,29 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       builder: (_) => GraphView(
                                             gameSession: gameSession,
                                           )))),
+                          CupertinoListTile(
+                              title: Text(
+                                AppLocalizations.of(context).point_overview,
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (_) => PointsView(
+                                            gameSession: gameSession,
+                                          )))),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Text(
+                          AppLocalizations.of(context).game,
+                          style: CustomTheme.rowTitle,
+                        ),
+                      ),
+                      Column(
+                        children: [
                           Visibility(
                             visible: !gameSession.isPointsLimitEnabled,
                             child: CupertinoListTile(

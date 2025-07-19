@@ -92,7 +92,6 @@
     }
   },
 
-
   "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
@@ -102,7 +101,9 @@
   "end_game_title": "Spiel beenden?",
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
-  "game_process": "Spielverlauf",
+  "statistics": "Statistiken",
+  "point_overview": "Punkteübersicht",
+  "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
   "settings": "Einstellungen",

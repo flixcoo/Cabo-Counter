@@ -118,8 +118,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                               ),
                             ],
                           )
-                        : ListView.builder(
+                        : ListView.separated(
                             itemCount: gameManager.gameList.length,
+                            separatorBuilder: (context, index) => Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: CustomTheme.white.withAlpha(50),
+                              indent: 50,
+                              endIndent: 50,
+                            ),
                             itemBuilder: (context, index) {
                               final session = gameManager.gameList[index];
                               return ListenableBuilder(
