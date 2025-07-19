@@ -127,10 +127,22 @@ class _CreateGameViewState extends State<CreateGameView> {
                     ),
                   );
 
-                  if (selectedMode != null) {
-                    setState(() {
-                      _isPointsLimitEnabled = selectedMode;
-                    });
+                  switch (selectedMode) {
+                    case GameMode.pointLimit:
+                      setState(() {
+                        _isPointsLimitEnabled = null;
+                      });
+                      break;
+                    case GameMode.unlimited:
+                      setState(() {
+                        _isPointsLimitEnabled = false;
+                      });
+                      break;
+                    case GameMode.none:
+                    default:
+                      setState(() {
+                        _isPointsLimitEnabled = true;
+                      });
                   }
                 },
               ),
