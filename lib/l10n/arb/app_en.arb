@@ -102,6 +102,7 @@
   "end_game_title": "End the game?",
   "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
 
+  "table": "Point Overview",
   "game_process": "Scoring History",
   "empty_graph_text": "You must play at least one round for the game progress graph to be displayed.",
 
