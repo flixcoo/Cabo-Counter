@@ -27,7 +27,7 @@ class _GraphViewState extends State<GraphView> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(AppLocalizations.of(context).game_process),
+          middle: Text(AppLocalizations.of(context).scoring_history),
           previousPageTitle: AppLocalizations.of(context).back,
         ),
         child: widget.gameSession.roundNumber > 1

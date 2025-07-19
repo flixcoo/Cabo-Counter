@@ -477,17 +477,17 @@ abstract class AppLocalizations {
   /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
   String get end_game_message;
 
-  /// No description provided for @table.
+  /// No description provided for @point_overview.
   ///
   /// In de, this message translates to:
   /// **'Punkteübersicht'**
-  String get table;
+  String get point_overview;
 
-  /// No description provided for @game_process.
+  /// No description provided for @scoring_history.
   ///
   /// In de, this message translates to:
   /// **'Spielverlauf'**
-  String get game_process;
+  String get scoring_history;
 
   /// No description provided for @empty_graph_text.
   ///

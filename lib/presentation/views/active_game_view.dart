@@ -126,7 +126,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         children: [
                           CupertinoListTile(
                               title: Text(
-                                AppLocalizations.of(context).game_process,
+                                AppLocalizations.of(context).scoring_history,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
@@ -138,7 +138,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                           )))),
                           CupertinoListTile(
                               title: Text(
-                                AppLocalizations.of(context).table,
+                                AppLocalizations.of(context).point_overview,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,
