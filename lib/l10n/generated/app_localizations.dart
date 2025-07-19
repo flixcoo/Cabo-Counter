@@ -374,6 +374,24 @@ abstract class AppLocalizations {
   /// **'Spielmodus auswählen'**
   String get select_game_mode;
 
+  /// No description provided for @no_mode_selected.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Modus ausgewählt'**
+  String get no_mode_selected;
+
+  /// No description provided for @no_default_mode.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Standard-Modus'**
+  String get no_default_mode;
+
+  /// No description provided for @no_default_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Standard-Modus wird zurückgesetzt.'**
+  String get no_default_description;
+
   /// No description provided for @point_limit_description.
   ///
   /// In de, this message translates to:

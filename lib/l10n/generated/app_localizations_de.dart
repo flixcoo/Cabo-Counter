@@ -155,6 +155,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get select_game_mode => 'Spielmodus auswählen';
 
   @override
+  String get no_mode_selected => 'Kein Modus ausgewählt';
+
+  @override
+  String get no_default_mode => 'Kein Standard-Modus';
+
+  @override
+  String get no_default_description => 'Der Standard-Modus wird zurückgesetzt.';
+
+  @override
   String point_limit_description(int pointLimit) {
     return 'Es wird so lange gespielt, bis ein:e Spieler:in mehr als $pointLimit Punkte erreicht';
   }
