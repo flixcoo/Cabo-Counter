@@ -142,6 +142,7 @@ class _SettingsViewState extends State<SettingsView> {
                           setState(() {
                             _stepperKey1 = UniqueKey();
                             _stepperKey2 = UniqueKey();
+                            defaultMode = ConfigService.gameMode;
                           });
                         },
                       )
