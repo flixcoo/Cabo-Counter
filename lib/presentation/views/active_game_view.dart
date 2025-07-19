@@ -138,7 +138,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                           )))),
                           CupertinoListTile(
                               title: Text(
-                                'Übersicht',
+                                AppLocalizations.of(context).table,
                               ),
                               backgroundColorActivated:
                                   CustomTheme.backgroundColor,

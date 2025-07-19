@@ -17,9 +17,8 @@ class _PointOverviewViewState extends State<PointOverviewView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: true,
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('Punkte-Übersicht'),
+        middle: Text(AppLocalizations.of(context).table),
         previousPageTitle: AppLocalizations.of(context).back,
       ),
       child: SingleChildScrollView(
