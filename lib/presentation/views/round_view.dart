@@ -184,7 +184,7 @@ class _RoundViewState extends State<RoundView> {
                                   ),
                                   Visibility(
                                       visible: shouldShowMedal,
-                                      child: const Icon(FontAwesomeIcons.medal,
+                                      child: const Icon(FontAwesomeIcons.crown,
                                           size: 15))
                                 ]))
                               ]),
