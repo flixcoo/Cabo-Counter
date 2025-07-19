@@ -25,6 +25,10 @@ class ConfigService {
     prefs.setInt(
         _keyCaboPenalty, prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty);
     prefs.setInt(_keyGameMode, prefs.getInt(_keyGameMode) ?? _defaultGameMode);
+
+    pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
+    caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
+    gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
   }
 
   static Future<void> setGameMode(int newGameMode) async {
