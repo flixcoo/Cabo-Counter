@@ -74,21 +74,22 @@ class _RoundViewState extends State<RoundView> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: true,
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () =>
-              {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
-          child: Text(AppLocalizations.of(context).cancel),
-        ),
-        middle: Text(AppLocalizations.of(context).results),
-        trailing: widget.gameSession.isGameFinished
-            ? const Icon(
+          transitionBetweenRoutes: true,
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => {
+              LocalStorageService.saveGameSessions(),
+              Navigator.pop(context)
+            },
+            child: Text(AppLocalizations.of(context).cancel),
+          ),
+          middle: Text(AppLocalizations.of(context).results),
+          trailing: Visibility(
+              visible: widget.gameSession.isGameFinished,
+              child: const Icon(
                 CupertinoIcons.lock,
                 size: 25,
-              )
-            : null,
-      ),
+              ))),
       child: Stack(
         children: [
           Positioned.fill(
@@ -114,9 +115,10 @@ class _RoundViewState extends State<RoundView> {
                         vertical: 10,
                       ),
                       child: SizedBox(
-                        height: 40,
+                        height: 60,
                         child: CupertinoSegmentedControl<int>(
-                          unselectedColor: CustomTheme.backgroundTintColor,
+                          unselectedColor:
+                              CustomTheme.mainElementBackgroundColor,
                           selectedColor: CustomTheme.primaryColor,
                           groupValue: _caboPlayerIndex,
                           children: Map.fromEntries(widget.gameSession.players
@@ -130,7 +132,7 @@ class _RoundViewState extends State<RoundView> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
-                                  vertical: 6,
+                                  vertical: 8,
                                 ),
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
@@ -154,27 +156,6 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).player),
-                        trailing: Row(
-                          children: [
-                            SizedBox(
-                                width: 100,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context).points))),
-                            const SizedBox(width: 20),
-                            SizedBox(
-                                width: 80,
-                                child: Center(
-                                    child: Text(AppLocalizations.of(context)
-                                        .kamikaze))),
-                          ],
-                        ),
-                      ),
-                    ),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -190,7 +171,7 @@ class _RoundViewState extends State<RoundView> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: CupertinoListTile(
-                              backgroundColor: CupertinoColors.secondaryLabel,
+                              backgroundColor: CustomTheme.playerTileColor,
                               title: Row(children: [
                                 Expanded(
                                     child: Row(children: [
@@ -204,89 +185,67 @@ class _RoundViewState extends State<RoundView> {
                                   ),
                                   Visibility(
                                       visible: shouldShowMedal,
-                                      child: const Icon(FontAwesomeIcons.medal,
+                                      child: const Icon(FontAwesomeIcons.crown,
                                           size: 15))
                                 ]))
                               ]),
                               subtitle: Text(
                                   '${widget.gameSession.playerScores[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
-                              trailing: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    child: CupertinoTextField(
-                                      maxLength: 3,
-                                      focusNode: _focusNodeList[originalIndex],
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                        signed: true,
-                                        decimal: false,
-                                      ),
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      textInputAction: index ==
-                                              widget.gameSession.players
-                                                      .length -
-                                                  1
-                                          ? TextInputAction.done
-                                          : TextInputAction.next,
-                                      controller:
-                                          _scoreControllerList[originalIndex],
-                                      placeholder:
-                                          AppLocalizations.of(context).points,
-                                      textAlign: TextAlign.center,
-                                      onSubmitted: (_) =>
-                                          _focusNextTextfield(originalIndex),
-                                      onChanged: (_) => setState(() {}),
-                                    ),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: CupertinoTextField(
+                                  maxLength: 3,
+                                  focusNode: _focusNodeList[originalIndex],
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                    signed: true,
+                                    decimal: false,
                                   ),
-                                  const SizedBox(width: 50),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _kamikazePlayerIndex =
-                                            (_kamikazePlayerIndex ==
-                                                    originalIndex)
-                                                ? null
-                                                : originalIndex;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: _kamikazePlayerIndex ==
-                                                originalIndex
-                                            ? CupertinoColors.systemRed
-                                            : CupertinoColors
-                                                .tertiarySystemFill,
-                                        border: Border.all(
-                                          color: _kamikazePlayerIndex ==
-                                                  originalIndex
-                                              ? CupertinoColors.systemRed
-                                              : CupertinoColors.systemGrey,
-                                        ),
-                                      ),
-                                      child: _kamikazePlayerIndex ==
-                                              originalIndex
-                                          ? const Icon(
-                                              CupertinoIcons.exclamationmark,
-                                              size: 16,
-                                              color: CupertinoColors.white,
-                                            )
-                                          : null,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 22),
-                                ],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  textInputAction: index ==
+                                          widget.gameSession.players.length - 1
+                                      ? TextInputAction.done
+                                      : TextInputAction.next,
+                                  controller:
+                                      _scoreControllerList[originalIndex],
+                                  placeholder:
+                                      AppLocalizations.of(context).points,
+                                  textAlign: TextAlign.center,
+                                  onSubmitted: (_) =>
+                                      _focusNextTextfield(originalIndex),
+                                  onChanged: (_) => setState(() {}),
+                                ),
                               ),
                             ),
                           ),
                         );
                       },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Center(
+                        heightFactor: 1,
+                        child: CupertinoButton(
+                          sizeStyle: CupertinoButtonSize.medium,
+                          borderRadius: BorderRadius.circular(12),
+                          color: CustomTheme.buttonBackgroundColor,
+                          onPressed: () async {
+                            if (await _showKamikazeSheet(context)) {
+                              if (!context.mounted) return;
+                              _endOfRoundNavigation(context, true);
+                            }
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).kamikaze,
+                            style: const TextStyle(
+                              color: CupertinoColors.destructiveRed,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -302,21 +261,14 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.backgroundTintColor,
+                  color: CustomTheme.mainElementBackgroundColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
-                            ? () async {
-                                List<int> bonusPlayersIndices = _finishRound();
-                                if (bonusPlayersIndices.isNotEmpty) {
-                                  await _showBonusPopup(
-                                      context, bonusPlayersIndices);
-                                }
-                                LocalStorageService.saveGameSessions();
-                                if (!context.mounted) return;
-                                Navigator.pop(context);
+                            ? () {
+                                _endOfRoundNavigation(context, false);
                               }
                             : null,
                         child: Text(AppLocalizations.of(context).done),
@@ -324,21 +276,8 @@ class _RoundViewState extends State<RoundView> {
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () async {
-                                  List<int> bonusPlayersIndices =
-                                      _finishRound();
-                                  if (bonusPlayersIndices.isNotEmpty) {
-                                    await _showBonusPopup(
-                                        context, bonusPlayersIndices);
-                                  }
-                                  LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished &&
-                                      context.mounted) {
-                                    Navigator.pop(context);
-                                  } else if (context.mounted) {
-                                    Navigator.pop(
-                                        context, widget.roundNumber + 1);
-                                  }
+                              ? () {
+                                  _endOfRoundNavigation(context, true);
                                 }
                               : null,
                           child: Text(AppLocalizations.of(context).next_round),
@@ -399,6 +338,37 @@ class _RoundViewState extends State<RoundView> {
           (i) => winnerIndex + i + 1),
       ...List.generate(winnerIndex, (i) => i)
     ];
+  }
+
+  /// Shows a Cupertino action sheet to select the player who has Kamikaze.
+  /// It returns true if a player was selected, false if the action was cancelled.
+  Future<bool> _showKamikazeSheet(BuildContext context) async {
+    return await showCupertinoModalPopup<bool?>(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoActionSheet(
+              title: Text(AppLocalizations.of(context).kamikaze),
+              message: Text(AppLocalizations.of(context).who_has_kamikaze),
+              actions: widget.gameSession.players.asMap().entries.map((entry) {
+                final index = entry.key;
+                final name = entry.value;
+                return CupertinoActionSheetAction(
+                  onPressed: () {
+                    _kamikazePlayerIndex = index;
+                    Navigator.pop(context, true);
+                  },
+                  child: Text(name),
+                );
+              }).toList(),
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () => Navigator.pop(context, false),
+                isDestructiveAction: true,
+                child: Text(AppLocalizations.of(context).cancel),
+              ),
+            );
+          },
+        ) ??
+        false;
   }
 
   /// Focuses the next text field in the list of text fields.
@@ -471,10 +441,9 @@ class _RoundViewState extends State<RoundView> {
     return bonusPlayers;
   }
 
-  /// Shows a popup dialog with the bonus information.
+  /// Shows a popup dialog with the information which player received the bonus points.
   Future<void> _showBonusPopup(
       BuildContext context, List<int> bonusPlayers) async {
-    print('Bonus Popup wird angezeigt');
     int pointLimit = widget.gameSession.pointLimit;
     int bonusPoints = (pointLimit / 2).round();
 
@@ -519,6 +488,37 @@ class _RoundViewState extends State<RoundView> {
       );
     }
     return resultText;
+  }
+
+  /// Handles the navigation for the end of the round.
+  /// It checks for bonus players and shows a popup, saves the game session,
+  /// and navigates to the next round or back to the previous screen.
+  /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
+  /// if it should navigate to the next round or not.
+  Future<void> _endOfRoundNavigation(
+      BuildContext context, bool navigateToNextRound) async {
+    List<int> bonusPlayersIndices = _finishRound();
+    if (bonusPlayersIndices.isNotEmpty) {
+      await _showBonusPopup(context, bonusPlayersIndices);
+    }
+
+    LocalStorageService.saveGameSessions();
+
+    if (context.mounted) {
+      // If the game is finished, pop the context and return to the previous screen.
+      if (widget.gameSession.isGameFinished) {
+        Navigator.pop(context);
+        return;
+      }
+      // If navigateToNextRound is false, pop the context and return to the previous screen.
+      if (!navigateToNextRound) {
+        Navigator.pop(context);
+        return;
+      }
+      // If navigateToNextRound is true and the game isn't finished yet,
+      // pop the context and navigate to the next round.
+      Navigator.pop(context, widget.roundNumber + 1);
+    }
   }
 
   @override

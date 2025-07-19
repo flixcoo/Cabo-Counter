@@ -173,6 +173,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get kamikaze => 'Kamikaze';
 
   @override
+  String get who_has_kamikaze => 'Wer hat Kamikaze?';
+
+  @override
   String get done => 'Fertig';
 
   @override
