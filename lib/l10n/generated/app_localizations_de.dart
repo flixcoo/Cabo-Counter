@@ -244,13 +244,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cabo_penalty => 'Cabo-Strafe';
 
   @override
-  String get cabo_penalty_subtitle => '... für falsches Cabo sagen';
-
-  @override
   String get point_limit => 'Punkte-Limit';
 
   @override
-  String get point_limit_subtitle => '... hier ist Schluss';
+  String get standard_mode => 'Standard-Modus';
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';

@@ -109,9 +109,8 @@
 
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
-  "cabo_penalty_subtitle": "A point penalty for incorrectly calling Cabo.",
   "point_limit": "Point Limit",
-  "point_limit_subtitle": "The required score to win the game.",
+  "standard_mode": "Default Mode",
   "reset_to_default": "Reset to Default",
   "game_data": "Game Data",
   "import_data": "Import Data",

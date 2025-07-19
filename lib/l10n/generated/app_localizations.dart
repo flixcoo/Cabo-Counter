@@ -519,23 +519,17 @@ abstract class AppLocalizations {
   /// **'Cabo-Strafe'**
   String get cabo_penalty;
 
-  /// No description provided for @cabo_penalty_subtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'... für falsches Cabo sagen'**
-  String get cabo_penalty_subtitle;
-
   /// No description provided for @point_limit.
   ///
   /// In de, this message translates to:
   /// **'Punkte-Limit'**
   String get point_limit;
 
-  /// No description provided for @point_limit_subtitle.
+  /// No description provided for @standard_mode.
   ///
   /// In de, this message translates to:
-  /// **'... hier ist Schluss'**
-  String get point_limit_subtitle;
+  /// **'Standard-Modus'**
+  String get standard_mode;
 
   /// No description provided for @reset_to_default.
   ///
