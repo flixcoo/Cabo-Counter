@@ -117,6 +117,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
                         pointLimit: ConfigService.pointLimit,
+                        showDeselection: false,
                       ),
                     ),
                   );
