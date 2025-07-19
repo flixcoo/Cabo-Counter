@@ -54,14 +54,14 @@ class _PointOverviewViewState extends State<PointOverviewView> {
             rows: [
               ...List<DataRow>.generate(
                 widget.gameSession.roundList.length,
-                (roundIndex) {
-                  final round = widget.gameSession.roundList[roundIndex];
+                (roundNumber) {
+                  final round = widget.gameSession.roundList[roundNumber];
                   return DataRow(
                     cells: [
                       DataCell(Align(
                         alignment: Alignment.center,
                         child: Text(
-                          '$roundIndex',
+                          '$roundNumber',
                           style: const TextStyle(fontSize: 20),
                         ),
                       )),
