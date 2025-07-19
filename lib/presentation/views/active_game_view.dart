@@ -118,7 +118,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: Text(
-                          AppLocalizations.of(context).game,
+                          AppLocalizations.of(context).statistics,
                           style: CustomTheme.rowTitle,
                         ),
                       ),
@@ -148,6 +148,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       builder: (_) => PointOverviewView(
                                             gameSession: gameSession,
                                           )))),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Text(
+                          AppLocalizations.of(context).game,
+                          style: CustomTheme.rowTitle,
+                        ),
+                      ),
+                      Column(
+                        children: [
                           Visibility(
                             visible: !gameSession.isPointsLimitEnabled,
                             child: CupertinoListTile(

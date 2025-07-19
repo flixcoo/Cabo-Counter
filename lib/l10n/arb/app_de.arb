@@ -101,6 +101,7 @@
   "end_game_title": "Spiel beenden?",
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
+  "statistics": "Statistiken",
   "point_overview": "Punkteübersicht",
   "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",

@@ -222,6 +222,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.';
 
   @override
+  String get statistics => 'Statistiken';
+
+  @override
   String get point_overview => 'Punkteübersicht';
 
   @override

@@ -220,6 +220,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
+  String get statistics => 'Statistics';
+
+  @override
   String get point_overview => 'Point Overview';
 
   @override
