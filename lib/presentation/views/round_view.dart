@@ -74,21 +74,22 @@ class _RoundViewState extends State<RoundView> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: true,
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () =>
-              {LocalStorageService.saveGameSessions(), Navigator.pop(context)},
-          child: Text(AppLocalizations.of(context).cancel),
-        ),
-        middle: Text(AppLocalizations.of(context).results),
-        trailing: widget.gameSession.isGameFinished
-            ? const Icon(
+          transitionBetweenRoutes: true,
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => {
+              LocalStorageService.saveGameSessions(),
+              Navigator.pop(context)
+            },
+            child: Text(AppLocalizations.of(context).cancel),
+          ),
+          middle: Text(AppLocalizations.of(context).results),
+          trailing: Visibility(
+              visible: widget.gameSession.isGameFinished,
+              child: const Icon(
                 CupertinoIcons.lock,
                 size: 25,
-              )
-            : null,
-      ),
+              ))),
       child: Stack(
         children: [
           Positioned.fill(
@@ -155,14 +156,25 @@ class _RoundViewState extends State<RoundView> {
                       ),
                     ),
                     Center(
+                      heightFactor: 1,
                       child: CupertinoButton(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 0),
+                        borderRadius: BorderRadius.circular(12),
+                        color: CupertinoColors.systemRed,
                         onPressed: () async {
                           if (await _showKamikazeSheet(context)) {
                             if (!context.mounted) return;
                             _endOfRoundNavigation(context, true);
                           }
                         },
-                        child: Text(AppLocalizations.of(context).kamikaze),
+                        child: Text(
+                          AppLocalizations.of(context).kamikaze,
+                          style: const TextStyle(
+                            color: CupertinoColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     Padding(
