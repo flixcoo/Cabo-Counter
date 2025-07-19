@@ -159,7 +159,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_default_mode => 'No default mode';
 
   @override
-  String get no_default_description => 'The default mode gets resetted.';
+  String get no_default_description => 'The default mode gets reset.';
 
   @override
   String point_limit_description(int pointLimit) {
