@@ -13,6 +13,10 @@ class CustomTheme {
   static const Color graphColor4 = Color(0xFF9C27B0);
   static final Color graphColor5 = primaryColor;
 
+  // Colors for PointsView
+  static Color pointLossColor = primaryColor;
+  static const Color pointGainColor = Color(0xFFF44336);
+
   static TextStyle modeTitle = TextStyle(
     color: primaryColor,
     fontSize: 20,

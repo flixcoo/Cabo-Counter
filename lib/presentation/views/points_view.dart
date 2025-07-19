@@ -4,16 +4,16 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PointOverviewView extends StatefulWidget {
+class PointsView extends StatefulWidget {
   final GameSession gameSession;
 
-  const PointOverviewView({super.key, required this.gameSession});
+  const PointsView({super.key, required this.gameSession});
 
   @override
-  State<PointOverviewView> createState() => _PointOverviewViewState();
+  State<PointsView> createState() => _PointsViewState();
 }
 
-class _PointOverviewViewState extends State<PointOverviewView> {
+class _PointsViewState extends State<PointsView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -81,8 +81,8 @@ class _PointOverviewViewState extends State<PointOverviewView> {
                                       horizontal: 6, vertical: 2),
                                   decoration: BoxDecoration(
                                     color: update <= 0
-                                        ? CustomTheme.primaryColor
-                                        : CupertinoColors.destructiveRed,
+                                        ? CustomTheme.pointLossColor
+                                        : CustomTheme.pointGainColor,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
