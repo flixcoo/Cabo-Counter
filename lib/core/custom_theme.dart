@@ -4,7 +4,7 @@ class CustomTheme {
   static Color white = CupertinoColors.white;
   static Color primaryColor = CupertinoColors.systemGreen;
   static Color backgroundColor = const Color(0xFF101010);
-  static Color mainElementbackgroundColor = CupertinoColors.darkBackgroundGray;
+  static Color mainElementBackgroundColor = CupertinoColors.darkBackgroundGray;
   static Color playerTileColor = CupertinoColors.secondaryLabel;
   static Color buttonBackgroundColor = const Color(0xFF202020);
 

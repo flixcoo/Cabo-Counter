@@ -118,7 +118,7 @@ class _RoundViewState extends State<RoundView> {
                         height: 60,
                         child: CupertinoSegmentedControl<int>(
                           unselectedColor:
-                              CustomTheme.mainElementbackgroundColor,
+                              CustomTheme.mainElementBackgroundColor,
                           selectedColor: CustomTheme.primaryColor,
                           groupValue: _caboPlayerIndex,
                           children: Map.fromEntries(widget.gameSession.players
@@ -261,7 +261,7 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.mainElementbackgroundColor,
+                  color: CustomTheme.mainElementBackgroundColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
