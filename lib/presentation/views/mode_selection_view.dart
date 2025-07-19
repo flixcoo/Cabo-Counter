@@ -2,6 +2,12 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
+enum GameMode {
+  none,
+  pointLimit,
+  unlimited,
+}
+
 class ModeSelectionMenu extends StatelessWidget {
   final int pointLimit;
   final bool showDeselection;
@@ -16,23 +22,6 @@ class ModeSelectionMenu extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          Visibility(
-              visible: showDeselection,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: CupertinoListTile(
-                  title:
-                      Text('Kein Standardmodus', style: CustomTheme.modeTitle),
-                  subtitle: const Text(
-                    'Dein Standardmodus wird zurückgesetzt.',
-                    style: CustomTheme.modeDescription,
-                    maxLines: 3,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              )),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
@@ -45,12 +34,12 @@ class ModeSelectionMenu extends StatelessWidget {
                 maxLines: 3,
               ),
               onTap: () {
-                Navigator.pop(context, true);
+                Navigator.pop(context, GameMode.pointLimit);
               },
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
               title: Text(AppLocalizations.of(context).unlimited,
                   style: CustomTheme.modeTitle),
@@ -60,10 +49,27 @@ class ModeSelectionMenu extends StatelessWidget {
                 maxLines: 3,
               ),
               onTap: () {
-                Navigator.pop(context, false);
+                Navigator.pop(context, GameMode.unlimited);
               },
             ),
           ),
+          Visibility(
+              visible: showDeselection,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                child: CupertinoListTile(
+                  title: Text(AppLocalizations.of(context).no_default_mode,
+                      style: CustomTheme.modeTitle),
+                  subtitle: Text(
+                    AppLocalizations.of(context).no_default_description,
+                    style: CustomTheme.modeDescription,
+                    maxLines: 3,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context, GameMode.none);
+                  },
+                ),
+              )),
         ],
       ),
     );
