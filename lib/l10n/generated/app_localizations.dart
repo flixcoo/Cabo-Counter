@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Kamikaze'**
   String get kamikaze;
 
+  /// No description provided for @who_has_kamikaze.
+  ///
+  /// In de, this message translates to:
+  /// **'Wer hat Kamikaze?'**
+  String get who_has_kamikaze;
+
   /// No description provided for @done.
   ///
   /// In de, this message translates to:

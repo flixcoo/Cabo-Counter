@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kamikaze => 'Kamikaze';
 
   @override
+  String get who_has_kamikaze => 'Who has Kamikaze?';
+
+  @override
   String get done => 'Done';
 
   @override

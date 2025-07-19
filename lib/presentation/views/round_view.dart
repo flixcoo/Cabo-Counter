@@ -154,6 +154,17 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
+                    Center(
+                      child: CupertinoButton(
+                        onPressed: () async {
+                          if (await _showKamikazeSheet(context)) {
+                            if (!context.mounted) return;
+                            _endOfRoundNavigation(context, true);
+                          }
+                        },
+                        child: Text(AppLocalizations.of(context).kamikaze),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: CupertinoListTile(
@@ -308,15 +319,8 @@ class _RoundViewState extends State<RoundView> {
                     children: [
                       CupertinoButton(
                         onPressed: _areRoundInputsValid()
-                            ? () async {
-                                List<int> bonusPlayersIndices = _finishRound();
-                                if (bonusPlayersIndices.isNotEmpty) {
-                                  await _showBonusPopup(
-                                      context, bonusPlayersIndices);
-                                }
-                                LocalStorageService.saveGameSessions();
-                                if (!context.mounted) return;
-                                Navigator.pop(context);
+                            ? () {
+                                _endOfRoundNavigation(context, false);
                               }
                             : null,
                         child: Text(AppLocalizations.of(context).done),
@@ -324,21 +328,8 @@ class _RoundViewState extends State<RoundView> {
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
                           onPressed: _areRoundInputsValid()
-                              ? () async {
-                                  List<int> bonusPlayersIndices =
-                                      _finishRound();
-                                  if (bonusPlayersIndices.isNotEmpty) {
-                                    await _showBonusPopup(
-                                        context, bonusPlayersIndices);
-                                  }
-                                  LocalStorageService.saveGameSessions();
-                                  if (widget.gameSession.isGameFinished &&
-                                      context.mounted) {
-                                    Navigator.pop(context);
-                                  } else if (context.mounted) {
-                                    Navigator.pop(
-                                        context, widget.roundNumber + 1);
-                                  }
+                              ? () {
+                                  _endOfRoundNavigation(context, true);
                                 }
                               : null,
                           child: Text(AppLocalizations.of(context).next_round),
@@ -399,6 +390,36 @@ class _RoundViewState extends State<RoundView> {
           (i) => winnerIndex + i + 1),
       ...List.generate(winnerIndex, (i) => i)
     ];
+  }
+
+  Future<bool> _showKamikazeSheet(BuildContext context) async {
+    return await showCupertinoModalPopup<bool?>(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoActionSheet(
+              title: Text(AppLocalizations.of(context).kamikaze),
+              message: Text(AppLocalizations.of(context).who_has_kamikaze),
+              actions: widget.gameSession.players.asMap().entries.map((entry) {
+                final index = entry.key;
+                final name = entry.value;
+                return CupertinoActionSheetAction(
+                  onPressed: () {
+                    _kamikazePlayerIndex =
+                        _kamikazePlayerIndex == index ? null : index;
+                    Navigator.pop(context, true);
+                  },
+                  child: Text(name),
+                );
+              }).toList(),
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () => Navigator.pop(context, false),
+                isDestructiveAction: true,
+                child: Text(AppLocalizations.of(context).cancel),
+              ),
+            );
+          },
+        ) ??
+        false;
   }
 
   /// Focuses the next text field in the list of text fields.
@@ -519,6 +540,30 @@ class _RoundViewState extends State<RoundView> {
       );
     }
     return resultText;
+  }
+
+  /// Handles the navigation for the end of the round.
+  /// It checks for bonus players and shows a popup, saves the game session,
+  /// and navigates to the next round or back to the previous screen.
+  /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
+  /// if it should navigate to the next round or not.
+  Future<void> _endOfRoundNavigation(
+      BuildContext context, bool navigateToNextRound) async {
+    List<int> bonusPlayersIndices = _finishRound();
+    if (bonusPlayersIndices.isNotEmpty) {
+      await _showBonusPopup(context, bonusPlayersIndices);
+    }
+
+    LocalStorageService.saveGameSessions();
+
+    if (context.mounted) {
+      if (!navigateToNextRound || widget.gameSession.isGameFinished) {
+        Navigator.pop(context);
+        return;
+      } else {
+        Navigator.pop(context, widget.roundNumber + 1);
+      }
+    }
   }
 
   @override
