@@ -19,16 +19,16 @@ class ConfigService {
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Default values only set if they are not already set
-    prefs.setInt(
-        _keyPointLimit, prefs.getInt(_keyPointLimit) ?? _defaultPointLimit);
-    prefs.setInt(
-        _keyCaboPenalty, prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty);
-    prefs.setInt(_keyGameMode, prefs.getInt(_keyGameMode) ?? _defaultGameMode);
-
+    // Initialize pointLimit, caboPenalty, and gameMode from SharedPreferences
+    // If they are not set, use the default values
     pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
     caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
     gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
+
+    // Save the initial values to SharedPreferences
+    prefs.setInt(_keyPointLimit, pointLimit);
+    prefs.setInt(_keyCaboPenalty, caboPenalty);
+    prefs.setInt(_keyGameMode, gameMode);
   }
 
   static Future<void> setGameMode(int newGameMode) async {
