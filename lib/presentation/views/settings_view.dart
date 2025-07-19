@@ -114,7 +114,6 @@ class _SettingsViewState extends State<SettingsView> {
                               ),
                             ),
                           );
-                          print('Selected mode: $selectedMode');
 
                           switch (selectedMode) {
                             case GameMode.pointLimit:
