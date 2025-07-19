@@ -443,7 +443,6 @@ class _RoundViewState extends State<RoundView> {
   /// Shows a popup dialog with the information which player received the bonus points.
   Future<void> _showBonusPopup(
       BuildContext context, List<int> bonusPlayers) async {
-    print('Bonus Popup wird angezeigt');
     int pointLimit = widget.gameSession.pointLimit;
     int bonusPoints = (pointLimit / 2).round();
 
