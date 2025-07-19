@@ -117,7 +117,8 @@ class _RoundViewState extends State<RoundView> {
                       child: SizedBox(
                         height: 60,
                         child: CupertinoSegmentedControl<int>(
-                          unselectedColor: CustomTheme.backgroundTintColor,
+                          unselectedColor:
+                              CustomTheme.mainElementbackgroundColor,
                           selectedColor: CustomTheme.primaryColor,
                           groupValue: _caboPlayerIndex,
                           children: Map.fromEntries(widget.gameSession.players
@@ -170,7 +171,7 @@ class _RoundViewState extends State<RoundView> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: CupertinoListTile(
-                              backgroundColor: CupertinoColors.secondaryLabel,
+                              backgroundColor: CustomTheme.playerTileColor,
                               title: Row(children: [
                                 Expanded(
                                     child: Row(children: [
@@ -229,8 +230,8 @@ class _RoundViewState extends State<RoundView> {
                         heightFactor: 1,
                         child: CupertinoButton(
                           sizeStyle: CupertinoButtonSize.medium,
-                          borderRadius: BorderRadius.circular(15),
-                          color: const Color(0xFF202020),
+                          borderRadius: BorderRadius.circular(12),
+                          color: CustomTheme.buttonBackgroundColor,
                           onPressed: () async {
                             if (await _showKamikazeSheet(context)) {
                               if (!context.mounted) return;
@@ -260,7 +261,7 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.backgroundTintColor,
+                  color: CustomTheme.mainElementbackgroundColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
