@@ -49,7 +49,13 @@ class _CreateGameViewState extends State<CreateGameView> {
   void initState() {
     super.initState();
 
-    _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    if (widget.isPointsLimitEnabled == null) {
+      _isPointsLimitEnabled =
+          ConfigService.gameMode == -1 ? null : ConfigService.gameMode == 1;
+    } else {
+      _isPointsLimitEnabled = widget.isPointsLimitEnabled;
+    }
+
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
     if (widget.players != null) {
@@ -91,7 +97,6 @@ class _CreateGameViewState extends State<CreateGameView> {
                 controller: _gameTitleTextController,
               ),
             ),
-            // Spielmodus-Auswahl mit Chevron
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
               child: CupertinoTextField(
@@ -117,14 +122,27 @@ class _CreateGameViewState extends State<CreateGameView> {
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
                         pointLimit: ConfigService.pointLimit,
+                        showDeselection: false,
                       ),
                     ),
                   );
 
-                  if (selectedMode != null) {
-                    setState(() {
-                      _isPointsLimitEnabled = selectedMode;
-                    });
+                  switch (selectedMode) {
+                    case GameMode.pointLimit:
+                      setState(() {
+                        _isPointsLimitEnabled = true;
+                      });
+                      break;
+                    case GameMode.unlimited:
+                      setState(() {
+                        _isPointsLimitEnabled = false;
+                      });
+                      break;
+                    case GameMode.none:
+                    default:
+                      setState(() {
+                        _isPointsLimitEnabled = null;
+                      });
                   }
                 },
               ),
@@ -138,11 +156,9 @@ class _CreateGameViewState extends State<CreateGameView> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: _playerNameTextControllers.length +
-                    1, // +1 für den + Button
+                itemCount: _playerNameTextControllers.length + 1,
                 itemBuilder: (context, index) {
                   if (index == _playerNameTextControllers.length) {
-                    // + Button als letztes Element
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoButton(

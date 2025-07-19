@@ -58,6 +58,9 @@
   "no_name_message": "Jeder Spieler muss einen Namen haben.",
 
   "select_game_mode": "Spielmodus auswählen",
+  "no_mode_selected": "Kein Modus ausgewählt",
+  "no_default_mode": "Kein Standard-Modus",
+  "no_default_description": "Der Standard-Modus wird zurückgesetzt.",
   "point_limit_description": "Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht",
   "@point_limit_description": {
     "placeholders": {
@@ -109,9 +112,8 @@
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
-  "cabo_penalty_subtitle": "... für falsches Cabo sagen",
   "point_limit": "Punkte-Limit",
-  "point_limit_subtitle": "... hier ist Schluss",
+  "standard_mode": "Standard-Modus",
   "reset_to_default": "Auf Standard zurücksetzen",
   "game_data": "Spieldaten",
   "import_data": "Spieldaten importieren",

@@ -153,6 +153,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_game_mode => 'Select game mode';
 
   @override
+  String get no_mode_selected => 'No mode selected';
+
+  @override
+  String get no_default_mode => 'No default mode';
+
+  @override
+  String get no_default_description => 'The default mode gets reset.';
+
+  @override
   String point_limit_description(int pointLimit) {
     return 'The game ends when a player scores more than $pointLimit points.';
   }
@@ -242,14 +251,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cabo_penalty => 'Cabo Penalty';
 
   @override
-  String get cabo_penalty_subtitle =>
-      'A point penalty for incorrectly calling Cabo.';
-
-  @override
   String get point_limit => 'Point Limit';
 
   @override
-  String get point_limit_subtitle => 'The required score to win the game.';
+  String get standard_mode => 'Default Mode';
 
   @override
   String get reset_to_default => 'Reset to Default';

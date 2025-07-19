@@ -374,6 +374,24 @@ abstract class AppLocalizations {
   /// **'Spielmodus auswählen'**
   String get select_game_mode;
 
+  /// No description provided for @no_mode_selected.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Modus ausgewählt'**
+  String get no_mode_selected;
+
+  /// No description provided for @no_default_mode.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Standard-Modus'**
+  String get no_default_mode;
+
+  /// No description provided for @no_default_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Standard-Modus wird zurückgesetzt.'**
+  String get no_default_description;
+
   /// No description provided for @point_limit_description.
   ///
   /// In de, this message translates to:
@@ -519,23 +537,17 @@ abstract class AppLocalizations {
   /// **'Cabo-Strafe'**
   String get cabo_penalty;
 
-  /// No description provided for @cabo_penalty_subtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'... für falsches Cabo sagen'**
-  String get cabo_penalty_subtitle;
-
   /// No description provided for @point_limit.
   ///
   /// In de, this message translates to:
   /// **'Punkte-Limit'**
   String get point_limit;
 
-  /// No description provided for @point_limit_subtitle.
+  /// No description provided for @standard_mode.
   ///
   /// In de, this message translates to:
-  /// **'... hier ist Schluss'**
-  String get point_limit_subtitle;
+  /// **'Standard-Modus'**
+  String get standard_mode;
 
   /// No description provided for @reset_to_default.
   ///

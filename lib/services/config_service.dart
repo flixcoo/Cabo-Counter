@@ -6,27 +6,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ConfigService {
   static const String _keyPointLimit = 'pointLimit';
   static const String _keyCaboPenalty = 'caboPenalty';
+  static const String _keyGameMode = 'gameMode';
   // Actual values used in the app
   static int pointLimit = 100;
   static int caboPenalty = 5;
+  static int gameMode = -1;
   // Default values
   static const int _defaultPointLimit = 100;
   static const int _defaultCaboPenalty = 5;
+  static const int _defaultGameMode = -1;
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Default values only set if they are not already set
-    prefs.setInt(
-        _keyPointLimit, prefs.getInt(_keyPointLimit) ?? _defaultPointLimit);
-    prefs.setInt(
-        _keyCaboPenalty, prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty);
+    // Initialize pointLimit, caboPenalty, and gameMode from SharedPreferences
+    // If they are not set, use the default values
+    pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
+    caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
+    gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
+
+    // Save the initial values to SharedPreferences
+    prefs.setInt(_keyPointLimit, pointLimit);
+    prefs.setInt(_keyCaboPenalty, caboPenalty);
+    prefs.setInt(_keyGameMode, gameMode);
   }
 
-  /// Getter for the point limit.
-  static Future<int> getPointLimit() async {
+  static Future<void> setGameMode(int newGameMode) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
+    await prefs.setInt(_keyGameMode, newGameMode);
+    gameMode = newGameMode;
   }
 
   /// Setter for the point limit.
@@ -34,12 +42,7 @@ class ConfigService {
   static Future<void> setPointLimit(int newPointLimit) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, newPointLimit);
-  }
-
-  /// Getter for the cabo penalty.
-  static Future<int> getCaboPenalty() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
+    pointLimit = newPointLimit;
   }
 
   /// Setter for the cabo penalty.
@@ -47,12 +50,14 @@ class ConfigService {
   static Future<void> setCaboPenalty(int newCaboPenalty) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyCaboPenalty, newCaboPenalty);
+    caboPenalty = newCaboPenalty;
   }
 
   /// Resets the configuration to default values.
   static Future<void> resetConfig() async {
     ConfigService.pointLimit = _defaultPointLimit;
     ConfigService.caboPenalty = _defaultCaboPenalty;
+    ConfigService.gameMode = _defaultGameMode;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, _defaultPointLimit);
     await prefs.setInt(_keyCaboPenalty, _defaultCaboPenalty);

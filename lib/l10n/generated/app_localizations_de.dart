@@ -155,6 +155,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get select_game_mode => 'Spielmodus auswählen';
 
   @override
+  String get no_mode_selected => 'Kein Modus ausgewählt';
+
+  @override
+  String get no_default_mode => 'Kein Standard-Modus';
+
+  @override
+  String get no_default_description => 'Der Standard-Modus wird zurückgesetzt.';
+
+  @override
   String point_limit_description(int pointLimit) {
     return 'Es wird so lange gespielt, bis ein:e Spieler:in mehr als $pointLimit Punkte erreicht';
   }
@@ -244,13 +253,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cabo_penalty => 'Cabo-Strafe';
 
   @override
-  String get cabo_penalty_subtitle => '... für falsches Cabo sagen';
-
-  @override
   String get point_limit => 'Punkte-Limit';
 
   @override
-  String get point_limit_subtitle => '... hier ist Schluss';
+  String get standard_mode => 'Standard-Modus';
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
