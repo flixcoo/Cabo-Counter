@@ -155,7 +155,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get select_game_mode => 'Spielmodus auswählen';
 
   @override
-  String get no_mode_selected => 'Kein Modus ausgewählt';
+  String get no_mode_selected => 'Kein Modus';
 
   @override
   String get no_default_mode => 'Kein Standard-Modus';

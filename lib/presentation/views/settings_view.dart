@@ -98,7 +98,7 @@ class _SettingsViewState extends State<SettingsView> {
                                       ? '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}'
                                       : AppLocalizations.of(context).unlimited),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 5),
                             const CupertinoListTileChevron()
                           ],
                         ),

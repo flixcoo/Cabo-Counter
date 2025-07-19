@@ -377,7 +377,7 @@ abstract class AppLocalizations {
   /// No description provided for @no_mode_selected.
   ///
   /// In de, this message translates to:
-  /// **'Kein Modus ausgewählt'**
+  /// **'Kein Modus'**
   String get no_mode_selected;
 
   /// No description provided for @no_default_mode.
