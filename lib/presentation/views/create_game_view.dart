@@ -144,11 +144,9 @@ class _CreateGameViewState extends State<CreateGameView> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: _playerNameTextControllers.length +
-                    1, // +1 für den + Button
+                itemCount: _playerNameTextControllers.length + 1,
                 itemBuilder: (context, index) {
                   if (index == _playerNameTextControllers.length) {
-                    // + Button als letztes Element
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoButton(
