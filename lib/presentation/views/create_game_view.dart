@@ -48,7 +48,6 @@ class _CreateGameViewState extends State<CreateGameView> {
   @override
   void initState() {
     super.initState();
-    print('pointLimit: $_isPointsLimitEnabled');
 
     if (widget.isPointsLimitEnabled == null) {
       _isPointsLimitEnabled =
