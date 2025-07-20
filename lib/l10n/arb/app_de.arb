@@ -55,7 +55,7 @@
   "min_players_title": "Zu wenig Spieler:innen",
   "min_players_message": "Es müssen mindestens 2 Spieler:innen hinzugefügt werden",
   "no_name_title": "Kein Name",
-  "no_name_message": "Jeder Spieler muss einen Namen haben.",
+  "no_name_message": "Jede:r Spieler:in muss einen Namen haben.",
 
   "select_game_mode": "Spielmodus auswählen",
   "no_mode_selected": "Wähle einen Spielmodus",
