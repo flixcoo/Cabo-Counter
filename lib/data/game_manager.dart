@@ -21,6 +21,10 @@ class GameManager extends ChangeNotifier {
     return gameList.indexOf(session);
   }
 
+  GameSession? getGameSessionById(String id) {
+    return gameList.firstWhere((session) => session.id.toString() == id);
+  }
+
   /// Removes a game session from the list and sorts it by creation date.
   /// Takes a [index] as input. It then removes the session at the specified index from the `gameList`,
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
