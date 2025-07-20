@@ -188,6 +188,18 @@ class _CreateGameViewState extends State<CreateGameView> {
                                   '${AppLocalizations.of(context).player} ${index + 1}',
                               padding: const EdgeInsets.all(12),
                               decoration: const BoxDecoration(),
+                              textInputAction:
+                                  index + 1 < _playerNameTextControllers.length
+                                      ? TextInputAction.next
+                                      : TextInputAction.done,
+                              onSubmitted: (_) {
+                                if (index + 1 < _playerNameFocusNodes.length) {
+                                  _playerNameFocusNodes[index + 1]
+                                      .requestFocus();
+                                } else {
+                                  FocusScope.of(context).unfocus();
+                                }
+                              },
                             ),
                           ),
                           AnimatedOpacity(
