@@ -86,9 +86,8 @@ class _MainMenuViewState extends State<MainMenuView> {
               child: CupertinoPageScaffold(
                   child: SafeArea(
                 child: Visibility(
-                  replacement:
-                      const Center(child: CupertinoActivityIndicator()),
-                  child: Visibility(
+                  visible: _isLoading,
+                  replacement: Visibility(
                     visible: gameManager.gameList.isEmpty,
                     replacement: ListView.separated(
                       itemCount: gameManager.gameList.length,
@@ -206,6 +205,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
+                  child: const Center(child: CupertinoActivityIndicator()),
                 ),
               )));
         });
