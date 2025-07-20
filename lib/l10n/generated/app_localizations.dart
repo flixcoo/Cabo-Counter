@@ -18,7 +18,7 @@ import 'app_localizations_en.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/app_localizations.dart';
+/// import 'generated/app_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -218,6 +218,60 @@ abstract class AppLocalizations {
   /// **'Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
   String delete_game_message(String gameTitle);
 
+  /// No description provided for @pre_rating_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Gefällt dir die App?'**
+  String get pre_rating_title;
+
+  /// No description provided for @pre_rating_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Feedback hilft mir, die App zu verbessern. Vielen Dank!'**
+  String get pre_rating_message;
+
+  /// No description provided for @yes.
+  ///
+  /// In de, this message translates to:
+  /// **'Ja'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In de, this message translates to:
+  /// **'Nein'**
+  String get no;
+
+  /// No description provided for @bad_rating_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Unzufrieden mit der App?'**
+  String get bad_rating_title;
+
+  /// No description provided for @bad_rating_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!'**
+  String get bad_rating_message;
+
+  /// No description provided for @contact_email.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail schreiben'**
+  String get contact_email;
+
+  /// No description provided for @email_subject.
+  ///
+  /// In de, this message translates to:
+  /// **'Feedback: Cabo Counter App'**
+  String get email_subject;
+
+  /// No description provided for @email_body.
+  ///
+  /// In de, this message translates to:
+  /// **'Ich habe folgendes Feedback...'**
+  String get email_body;
+
   /// No description provided for @overview.
   ///
   /// In de, this message translates to:
@@ -320,6 +374,24 @@ abstract class AppLocalizations {
   /// **'Spielmodus auswählen'**
   String get select_game_mode;
 
+  /// No description provided for @no_mode_selected.
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle einen Spielmodus'**
+  String get no_mode_selected;
+
+  /// No description provided for @no_default_mode.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Modus'**
+  String get no_default_mode;
+
+  /// No description provided for @no_default_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.'**
+  String get no_default_description;
+
   /// No description provided for @point_limit_description.
   ///
   /// In de, this message translates to:
@@ -350,6 +422,12 @@ abstract class AppLocalizations {
   /// **'Kamikaze'**
   String get kamikaze;
 
+  /// No description provided for @who_has_kamikaze.
+  ///
+  /// In de, this message translates to:
+  /// **'Wer hat Kamikaze?'**
+  String get who_has_kamikaze;
+
   /// No description provided for @done.
   ///
   /// In de, this message translates to:
@@ -362,11 +440,24 @@ abstract class AppLocalizations {
   /// **'Nächste Runde'**
   String get next_round;
 
-  /// No description provided for @statistics.
+  /// No description provided for @bonus_points_title.
   ///
   /// In de, this message translates to:
-  /// **'Statistiken'**
-  String get statistics;
+  /// **'Bonus-Punkte!'**
+  String get bonus_points_title;
+
+  /// No description provided for @bonus_points_message.
+  ///
+  /// In de, this message translates to:
+  /// **'{playerCount, plural, =1{{names} hat exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommt deshalb {bonusPoints} Punkte abgezogen!} other{{names} haben exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommen deshalb jeweils {bonusPoints} Punkte abgezogen!}}'**
+  String bonus_points_message(
+      int playerCount, String names, int pointLimit, int bonusPoints);
+
+  /// No description provided for @end_game.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden'**
+  String get end_game;
 
   /// No description provided for @delete_game.
   ///
@@ -398,11 +489,41 @@ abstract class AppLocalizations {
   /// **'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.'**
   String get id_error_message;
 
-  /// No description provided for @game_process.
+  /// No description provided for @end_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beenden?'**
+  String get end_game_title;
+
+  /// No description provided for @end_game_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
+  String get end_game_message;
+
+  /// No description provided for @statistics.
+  ///
+  /// In de, this message translates to:
+  /// **'Statistiken'**
+  String get statistics;
+
+  /// No description provided for @point_overview.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkteübersicht'**
+  String get point_overview;
+
+  /// No description provided for @scoring_history.
   ///
   /// In de, this message translates to:
   /// **'Spielverlauf'**
-  String get game_process;
+  String get scoring_history;
+
+  /// No description provided for @empty_graph_text.
+  ///
+  /// In de, this message translates to:
+  /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
+  String get empty_graph_text;
 
   /// No description provided for @settings.
   ///
@@ -416,23 +537,17 @@ abstract class AppLocalizations {
   /// **'Cabo-Strafe'**
   String get cabo_penalty;
 
-  /// No description provided for @cabo_penalty_subtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'... für falsches Cabo sagen'**
-  String get cabo_penalty_subtitle;
-
   /// No description provided for @point_limit.
   ///
   /// In de, this message translates to:
   /// **'Punkte-Limit'**
   String get point_limit;
 
-  /// No description provided for @point_limit_subtitle.
+  /// No description provided for @standard_mode.
   ///
   /// In de, this message translates to:
-  /// **'... hier ist Schluss'**
-  String get point_limit_subtitle;
+  /// **'Standard-Modus'**
+  String get standard_mode;
 
   /// No description provided for @reset_to_default.
   ///
@@ -449,14 +564,38 @@ abstract class AppLocalizations {
   /// No description provided for @import_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten importieren'**
+  /// **'Spieldaten importieren'**
   String get import_data;
 
   /// No description provided for @export_data.
   ///
   /// In de, this message translates to:
-  /// **'Daten exportieren'**
+  /// **'Spieldaten exportieren'**
   String get export_data;
+
+  /// No description provided for @delete_data.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Spieldaten löschen'**
+  String get delete_data;
+
+  /// No description provided for @delete_data_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spieldaten löschen?'**
+  String get delete_data_title;
+
+  /// No description provided for @delete_data_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'**
+  String get delete_data_message;
+
+  /// No description provided for @app.
+  ///
+  /// In de, this message translates to:
+  /// **'App'**
+  String get app;
 
   /// No description provided for @import_success_title.
   ///
@@ -530,23 +669,35 @@ abstract class AppLocalizations {
   /// **'Issue erstellen'**
   String get create_issue;
 
+  /// No description provided for @wiki.
+  ///
+  /// In de, this message translates to:
+  /// **'Wiki'**
+  String get wiki;
+
   /// No description provided for @app_version.
   ///
   /// In de, this message translates to:
   /// **'App-Version'**
   String get app_version;
 
+  /// No description provided for @privacy_policy.
+  ///
+  /// In de, this message translates to:
+  /// **'Datenschutzerklärung'**
+  String get privacy_policy;
+
   /// No description provided for @build.
   ///
   /// In de, this message translates to:
-  /// **'Build'**
+  /// **'Build-Nr.'**
   String get build;
 
-  /// No description provided for @load_version.
+  /// No description provided for @loading.
   ///
   /// In de, this message translates to:
-  /// **'Lade Version...'**
-  String get load_version;
+  /// **'Lädt...'**
+  String get loading;
 
   /// No description provided for @about_text.
   ///

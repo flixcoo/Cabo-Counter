@@ -72,6 +72,35 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get pre_rating_title => 'Gefällt dir die App?';
+
+  @override
+  String get pre_rating_message =>
+      'Feedback hilft mir, die App zu verbessern. Vielen Dank!';
+
+  @override
+  String get yes => 'Ja';
+
+  @override
+  String get no => 'Nein';
+
+  @override
+  String get bad_rating_title => 'Unzufrieden mit der App?';
+
+  @override
+  String get bad_rating_message =>
+      'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!';
+
+  @override
+  String get contact_email => 'E-Mail schreiben';
+
+  @override
+  String get email_subject => 'Feedback: Cabo Counter App';
+
+  @override
+  String get email_body => 'Ich habe folgendes Feedback...';
+
+  @override
   String get overview => 'Übersicht';
 
   @override
@@ -126,6 +155,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get select_game_mode => 'Spielmodus auswählen';
 
   @override
+  String get no_mode_selected => 'Wähle einen Spielmodus';
+
+  @override
+  String get no_default_mode => 'Kein Modus';
+
+  @override
+  String get no_default_description =>
+      'Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.';
+
+  @override
   String point_limit_description(int pointLimit) {
     return 'Es wird so lange gespielt, bis ein:e Spieler:in mehr als $pointLimit Punkte erreicht';
   }
@@ -144,13 +183,33 @@ class AppLocalizationsDe extends AppLocalizations {
   String get kamikaze => 'Kamikaze';
 
   @override
+  String get who_has_kamikaze => 'Wer hat Kamikaze?';
+
+  @override
   String get done => 'Fertig';
 
   @override
   String get next_round => 'Nächste Runde';
 
   @override
-  String get statistics => 'Statistiken';
+  String get bonus_points_title => 'Bonus-Punkte!';
+
+  @override
+  String bonus_points_message(
+      int playerCount, String names, int pointLimit, int bonusPoints) {
+    String _temp0 = intl.Intl.pluralLogic(
+      playerCount,
+      locale: localeName,
+      other:
+          '$names haben exakt das Punktelimit von $pointLimit Punkten erreicht und bekommen deshalb jeweils $bonusPoints Punkte abgezogen!',
+      one:
+          '$names hat exakt das Punktelimit von $pointLimit Punkten erreicht und bekommt deshalb $bonusPoints Punkte abgezogen!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get end_game => 'Spiel beenden';
 
   @override
   String get delete_game => 'Spiel löschen';
@@ -169,7 +228,24 @@ class AppLocalizationsDe extends AppLocalizations {
       'Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get end_game_title => 'Spiel beenden?';
+
+  @override
+  String get end_game_message =>
+      'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.';
+
+  @override
+  String get statistics => 'Statistiken';
+
+  @override
+  String get point_overview => 'Punkteübersicht';
+
+  @override
+  String get scoring_history => 'Spielverlauf';
+
+  @override
+  String get empty_graph_text =>
+      'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
 
   @override
   String get settings => 'Einstellungen';
@@ -178,13 +254,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cabo_penalty => 'Cabo-Strafe';
 
   @override
-  String get cabo_penalty_subtitle => '... für falsches Cabo sagen';
-
-  @override
   String get point_limit => 'Punkte-Limit';
 
   @override
-  String get point_limit_subtitle => '... hier ist Schluss';
+  String get standard_mode => 'Standard-Modus';
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
@@ -193,10 +266,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game_data => 'Spieldaten';
 
   @override
-  String get import_data => 'Daten importieren';
+  String get import_data => 'Spieldaten importieren';
 
   @override
-  String get export_data => 'Daten exportieren';
+  String get export_data => 'Spieldaten exportieren';
+
+  @override
+  String get delete_data => 'Alle Spieldaten löschen';
+
+  @override
+  String get delete_data_title => 'Spieldaten löschen?';
+
+  @override
+  String get delete_data_message =>
+      'Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get app => 'App';
 
   @override
   String get import_success_title => 'Import erfolgreich';
@@ -238,13 +324,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get create_issue => 'Issue erstellen';
 
   @override
+  String get wiki => 'Wiki';
+
+  @override
   String get app_version => 'App-Version';
 
   @override
-  String get build => 'Build';
+  String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get load_version => 'Lade Version...';
+  String get build => 'Build-Nr.';
+
+  @override
+  String get loading => 'Lädt...';
 
   @override
   String get about_text =>

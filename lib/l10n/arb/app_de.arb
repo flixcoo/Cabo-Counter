@@ -30,6 +30,16 @@
       }
     }
   },
+  "pre_rating_title": "Gefällt dir die App?",
+  "pre_rating_message": "Feedback hilft mir, die App zu verbessern. Vielen Dank!",
+  "yes": "Ja",
+  "no": "Nein",
+  "bad_rating_title": "Unzufrieden mit der App?",
+  "bad_rating_message": "Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!",
+  "contact_email": "E-Mail schreiben",
+  "email_subject": "Feedback: Cabo Counter App",
+  "email_body": "Ich habe folgendes Feedback...",
+
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
   "game_title": "Titel des Spiels",
@@ -48,6 +58,9 @@
   "no_name_message": "Jeder Spieler muss einen Namen haben.",
 
   "select_game_mode": "Spielmodus auswählen",
+  "no_mode_selected": "Wähle einen Spielmodus",
+  "no_default_mode": "Kein Modus",
+  "no_default_description": "Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.",
   "point_limit_description": "Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht",
   "@point_limit_description": {
     "placeholders": {
@@ -61,28 +74,54 @@
   "results": "Ergebnisse",
   "who_said_cabo": "Wer hat CABO gesagt?",
   "kamikaze": "Kamikaze",
+  "who_has_kamikaze": "Wer hat Kamikaze?",
   "done": "Fertig",
   "next_round": "Nächste Runde",
+  "bonus_points_title": "Bonus-Punkte!",
+  "bonus_points_message": "{playerCount, plural, =1{{names} hat exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommt deshalb {bonusPoints} Punkte abgezogen!} other{{names} haben exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommen deshalb jeweils {bonusPoints} Punkte abgezogen!}}",
+  "@bonus_points_message": {
+    "placeholders": {
+      "playerCount": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      },
+      "pointLimit": {
+        "type": "int"
+      },
+      "bonusPoints": {
+        "type": "int"
+      }
+    }
+  },
 
-  "statistics": "Statistiken",
+  "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
   "export_game": "Spiel exportieren",
   "id_error_title": "ID Fehler",
   "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
+  "end_game_title": "Spiel beenden?",
+  "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
-
-  "game_process": "Spielverlauf",
+  "statistics": "Statistiken",
+  "point_overview": "Punkteübersicht",
+  "scoring_history": "Spielverlauf",
+  "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
-  "cabo_penalty_subtitle": "... für falsches Cabo sagen",
   "point_limit": "Punkte-Limit",
-  "point_limit_subtitle": "... hier ist Schluss",
+  "standard_mode": "Standard-Modus",
   "reset_to_default": "Auf Standard zurücksetzen",
   "game_data": "Spieldaten",
-  "import_data": "Daten importieren",
-  "export_data": "Daten exportieren",
+  "import_data": "Spieldaten importieren",
+  "export_data": "Spieldaten exportieren",
+  "delete_data": "Alle Spieldaten löschen",
+  "delete_data_title": "Spieldaten löschen?",
+  "delete_data_message": "Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "app": "App",
 
   "import_success_title": "Import erfolgreich",
   "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
@@ -90,16 +129,19 @@
   "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
   "import_format_error_title": "Falsches Format",
   "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
-   "import_generic_error_title": "Import fehlgeschlagen",
+  "import_generic_error_title": "Import fehlgeschlagen",
   "import_generic_error_message": "Der Import ist fehlgeschlagen.",
 
   "export_error_title": "Fehler",
   "export_error_message": "Datei konnte nicht exportiert werden",
+
   "error_found": "Fehler gefunden?",
   "create_issue": "Issue erstellen",
+  "wiki": "Wiki",
   "app_version": "App-Version",
-  "build": "Build",
-  "load_version": "Lade Version...",
+  "privacy_policy": "Datenschutzerklärung",
+  "build": "Build-Nr.",
+  "loading": "Lädt...",
 
   "about_text": "Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! "
 }

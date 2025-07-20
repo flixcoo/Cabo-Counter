@@ -1,10 +1,13 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
-import 'package:cabo_counter/l10n/app_localizations.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/create_game_view.dart';
-import 'package:cabo_counter/views/graph_view.dart';
-import 'package:cabo_counter/views/round_view.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/graph_view.dart';
+import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/points_view.dart';
+import 'package:cabo_counter/presentation/views/round_view.dart';
+import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +22,8 @@ class ActiveGameView extends StatefulWidget {
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   late final GameSession gameSession;
+  late List<int> denseRanks;
+  late List<int> sortedPlayerIndices;
 
   @override
   void initState() {
@@ -31,7 +36,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return ListenableBuilder(
         listenable: gameSession,
         builder: (context, _) {
-          List<int> sortedPlayerIndices = _getSortedPlayerIndices();
+          sortedPlayerIndices = _getSortedPlayerIndices();
+          denseRanks = _calculateDenseRank(
+              gameSession.playerScores, sortedPlayerIndices);
           return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 middle: Text(gameSession.gameTitle),
@@ -57,7 +64,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           return CupertinoListTile(
                             title: Row(
                               children: [
-                                _getPlacementPrefix(index),
+                                _getPlacementTextWidget(index),
                                 const SizedBox(width: 5),
                                 Text(
                                   gameSession.players[playerIndex],
@@ -104,20 +111,45 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         : const Text('\u{23F3}',
                                             style: TextStyle(fontSize: 22)),
                                 onTap: () async {
-                                  // ignore: unused_local_variable
-                                  final val = await Navigator.of(context,
-                                          rootNavigator: true)
-                                      .push(
-                                    CupertinoPageRoute(
-                                      fullscreenDialog: true,
-                                      builder: (context) => RoundView(
-                                          gameSession: gameSession,
-                                          roundNumber: index + 1),
-                                    ),
-                                  );
+                                  _openRoundView(index + 1);
                                 },
                               ));
                         },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Text(
+                          AppLocalizations.of(context).statistics,
+                          style: CustomTheme.rowTitle,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          CupertinoListTile(
+                              title: Text(
+                                AppLocalizations.of(context).scoring_history,
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (_) => GraphView(
+                                            gameSession: gameSession,
+                                          )))),
+                          CupertinoListTile(
+                              title: Text(
+                                AppLocalizations.of(context).point_overview,
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (_) => PointsView(
+                                            gameSession: gameSession,
+                                          )))),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -128,22 +160,31 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ),
                       Column(
                         children: [
-                          CupertinoListTile(
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              title: Text(
-                                AppLocalizations.of(context).statistics,
-                              ),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (_) => GraphView(
-                                            gameSession: gameSession,
-                                          )))),
+                          Visibility(
+                            visible: !gameSession.isPointsLimitEnabled,
+                            child: CupertinoListTile(
+                                title: Text(
+                                  AppLocalizations.of(context).end_game,
+                                  style: gameSession.roundNumber > 1 &&
+                                          !gameSession.isGameFinished
+                                      ? const TextStyle(color: Colors.white)
+                                      : const TextStyle(color: Colors.white30),
+                                ),
+                                backgroundColorActivated:
+                                    CustomTheme.backgroundColor,
+                                onTap: () {
+                                  if (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished) {
+                                    _showEndGameDialog();
+                                  }
+                                }),
+                          ),
                           CupertinoListTile(
                             title: Text(
                               AppLocalizations.of(context).delete_game,
                             ),
+                            backgroundColorActivated:
+                                CustomTheme.backgroundColor,
                             onTap: () {
                               _showDeleteGameDialog().then((value) {
                                 if (value) {
@@ -157,26 +198,53 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               AppLocalizations.of(context)
                                   .new_game_same_settings,
                             ),
+                            backgroundColorActivated:
+                                CustomTheme.backgroundColor,
                             onTap: () {
                               Navigator.pushReplacement(
                                   context,
                                   CupertinoPageRoute(
                                       builder: (_) => CreateGameView(
                                             gameTitle: gameSession.gameTitle,
-                                            isPointsLimitEnabled: widget
-                                                .gameSession
-                                                .isPointsLimitEnabled,
+                                            gameMode: widget.gameSession
+                                                        .isPointsLimitEnabled ==
+                                                    true
+                                                ? GameMode.pointLimit
+                                                : GameMode.unlimited,
                                             players: gameSession.players,
                                           )));
                             },
                           ),
                           CupertinoListTile(
-                            title:
-                                Text(AppLocalizations.of(context).export_game,
-                                    style: const TextStyle(
-                                      color: Colors.white30,
-                                    )),
-                          ),
+                              title: Text(
+                                AppLocalizations.of(context).export_game,
+                              ),
+                              backgroundColorActivated:
+                                  CustomTheme.backgroundColor,
+                              onTap: () async {
+                                final success = await LocalStorageService
+                                    .exportSingleGameSession(
+                                        widget.gameSession);
+                                if (!success && context.mounted) {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                      title: Text(AppLocalizations.of(context)
+                                          .export_error_title),
+                                      content: Text(AppLocalizations.of(context)
+                                          .export_error_message),
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: Text(
+                                              AppLocalizations.of(context).ok),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              }),
                         ],
                       )
                     ],
@@ -184,6 +252,40 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                 ),
               ));
         });
+  }
+
+  /// Shows a dialog to confirm ending the game.
+  /// If the user confirms, it calls the `endGame` method on the game manager
+  void _showEndGameDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context).end_game_title),
+          content: Text(AppLocalizations.of(context).end_game_message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                AppLocalizations.of(context).end_game,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.destructiveRed),
+              ),
+              onPressed: () {
+                setState(() {
+                  gameManager.endGame(gameSession.id);
+                });
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Returns a list of player indices sorted by their scores in
@@ -195,39 +297,50 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     playerIndices.sort((a, b) {
       int scoreA = gameSession.playerScores[a];
       int scoreB = gameSession.playerScores[b];
-      return scoreA.compareTo(scoreB);
+      if (scoreA != scoreB) {
+        return scoreA.compareTo(scoreB);
+      }
+      return a.compareTo(b);
     });
     return playerIndices;
   }
 
-  /// Returns a widget that displays the placement prefix based on the index.
-  /// First three places are represented by medals, and the rest are numbered.
-  /// [index] is the index of the player in the descending sorted list.
-  Widget _getPlacementPrefix(int index) {
-    switch (index) {
-      case 0:
-        return const Text(
-          '\u{1F947}',
-          style: TextStyle(fontSize: 22),
-        );
+  /// Calculates the dense rank for a player based on their index in the sorted list of players.
+  List<int> _calculateDenseRank(
+      List<int> playerScores, List<int> sortedIndices) {
+    List<int> denseRanks = [];
+    int rank = 1;
+    for (int i = 0; i < sortedIndices.length; i++) {
+      if (i > 0) {
+        int prevScore = playerScores[sortedIndices[i - 1]];
+        int currScore = playerScores[sortedIndices[i]];
+        if (currScore != prevScore) {
+          rank++;
+        }
+      }
+      denseRanks.add(rank);
+    }
+    return denseRanks;
+  }
+
+  /// Returns a text widget representing the placement text based on the given placement number.
+  /// [index] is the index of the player in [players] list,
+  Text _getPlacementTextWidget(int index) {
+    int placement = denseRanks[index];
+    switch (placement) {
       case 1:
-        return const Text(
-          '\u{1F948}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
       case 2:
-        return const Text(
-          '\u{1F949}',
-          style: TextStyle(fontSize: 22),
-        );
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+      case 3:
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
       default:
-        return Text(
-          ' ${index + 1}.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        );
+        return Text(' $placement.',
+            style: const TextStyle(fontWeight: FontWeight.bold));
     }
   }
 
+  /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
     return await showCupertinoDialog<bool>(
           context: context,
@@ -260,6 +373,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         false;
   }
 
+  /// Removes the game session in the game manager and navigates back to the previous screen.
+  /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
     if (gameManager.gameExistsInGameList(gameSession.id)) {
       Navigator.pop(context);
@@ -282,6 +397,27 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               ],
             );
           });
+    }
+  }
+
+  /// Recursively opens the RoundView for the specified round number.
+  /// It starts with the given [roundNumber] and continues to open the next round
+  /// until the user navigates back or the round number is invalid.
+  void _openRoundView(int roundNumber) async {
+    final val = await Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => RoundView(
+          gameSession: gameSession,
+          roundNumber: roundNumber,
+        ),
+      ),
+    );
+    if (val != null && val >= 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await Future.delayed(const Duration(milliseconds: 600));
+        _openRoundView(val);
+      });
     }
   }
 }

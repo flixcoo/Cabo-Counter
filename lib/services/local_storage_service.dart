@@ -20,8 +20,8 @@ enum ImportStatus {
 class LocalStorageService {
   static const String _fileName = 'game_data.json';
 
-  /// Writes the game session list to a  JSON file and returns it as string.
-  static String getJsonFile() {
+  /// Writes the game session list to a JSON file and returns it as string.
+  static String _getGameDataAsJsonFile() {
     final jsonFile =
         gameManager.gameList.map((session) => session.toJson()).toList();
     return json.encode(jsonFile);
@@ -39,7 +39,7 @@ class LocalStorageService {
     print('[local_storage_service.dart] Versuche, Daten zu speichern...');
     try {
       final file = await _getFilePath();
-      final jsonFile = getJsonFile();
+      final jsonFile = _getGameDataAsJsonFile();
       await file.writeAsString(jsonFile);
       print(
           '[local_storage_service.dart] Die Spieldaten wurden zwischengespeichert.');
@@ -70,7 +70,7 @@ class LocalStorageService {
         return false;
       }
 
-      if (!await validateJsonSchema(jsonString)) {
+      if (!await _validateJsonSchema(jsonString, true)) {
         print(
             '[local_storage_service.dart] Die Datei konnte nicht validiert werden');
         gameManager.gameList = [];
@@ -102,19 +102,27 @@ class LocalStorageService {
     }
   }
 
-  /// Opens the file picker to save a JSON file with the current game data.
-  static Future<bool> exportJsonFile() async {
-    final jsonString = getJsonFile();
+  /// Opens the file picker to export game data as a JSON file.
+  /// This method will export the given [jsonString] as a JSON file. It opens
+  /// the file picker with the choosen [fileName].
+  static Future<bool> _exportJsonData(
+    String jsonString,
+    String fileName,
+  ) async {
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
-      final result = await FileSaver.instance.saveAs(
-        name: 'cabo_counter_data',
+      final path = await FileSaver.instance.saveAs(
+        name: fileName,
         bytes: bytes,
         ext: 'json',
         mimeType: MimeType.json,
       );
-      print(
-          '[local_storage_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $result');
+      if (path == null) {
+        print('[local_storage_service.dart]: Export abgebrochen');
+      } else {
+        print(
+            '[local_storage_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $path');
+      }
       return true;
     } catch (e) {
       print(
@@ -123,33 +131,59 @@ class LocalStorageService {
     }
   }
 
+  /// Opens the file picker to export all game sessions as a JSON file.
+  static Future<bool> exportGameData() async {
+    String jsonString = _getGameDataAsJsonFile();
+    String fileName = 'cabo_counter-game_data';
+    return _exportJsonData(jsonString, fileName);
+  }
+
+  /// Opens the file picker to save a single game session as a JSON file.
+  static Future<bool> exportSingleGameSession(GameSession session) async {
+    String jsonString = json.encode(session.toJson());
+    String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
+    return _exportJsonData(jsonString, fileName);
+  }
+
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<ImportStatus> importJsonFile() async {
-    final result = await FilePicker.platform.pickFiles(
+    final path = await FilePicker.platform.pickFiles(
       dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
 
-    if (result == null) {
+    if (path == null) {
       print(
           '[local_storage_service.dart] Der Filepicker-Dialog wurde abgebrochen');
       return ImportStatus.canceled;
     }
 
     try {
-      final jsonString = await _readFileContent(result.files.single);
+      final jsonString = await _readFileContent(path.files.single);
 
-      if (!await validateJsonSchema(jsonString)) {
+      if (await _validateJsonSchema(jsonString, true)) {
+        // Checks if the JSON String is in the gameList format
+
+        final jsonData = json.decode(jsonString) as List<dynamic>;
+        List<GameSession> importedList = jsonData
+            .map((jsonItem) =>
+                GameSession.fromJson(jsonItem as Map<String, dynamic>))
+            .toList();
+
+        for (GameSession s in importedList) {
+          _importSession(s);
+        }
+      } else if (await _validateJsonSchema(jsonString, false)) {
+        // Checks if the JSON String is in the single game format
+        final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+        _importSession(GameSession.fromJson(jsonData));
+      } else {
         return ImportStatus.validationError;
       }
-      final jsonData = json.decode(jsonString) as List<dynamic>;
-      gameManager.gameList = jsonData
-          .map((jsonItem) =>
-              GameSession.fromJson(jsonItem as Map<String, dynamic>))
-          .toList();
+
       print(
-          '[local_storage_service.dart] Die Datei wurde erfolgreich Importiertn');
+          '[local_storage_service.dart] Die Datei wurde erfolgreich Importiert');
       await saveGameSessions();
       return ImportStatus.success;
     } on FormatException catch (e) {
@@ -163,6 +197,18 @@ class LocalStorageService {
     }
   }
 
+  /// Imports a single game session into the gameList.
+  static Future<void> _importSession(GameSession session) async {
+    if (gameManager.gameExistsInGameList(session.id)) {
+      print(
+          '[local_storage_service.dart] Die Session mit der ID ${session.id} existiert bereits. Sie wird überschrieben.');
+      gameManager.removeGameSessionById(session.id);
+    }
+    gameManager.addGameSession(session);
+    print(
+        '[local_storage_service.dart] Die Session mit der ID ${session.id} wurde erfolgreich importiert.');
+  }
+
   /// Helper method to read file content from either bytes or path
   static Future<String> _readFileContent(PlatformFile file) async {
     if (file.bytes != null) return utf8.decode(file.bytes!);
@@ -172,15 +218,28 @@ class LocalStorageService {
   }
 
   /// Validates the JSON data against the schema.
-  static Future<bool> validateJsonSchema(String jsonString) async {
+  /// This method checks if the provided [jsonString] is valid against the
+  /// JSON schema. It takes a boolean [isGameList] to determine
+  /// which schema to use (game list or single game).
+  static Future<bool> _validateJsonSchema(
+      String jsonString, bool isGameList) async {
+    final String schemaString;
+
+    if (isGameList) {
+      schemaString =
+          await rootBundle.loadString('assets/game_list-schema.json');
+    } else {
+      schemaString = await rootBundle.loadString('assets/game-schema.json');
+    }
+
     try {
-      final schemaString = await rootBundle.loadString('assets/schema.json');
       final schema = JsonSchema.create(json.decode(schemaString));
       final jsonData = json.decode(jsonString);
       final result = schema.validate(jsonData);
 
       if (result.isValid) {
-        print('[local_storage_service.dart] JSON ist erfolgreich validiert.');
+        print(
+            '[local_storage_service.dart] JSON ist erfolgreich validiert. Typ: ${isGameList ? 'Game List' : 'Single Game'}');
         return true;
       }
       print(
