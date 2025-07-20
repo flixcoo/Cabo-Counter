@@ -230,7 +230,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 .add(TextEditingController());
                           });
                         } else {
-                          showFeedbackDialog(CreateStatus.maxPlayers);
+                          _showFeedbackDialog(CreateStatus.maxPlayers);
                         }
                       },
                     ),
@@ -268,37 +268,60 @@ class _CreateGameViewState extends State<CreateGameView> {
         )));
   }
 
-  Future<void> _createGame() async {
-    var uuid = const Uuid();
-    final String id = uuid.v1();
+  /// Returns a widget that displays the currently selected game mode in the View.
+  Text _getDisplayedGameMode() {
+    if (gameMode == GameMode.none) {
+      return Text(AppLocalizations.of(context).no_mode_selected);
+    } else if (gameMode == GameMode.pointLimit) {
+      return Text(
+          '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
+          style: TextStyle(color: CustomTheme.primaryColor));
+    } else {
+      return Text(AppLocalizations.of(context).unlimited,
+          style: TextStyle(color: CustomTheme.primaryColor));
+    }
+  }
 
-    List<String> players = [];
-    for (var controller in _playerNameTextControllers) {
-      players.add(controller.text);
+  /// Checks all game attributes before creating a new game.
+  /// If any attribute is invalid, it shows a feedback dialog.
+  /// If all attributes are valid, it calls the `_createGame` method.
+  void _checkAllGameAttributes() {
+    if (_gameTitleTextController.text == '') {
+      _showFeedbackDialog(CreateStatus.noGameTitle);
+      return;
     }
 
-    bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+    if (gameMode == GameMode.none) {
+      _showFeedbackDialog(CreateStatus.noModeSelected);
+      return;
+    }
 
-    GameSession gameSession = GameSession(
-      id: id,
-      createdAt: DateTime.now(),
-      gameTitle: _gameTitleTextController.text,
-      players: players,
-      pointLimit: ConfigService.getPointLimit(),
-      caboPenalty: ConfigService.getCaboPenalty(),
-      isPointsLimitEnabled: isPointsLimitEnabled,
-    );
-    gameManager.addGameSession(gameSession);
-    final session = gameManager.getGameSessionById(id)!;
+    if (_playerNameTextControllers.length < 2) {
+      _showFeedbackDialog(CreateStatus.minPlayers);
+      return;
+    }
 
-    Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(
-            builder: (context) => ActiveGameView(gameSession: session)));
+    if (!_everyPlayerHasAName()) {
+      _showFeedbackDialog(CreateStatus.noPlayerName);
+      return;
+    }
+
+    _createGame();
+  }
+
+  /// Checks if every player has a name.
+  /// Returns true if all players have a name, false otherwise.
+  bool _everyPlayerHasAName() {
+    for (var controller in _playerNameTextControllers) {
+      if (controller.text == '') {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Displays a feedback dialog based on the [CreateStatus].
-  void showFeedbackDialog(CreateStatus status) {
+  void _showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
     showCupertinoDialog(
@@ -315,63 +338,6 @@ class _CreateGameViewState extends State<CreateGameView> {
             ],
           );
         });
-  }
-
-  void _checkAllGameAttributes() {
-    if (_gameTitleTextController.text == '') {
-      _showDialog((
-        AppLocalizations.of(context).no_gameTitle_title,
-        AppLocalizations.of(context).no_gameTitle_message
-      ));
-      return;
-    }
-
-    if (gameMode == GameMode.none) {
-      _showDialog(
-        (
-          AppLocalizations.of(context).no_mode_title,
-          AppLocalizations.of(context).no_mode_message
-        ),
-      );
-      return;
-    }
-
-    if (_playerNameTextControllers.length < 2) {
-      _showDialog(
-        (
-          AppLocalizations.of(context).min_players_title,
-          AppLocalizations.of(context).min_players_message
-        ),
-      );
-      return;
-    }
-
-    if (!everyPlayerHasAName()) {
-      _showDialog((
-        AppLocalizations.of(context).no_name_title,
-        AppLocalizations.of(context).no_name_message
-      ));
-      return;
-    }
-
-    _createGame();
-  }
-
-  void _showDialog((String, String) content) {
-    final (title, message) = content;
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: Text(AppLocalizations.of(context).ok),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
-    );
   }
 
   /// Returns the title and message for the dialog based on the [CreateStatus].
@@ -406,28 +372,36 @@ class _CreateGameViewState extends State<CreateGameView> {
     }
   }
 
-  /// Checks if every player has a name.
-  /// Returns true if all players have a name, false otherwise.
-  bool everyPlayerHasAName() {
-    for (var controller in _playerNameTextControllers) {
-      if (controller.text == '') {
-        return false;
-      }
-    }
-    return true;
-  }
+  /// Creates a new gameSession and navigates to the active game view.
+  /// This method creates a new gameSession object with the provided attributes in the text fields.
+  /// It then adds the game session to the game manager and navigates to the active game view.
+  void _createGame() {
+    var uuid = const Uuid();
+    final String id = uuid.v1();
 
-  Text _getDisplayedGameMode() {
-    if (gameMode == GameMode.none) {
-      return Text(AppLocalizations.of(context).no_mode_selected);
-    } else if (gameMode == GameMode.pointLimit) {
-      return Text(
-          '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
-          style: TextStyle(color: CustomTheme.primaryColor));
-    } else {
-      return Text(AppLocalizations.of(context).unlimited,
-          style: TextStyle(color: CustomTheme.primaryColor));
+    List<String> players = [];
+    for (var controller in _playerNameTextControllers) {
+      players.add(controller.text);
     }
+
+    bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+
+    GameSession gameSession = GameSession(
+      id: id,
+      createdAt: DateTime.now(),
+      gameTitle: _gameTitleTextController.text,
+      players: players,
+      pointLimit: ConfigService.getPointLimit(),
+      caboPenalty: ConfigService.getCaboPenalty(),
+      isPointsLimitEnabled: isPointsLimitEnabled,
+    );
+    gameManager.addGameSession(gameSession);
+    final session = gameManager.getGameSessionById(id)!;
+
+    Navigator.pushReplacement(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => ActiveGameView(gameSession: session)));
   }
 
   @override
