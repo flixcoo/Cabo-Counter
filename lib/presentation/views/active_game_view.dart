@@ -455,7 +455,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     // If the previous round was not the last one
     if (round != null && round >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await Future.delayed(const Duration(milliseconds: 600));
+        await Future.delayed(
+            const Duration(milliseconds: Constants.roundViewDelay));
         if (context.mounted) {
           _openRoundView(context, round);
         }
