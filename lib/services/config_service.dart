@@ -32,6 +32,14 @@ class ConfigService {
     prefs.setInt(_keyGameMode, _gameMode);
   }
 
+  /// Retrieves the current game mode.
+  ///
+  /// The game mode is determined based on the stored integer value:
+  /// - `0`: [GameMode.pointLimit]
+  /// - `1`: [GameMode.unlimited]
+  /// - Any other value: [GameMode.none] (-1 is used as a default for no mode)
+  ///
+  /// Returns the corresponding [GameMode] enum value.
   static GameMode getGameMode() {
     switch (_gameMode) {
       case 0:
@@ -43,6 +51,14 @@ class ConfigService {
     }
   }
 
+  /// Sets the game mode for the application.
+  ///
+  /// [newGameMode] is the new game mode to be set. It can be one of the following:
+  /// - `GameMode.pointLimit`: The game ends when a pleayer reaches the point limit.
+  /// - `GameMode.unlimited`: Every game goes for infinity until you end it.
+  /// - `GameMode.none`: No default mode set.
+  ///
+  /// This method updates the `_gameMode` field and persists the value in `SharedPreferences`.
   static Future<void> setGameMode(GameMode newGameMode) async {
     int gameMode;
     switch (newGameMode) {

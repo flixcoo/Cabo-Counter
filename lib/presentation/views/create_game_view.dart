@@ -50,7 +50,6 @@ class _CreateGameViewState extends State<CreateGameView> {
     super.initState();
 
     gameMode = widget.gameMode;
-    print('Game mode: $gameMode');
 
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
