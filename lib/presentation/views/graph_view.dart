@@ -25,7 +25,6 @@ class _GraphViewState extends State<GraphView> {
 
   @override
   Widget build(BuildContext context) {
-    print('roundNumber: ${widget.gameSession.roundNumber}');
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
