@@ -4,6 +4,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/widgets/custom_button.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,185 +137,129 @@ class _CreateGameViewState extends State<CreateGameView> {
                 style: CustomTheme.rowTitle,
               ),
             ),
-            Expanded(
-                child: ReorderableListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _playerNameTextControllers.length + 2,
-                    onReorder: (oldIndex, newIndex) {
+            Flexible(
+              child: ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: _playerNameTextControllers.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
                       if (oldIndex < _playerNameTextControllers.length &&
                           newIndex <= _playerNameTextControllers.length) {
-                        setState(() {
-                          if (newIndex > oldIndex) newIndex--;
-                          final item =
-                              _playerNameTextControllers.removeAt(oldIndex);
-                          _playerNameTextControllers.insert(newIndex, item);
-                        });
+                        if (newIndex > oldIndex) newIndex--;
+                        final item =
+                            _playerNameTextControllers.removeAt(oldIndex);
+                        _playerNameTextControllers.insert(newIndex, item);
                       }
-                    },
-                    itemBuilder: (context, index) {
-                      // Create game button
-                      if (index == _playerNameTextControllers.length + 1) {
-                        return Container(
-                          key: const ValueKey('create_game_button'),
-                          child: CupertinoButton(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: CustomTheme.primaryColor,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 8),
-                                  child: Text(
-                                    AppLocalizations.of(context).create_game,
-                                    style: TextStyle(
-                                      color: CustomTheme.backgroundColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      key: ValueKey(
+                          'player_${_playerNameTextControllers[index].hashCode}'),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: const Icon(
+                              CupertinoIcons.minus_circle_fill,
+                              color: CupertinoColors.destructiveRed,
+                              size: 25,
                             ),
                             onPressed: () {
-                              _checkAllGameAttributes();
+                              setState(() {
+                                _playerNameTextControllers[index].dispose();
+                                _playerNameTextControllers.removeAt(index);
+                              });
                             },
                           ),
-                        );
-                      }
-                      // Add player button
-                      if (index == _playerNameTextControllers.length) {
-                        return Container(
-                            key: const ValueKey('add_player_button'),
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 10),
-                                child: CupertinoButton(
-                                    padding: EdgeInsets.zero,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.add_circled_solid,
-                                            color: CustomTheme.primaryColor,
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            AppLocalizations.of(context)
-                                                .add_player,
-                                            style: TextStyle(
-                                                color:
-                                                    CustomTheme.primaryColor),
-                                          ),
-                                        ]),
-                                    onPressed: () {
-                                      if (_playerNameTextControllers.length <
-                                          maxPlayers) {
-                                        setState(() {
-                                          _playerNameTextControllers
-                                              .add(TextEditingController());
-                                        });
-                                      } else {
-                                        showFeedbackDialog(
-                                            CreateStatus.maxPlayers);
-                                      }
-                                    })));
-                      } else {
-                        // Player entries
-                        return Padding(
-                          key: ValueKey(_playerNameTextControllers[index]),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 5),
-                          child: Row(
-                            children: [
-                              CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: const Icon(
-                                  CupertinoIcons.minus_circle_fill,
-                                  color: CupertinoColors.destructiveRed,
-                                  size: 25,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _playerNameTextControllers[index].dispose();
-                                    _playerNameTextControllers.removeAt(index);
-                                  });
-                                },
-                              ),
-                              Expanded(
-                                child: CupertinoTextField(
-                                  controller: _playerNameTextControllers[index],
-                                  maxLength: 12,
-                                  placeholder:
-                                      '${AppLocalizations.of(context).player} ${index + 1}',
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: const BoxDecoration(),
-                                ),
-                              ),
-                            ],
+                          Expanded(
+                            child: CupertinoTextField(
+                              controller: _playerNameTextControllers[index],
+                              maxLength: 12,
+                              placeholder:
+                                  '${AppLocalizations.of(context).player} ${index + 1}',
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(),
+                            ),
                           ),
-                        );
-                      }
-                    })),
-            Center(
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).create_game,
-                      style: const TextStyle(
-                        color: CupertinoColors.activeGreen,
+                          AnimatedOpacity(
+                            opacity: _playerNameTextControllers.length > 1
+                                ? 1.0
+                                : 0.0,
+                            duration: const Duration(milliseconds: 300),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ReorderableDragStartListener(
+                                index: index,
+                                child: const Icon(
+                                  CupertinoIcons.line_horizontal_3,
+                                  color: CupertinoColors.systemGrey,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 0, 50),
+              child: Center(
+                child: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Row(
+                    children: [
+                      CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: null,
+                          child: Icon(
+                            CupertinoIcons.plus_circle_fill,
+                            color: CustomTheme.primaryColor,
+                            size: 25,
+                          )),
+                      Stack(children: [
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).add_player,
+                              style: TextStyle(color: CustomTheme.primaryColor),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+                  onPressed: () {
+                    if (_playerNameTextControllers.length < maxPlayers) {
+                      setState(() {
+                        _playerNameTextControllers.add(TextEditingController());
+                      });
+                    } else {
+                      showFeedbackDialog(CreateStatus.maxPlayers);
+                    }
+                  },
                 ),
-                onPressed: () async {
-                  if (_gameTitleTextController.text == '') {
-                    showFeedbackDialog(CreateStatus.noGameTitle);
-                    return;
-                  }
-                  if (gameMode == GameMode.none) {
-                    showFeedbackDialog(CreateStatus.noModeSelected);
-                    return;
-                  }
-                  if (_playerNameTextControllers.length < 2) {
-                    showFeedbackDialog(CreateStatus.minPlayers);
-                    return;
-                  }
-                  if (!everyPlayerHasAName()) {
-                    showFeedbackDialog(CreateStatus.noPlayerName);
-                    return;
-                  }
-
-                  List<String> players = [];
-                  for (var controller in _playerNameTextControllers) {
-                    players.add(controller.text);
-                  }
-
-                  bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
-
-                  GameSession gameSession = GameSession(
-                    createdAt: DateTime.now(),
-                    gameTitle: _gameTitleTextController.text,
-                    players: players,
-                    pointLimit: ConfigService.getPointLimit(),
-                    caboPenalty: ConfigService.getCaboPenalty(),
-                    isPointsLimitEnabled: isPointsLimitEnabled,
-                  );
-                  final index = await gameManager.addGameSession(gameSession);
-                  final session = gameManager.gameList[index];
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ActiveGameView(gameSession: session)));
-                  }
-                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: Center(
+                key: const ValueKey('create_game_button'),
+                child: CustomButton(
+                  child: Text(
+                    AppLocalizations.of(context).create_game,
+                    style: TextStyle(
+                      color: CustomTheme.primaryColor,
+                    ),
+                  ),
+                  onPressed: () {
+                    _checkAllGameAttributes();
+                  },
+                ),
               ),
             ),
           ],

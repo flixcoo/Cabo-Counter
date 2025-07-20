@@ -149,7 +149,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get no_name_title => 'Kein Name';
 
   @override
-  String get no_name_message => 'Jeder Spieler muss einen Namen haben.';
+  String get no_name_message => 'Jede:r Spieler:in muss einen Namen haben.';
 
   @override
   String get select_game_mode => 'Spielmodus auswählen';
