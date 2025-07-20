@@ -144,6 +144,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         )),
                                     trailing: Row(
                                       children: [
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
                                         Text('${session.roundNumber}'),
                                         const SizedBox(width: 3),
                                         const Icon(CupertinoIcons
