@@ -94,7 +94,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                 child: CupertinoTextField(
                   decoration: const BoxDecoration(),
-                  maxLength: 16,
+                  maxLength: 20,
                   prefix: Text(AppLocalizations.of(context).name),
                   textAlign: TextAlign.right,
                   placeholder: AppLocalizations.of(context).game_title,
