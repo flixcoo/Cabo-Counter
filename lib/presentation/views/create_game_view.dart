@@ -16,15 +16,15 @@ enum CreateStatus {
 }
 
 class CreateGameView extends StatefulWidget {
+  final GameMode gameMode;
   final String? gameTitle;
-  final bool? isPointsLimitEnabled;
   final List<String>? players;
 
   const CreateGameView({
     super.key,
     this.gameTitle,
-    this.isPointsLimitEnabled,
     this.players,
+    required this.gameMode,
   });
 
   @override
@@ -42,19 +42,14 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
-  /// Variable to store whether the points limit feature is enabled.
-  bool? _isPointsLimitEnabled;
+  /// Variable to hold the selected game mode.
+  late GameMode gameMode;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.isPointsLimitEnabled == null) {
-      _isPointsLimitEnabled =
-          ConfigService.gameMode == -1 ? null : ConfigService.gameMode == 1;
-    } else {
-      _isPointsLimitEnabled = widget.isPointsLimitEnabled;
-    }
+    gameMode = widget.gameMode;
 
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
@@ -106,10 +101,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                 suffix: Row(
                   children: [
                     Text(
-                      _isPointsLimitEnabled == null
-                          ? AppLocalizations.of(context).select_mode
-                          : (_isPointsLimitEnabled!
-                              ? '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}'
+                      gameMode == GameMode.none
+                          ? AppLocalizations.of(context).no_mode_selected
+                          : (gameMode == GameMode.pointLimit
+                              ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited),
                     ),
                     const SizedBox(width: 3),
@@ -121,29 +116,15 @@ class _CreateGameViewState extends State<CreateGameView> {
                     context,
                     CupertinoPageRoute(
                       builder: (context) => ModeSelectionMenu(
-                        pointLimit: ConfigService.pointLimit,
+                        pointLimit: ConfigService.getPointLimit(),
                         showDeselection: false,
                       ),
                     ),
                   );
 
-                  switch (selectedMode) {
-                    case GameMode.pointLimit:
-                      setState(() {
-                        _isPointsLimitEnabled = true;
-                      });
-                      break;
-                    case GameMode.unlimited:
-                      setState(() {
-                        _isPointsLimitEnabled = false;
-                      });
-                      break;
-                    case GameMode.none:
-                    default:
-                      setState(() {
-                        _isPointsLimitEnabled = null;
-                      });
-                  }
+                  setState(() {
+                    gameMode = selectedMode ?? gameMode;
+                  });
                 },
               ),
             ),
@@ -249,7 +230,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     showFeedbackDialog(CreateStatus.noGameTitle);
                     return;
                   }
-                  if (_isPointsLimitEnabled == null) {
+                  if (gameMode == GameMode.none) {
                     showFeedbackDialog(CreateStatus.noModeSelected);
                     return;
                   }
@@ -266,13 +247,16 @@ class _CreateGameViewState extends State<CreateGameView> {
                   for (var controller in _playerNameTextControllers) {
                     players.add(controller.text);
                   }
+
+                  bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+
                   GameSession gameSession = GameSession(
                     createdAt: DateTime.now(),
                     gameTitle: _gameTitleTextController.text,
                     players: players,
-                    pointLimit: ConfigService.pointLimit,
-                    caboPenalty: ConfigService.caboPenalty,
-                    isPointsLimitEnabled: _isPointsLimitEnabled!,
+                    pointLimit: ConfigService.getPointLimit(),
+                    caboPenalty: ConfigService.getCaboPenalty(),
+                    isPointsLimitEnabled: isPointsLimitEnabled,
                   );
                   final index = await gameManager.addGameSession(gameSession);
                   final session = gameManager.gameList[index];

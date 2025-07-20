@@ -21,7 +21,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
-  int defaultMode = ConfigService.gameMode;
+  GameMode defaultMode = ConfigService.getGameMode();
   @override
   void initState() {
     super.initState();
@@ -57,7 +57,7 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.bolt_fill,
                         suffixWidget: CustomStepper(
                           key: _stepperKey1,
-                          initialValue: ConfigService.caboPenalty,
+                          initialValue: ConfigService.getCaboPenalty(),
                           minValue: 0,
                           maxValue: 50,
                           step: 1,
@@ -73,7 +73,7 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: FontAwesomeIcons.bullseye,
                         suffixWidget: CustomStepper(
                           key: _stepperKey2,
-                          initialValue: ConfigService.pointLimit,
+                          initialValue: ConfigService.getPointLimit(),
                           minValue: 30,
                           maxValue: 1000,
                           step: 10,
@@ -91,11 +91,10 @@ class _SettingsViewState extends State<SettingsView> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              defaultMode == -1
-                                  ? AppLocalizations.of(context)
-                                      .no_mode_selected
-                                  : (defaultMode == 1
-                                      ? '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}'
+                              defaultMode == GameMode.none
+                                  ? AppLocalizations.of(context).no_default_mode
+                                  : (defaultMode == GameMode.pointLimit
+                                      ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
                                       : AppLocalizations.of(context).unlimited),
                             ),
                             const SizedBox(width: 5),
@@ -107,29 +106,15 @@ class _SettingsViewState extends State<SettingsView> {
                             context,
                             CupertinoPageRoute(
                               builder: (context) => ModeSelectionMenu(
-                                pointLimit: ConfigService.pointLimit,
+                                pointLimit: ConfigService.getPointLimit(),
                                 showDeselection: true,
                               ),
                             ),
                           );
 
-                          switch (selectedMode) {
-                            case GameMode.pointLimit:
-                              setState(() {
-                                defaultMode = 1;
-                              });
-                              break;
-                            case GameMode.unlimited:
-                              setState(() {
-                                defaultMode = 0;
-                              });
-                              break;
-                            case GameMode.none:
-                            default:
-                              setState(() {
-                                defaultMode = -1;
-                              });
-                          }
+                          setState(() {
+                            defaultMode = selectedMode ?? GameMode.none;
+                          });
                           ConfigService.setGameMode(defaultMode);
                         },
                       ),
@@ -142,7 +127,7 @@ class _SettingsViewState extends State<SettingsView> {
                           setState(() {
                             _stepperKey1 = UniqueKey();
                             _stepperKey2 = UniqueKey();
-                            defaultMode = ConfigService.gameMode;
+                            defaultMode = ConfigService.getGameMode();
                           });
                         },
                       )
