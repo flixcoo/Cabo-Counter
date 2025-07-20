@@ -58,160 +58,156 @@ class _MainMenuViewState extends State<MainMenuView> {
         listenable: gameManager,
         builder: (context, _) {
           return CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: CupertinoNavigationBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => const SettingsView(),
-                      ),
-                    ).then((_) {
-                      setState(() {});
-                    });
-                  },
-                  icon: const Icon(CupertinoIcons.settings, size: 30)),
-              middle: Text(AppLocalizations.of(context).app_name),
-              trailing: IconButton(
-                  onPressed: () => Navigator.push(
+              resizeToAvoidBottomInset: false,
+              navigationBar: CupertinoNavigationBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => CreateGameView(
-                              gameMode: ConfigService.getGameMode()),
+                          builder: (context) => const SettingsView(),
                         ),
+                      ).then((_) {
+                        setState(() {});
+                      });
+                    },
+                    icon: const Icon(CupertinoIcons.settings, size: 30)),
+                middle: Text(AppLocalizations.of(context).app_name),
+                trailing: IconButton(
+                    onPressed: () => Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => CreateGameView(
+                                gameMode: ConfigService.getGameMode()),
+                          ),
+                        ),
+                    icon: const Icon(CupertinoIcons.add)),
+              ),
+              child: CupertinoPageScaffold(
+                  child: SafeArea(
+                child: Visibility(
+                  replacement:
+                      const Center(child: CupertinoActivityIndicator()),
+                  child: Visibility(
+                    visible: gameManager.gameList.isEmpty,
+                    replacement: ListView.separated(
+                      itemCount: gameManager.gameList.length,
+                      separatorBuilder: (context, index) => Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: CustomTheme.white.withAlpha(50),
+                        indent: 50,
+                        endIndent: 50,
                       ),
-                  icon: const Icon(CupertinoIcons.add)),
-            ),
-            child: CupertinoPageScaffold(
-              child: SafeArea(
-                child: _isLoading
-                    ? const Center(child: CupertinoActivityIndicator())
-                    : gameManager.gameList.isEmpty
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 30),
-                              Center(
-                                  child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => CreateGameView(
-                                        gameMode: ConfigService.getGameMode()),
+                      itemBuilder: (context, index) {
+                        final session = gameManager.gameList[index];
+                        return ListenableBuilder(
+                            listenable: session,
+                            builder: (context, _) {
+                              return Dismissible(
+                                key: Key(session.id),
+                                background: Container(
+                                  color: CupertinoColors.destructiveRed,
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: const Icon(
+                                    CupertinoIcons.delete,
+                                    color: CupertinoColors.white,
                                   ),
                                 ),
-                                child: Icon(
-                                  CupertinoIcons.plus,
-                                  size: 60,
-                                  color: CustomTheme.primaryColor,
+                                direction: DismissDirection.endToStart,
+                                confirmDismiss: (direction) async {
+                                  return await _showDeleteGamePopup(
+                                      context, session.gameTitle);
+                                },
+                                onDismissed: (direction) {
+                                  gameManager.removeGameSessionById(session.id);
+                                },
+                                dismissThresholds: const {
+                                  DismissDirection.startToEnd: 0.6
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0),
+                                  child: CupertinoListTile(
+                                    backgroundColorActivated:
+                                        CustomTheme.backgroundColor,
+                                    title: Text(session.gameTitle),
+                                    subtitle: Visibility(
+                                        visible: session.isGameFinished,
+                                        replacement: Text(
+                                          '${AppLocalizations.of(context).mode}: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                        child: Text(
+                                          '\u{1F947} ${session.winner}',
+                                          style: const TextStyle(fontSize: 14),
+                                        )),
+                                    trailing: Row(
+                                      children: [
+                                        Text('${session.roundNumber}'),
+                                        const SizedBox(width: 3),
+                                        const Icon(CupertinoIcons
+                                            .arrow_2_circlepath_circle_fill),
+                                        const SizedBox(width: 15),
+                                        Text('${session.players.length}'),
+                                        const SizedBox(width: 3),
+                                        const Icon(
+                                            CupertinoIcons.person_2_fill),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      final session =
+                                          gameManager.gameList[index];
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) => ActiveGameView(
+                                              gameSession: session),
+                                        ),
+                                      ).then((_) {
+                                        setState(() {});
+                                      });
+                                    },
+                                  ),
                                 ),
-                              )),
-                              const SizedBox(height: 10),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 70),
-                                child: Text(
-                                  '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          )
-                        : ListView.separated(
-                            itemCount: gameManager.gameList.length,
-                            separatorBuilder: (context, index) => Divider(
-                              height: 1,
-                              thickness: 0.5,
-                              color: CustomTheme.white.withAlpha(50),
-                              indent: 50,
-                              endIndent: 50,
+                              );
+                            });
+                      },
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 30),
+                        Center(
+                            child: GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => CreateGameView(
+                                  gameMode: ConfigService.getGameMode()),
                             ),
-                            itemBuilder: (context, index) {
-                              final session = gameManager.gameList[index];
-                              return ListenableBuilder(
-                                  listenable: session,
-                                  builder: (context, _) {
-                                    return Dismissible(
-                                      key: Key(session.id),
-                                      background: Container(
-                                        color: CupertinoColors.destructiveRed,
-                                        alignment: Alignment.centerRight,
-                                        padding:
-                                            const EdgeInsets.only(right: 20.0),
-                                        child: const Icon(
-                                          CupertinoIcons.delete,
-                                          color: CupertinoColors.white,
-                                        ),
-                                      ),
-                                      direction: DismissDirection.endToStart,
-                                      confirmDismiss: (direction) async {
-                                        return await _showDeleteGamePopup(
-                                            context, session.gameTitle);
-                                      },
-                                      onDismissed: (direction) {
-                                        gameManager
-                                            .removeGameSessionById(session.id);
-                                      },
-                                      dismissThresholds: const {
-                                        DismissDirection.startToEnd: 0.6
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0),
-                                        child: CupertinoListTile(
-                                          backgroundColorActivated:
-                                              CustomTheme.backgroundColor,
-                                          title: Text(session.gameTitle),
-                                          subtitle:
-                                              session.isGameFinished == true
-                                                  ? Text(
-                                                      '\u{1F947} ${session.winner}',
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    )
-                                                  : Text(
-                                                      '${AppLocalizations.of(context).mode}: ${_translateGameMode(session.isPointsLimitEnabled)}',
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                          trailing: Row(
-                                            children: [
-                                              Text('${session.roundNumber}'),
-                                              const SizedBox(width: 3),
-                                              const Icon(CupertinoIcons
-                                                  .arrow_2_circlepath_circle_fill),
-                                              const SizedBox(width: 15),
-                                              Text('${session.players.length}'),
-                                              const SizedBox(width: 3),
-                                              const Icon(
-                                                  CupertinoIcons.person_2_fill),
-                                            ],
-                                          ),
-                                          onTap: () {
-                                            final session =
-                                                gameManager.gameList[index];
-                                            Navigator.push(
-                                              context,
-                                              CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    ActiveGameView(
-                                                        gameSession: session),
-                                              ),
-                                            ).then((_) {
-                                              setState(() {});
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  });
-                            },
                           ),
-              ),
-            ),
-          );
+                          child: Icon(
+                            CupertinoIcons.plus,
+                            size: 60,
+                            color: CustomTheme.primaryColor,
+                          ),
+                        )),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 70),
+                          child: Text(
+                            '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )));
         });
   }
 
