@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 class GameManager extends ChangeNotifier {
@@ -21,8 +22,12 @@ class GameManager extends ChangeNotifier {
     return gameList.indexOf(session);
   }
 
+  /// Retrieves a game session by its id.
+  /// Takes a String [id] as input. It searches the `gameList` for a session
+  /// with a matching id and returns it if found.
+  /// If no session is found, it returns null.
   GameSession? getGameSessionById(String id) {
-    return gameList.firstWhere((session) => session.id.toString() == id);
+    return gameList.firstWhereOrNull((session) => session.id.toString() == id);
   }
 
   /// Removes a game session from the list and sorts it by creation date.

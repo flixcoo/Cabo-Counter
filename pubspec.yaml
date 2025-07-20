@@ -2,7 +2,7 @@ name: cabo_counter
 description: "Mobile app for the card game Cabo"
 publish_to: 'none'
 
-version: 0.5.0+568
+version: 0.5.1+568
 
 environment:
   sdk: ^3.5.4
@@ -29,6 +29,7 @@ dependencies:
   uuid: ^4.5.1
   rate_my_app: ^2.3.2
   reorderables: ^0.4.2
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:
