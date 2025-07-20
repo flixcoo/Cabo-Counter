@@ -9,6 +9,7 @@ import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/views/points_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -467,8 +468,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Plays the confetti animation and shows a dialog with the winner's information.
   Future<void> _playFinishAnimation(BuildContext context) async {
     String winner = widget.gameSession.winner;
-    int winnerIndex = widget.gameSession.players.indexOf(winner);
-    int points = widget.gameSession.playerScores[winnerIndex];
+    int winnerPoints = widget.gameSession.playerScores.min;
 
     confettiController.play();
 
@@ -480,8 +480,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
               title: Text(AppLocalizations.of(context).end_of_game_title),
-              content: Text(AppLocalizations.of(context)
-                  .end_of_game_message(1, winner, points)),
+              content: Text(AppLocalizations.of(context).end_of_game_message(
+                  winner.contains('&') ? 2 : 1, winner, winnerPoints)),
               actions: [
                 CupertinoDialogAction(
                   child: Text(AppLocalizations.of(context).ok),
