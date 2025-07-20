@@ -260,10 +260,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       );
                                     }
                                   }),
-                              CupertinoListTile(
-                                title: const Text('Konfetti'),
-                                onTap: () => confettiController.play(),
-                              )
                             ],
                           )
                         ],
