@@ -4,6 +4,7 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/graph_view.dart';
+import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/views/points_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
@@ -205,9 +206,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   CupertinoPageRoute(
                                       builder: (_) => CreateGameView(
                                             gameTitle: gameSession.gameTitle,
-                                            isPointsLimitEnabled: widget
-                                                .gameSession
-                                                .isPointsLimitEnabled,
+                                            gameMode: widget.gameSession
+                                                        .isPointsLimitEnabled ==
+                                                    true
+                                                ? GameMode.pointLimit
+                                                : GameMode.unlimited,
                                             players: gameSession.players,
                                           )));
                             },

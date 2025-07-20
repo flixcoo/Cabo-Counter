@@ -58,9 +58,9 @@
   "no_name_message": "Jeder Spieler muss einen Namen haben.",
 
   "select_game_mode": "Spielmodus auswählen",
-  "no_mode_selected": "Kein Modus",
-  "no_default_mode": "Kein Standard-Modus",
-  "no_default_description": "Der Standard-Modus wird zurückgesetzt.",
+  "no_mode_selected": "Wähle einen Spielmodus",
+  "no_default_mode": "Kein Modus",
+  "no_default_description": "Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.",
   "point_limit_description": "Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht",
   "@point_limit_description": {
     "placeholders": {

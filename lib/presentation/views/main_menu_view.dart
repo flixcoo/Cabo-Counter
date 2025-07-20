@@ -77,7 +77,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                   onPressed: () => Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => const CreateGameView(),
+                          builder: (context) => CreateGameView(
+                              gameMode: ConfigService.getGameMode()),
                         ),
                       ),
                   icon: const Icon(CupertinoIcons.add)),
@@ -96,8 +97,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                 onTap: () => Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const CreateGameView(),
+                                    builder: (context) => CreateGameView(
+                                        gameMode: ConfigService.getGameMode()),
                                   ),
                                 ),
                                 child: Icon(
@@ -216,9 +217,9 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   /// Translates the game mode boolean into the corresponding String.
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
-  String _translateGameMode(bool pointLimit) {
-    if (pointLimit) {
-      return '${ConfigService.pointLimit} ${AppLocalizations.of(context).points}';
+  String _translateGameMode(bool isPointLimitEnabled) {
+    if (isPointLimitEnabled) {
+      return '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}';
     }
     return AppLocalizations.of(context).unlimited;
   }

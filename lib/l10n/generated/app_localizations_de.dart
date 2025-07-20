@@ -155,13 +155,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get select_game_mode => 'Spielmodus auswählen';
 
   @override
-  String get no_mode_selected => 'Kein Modus';
+  String get no_mode_selected => 'Wähle einen Spielmodus';
 
   @override
-  String get no_default_mode => 'Kein Standard-Modus';
+  String get no_default_mode => 'Kein Modus';
 
   @override
-  String get no_default_description => 'Der Standard-Modus wird zurückgesetzt.';
+  String get no_default_description =>
+      'Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.';
 
   @override
   String point_limit_description(int pointLimit) {
