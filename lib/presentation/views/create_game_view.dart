@@ -396,7 +396,7 @@ class _CreateGameViewState extends State<CreateGameView> {
       isPointsLimitEnabled: isPointsLimitEnabled,
     );
     gameManager.addGameSession(gameSession);
-    final session = gameManager.getGameSessionById(id)!;
+    final session = gameManager.getGameSessionById(id) ?? gameSession;
 
     Navigator.pushReplacement(
         context,
