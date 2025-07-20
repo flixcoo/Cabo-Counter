@@ -98,7 +98,7 @@
 
   "end_of_game_title": "End of Game",
   "end_of_game_message": "{playerCount, plural, =1{{names} won the game with {points} points. Congratulations!} other{{names} won the game with {points} points. Congratulations!}}",
-  "@game_over_message": {
+  "@end_of_game_message": {
     "placeholders": {
       "playerCount": {
         "type": "int"

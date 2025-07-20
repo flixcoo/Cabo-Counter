@@ -98,18 +98,18 @@
 
   "end_of_game_title": "Spiel beendet",
   "end_of_game_message": "{playerCount, plural, =1{{names} hat das Spiel mit {points} Punkten gewonnen. Glückwunsch!} other{{names} haben das Spiel mit {points} Punkten gewonnen. Glückwunsch!}}",
-    "@end_of_game_message": {
-        "placeholders": {
-        "playerCount": {
-            "type": "int"
-        },
-        "names": {
-            "type": "String"
-        },
-        "points": {
-            "type": "int"
-        }
-        }
+  "@end_of_game_message": {
+      "placeholders": {
+      "playerCount": {
+          "type": "int"
+      },
+      "names": {
+          "type": "String"
+      },
+      "points": {
+          "type": "int"
+      }
+      }
   },
   "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
