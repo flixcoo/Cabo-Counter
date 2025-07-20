@@ -1,6 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/widgets/custom_button.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -228,10 +229,7 @@ class _RoundViewState extends State<RoundView> {
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Center(
                         heightFactor: 1,
-                        child: CupertinoButton(
-                          sizeStyle: CupertinoButtonSize.medium,
-                          borderRadius: BorderRadius.circular(12),
-                          color: CustomTheme.buttonBackgroundColor,
+                        child: CustomButton(
                           onPressed: () async {
                             if (await _showKamikazeSheet(context)) {
                               if (!context.mounted) return;
