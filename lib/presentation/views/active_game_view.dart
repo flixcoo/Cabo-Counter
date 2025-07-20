@@ -494,4 +494,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           });
     }
   }
+
+  @override
+  void dispose() {
+    confettiController.dispose();
+    super.dispose();
+  }
 }
