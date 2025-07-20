@@ -255,8 +255,8 @@ class _CreateGameViewState extends State<CreateGameView> {
               ),
               KeyboardVisibilityBuilder(builder: (context, visible) {
                 if (visible) {
-                  return const SizedBox(
-                    height: 250,
+                  return SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom * 0.75,
                   );
                 } else {
                   return const SizedBox.shrink();
