@@ -27,7 +27,7 @@ class GameManager extends ChangeNotifier {
   /// with a matching id and returns it if found.
   /// If no session is found, it returns null.
   GameSession? getGameSessionById(String id) {
-    return gameList.firstWhereOrNull((session) => session.id.toString() == id);
+    return gameList.firstWhereOrNull((session) => session.id == id);
   }
 
   /// Removes a game session from the list and sorts it by creation date.
