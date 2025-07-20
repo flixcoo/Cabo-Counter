@@ -11,14 +11,14 @@ class GameManager extends ChangeNotifier {
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
   /// Returns the index of the newly added session in the sorted list.
-  Future<int> addGameSession(GameSession session) async {
+  int addGameSession(GameSession session) {
     session.addListener(() {
       notifyListeners(); // Propagate session changes
     });
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
-    await LocalStorageService.saveGameSessions();
+    LocalStorageService.saveGameSessions();
     return gameList.indexOf(session);
   }
 
