@@ -239,7 +239,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
 
     // so that the bad rating dialog is not shown immediately
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
 
     switch (preRatingDecision) {
       case PreRatingDialogDecision.yes:

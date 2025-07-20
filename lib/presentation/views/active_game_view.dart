@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
@@ -474,7 +475,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
     confettiController.play();
 
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
 
     if (context.mounted) {
       showCupertinoDialog(
