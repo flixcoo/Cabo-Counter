@@ -38,11 +38,16 @@ class CreateGameView extends StatefulWidget {
 }
 
 class _CreateGameViewState extends State<CreateGameView> {
+  final TextEditingController _gameTitleTextController =
+      TextEditingController();
+
+  /// List of text controllers for player names.
   final List<TextEditingController> _playerNameTextControllers = [
     TextEditingController()
   ];
-  final TextEditingController _gameTitleTextController =
-      TextEditingController();
+
+  /// List of focus nodes for player name text fields.
+  final List<FocusNode> _playerNameFocusNodes = [FocusNode()];
 
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
@@ -177,6 +182,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                           Expanded(
                             child: CupertinoTextField(
                               controller: _playerNameTextControllers[index],
+                              focusNode: _playerNameFocusNodes[index],
                               maxLength: 12,
                               placeholder:
                                   '${AppLocalizations.of(context).player} ${index + 1}',
@@ -245,6 +251,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                             setState(() {
                               _playerNameTextControllers
                                   .add(TextEditingController());
+                              _playerNameFocusNodes.add(FocusNode());
+                            });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _playerNameFocusNodes.last.requestFocus();
                             });
                           } else {
                             _showFeedbackDialog(CreateStatus.maxPlayers);
