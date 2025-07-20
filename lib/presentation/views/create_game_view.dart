@@ -155,7 +155,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   },
                   itemBuilder: (context, index) {
                     return Padding(
-                      key: UniqueKey(),
+                      key: ValueKey(index),
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
