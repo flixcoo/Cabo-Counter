@@ -441,7 +441,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// It starts with the given [roundNumber] and continues to open the next round
   /// until the user navigates back or the round number is invalid.
   void _openRoundView(BuildContext context, int roundNumber) async {
-    final val = await Navigator.of(context, rootNavigator: true).push(
+    final round = await Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
         fullscreenDialog: true,
         builder: (context) => RoundView(
@@ -450,43 +450,51 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         ),
       ),
     );
-    if (widget.gameSession.isGameFinished && mounted) {
-      String winner = widget.gameSession.winner;
-      int winnerIndex = widget.gameSession.players.indexOf(winner);
-      int points = widget.gameSession.playerScores[winnerIndex];
 
-      confettiController.play();
-
-      await Future.delayed(const Duration(milliseconds: 300));
-
-      if (context.mounted) {
-        showCupertinoDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return CupertinoAlertDialog(
-                title: Text(AppLocalizations.of(context).end_of_game_title),
-                content: Text(AppLocalizations.of(context)
-                    .end_of_game_message(1, winner, points)),
-                actions: [
-                  CupertinoDialogAction(
-                    child: Text(AppLocalizations.of(context).ok),
-                    onPressed: () {
-                      confettiController.stop();
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              );
-            });
-      }
+    if (widget.gameSession.isGameFinished && context.mounted) {
+      _playFinishAnimation(context);
     }
-    if (val != null && val >= 0) {
+
+    // If the previous round was not the last one
+    if (round != null && round >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Future.delayed(const Duration(milliseconds: 600));
         if (context.mounted) {
-          _openRoundView(context, val);
+          _openRoundView(context, round);
         }
       });
+    }
+  }
+
+  /// Plays the confetti animation and shows a dialog with the winner's information.
+  Future<void> _playFinishAnimation(BuildContext context) async {
+    String winner = widget.gameSession.winner;
+    int winnerIndex = widget.gameSession.players.indexOf(winner);
+    int points = widget.gameSession.playerScores[winnerIndex];
+
+    confettiController.play();
+
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (context.mounted) {
+      showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: Text(AppLocalizations.of(context).end_of_game_title),
+              content: Text(AppLocalizations.of(context)
+                  .end_of_game_message(1, winner, points)),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () {
+                    confettiController.stop();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 }
