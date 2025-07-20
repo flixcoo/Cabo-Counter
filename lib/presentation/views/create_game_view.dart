@@ -8,6 +8,7 @@ import 'package:cabo_counter/presentation/widgets/custom_button.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 enum CreateStatus {
   noGameTitle,
@@ -66,12 +67,13 @@ class _CreateGameViewState extends State<CreateGameView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: AppLocalizations.of(context).overview,
           middle: Text(AppLocalizations.of(context).new_game),
         ),
         child: SafeArea(
-            child: Center(
+            child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,13 +104,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   prefix: Text(AppLocalizations.of(context).mode),
                   suffix: Row(
                     children: [
-                      Text(
-                        gameMode == GameMode.none
-                            ? AppLocalizations.of(context).no_mode_selected
-                            : (gameMode == GameMode.pointLimit
-                                ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                                : AppLocalizations.of(context).unlimited),
-                      ),
+                      _getDisplayedGameMode(),
                       const SizedBox(width: 3),
                       const CupertinoListTileChevron(),
                     ],
@@ -137,75 +133,73 @@ class _CreateGameViewState extends State<CreateGameView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              Flexible(
-                child: ReorderableListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(8),
-                    itemCount: _playerNameTextControllers.length,
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        if (oldIndex < _playerNameTextControllers.length &&
-                            newIndex <= _playerNameTextControllers.length) {
-                          if (newIndex > oldIndex) newIndex--;
-                          final item =
-                              _playerNameTextControllers.removeAt(oldIndex);
-                          _playerNameTextControllers.insert(newIndex, item);
-                        }
-                      });
-                    },
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        key: ValueKey(
-                            'player_${_playerNameTextControllers[index].hashCode}'),
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            CupertinoButton(
-                              padding: EdgeInsets.zero,
-                              child: const Icon(
-                                CupertinoIcons.minus_circle_fill,
-                                color: CupertinoColors.destructiveRed,
-                                size: 25,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _playerNameTextControllers[index].dispose();
-                                  _playerNameTextControllers.removeAt(index);
-                                });
-                              },
+              ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: _playerNameTextControllers.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (oldIndex < _playerNameTextControllers.length &&
+                          newIndex <= _playerNameTextControllers.length) {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item =
+                            _playerNameTextControllers.removeAt(oldIndex);
+                        _playerNameTextControllers.insert(newIndex, item);
+                      }
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      key: ValueKey(
+                          'player_${_playerNameTextControllers[index].hashCode}'),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: const Icon(
+                              CupertinoIcons.minus_circle_fill,
+                              color: CupertinoColors.destructiveRed,
+                              size: 25,
                             ),
-                            Expanded(
-                              child: CupertinoTextField(
-                                controller: _playerNameTextControllers[index],
-                                maxLength: 12,
-                                placeholder:
-                                    '${AppLocalizations.of(context).player} ${index + 1}',
-                                padding: const EdgeInsets.all(12),
-                                decoration: const BoxDecoration(),
-                              ),
+                            onPressed: () {
+                              setState(() {
+                                _playerNameTextControllers[index].dispose();
+                                _playerNameTextControllers.removeAt(index);
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: CupertinoTextField(
+                              controller: _playerNameTextControllers[index],
+                              maxLength: 12,
+                              placeholder:
+                                  '${AppLocalizations.of(context).player} ${index + 1}',
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(),
                             ),
-                            AnimatedOpacity(
-                              opacity: _playerNameTextControllers.length > 1
-                                  ? 1.0
-                                  : 0.0,
-                              duration: const Duration(milliseconds: 300),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: ReorderableDragStartListener(
-                                  index: index,
-                                  child: const Icon(
-                                    CupertinoIcons.line_horizontal_3,
-                                    color: CupertinoColors.systemGrey,
-                                  ),
+                          ),
+                          AnimatedOpacity(
+                            opacity: _playerNameTextControllers.length > 1
+                                ? 1.0
+                                : 0.0,
+                            duration: const Duration(milliseconds: 300),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ReorderableDragStartListener(
+                                index: index,
+                                child: const Icon(
+                                  CupertinoIcons.line_horizontal_3,
+                                  color: CupertinoColors.systemGrey,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
                 child: Center(
@@ -259,6 +253,15 @@ class _CreateGameViewState extends State<CreateGameView> {
                   ),
                 ),
               ),
+              KeyboardVisibilityBuilder(builder: (context, visible) {
+                if (visible) {
+                  return const SizedBox(
+                    height: 250,
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
             ],
           ),
         )));
@@ -410,6 +413,19 @@ class _CreateGameViewState extends State<CreateGameView> {
       }
     }
     return true;
+  }
+
+  Text _getDisplayedGameMode() {
+    if (gameMode == GameMode.none) {
+      return Text(AppLocalizations.of(context).no_mode_selected);
+    } else if (gameMode == GameMode.pointLimit) {
+      return Text(
+          '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
+          style: TextStyle(color: CustomTheme.primaryColor));
+    } else {
+      return Text(AppLocalizations.of(context).unlimited,
+          style: TextStyle(color: CustomTheme.primaryColor));
+    }
   }
 
   @override
