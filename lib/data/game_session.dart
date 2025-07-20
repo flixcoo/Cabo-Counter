@@ -299,15 +299,19 @@ class GameSession extends ChangeNotifier {
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
   void _setWinner() {
-    int score = playerScores[0];
-    String lowestPlayer = players[0];
+    int minScore = playerScores.reduce((a, b) => a < b ? a : b);
+    List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] < score) {
-        score = playerScores[i];
-        lowestPlayer = players[i];
+      if (playerScores[i] == minScore) {
+        lowestPlayers.add(players[i]);
       }
     }
-    winner = lowestPlayer;
+    if (lowestPlayers.length > 1) {
+      winner =
+          '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    } else {
+      winner = lowestPlayers.first;
+    }
     notifyListeners();
   }
 

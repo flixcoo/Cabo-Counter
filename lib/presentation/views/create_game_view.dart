@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
@@ -187,7 +188,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                             opacity: _playerNameTextControllers.length > 1
                                 ? 1.0
                                 : 0.0,
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(
+                                milliseconds: Constants.fadeInDuration),
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: ReorderableDragStartListener(

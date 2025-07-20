@@ -209,6 +209,21 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get end_of_game_title => 'Spiel beendet';
+
+  @override
+  String end_of_game_message(int playerCount, String names, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      playerCount,
+      locale: localeName,
+      other:
+          '$names haben das Spiel mit $points Punkten gewonnen. Glückwunsch!',
+      one: '$names hat das Spiel mit $points Punkten gewonnen. Glückwunsch!',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get end_game => 'Spiel beenden';
 
   @override

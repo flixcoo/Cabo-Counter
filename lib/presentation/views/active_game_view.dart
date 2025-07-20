@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
@@ -8,6 +9,8 @@ import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/views/points_view.dart';
 import 'package:cabo_counter/presentation/views/round_view.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:collection/collection.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,9 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
+  final confettiController = ConfettiController(
+    duration: const Duration(seconds: 10),
+  );
   late final GameSession gameSession;
   late List<int> denseRanks;
   late List<int> sortedPlayerIndices;
@@ -33,225 +39,254 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-        listenable: gameSession,
-        builder: (context, _) {
-          sortedPlayerIndices = _getSortedPlayerIndices();
-          denseRanks = _calculateDenseRank(
-              gameSession.playerScores, sortedPlayerIndices);
-          return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: Text(gameSession.gameTitle),
-              ),
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).players,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.players.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          int playerIndex = sortedPlayerIndices[index];
-                          return CupertinoListTile(
-                            title: Row(
-                              children: [
-                                _getPlacementTextWidget(index),
-                                const SizedBox(width: 5),
-                                Text(
-                                  gameSession.players[playerIndex],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+    return Stack(
+      children: [
+        ListenableBuilder(
+            listenable: gameSession,
+            builder: (context, _) {
+              sortedPlayerIndices = _getSortedPlayerIndices();
+              denseRanks = _calculateDenseRank(
+                  gameSession.playerScores, sortedPlayerIndices);
+              return CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text(gameSession.gameTitle),
+                  ),
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).players,
+                              style: CustomTheme.rowTitle,
                             ),
-                            trailing: Row(
-                              children: [
-                                const SizedBox(width: 5),
-                                Text('${gameSession.playerScores[playerIndex]} '
-                                    '${AppLocalizations.of(context).points}')
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).rounds,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.roundNumber,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: CupertinoListTile(
-                                backgroundColorActivated:
-                                    CustomTheme.backgroundColor,
-                                title: Text(
-                                  '${AppLocalizations.of(context).round} ${index + 1}',
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: gameSession.players.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              int playerIndex = sortedPlayerIndices[index];
+                              return CupertinoListTile(
+                                title: Row(
+                                  children: [
+                                    _getPlacementTextWidget(index),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      gameSession.players[playerIndex],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                                trailing:
-                                    index + 1 != gameSession.roundNumber ||
+                                trailing: Row(
+                                  children: [
+                                    const SizedBox(width: 5),
+                                    Text(
+                                        '${gameSession.playerScores[playerIndex]} '
+                                        '${AppLocalizations.of(context).points}')
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).rounds,
+                              style: CustomTheme.rowTitle,
+                            ),
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: gameSession.roundNumber,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                  padding: const EdgeInsets.all(1),
+                                  child: CupertinoListTile(
+                                    backgroundColorActivated:
+                                        CustomTheme.backgroundColor,
+                                    title: Text(
+                                      '${AppLocalizations.of(context).round} ${index + 1}',
+                                    ),
+                                    trailing: index + 1 !=
+                                                gameSession.roundNumber ||
                                             gameSession.isGameFinished == true
                                         ? (const Text('\u{2705}',
                                             style: TextStyle(fontSize: 22)))
                                         : const Text('\u{23F3}',
                                             style: TextStyle(fontSize: 22)),
-                                onTap: () async {
-                                  _openRoundView(index + 1);
-                                },
-                              ));
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).statistics,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          CupertinoListTile(
-                              title: Text(
-                                AppLocalizations.of(context).scoring_history,
+                                    onTap: () async {
+                                      _openRoundView(context, index + 1);
+                                    },
+                                  ));
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).statistics,
+                              style: CustomTheme.rowTitle,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              CupertinoListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context)
+                                        .scoring_history,
+                                  ),
+                                  backgroundColorActivated:
+                                      CustomTheme.backgroundColor,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (_) => GraphView(
+                                                gameSession: gameSession,
+                                              )))),
+                              CupertinoListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context).point_overview,
+                                  ),
+                                  backgroundColorActivated:
+                                      CustomTheme.backgroundColor,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (_) => PointsView(
+                                                gameSession: gameSession,
+                                              )))),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).game,
+                              style: CustomTheme.rowTitle,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Visibility(
+                                visible: !gameSession.isPointsLimitEnabled,
+                                child: CupertinoListTile(
+                                    title: Text(
+                                      AppLocalizations.of(context).end_game,
+                                      style: gameSession.roundNumber > 1 &&
+                                              !gameSession.isGameFinished
+                                          ? const TextStyle(color: Colors.white)
+                                          : const TextStyle(
+                                              color: Colors.white30),
+                                    ),
+                                    backgroundColorActivated:
+                                        CustomTheme.backgroundColor,
+                                    onTap: () {
+                                      if (gameSession.roundNumber > 1 &&
+                                          !gameSession.isGameFinished) {
+                                        _showEndGameDialog();
+                                      }
+                                    }),
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (_) => GraphView(
-                                            gameSession: gameSession,
-                                          )))),
-                          CupertinoListTile(
-                              title: Text(
-                                AppLocalizations.of(context).point_overview,
-                              ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              onTap: () => Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (_) => PointsView(
-                                            gameSession: gameSession,
-                                          )))),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).game,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Visibility(
-                            visible: !gameSession.isPointsLimitEnabled,
-                            child: CupertinoListTile(
+                              CupertinoListTile(
                                 title: Text(
-                                  AppLocalizations.of(context).end_game,
-                                  style: gameSession.roundNumber > 1 &&
-                                          !gameSession.isGameFinished
-                                      ? const TextStyle(color: Colors.white)
-                                      : const TextStyle(color: Colors.white30),
+                                  AppLocalizations.of(context).delete_game,
                                 ),
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
                                 onTap: () {
-                                  if (gameSession.roundNumber > 1 &&
-                                      !gameSession.isGameFinished) {
-                                    _showEndGameDialog();
-                                  }
-                                }),
-                          ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context).delete_game,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
-                            onTap: () {
-                              _showDeleteGameDialog().then((value) {
-                                if (value) {
-                                  _removeGameSession(gameSession);
-                                }
-                              });
-                            },
-                          ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context)
-                                  .new_game_same_settings,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (_) => CreateGameView(
-                                            gameTitle: gameSession.gameTitle,
-                                            gameMode: widget.gameSession
-                                                        .isPointsLimitEnabled ==
-                                                    true
-                                                ? GameMode.pointLimit
-                                                : GameMode.unlimited,
-                                            players: gameSession.players,
-                                          )));
-                            },
-                          ),
-                          CupertinoListTile(
-                              title: Text(
-                                AppLocalizations.of(context).export_game,
+                                  _showDeleteGameDialog().then((value) {
+                                    if (value) {
+                                      _removeGameSession(gameSession);
+                                    }
+                                  });
+                                },
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              onTap: () async {
-                                final success = await LocalStorageService
-                                    .exportSingleGameSession(
-                                        widget.gameSession);
-                                if (!success && context.mounted) {
-                                  showCupertinoDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                      title: Text(AppLocalizations.of(context)
-                                          .export_error_title),
-                                      content: Text(AppLocalizations.of(context)
-                                          .export_error_message),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: Text(
-                                              AppLocalizations.of(context).ok),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
+                              CupertinoListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)
+                                      .new_game_same_settings,
+                                ),
+                                backgroundColorActivated:
+                                    CustomTheme.backgroundColor,
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (_) => CreateGameView(
+                                                gameTitle:
+                                                    gameSession.gameTitle,
+                                                gameMode: widget.gameSession
+                                                            .isPointsLimitEnabled ==
+                                                        true
+                                                    ? GameMode.pointLimit
+                                                    : GameMode.unlimited,
+                                                players: gameSession.players,
+                                              )));
+                                },
+                              ),
+                              CupertinoListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context).export_game,
+                                  ),
+                                  backgroundColorActivated:
+                                      CustomTheme.backgroundColor,
+                                  onTap: () async {
+                                    final success = await LocalStorageService
+                                        .exportSingleGameSession(
+                                            widget.gameSession);
+                                    if (!success && context.mounted) {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            CupertinoAlertDialog(
+                                          title: Text(
+                                              AppLocalizations.of(context)
+                                                  .export_error_title),
+                                          content: Text(
+                                              AppLocalizations.of(context)
+                                                  .export_error_message),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .ok),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              }),
+                                      );
+                                    }
+                                  }),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-              ));
-        });
+                      ),
+                    ),
+                  ));
+            }),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: ConfettiWidget(
+                blastDirectionality: BlastDirectionality.explosive,
+                particleDrag: 0.07,
+                emissionFrequency: 0.1,
+                numberOfParticles: 10,
+                minBlastForce: 5,
+                maxBlastForce: 20,
+                confettiController: confettiController,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   /// Shows a dialog to confirm ending the game.
@@ -403,8 +438,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Recursively opens the RoundView for the specified round number.
   /// It starts with the given [roundNumber] and continues to open the next round
   /// until the user navigates back or the round number is invalid.
-  void _openRoundView(int roundNumber) async {
-    final val = await Navigator.of(context, rootNavigator: true).push(
+  void _openRoundView(BuildContext context, int roundNumber) async {
+    final round = await Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
         fullscreenDialog: true,
         builder: (context) => RoundView(
@@ -413,11 +448,58 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         ),
       ),
     );
-    if (val != null && val >= 0) {
+
+    if (widget.gameSession.isGameFinished && context.mounted) {
+      _playFinishAnimation(context);
+    }
+
+    // If the previous round was not the last one
+    if (round != null && round >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await Future.delayed(const Duration(milliseconds: 600));
-        _openRoundView(val);
+        await Future.delayed(
+            const Duration(milliseconds: Constants.roundViewDelay));
+        if (context.mounted) {
+          _openRoundView(context, round);
+        }
       });
     }
+  }
+
+  /// Plays the confetti animation and shows a dialog with the winner's information.
+  Future<void> _playFinishAnimation(BuildContext context) async {
+    String winner = widget.gameSession.winner;
+    int winnerPoints = widget.gameSession.playerScores.min;
+    int winnerAmount = winner.contains('&') ? 2 : 1;
+
+    confettiController.play();
+
+    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
+
+    if (context.mounted) {
+      showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: Text(AppLocalizations.of(context).end_of_game_title),
+              content: Text(AppLocalizations.of(context)
+                  .end_of_game_message(winnerAmount, winner, winnerPoints)),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () {
+                    confettiController.stop();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  @override
+  void dispose() {
+    confettiController.dispose();
+    super.dispose();
   }
 }

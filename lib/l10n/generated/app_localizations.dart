@@ -453,6 +453,18 @@ abstract class AppLocalizations {
   String bonus_points_message(
       int playerCount, String names, int pointLimit, int bonusPoints);
 
+  /// No description provided for @end_of_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beendet'**
+  String get end_of_game_title;
+
+  /// No description provided for @end_of_game_message.
+  ///
+  /// In de, this message translates to:
+  /// **'{playerCount, plural, =1{{names} hat das Spiel mit {points} Punkten gewonnen. Glückwunsch!} other{{names} haben das Spiel mit {points} Punkten gewonnen. Glückwunsch!}}'**
+  String end_of_game_message(int playerCount, String names, int points);
+
   /// No description provided for @end_game.
   ///
   /// In de, this message translates to:

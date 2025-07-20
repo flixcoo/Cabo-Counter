@@ -19,4 +19,13 @@ class Constants {
       remindDays: 45,
       minLaunches: 15,
       remindLaunches: 40);
+
+  /// Delay in milliseconds before a pop-up appears.
+  static const int popUpDelay = 300;
+
+  /// Delay in milliseconds before the round view appears after the previous one is closed.
+  static const int roundViewDelay = 600;
+
+  /// Duration in milliseconds for the fade-in animation of texts.
+  static const int fadeInDuration = 300;
 }

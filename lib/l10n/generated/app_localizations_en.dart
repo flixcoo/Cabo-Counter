@@ -206,6 +206,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get end_of_game_title => 'End of Game';
+
+  @override
+  String end_of_game_message(int playerCount, String names, int points) {
+    return '$names won the game with $points points. Congratulations!';
+  }
+
+  @override
   String get end_game => 'End Game';
 
   @override

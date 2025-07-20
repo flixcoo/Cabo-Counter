@@ -96,6 +96,21 @@
     }
   },
 
+  "end_of_game_title": "End of Game",
+  "end_of_game_message": "{names} won the game with {points} points. Congratulations!",
+  "@end_of_game_message": {
+    "placeholders": {
+      "playerCount": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      },
+      "points": {
+        "type": "int"
+      }
+    }
+  },
   "end_game": "End Game",
   "delete_game": "Delete Game",
   "new_game_same_settings": "New Game with same Settings",
