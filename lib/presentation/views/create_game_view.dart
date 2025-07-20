@@ -9,6 +9,7 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:uuid/uuid.dart';
 
 enum CreateStatus {
   noGameTitle,
@@ -268,8 +269,8 @@ class _CreateGameViewState extends State<CreateGameView> {
   }
 
   Future<void> _createGame() async {
-    /*var uuid = const Uuid();
-    id = uuid.v1();*/
+    var uuid = const Uuid();
+    final String id = uuid.v1();
 
     List<String> players = [];
     for (var controller in _playerNameTextControllers) {
@@ -279,6 +280,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
+      id: id,
       createdAt: DateTime.now(),
       gameTitle: _gameTitleTextController.text,
       players: players,
@@ -286,8 +288,8 @@ class _CreateGameViewState extends State<CreateGameView> {
       caboPenalty: ConfigService.getCaboPenalty(),
       isPointsLimitEnabled: isPointsLimitEnabled,
     );
-    final index = await gameManager.addGameSession(gameSession);
-    final session = gameManager.gameList[index];
+    gameManager.addGameSession(gameSession);
+    final session = gameManager.getGameSessionById(id)!;
 
     Navigator.pushReplacement(
         context,
