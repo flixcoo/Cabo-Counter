@@ -469,6 +469,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   Future<void> _playFinishAnimation(BuildContext context) async {
     String winner = widget.gameSession.winner;
     int winnerPoints = widget.gameSession.playerScores.min;
+    int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();
 
@@ -480,8 +481,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
               title: Text(AppLocalizations.of(context).end_of_game_title),
-              content: Text(AppLocalizations.of(context).end_of_game_message(
-                  winner.contains('&') ? 2 : 1, winner, winnerPoints)),
+              content: Text(AppLocalizations.of(context)
+                  .end_of_game_message(winnerAmount, winner, winnerPoints)),
               actions: [
                 CupertinoDialogAction(
                   child: Text(AppLocalizations.of(context).ok),
