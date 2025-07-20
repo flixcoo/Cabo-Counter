@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 class GameManager extends ChangeNotifier {
@@ -10,15 +11,23 @@ class GameManager extends ChangeNotifier {
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
   /// Returns the index of the newly added session in the sorted list.
-  Future<int> addGameSession(GameSession session) async {
+  int addGameSession(GameSession session) {
     session.addListener(() {
       notifyListeners(); // Propagate session changes
     });
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
-    await LocalStorageService.saveGameSessions();
+    LocalStorageService.saveGameSessions();
     return gameList.indexOf(session);
+  }
+
+  /// Retrieves a game session by its id.
+  /// Takes a String [id] as input. It searches the `gameList` for a session
+  /// with a matching id and returns it if found.
+  /// If no session is found, it returns null.
+  GameSession? getGameSessionById(String id) {
+    return gameList.firstWhereOrNull((session) => session.id == id);
   }
 
   /// Removes a game session from the list and sorts it by creation date.

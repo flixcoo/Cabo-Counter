@@ -4,8 +4,12 @@ import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/widgets/custom_button.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:uuid/uuid.dart';
 
 enum CreateStatus {
   noGameTitle,
@@ -42,6 +46,9 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
+  /// Factor to adjust the view length when the keyboard is visible.
+  final double keyboardHeightAdjustmentFactor = 0.75;
+
   /// Variable to hold the selected game mode.
   late GameMode gameMode;
 
@@ -64,120 +71,92 @@ class _CreateGameViewState extends State<CreateGameView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: AppLocalizations.of(context).overview,
           middle: Text(AppLocalizations.of(context).new_game),
         ),
         child: SafeArea(
-            child: Center(
-                child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Text(
-                AppLocalizations.of(context).game,
-                style: CustomTheme.rowTitle,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-              child: CupertinoTextField(
-                decoration: const BoxDecoration(),
-                maxLength: 16,
-                prefix: Text(AppLocalizations.of(context).name),
-                textAlign: TextAlign.right,
-                placeholder: AppLocalizations.of(context).game_title,
-                controller: _gameTitleTextController,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-              child: CupertinoTextField(
-                decoration: const BoxDecoration(),
-                readOnly: true,
-                prefix: Text(AppLocalizations.of(context).mode),
-                suffix: Row(
-                  children: [
-                    Text(
-                      gameMode == GameMode.none
-                          ? AppLocalizations.of(context).no_mode_selected
-                          : (gameMode == GameMode.pointLimit
-                              ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                              : AppLocalizations.of(context).unlimited),
-                    ),
-                    const SizedBox(width: 3),
-                    const CupertinoListTileChevron(),
-                  ],
+            child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                child: Text(
+                  AppLocalizations.of(context).game,
+                  style: CustomTheme.rowTitle,
                 ),
-                onTap: () async {
-                  final selectedMode = await Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ModeSelectionMenu(
-                        pointLimit: ConfigService.getPointLimit(),
-                        showDeselection: false,
-                      ),
-                    ),
-                  );
-
-                  setState(() {
-                    gameMode = selectedMode ?? gameMode;
-                  });
-                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Text(
-                AppLocalizations.of(context).players,
-                style: CustomTheme.rowTitle,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                child: CupertinoTextField(
+                  decoration: const BoxDecoration(),
+                  maxLength: 16,
+                  prefix: Text(AppLocalizations.of(context).name),
+                  textAlign: TextAlign.right,
+                  placeholder: AppLocalizations.of(context).game_title,
+                  controller: _gameTitleTextController,
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _playerNameTextControllers.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == _playerNameTextControllers.length) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              CupertinoIcons.add_circled,
-                              color: CupertinoColors.activeGreen,
-                              size: 25,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              AppLocalizations.of(context).add_player,
-                              style: const TextStyle(
-                                color: CupertinoColors.activeGreen,
-                              ),
-                            ),
-                          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                child: CupertinoTextField(
+                  decoration: const BoxDecoration(),
+                  readOnly: true,
+                  prefix: Text(AppLocalizations.of(context).mode),
+                  suffix: Row(
+                    children: [
+                      _getDisplayedGameMode(),
+                      const SizedBox(width: 3),
+                      const CupertinoListTileChevron(),
+                    ],
+                  ),
+                  onTap: () async {
+                    final selectedMode = await Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ModeSelectionMenu(
+                          pointLimit: ConfigService.getPointLimit(),
+                          showDeselection: false,
                         ),
-                        onPressed: () {
-                          if (_playerNameTextControllers.length < maxPlayers) {
-                            setState(() {
-                              _playerNameTextControllers
-                                  .add(TextEditingController());
-                            });
-                          } else {
-                            showFeedbackDialog(CreateStatus.maxPlayers);
-                          }
-                        },
                       ),
                     );
-                  } else {
-                    // Spieler-Einträge
+
+                    setState(() {
+                      gameMode = selectedMode ?? gameMode;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                child: Text(
+                  AppLocalizations.of(context).players,
+                  style: CustomTheme.rowTitle,
+                ),
+              ),
+              ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: _playerNameTextControllers.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (oldIndex < _playerNameTextControllers.length &&
+                          newIndex <= _playerNameTextControllers.length) {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item =
+                            _playerNameTextControllers.removeAt(oldIndex);
+                        _playerNameTextControllers.insert(newIndex, item);
+                      }
+                    });
+                  },
+                  itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 5),
+                      key: ValueKey(index),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
                           CupertinoButton(
@@ -204,78 +183,148 @@ class _CreateGameViewState extends State<CreateGameView> {
                               decoration: const BoxDecoration(),
                             ),
                           ),
+                          AnimatedOpacity(
+                            opacity: _playerNameTextControllers.length > 1
+                                ? 1.0
+                                : 0.0,
+                            duration: const Duration(milliseconds: 300),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ReorderableDragStartListener(
+                                index: index,
+                                child: const Icon(
+                                  CupertinoIcons.line_horizontal_3,
+                                  color: CupertinoColors.systemGrey,
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     );
-                  }
-                },
+                  }),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
+                child: Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).add_player,
+                            style: TextStyle(color: CustomTheme.primaryColor),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            CupertinoIcons.add_circled_solid,
+                            color: CustomTheme.primaryColor,
+                            size: 25,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        if (_playerNameTextControllers.length < maxPlayers) {
+                          setState(() {
+                            _playerNameTextControllers
+                                .add(TextEditingController());
+                          });
+                        } else {
+                          _showFeedbackDialog(CreateStatus.maxPlayers);
+                        }
+                      },
+                    ),
+                  ),
+                ),
               ),
-            ),
-            Center(
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+                child: Center(
+                  key: const ValueKey('create_game_button'),
+                  child: CustomButton(
+                    child: Text(
                       AppLocalizations.of(context).create_game,
-                      style: const TextStyle(
-                        color: CupertinoColors.activeGreen,
+                      style: TextStyle(
+                        color: CustomTheme.primaryColor,
                       ),
                     ),
-                  ],
+                    onPressed: () {
+                      _checkAllGameAttributes();
+                    },
+                  ),
                 ),
-                onPressed: () async {
-                  if (_gameTitleTextController.text == '') {
-                    showFeedbackDialog(CreateStatus.noGameTitle);
-                    return;
-                  }
-                  if (gameMode == GameMode.none) {
-                    showFeedbackDialog(CreateStatus.noModeSelected);
-                    return;
-                  }
-                  if (_playerNameTextControllers.length < 2) {
-                    showFeedbackDialog(CreateStatus.minPlayers);
-                    return;
-                  }
-                  if (!everyPlayerHasAName()) {
-                    showFeedbackDialog(CreateStatus.noPlayerName);
-                    return;
-                  }
-
-                  List<String> players = [];
-                  for (var controller in _playerNameTextControllers) {
-                    players.add(controller.text);
-                  }
-
-                  bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
-
-                  GameSession gameSession = GameSession(
-                    createdAt: DateTime.now(),
-                    gameTitle: _gameTitleTextController.text,
-                    players: players,
-                    pointLimit: ConfigService.getPointLimit(),
-                    caboPenalty: ConfigService.getCaboPenalty(),
-                    isPointsLimitEnabled: isPointsLimitEnabled,
-                  );
-                  final index = await gameManager.addGameSession(gameSession);
-                  final session = gameManager.gameList[index];
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ActiveGameView(gameSession: session)));
-                  }
-                },
               ),
-            ),
-          ],
-        ))));
+              KeyboardVisibilityBuilder(builder: (context, visible) {
+                if (visible) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom *
+                        keyboardHeightAdjustmentFactor,
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
+            ],
+          ),
+        )));
+  }
+
+  /// Returns a widget that displays the currently selected game mode in the View.
+  Text _getDisplayedGameMode() {
+    if (gameMode == GameMode.none) {
+      return Text(AppLocalizations.of(context).no_mode_selected);
+    } else if (gameMode == GameMode.pointLimit) {
+      return Text(
+          '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
+          style: TextStyle(color: CustomTheme.primaryColor));
+    } else {
+      return Text(AppLocalizations.of(context).unlimited,
+          style: TextStyle(color: CustomTheme.primaryColor));
+    }
+  }
+
+  /// Checks all game attributes before creating a new game.
+  /// If any attribute is invalid, it shows a feedback dialog.
+  /// If all attributes are valid, it calls the `_createGame` method.
+  void _checkAllGameAttributes() {
+    if (_gameTitleTextController.text == '') {
+      _showFeedbackDialog(CreateStatus.noGameTitle);
+      return;
+    }
+
+    if (gameMode == GameMode.none) {
+      _showFeedbackDialog(CreateStatus.noModeSelected);
+      return;
+    }
+
+    if (_playerNameTextControllers.length < 2) {
+      _showFeedbackDialog(CreateStatus.minPlayers);
+      return;
+    }
+
+    if (!_everyPlayerHasAName()) {
+      _showFeedbackDialog(CreateStatus.noPlayerName);
+      return;
+    }
+
+    _createGame();
+  }
+
+  /// Checks if every player has a name.
+  /// Returns true if all players have a name, false otherwise.
+  bool _everyPlayerHasAName() {
+    for (var controller in _playerNameTextControllers) {
+      if (controller.text == '') {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Displays a feedback dialog based on the [CreateStatus].
-  void showFeedbackDialog(CreateStatus status) {
+  void _showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
     showCupertinoDialog(
@@ -326,15 +375,36 @@ class _CreateGameViewState extends State<CreateGameView> {
     }
   }
 
-  /// Checks if every player has a name.
-  /// Returns true if all players have a name, false otherwise.
-  bool everyPlayerHasAName() {
+  /// Creates a new gameSession and navigates to the active game view.
+  /// This method creates a new gameSession object with the provided attributes in the text fields.
+  /// It then adds the game session to the game manager and navigates to the active game view.
+  void _createGame() {
+    var uuid = const Uuid();
+    final String id = uuid.v1();
+
+    List<String> players = [];
     for (var controller in _playerNameTextControllers) {
-      if (controller.text == '') {
-        return false;
-      }
+      players.add(controller.text);
     }
-    return true;
+
+    bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+
+    GameSession gameSession = GameSession(
+      id: id,
+      createdAt: DateTime.now(),
+      gameTitle: _gameTitleTextController.text,
+      players: players,
+      pointLimit: ConfigService.getPointLimit(),
+      caboPenalty: ConfigService.getCaboPenalty(),
+      isPointsLimitEnabled: isPointsLimitEnabled,
+    );
+    gameManager.addGameSession(gameSession);
+    final session = gameManager.getGameSessionById(id) ?? gameSession;
+
+    Navigator.pushReplacement(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => ActiveGameView(gameSession: session)));
   }
 
   @override

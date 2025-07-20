@@ -365,7 +365,7 @@ abstract class AppLocalizations {
   /// No description provided for @no_name_message.
   ///
   /// In de, this message translates to:
-  /// **'Jeder Spieler muss einen Namen haben.'**
+  /// **'Jede:r Spieler:in muss einen Namen haben.'**
   String get no_name_message;
 
   /// No description provided for @select_game_mode.

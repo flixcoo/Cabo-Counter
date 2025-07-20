@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
-  late String id;
+  final String id;
   final DateTime createdAt;
   final String gameTitle;
   final List<String> players;
@@ -27,6 +27,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList = [];
 
   GameSession({
+    required this.id,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -35,8 +36,6 @@ class GameSession extends ChangeNotifier {
     required this.isPointsLimitEnabled,
   }) {
     playerScores = List.filled(players.length, 0);
-    var uuid = const Uuid();
-    id = uuid.v1();
   }
 
   @override
