@@ -46,6 +46,9 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
 
+  /// Factor to adjust the view length when the keyboard is visible.
+  final double keyboardHeightAdjustmentFactor = 0.75;
+
   /// Variable to hold the selected game mode.
   late GameMode gameMode;
 
@@ -152,8 +155,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   },
                   itemBuilder: (context, index) {
                     return Padding(
-                      key: ValueKey(
-                          'player_${_playerNameTextControllers[index].hashCode}'),
+                      key: UniqueKey(),
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
@@ -257,7 +259,8 @@ class _CreateGameViewState extends State<CreateGameView> {
               KeyboardVisibilityBuilder(builder: (context, visible) {
                 if (visible) {
                   return SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom * 0.75,
+                    height: MediaQuery.of(context).viewInsets.bottom *
+                        keyboardHeightAdjustmentFactor,
                   );
                 } else {
                   return const SizedBox.shrink();
