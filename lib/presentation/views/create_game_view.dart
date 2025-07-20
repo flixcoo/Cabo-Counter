@@ -207,38 +207,52 @@ class _CreateGameViewState extends State<CreateGameView> {
                   }),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
-                child: Center(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: CupertinoButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).add_player,
-                            style: TextStyle(color: CustomTheme.primaryColor),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            CupertinoIcons.add_circled_solid,
+                child: Stack(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: null,
+                          child: Icon(
+                            CupertinoIcons.plus_circle_fill,
                             color: CustomTheme.primaryColor,
                             size: 25,
                           ),
-                        ],
-                      ),
-                      onPressed: () {
-                        if (_playerNameTextControllers.length < maxPlayers) {
-                          setState(() {
-                            _playerNameTextControllers
-                                .add(TextEditingController());
-                          });
-                        } else {
-                          _showFeedbackDialog(CreateStatus.maxPlayers);
-                        }
-                      },
+                        ),
+                      ],
                     ),
-                  ),
+                    Center(
+                      child: CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context).add_player,
+                                  style: TextStyle(
+                                      color: CustomTheme.primaryColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          if (_playerNameTextControllers.length < maxPlayers) {
+                            setState(() {
+                              _playerNameTextControllers
+                                  .add(TextEditingController());
+                            });
+                          } else {
+                            _showFeedbackDialog(CreateStatus.maxPlayers);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
