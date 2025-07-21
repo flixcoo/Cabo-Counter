@@ -38,11 +38,16 @@ class CreateGameView extends StatefulWidget {
 }
 
 class _CreateGameViewState extends State<CreateGameView> {
+  final TextEditingController _gameTitleTextController =
+      TextEditingController();
+
+  /// List of text controllers for player names.
   final List<TextEditingController> _playerNameTextControllers = [
     TextEditingController()
   ];
-  final TextEditingController _gameTitleTextController =
-      TextEditingController();
+
+  /// List of focus nodes for player name text fields.
+  final List<FocusNode> _playerNameFocusNodes = [FocusNode()];
 
   /// Maximum number of players allowed in the game.
   final int maxPlayers = 5;
@@ -94,11 +99,19 @@ class _CreateGameViewState extends State<CreateGameView> {
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                 child: CupertinoTextField(
                   decoration: const BoxDecoration(),
-                  maxLength: 16,
+                  maxLength: 20,
                   prefix: Text(AppLocalizations.of(context).name),
                   textAlign: TextAlign.right,
                   placeholder: AppLocalizations.of(context).game_title,
                   controller: _gameTitleTextController,
+                  onSubmitted: (_) {
+                    _playerNameFocusNodes.isNotEmpty
+                        ? _playerNameFocusNodes[0].requestFocus()
+                        : FocusScope.of(context).unfocus();
+                  },
+                  textInputAction: _playerNameFocusNodes.isNotEmpty
+                      ? TextInputAction.next
+                      : TextInputAction.done,
                 ),
               ),
               Padding(
@@ -177,11 +190,24 @@ class _CreateGameViewState extends State<CreateGameView> {
                           Expanded(
                             child: CupertinoTextField(
                               controller: _playerNameTextControllers[index],
+                              focusNode: _playerNameFocusNodes[index],
                               maxLength: 12,
                               placeholder:
                                   '${AppLocalizations.of(context).player} ${index + 1}',
                               padding: const EdgeInsets.all(12),
                               decoration: const BoxDecoration(),
+                              textInputAction:
+                                  index + 1 < _playerNameTextControllers.length
+                                      ? TextInputAction.next
+                                      : TextInputAction.done,
+                              onSubmitted: (_) {
+                                if (index + 1 < _playerNameFocusNodes.length) {
+                                  _playerNameFocusNodes[index + 1]
+                                      .requestFocus();
+                                } else {
+                                  FocusScope.of(context).unfocus();
+                                }
+                              },
                             ),
                           ),
                           AnimatedOpacity(
@@ -207,38 +233,56 @@ class _CreateGameViewState extends State<CreateGameView> {
                   }),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
-                child: Center(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: CupertinoButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).add_player,
-                            style: TextStyle(color: CustomTheme.primaryColor),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            CupertinoIcons.add_circled_solid,
+                child: Stack(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: null,
+                          child: Icon(
+                            CupertinoIcons.plus_circle_fill,
                             color: CustomTheme.primaryColor,
                             size: 25,
                           ),
-                        ],
-                      ),
-                      onPressed: () {
-                        if (_playerNameTextControllers.length < maxPlayers) {
-                          setState(() {
-                            _playerNameTextControllers
-                                .add(TextEditingController());
-                          });
-                        } else {
-                          _showFeedbackDialog(CreateStatus.maxPlayers);
-                        }
-                      },
+                        ),
+                      ],
                     ),
-                  ),
+                    Center(
+                      child: CupertinoButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context).add_player,
+                                  style: TextStyle(
+                                      color: CustomTheme.primaryColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          if (_playerNameTextControllers.length < maxPlayers) {
+                            setState(() {
+                              _playerNameTextControllers
+                                  .add(TextEditingController());
+                              _playerNameFocusNodes.add(FocusNode());
+                            });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _playerNameFocusNodes.last.requestFocus();
+                            });
+                          } else {
+                            _showFeedbackDialog(CreateStatus.maxPlayers);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -414,6 +458,9 @@ class _CreateGameViewState extends State<CreateGameView> {
     _gameTitleTextController.dispose();
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
+    }
+    for (var focusnode in _playerNameFocusNodes) {
+      focusnode.dispose();
     }
 
     super.dispose();
