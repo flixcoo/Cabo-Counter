@@ -312,6 +312,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               onPressed: () {
                 setState(() {
                   gameManager.endGame(gameSession.id);
+                  _playFinishAnimation(context);
                 });
                 Navigator.pop(context);
               },
