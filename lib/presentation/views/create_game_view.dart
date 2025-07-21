@@ -459,6 +459,9 @@ class _CreateGameViewState extends State<CreateGameView> {
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
     }
+    for (var focusnode in _playerNameFocusNodes) {
+      focusnode.dispose();
+    }
 
     super.dispose();
   }
