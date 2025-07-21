@@ -16,8 +16,9 @@ class _TabViewState extends State<TabView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      resizeToAvoidBottomInset: false,
       tabBar: CupertinoTabBar(
-          backgroundColor: CustomTheme.backgroundTintColor,
+          backgroundColor: CustomTheme.mainElementBackgroundColor,
           iconSize: 27,
           height: 55,
           items: <BottomNavigationBarItem>[

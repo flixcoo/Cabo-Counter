@@ -27,46 +27,61 @@ class _GraphViewState extends State<GraphView> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(AppLocalizations.of(context).game_process),
+          middle: Text(AppLocalizations.of(context).scoring_history),
           previousPageTitle: AppLocalizations.of(context).back,
         ),
-        child: widget.gameSession.roundNumber > 1
-            ? Padding(
-                padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-                child: SfCartesianChart(
-                  legend: const Legend(
-                      overflowMode: LegendItemOverflowMode.wrap,
-                      isVisible: true,
-                      position: LegendPosition.bottom),
-                  primaryXAxis: const NumericAxis(
-                    interval: 1,
-                    decimalPlaces: 0,
-                  ),
-                  primaryYAxis: const NumericAxis(
-                    interval: 1,
-                    decimalPlaces: 0,
-                  ),
-                  series: getCumulativeScores(),
+        child: Visibility(
+          visible: widget.gameSession.roundNumber > 1 ||
+              widget.gameSession.isGameFinished,
+          replacement: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Center(
+                child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  AppLocalizations.of(context).empty_graph_text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
                 ),
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Center(
-                    child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(
-                      AppLocalizations.of(context).empty_graph_text,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-              ));
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+            child: SfCartesianChart(
+              enableAxisAnimation: true,
+              legend: const Legend(
+                  overflowMode: LegendItemOverflowMode.wrap,
+                  isVisible: true,
+                  position: LegendPosition.bottom),
+              primaryXAxis: const NumericAxis(
+                labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                interval: 1,
+                decimalPlaces: 0,
+              ),
+              primaryYAxis: NumericAxis(
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                labelAlignment: LabelAlignment.center,
+                labelPosition: ChartDataLabelPosition.inside,
+                interval: 1,
+                decimalPlaces: 0,
+                axisLabelFormatter: (AxisLabelRenderDetails details) {
+                  if (details.value == 0) {
+                    return ChartAxisLabel('', const TextStyle());
+                  }
+                  return ChartAxisLabel(
+                      '${details.value.toInt()}', const TextStyle());
+                },
+              ),
+              series: getCumulativeScores(),
+            ),
+          ),
+        ));
   }
 
   /// Returns a list of LineSeries representing the cumulative scores of each player.

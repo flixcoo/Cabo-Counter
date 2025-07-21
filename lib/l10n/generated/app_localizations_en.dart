@@ -61,7 +61,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get empty_text_2 =>
-      'Add a new round using the button in the top right corner.';
+      'Create a new game using the button in the top right.';
 
   @override
   String get delete_game_title => 'Delete game?';
@@ -119,31 +119,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_game => 'Create Game';
 
   @override
-  String get max_players_title => 'Maximum reached';
+  String get max_players_title => 'Player Limit Reached';
 
   @override
-  String get max_players_message => 'A maximum of 5 players can be added.';
+  String get max_players_message => 'You can add a maximum of 5 players.';
 
   @override
-  String get no_gameTitle_title => 'No Title';
+  String get no_gameTitle_title => 'Missing Game Title';
 
   @override
-  String get no_gameTitle_message => 'You must enter a title for the game.';
+  String get no_gameTitle_message => 'Please enter a title for your game.';
 
   @override
-  String get no_mode_title => 'No Mode';
+  String get no_mode_title => 'Game Mode Required';
 
   @override
-  String get no_mode_message => 'You must select a game mode.';
+  String get no_mode_message => 'Please select a game mode to continue';
 
   @override
-  String get min_players_title => 'Too few players';
+  String get min_players_title => 'Too Few Players';
 
   @override
-  String get min_players_message => 'At least 2 players must be added.';
+  String get min_players_message =>
+      'At least 2 players are required to start the game.';
 
   @override
-  String get no_name_title => 'No Name';
+  String get no_name_title => 'Missing Player Names';
 
   @override
   String get no_name_message => 'Each player must have a name.';
@@ -152,22 +153,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_game_mode => 'Select game mode';
 
   @override
+  String get no_mode_selected => 'No mode selected';
+
+  @override
+  String get no_default_mode => 'No default mode';
+
+  @override
+  String get no_default_description => 'The default mode gets reset.';
+
+  @override
   String point_limit_description(int pointLimit) {
-    return 'The game ends when a player reaches more than $pointLimit points.';
+    return 'The game ends when a player scores more than $pointLimit points.';
   }
 
   @override
   String get unlimited_description =>
-      'There is no limit. The game continues until you decide to stop.';
+      'The game continues until you decide to stop playing';
 
   @override
   String get results => 'Results';
 
   @override
-  String get who_said_cabo => 'Who said CABO?';
+  String get who_said_cabo => 'Who called Cabo?';
 
   @override
   String get kamikaze => 'Kamikaze';
+
+  @override
+  String get who_has_kamikaze => 'Who has Kamikaze?';
 
   @override
   String get done => 'Done';
@@ -188,6 +201,21 @@ class AppLocalizationsEn extends AppLocalizations {
           '$names have reached exactly the point limit of $pointLimit points and therefore get $bonusPoints points deducted!',
       one:
           '$names has reached exactly the point limit of $pointLimit points and therefore gets $bonusPoints points deducted!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get end_of_game_title => 'End of Game';
+
+  @override
+  String end_of_game_message(int playerCount, String names, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      playerCount,
+      locale: localeName,
+      other:
+          '$names won the game with $points points. Congratulations to everyone!',
+      one: '$names won the game with $points points. Congratulations!',
     );
     return '$_temp0';
   }
@@ -219,7 +247,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do you want to end the game? The game gets marked as finished and cannot be continued.';
 
   @override
-  String get game_process => 'Scoring History';
+  String get statistics => 'Statistics';
+
+  @override
+  String get point_overview => 'Point Overview';
+
+  @override
+  String get scoring_history => 'Scoring History';
 
   @override
   String get empty_graph_text =>
@@ -232,13 +266,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cabo_penalty => 'Cabo Penalty';
 
   @override
-  String get cabo_penalty_subtitle => '... for falsely calling Cabo.';
-
-  @override
   String get point_limit => 'Point Limit';
 
   @override
-  String get point_limit_subtitle => '... the game ends here.';
+  String get standard_mode => 'Default Mode';
 
   @override
   String get reset_to_default => 'Reset to Default';

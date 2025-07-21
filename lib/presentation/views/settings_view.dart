@@ -1,6 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -20,6 +21,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
+  GameMode defaultMode = ConfigService.getGameMode();
   @override
   void initState() {
     super.initState();
@@ -55,14 +57,13 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.bolt_fill,
                         suffixWidget: CustomStepper(
                           key: _stepperKey1,
-                          initialValue: ConfigService.caboPenalty,
+                          initialValue: ConfigService.getCaboPenalty(),
                           minValue: 0,
                           maxValue: 50,
                           step: 1,
                           onChanged: (newCaboPenalty) {
                             setState(() {
                               ConfigService.setCaboPenalty(newCaboPenalty);
-                              ConfigService.caboPenalty = newCaboPenalty;
                             });
                           },
                         ),
@@ -72,17 +73,50 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: FontAwesomeIcons.bullseye,
                         suffixWidget: CustomStepper(
                           key: _stepperKey2,
-                          initialValue: ConfigService.pointLimit,
+                          initialValue: ConfigService.getPointLimit(),
                           minValue: 30,
                           maxValue: 1000,
                           step: 10,
                           onChanged: (newPointLimit) {
                             setState(() {
                               ConfigService.setPointLimit(newPointLimit);
-                              ConfigService.pointLimit = newPointLimit;
                             });
                           },
                         ),
+                      ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).standard_mode,
+                        prefixIcon: CupertinoIcons.square_stack,
+                        suffixWidget: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              defaultMode == GameMode.none
+                                  ? AppLocalizations.of(context).no_default_mode
+                                  : (defaultMode == GameMode.pointLimit
+                                      ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
+                                      : AppLocalizations.of(context).unlimited),
+                            ),
+                            const SizedBox(width: 5),
+                            const CupertinoListTileChevron()
+                          ],
+                        ),
+                        onPressed: () async {
+                          final selectedMode = await Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => ModeSelectionMenu(
+                                pointLimit: ConfigService.getPointLimit(),
+                                showDeselection: true,
+                              ),
+                            ),
+                          );
+
+                          setState(() {
+                            defaultMode = selectedMode ?? GameMode.none;
+                          });
+                          ConfigService.setGameMode(defaultMode);
+                        },
                       ),
                       CustomFormRow(
                         prefixText:
@@ -93,6 +127,7 @@ class _SettingsViewState extends State<SettingsView> {
                           setState(() {
                             _stepperKey1 = UniqueKey();
                             _stepperKey2 = UniqueKey();
+                            defaultMode = ConfigService.getGameMode();
                           });
                         },
                       )

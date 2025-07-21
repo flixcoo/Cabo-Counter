@@ -4,7 +4,9 @@ class CustomTheme {
   static Color white = CupertinoColors.white;
   static Color primaryColor = CupertinoColors.systemGreen;
   static Color backgroundColor = const Color(0xFF101010);
-  static Color backgroundTintColor = CupertinoColors.darkBackgroundGray;
+  static Color mainElementBackgroundColor = CupertinoColors.darkBackgroundGray;
+  static Color playerTileColor = CupertinoColors.secondaryLabel;
+  static Color buttonBackgroundColor = const Color(0xFF202020);
 
   // Line Colors for GraphView
   static const Color graphColor1 = Color(0xFFF44336);
@@ -12,6 +14,10 @@ class CustomTheme {
   static const Color graphColor3 = Color(0xFFFFA726);
   static const Color graphColor4 = Color(0xFF9C27B0);
   static final Color graphColor5 = primaryColor;
+
+  // Colors for PointsView
+  static Color pointLossColor = primaryColor;
+  static const Color pointGainColor = Color(0xFFF44336);
 
   static TextStyle modeTitle = TextStyle(
     color: primaryColor,

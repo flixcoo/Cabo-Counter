@@ -55,9 +55,12 @@
   "min_players_title": "Zu wenig Spieler:innen",
   "min_players_message": "Es müssen mindestens 2 Spieler:innen hinzugefügt werden",
   "no_name_title": "Kein Name",
-  "no_name_message": "Jeder Spieler muss einen Namen haben.",
+  "no_name_message": "Jede:r Spieler:in muss einen Namen haben.",
 
   "select_game_mode": "Spielmodus auswählen",
+  "no_mode_selected": "Wähle einen Spielmodus",
+  "no_default_mode": "Kein Modus",
+  "no_default_description": "Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.",
   "point_limit_description": "Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht",
   "@point_limit_description": {
     "placeholders": {
@@ -71,6 +74,7 @@
   "results": "Ergebnisse",
   "who_said_cabo": "Wer hat CABO gesagt?",
   "kamikaze": "Kamikaze",
+  "who_has_kamikaze": "Wer hat Kamikaze?",
   "done": "Fertig",
   "next_round": "Nächste Runde",
   "bonus_points_title": "Bonus-Punkte!",
@@ -92,7 +96,21 @@
     }
   },
 
-
+  "end_of_game_title": "Spiel beendet",
+  "end_of_game_message": "{playerCount, plural, =1{{names} hat das Spiel mit {points} Punkten gewonnen. Glückwunsch!} other{{names} haben das Spiel mit {points} Punkten gewonnen. Glückwunsch!}}",
+  "@end_of_game_message": {
+      "placeholders": {
+      "playerCount": {
+          "type": "int"
+      },
+      "names": {
+          "type": "String"
+      },
+      "points": {
+          "type": "int"
+      }
+      }
+  },
   "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
   "new_game_same_settings": "Neues Spiel mit gleichen Einstellungen",
@@ -102,14 +120,15 @@
   "end_game_title": "Spiel beenden?",
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
-  "game_process": "Spielverlauf",
+  "statistics": "Statistiken",
+  "point_overview": "Punkteübersicht",
+  "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
-  "cabo_penalty_subtitle": "... für falsches Cabo sagen",
   "point_limit": "Punkte-Limit",
-  "point_limit_subtitle": "... hier ist Schluss",
+  "standard_mode": "Standard-Modus",
   "reset_to_default": "Auf Standard zurücksetzen",
   "game_data": "Spieldaten",
   "import_data": "Spieldaten importieren",

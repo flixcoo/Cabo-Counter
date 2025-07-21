@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
-  late String id;
+  final String id;
   final DateTime createdAt;
   final String gameTitle;
   final List<String> players;
@@ -27,6 +27,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList = [];
 
   GameSession({
+    required this.id,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -35,8 +36,6 @@ class GameSession extends ChangeNotifier {
     required this.isPointsLimitEnabled,
   }) {
     playerScores = List.filled(players.length, 0);
-    var uuid = const Uuid();
-    id = uuid.v1();
   }
 
   @override
@@ -256,7 +255,7 @@ class GameSession extends ChangeNotifier {
           isGameFinished = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
-          _setWinner();
+          setWinner();
         }
       }
     }
@@ -299,16 +298,20 @@ class GameSession extends ChangeNotifier {
   /// Determines the winner of the game session.
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
-  void _setWinner() {
-    int score = playerScores[0];
-    String lowestPlayer = players[0];
+  void setWinner() {
+    int minScore = playerScores.reduce((a, b) => a < b ? a : b);
+    List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] < score) {
-        score = playerScores[i];
-        lowestPlayer = players[i];
+      if (playerScores[i] == minScore) {
+        lowestPlayers.add(players[i]);
       }
     }
-    winner = lowestPlayer;
+    if (lowestPlayers.length > 1) {
+      winner =
+          '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    } else {
+      winner = lowestPlayers.first;
+    }
     notifyListeners();
   }
 

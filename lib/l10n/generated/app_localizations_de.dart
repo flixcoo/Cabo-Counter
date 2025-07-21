@@ -149,10 +149,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get no_name_title => 'Kein Name';
 
   @override
-  String get no_name_message => 'Jeder Spieler muss einen Namen haben.';
+  String get no_name_message => 'Jede:r Spieler:in muss einen Namen haben.';
 
   @override
   String get select_game_mode => 'Spielmodus auswählen';
+
+  @override
+  String get no_mode_selected => 'Wähle einen Spielmodus';
+
+  @override
+  String get no_default_mode => 'Kein Modus';
+
+  @override
+  String get no_default_description =>
+      'Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.';
 
   @override
   String point_limit_description(int pointLimit) {
@@ -173,6 +183,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get kamikaze => 'Kamikaze';
 
   @override
+  String get who_has_kamikaze => 'Wer hat Kamikaze?';
+
+  @override
   String get done => 'Fertig';
 
   @override
@@ -191,6 +204,21 @@ class AppLocalizationsDe extends AppLocalizations {
           '$names haben exakt das Punktelimit von $pointLimit Punkten erreicht und bekommen deshalb jeweils $bonusPoints Punkte abgezogen!',
       one:
           '$names hat exakt das Punktelimit von $pointLimit Punkten erreicht und bekommt deshalb $bonusPoints Punkte abgezogen!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get end_of_game_title => 'Spiel beendet';
+
+  @override
+  String end_of_game_message(int playerCount, String names, int points) {
+    String _temp0 = intl.Intl.pluralLogic(
+      playerCount,
+      locale: localeName,
+      other:
+          '$names haben das Spiel mit $points Punkten gewonnen. Glückwunsch!',
+      one: '$names hat das Spiel mit $points Punkten gewonnen. Glückwunsch!',
     );
     return '$_temp0';
   }
@@ -222,7 +250,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.';
 
   @override
-  String get game_process => 'Spielverlauf';
+  String get statistics => 'Statistiken';
+
+  @override
+  String get point_overview => 'Punkteübersicht';
+
+  @override
+  String get scoring_history => 'Spielverlauf';
 
   @override
   String get empty_graph_text =>
@@ -235,13 +269,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cabo_penalty => 'Cabo-Strafe';
 
   @override
-  String get cabo_penalty_subtitle => '... für falsches Cabo sagen';
-
-  @override
   String get point_limit => 'Punkte-Limit';
 
   @override
-  String get point_limit_subtitle => '... hier ist Schluss';
+  String get standard_mode => 'Standard-Modus';
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';

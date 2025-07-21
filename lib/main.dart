@@ -12,8 +12,6 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await ConfigService.initConfig();
-  ConfigService.pointLimit = await ConfigService.getPointLimit();
-  ConfigService.caboPenalty = await ConfigService.getCaboPenalty();
   await VersionService.init();
   runApp(const App());
 }

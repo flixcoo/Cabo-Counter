@@ -365,7 +365,7 @@ abstract class AppLocalizations {
   /// No description provided for @no_name_message.
   ///
   /// In de, this message translates to:
-  /// **'Jeder Spieler muss einen Namen haben.'**
+  /// **'Jede:r Spieler:in muss einen Namen haben.'**
   String get no_name_message;
 
   /// No description provided for @select_game_mode.
@@ -373,6 +373,24 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Spielmodus auswählen'**
   String get select_game_mode;
+
+  /// No description provided for @no_mode_selected.
+  ///
+  /// In de, this message translates to:
+  /// **'Wähle einen Spielmodus'**
+  String get no_mode_selected;
+
+  /// No description provided for @no_default_mode.
+  ///
+  /// In de, this message translates to:
+  /// **'Kein Modus'**
+  String get no_default_mode;
+
+  /// No description provided for @no_default_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Entscheide bei jedem Spiel selber, welchen Modus du spielen möchtest.'**
+  String get no_default_description;
 
   /// No description provided for @point_limit_description.
   ///
@@ -404,6 +422,12 @@ abstract class AppLocalizations {
   /// **'Kamikaze'**
   String get kamikaze;
 
+  /// No description provided for @who_has_kamikaze.
+  ///
+  /// In de, this message translates to:
+  /// **'Wer hat Kamikaze?'**
+  String get who_has_kamikaze;
+
   /// No description provided for @done.
   ///
   /// In de, this message translates to:
@@ -428,6 +452,18 @@ abstract class AppLocalizations {
   /// **'{playerCount, plural, =1{{names} hat exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommt deshalb {bonusPoints} Punkte abgezogen!} other{{names} haben exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommen deshalb jeweils {bonusPoints} Punkte abgezogen!}}'**
   String bonus_points_message(
       int playerCount, String names, int pointLimit, int bonusPoints);
+
+  /// No description provided for @end_of_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel beendet'**
+  String get end_of_game_title;
+
+  /// No description provided for @end_of_game_message.
+  ///
+  /// In de, this message translates to:
+  /// **'{playerCount, plural, =1{{names} hat das Spiel mit {points} Punkten gewonnen. Glückwunsch!} other{{names} haben das Spiel mit {points} Punkten gewonnen. Glückwunsch!}}'**
+  String end_of_game_message(int playerCount, String names, int points);
 
   /// No description provided for @end_game.
   ///
@@ -477,11 +513,23 @@ abstract class AppLocalizations {
   /// **'Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.'**
   String get end_game_message;
 
-  /// No description provided for @game_process.
+  /// No description provided for @statistics.
+  ///
+  /// In de, this message translates to:
+  /// **'Statistiken'**
+  String get statistics;
+
+  /// No description provided for @point_overview.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkteübersicht'**
+  String get point_overview;
+
+  /// No description provided for @scoring_history.
   ///
   /// In de, this message translates to:
   /// **'Spielverlauf'**
-  String get game_process;
+  String get scoring_history;
 
   /// No description provided for @empty_graph_text.
   ///
@@ -501,23 +549,17 @@ abstract class AppLocalizations {
   /// **'Cabo-Strafe'**
   String get cabo_penalty;
 
-  /// No description provided for @cabo_penalty_subtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'... für falsches Cabo sagen'**
-  String get cabo_penalty_subtitle;
-
   /// No description provided for @point_limit.
   ///
   /// In de, this message translates to:
   /// **'Punkte-Limit'**
   String get point_limit;
 
-  /// No description provided for @point_limit_subtitle.
+  /// No description provided for @standard_mode.
   ///
   /// In de, this message translates to:
-  /// **'... hier ist Schluss'**
-  String get point_limit_subtitle;
+  /// **'Standard-Modus'**
+  String get standard_mode;
 
   /// No description provided for @reset_to_default.
   ///
