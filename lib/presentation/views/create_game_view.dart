@@ -104,6 +104,14 @@ class _CreateGameViewState extends State<CreateGameView> {
                   textAlign: TextAlign.right,
                   placeholder: AppLocalizations.of(context).game_title,
                   controller: _gameTitleTextController,
+                  onSubmitted: (_) {
+                    _playerNameFocusNodes.isNotEmpty
+                        ? _playerNameFocusNodes[0].requestFocus()
+                        : FocusScope.of(context).unfocus();
+                  },
+                  textInputAction: _playerNameFocusNodes.isNotEmpty
+                      ? TextInputAction.next
+                      : TextInputAction.done,
                 ),
               ),
               Padding(
