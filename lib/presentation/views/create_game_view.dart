@@ -70,6 +70,7 @@ class _CreateGameViewState extends State<CreateGameView> {
       _playerNameTextControllers.clear();
       for (var player in widget.players!) {
         _playerNameTextControllers.add(TextEditingController(text: player));
+        _playerNameFocusNodes.add(FocusNode());
       }
     }
   }
