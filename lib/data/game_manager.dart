@@ -69,6 +69,7 @@ class GameManager extends ChangeNotifier {
 
     gameList[index].roundNumber--;
     gameList[index].isGameFinished = true;
+    gameList[index].setWinner();
     notifyListeners();
     LocalStorageService.saveGameSessions();
   }

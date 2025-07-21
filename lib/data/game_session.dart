@@ -255,7 +255,7 @@ class GameSession extends ChangeNotifier {
           isGameFinished = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
-          _setWinner();
+          setWinner();
         }
       }
     }
@@ -298,7 +298,7 @@ class GameSession extends ChangeNotifier {
   /// Determines the winner of the game session.
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
-  void _setWinner() {
+  void setWinner() {
     int minScore = playerScores.reduce((a, b) => a < b ? a : b);
     List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
