@@ -453,6 +453,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       ),
     );
 
+    if (round == -1) return;
+
     if (widget.gameSession.isGameFinished && context.mounted) {
       _playFinishAnimation(context);
     }
