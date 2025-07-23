@@ -80,7 +80,7 @@ class _RoundViewState extends State<RoundView> {
             padding: EdgeInsets.zero,
             onPressed: () => {
               LocalStorageService.saveGameSessions(),
-              Navigator.pop(context)
+              Navigator.pop(context, -1)
             },
             child: Text(AppLocalizations.of(context).cancel),
           ),
