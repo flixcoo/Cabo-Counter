@@ -24,11 +24,19 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
+  /// Constant value to represent a press on the cancel button in round view.
+  static const int kRoundCancelled = -1;
+
   final confettiController = ConfettiController(
     duration: const Duration(seconds: 10),
   );
+
   late final GameSession gameSession;
+
+  /// A list of the ranks for each player corresponding to their index in sortedPlayerIndices
   late List<int> denseRanks;
+
+  /// A list of player indices sorted by their scores in ascending order.
   late List<int> sortedPlayerIndices;
 
   @override
@@ -453,7 +461,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       ),
     );
 
-    if (round == -1) return;
+    // If the user presses the cancel button
+    if (round == kRoundCancelled) return;
 
     if (widget.gameSession.isGameFinished && context.mounted) {
       _playFinishAnimation(context);
