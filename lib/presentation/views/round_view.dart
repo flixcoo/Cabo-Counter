@@ -297,11 +297,17 @@ class _RoundViewState extends State<RoundView> {
   /// Returns 0 in the first round, as there is no previous round.
   int _getPreviousRoundWinnerIndex() {
     if (widget.roundNumber == 1) {
-      return 0; // If it's the first round, there's no previous round, so return 0.
+      return 0; // If it's the first round, the order should be the same as the players list.
     }
 
-    final scores = widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
-    return scores.indexOf(0);
+    final List<int> scores = widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
+    final int winnerIndex =  scores.indexOf(0);
+
+    // Fallback if no player has 0 points, which should not happen in a valid game.
+    if (winnerIndex == -1) {
+      return 0;
+    }
+    return winnerIndex;
   }
 
   /// Rotates the players list based on the previous round's winner.
