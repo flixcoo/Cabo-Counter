@@ -308,7 +308,10 @@ class _RoundViewState extends State<RoundView> {
 
     // Iterate through the scores to find the player with the minimum score
     for (int i = 1; i < scores.length; i++) {
-      if (scores[i] < minScore) {
+
+      // Check if the current score is less than the minimum score
+      // and is not negative (to avoid bonus points being considered)
+      if (scores[i] < minScore && !(scores[i] < 0)) {
         minScore = scores[i];
         winnerIndex = i;
       }
