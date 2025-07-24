@@ -301,7 +301,7 @@ class _RoundViewState extends State<RoundView> {
     }
 
     final List<int> scores = widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
-    final int winnerIndex =  scores.indexOf(0);
+    final int winnerIndex = scores.indexOf(0);
 
     // Fallback if no player has 0 points, which should not happen in a valid game.
     if (winnerIndex == -1) {
