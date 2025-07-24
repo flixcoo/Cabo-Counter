@@ -294,30 +294,14 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Gets the index of the player who won the previous round.
+  /// Returns 0 in the first round, as there is no previous round.
   int _getPreviousRoundWinnerIndex() {
     if (widget.roundNumber == 1) {
       return 0; // If it's the first round, there's no previous round, so return 0.
     }
 
-    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
-    final scores = previousRound.scoreUpdates;
-
-    // Find the index of the player with the minimum score
-    int minScore = scores[0];
-    int winnerIndex = 0;
-
-    // Iterate through the scores to find the player with the minimum score
-    for (int i = 1; i < scores.length; i++) {
-
-      // Check if the current score is less than the minimum score
-      // and is not negative (to avoid bonus points being considered)
-      if (scores[i] < minScore && !(scores[i] < 0)) {
-        minScore = scores[i];
-        winnerIndex = i;
-      }
-    }
-
-    return winnerIndex;
+    final scores = widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
+    return scores.indexOf(0);
   }
 
   /// Rotates the players list based on the previous round's winner.
