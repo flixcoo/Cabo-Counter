@@ -49,6 +49,13 @@ class _MainMenuViewState extends State<MainMenuView> {
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    precacheImage(
+        const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
+    super.didChangeDependencies();
+  }
+
   void _updateView() {
     if (mounted) setState(() {});
   }
