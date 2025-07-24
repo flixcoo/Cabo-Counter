@@ -247,16 +247,22 @@ class GameSession extends ChangeNotifier {
   List<int> updatePoints() {
     List<int> bonusPlayers = [];
     _sumPoints();
+    bool limitExceeded = false;
+
     if (isPointsLimitEnabled) {
       bonusPlayers = _checkHundredPointsReached();
 
       for (int i = 0; i < playerScores.length; i++) {
         if (playerScores[i] > pointLimit) {
           isGameFinished = true;
+          limitExceeded = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
           setWinner();
         }
+      }
+      if (!limitExceeded) {
+        isGameFinished = false;
       }
     }
     notifyListeners();
