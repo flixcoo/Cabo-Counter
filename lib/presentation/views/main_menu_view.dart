@@ -38,6 +38,8 @@ class _MainMenuViewState extends State<MainMenuView> {
     gameManager.addListener(_updateView);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      precacheImage(
+          const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
       await Constants.rateMyApp.init();
 
       if (Constants.rateMyApp.shouldOpenDialog &&
