@@ -1,6 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
+import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/create_game_view.dart';
@@ -135,7 +136,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     subtitle: Visibility(
                                         visible: session.isGameFinished,
                                         replacement: Text(
-                                          '${AppLocalizations.of(context).mode}: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                          '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                         child: Text(
@@ -216,9 +217,9 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   /// Translates the game mode boolean into the corresponding String.
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
-  String _translateGameMode(bool isPointLimitEnabled) {
-    if (isPointLimitEnabled) {
-      return '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}';
+  String _translateGameMode(GameSession gameSession) {
+    if (gameSession.isPointsLimitEnabled) {
+      return '${gameSession.pointLimit} ${AppLocalizations.of(context).points}';
     }
     return AppLocalizations.of(context).unlimited;
   }
