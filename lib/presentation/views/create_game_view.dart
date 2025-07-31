@@ -289,7 +289,6 @@ class _CreateGameViewState extends State<CreateGameView> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
                 child: Center(
-                  key: const ValueKey('create_game_button'),
                   child: CustomButton(
                     child: Text(
                       AppLocalizations.of(context).create_game,
@@ -298,7 +297,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                       ),
                     ),
                     onPressed: () {
-                      _checkAllGameAttributes();
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        _checkAllGameAttributes();
+                      });
                     },
                   ),
                 ),
