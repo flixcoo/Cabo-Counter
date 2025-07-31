@@ -236,12 +236,10 @@ class _RoundViewState extends State<RoundView> {
                               _endOfRoundNavigation(context, true);
                             }
                           },
-                          child: Text(
-                            AppLocalizations.of(context).kamikaze,
-                            style: const TextStyle(
-                              color: CupertinoColors.destructiveRed,
-                            ),
-                          ),
+                          child: Text(AppLocalizations.of(context).kamikaze,
+                              style: TextStyle(
+                                color: CustomTheme.kamikazeColor,
+                              )),
                         ),
                       ),
                     ),
@@ -300,7 +298,8 @@ class _RoundViewState extends State<RoundView> {
       return 0; // If it's the first round, the order should be the same as the players list.
     }
 
-    final List<int> scores = widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
+    final List<int> scores =
+        widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
     final int winnerIndex = scores.indexOf(0);
 
     // Fallback if no player has 0 points, which should not happen in a valid game.
@@ -348,7 +347,10 @@ class _RoundViewState extends State<RoundView> {
                     _kamikazePlayerIndex = index;
                     Navigator.pop(context, true);
                   },
-                  child: Text(name),
+                  child: Text(
+                    name,
+                    style: TextStyle(color: CustomTheme.kamikazeColor),
+                  ),
                 );
               }).toList(),
               cancelButton: CupertinoActionSheetAction(

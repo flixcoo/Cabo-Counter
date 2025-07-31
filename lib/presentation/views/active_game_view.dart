@@ -311,11 +311,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           content: Text(AppLocalizations.of(context).end_game_message),
           actions: [
             CupertinoDialogAction(
+              isDestructiveAction: true,
               child: Text(
                 AppLocalizations.of(context).end_game,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: CupertinoColors.destructiveRed),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onPressed: () {
                 setState(() {

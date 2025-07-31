@@ -176,9 +176,9 @@ class _CreateGameViewState extends State<CreateGameView> {
                         children: [
                           CupertinoButton(
                             padding: EdgeInsets.zero,
-                            child: const Icon(
+                            child: Icon(
                               CupertinoIcons.minus_circle_fill,
-                              color: CupertinoColors.destructiveRed,
+                              color: CustomTheme.red,
                               size: 25,
                             ),
                             onPressed: () {
