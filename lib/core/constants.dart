@@ -28,4 +28,7 @@ class Constants {
 
   /// Duration in milliseconds for the fade-in animation of texts.
   static const int fadeInDuration = 300;
+
+  /// Duration in milliseconds for the keyboard to fully disappear.
+  static const int kKeyboardDelay = 300;
 }

@@ -298,7 +298,9 @@ class _CreateGameViewState extends State<CreateGameView> {
                     ),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      Future.delayed(const Duration(milliseconds: 300), () {
+                      Future.delayed(
+                          const Duration(
+                              milliseconds: Constants.kKeyboardDelay), () {
                         _checkAllGameAttributes();
                       });
                     },
