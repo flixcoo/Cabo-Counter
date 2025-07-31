@@ -21,11 +21,14 @@ class Constants {
       remindLaunches: 40);
 
   /// Delay in milliseconds before a pop-up appears.
-  static const int popUpDelay = 300;
+  static const int kPopUpDelay = 300;
 
   /// Delay in milliseconds before the round view appears after the previous one is closed.
-  static const int roundViewDelay = 600;
+  static const int kRoundViewDelay = 600;
 
   /// Duration in milliseconds for the fade-in animation of texts.
-  static const int fadeInDuration = 300;
+  static const int kFadeInDuration = 300;
+
+  /// Duration in milliseconds for the keyboard to fully disappear.
+  static const int kKeyboardDelay = 300;
 }

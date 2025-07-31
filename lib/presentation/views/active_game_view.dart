@@ -473,7 +473,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (round != null && round >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Future.delayed(
-            const Duration(milliseconds: Constants.roundViewDelay));
+            const Duration(milliseconds: Constants.kRoundViewDelay));
         if (context.mounted) {
           _openRoundView(context, round);
         }
@@ -489,7 +489,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
     confettiController.play();
 
-    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
+    await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
 
     if (context.mounted) {
       showCupertinoDialog(
