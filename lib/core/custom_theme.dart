@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 
 class CustomTheme {
   static Color white = CupertinoColors.white;
+  static Color red = CupertinoColors.destructiveRed;
   static Color primaryColor = CupertinoColors.systemGreen;
   static Color backgroundColor = const Color(0xFF101010);
   static Color mainElementBackgroundColor = CupertinoColors.darkBackgroundGray;
   static Color playerTileColor = CupertinoColors.secondaryLabel;
   static Color buttonBackgroundColor = const Color(0xFF202020);
+  static Color kamikazeColor = CupertinoColors.systemYellow;
 
   // Line Colors for GraphView
   static const Color graphColor1 = Color(0xFFF44336);

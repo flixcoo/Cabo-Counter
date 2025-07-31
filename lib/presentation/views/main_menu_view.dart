@@ -109,7 +109,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                               return Dismissible(
                                 key: Key(session.id),
                                 background: Container(
-                                  color: CupertinoColors.destructiveRed,
+                                  color: CustomTheme.red,
                                   alignment: Alignment.centerRight,
                                   padding: const EdgeInsets.only(right: 20.0),
                                   child: const Icon(
