@@ -216,7 +216,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 ? 1.0
                                 : 0.0,
                             duration: const Duration(
-                                milliseconds: Constants.fadeInDuration),
+                                milliseconds: Constants.kFadeInDuration),
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: ReorderableDragStartListener(
