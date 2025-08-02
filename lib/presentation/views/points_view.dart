@@ -28,9 +28,6 @@ class _PointsViewState extends State<PointsView> {
           final double playerColWidth =
               (constraints.maxWidth - roundColWidth - (tablePadding)) /
                   playerCount;
-          print('Column width: $playerColWidth');
-          print('Max width: ${constraints.maxWidth}');
-          print('Round column width: $roundColWidth');
 
           return SingleChildScrollView(
               scrollDirection: Axis.vertical,
