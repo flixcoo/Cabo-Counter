@@ -27,32 +27,33 @@ class _PointsViewState extends State<PointsView> {
 
           return SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: DataTable(
-                      dataRowMaxHeight: 60,
-                      dataRowMinHeight: 60,
-                      columnSpacing: 20,
-                      columns: [
-                        const DataColumn(
-                          label: SizedBox(
-                            width: 18,
-                            child: Text(
-                              '#',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: DataTable(
+                    dataRowMaxHeight: 60,
+                    dataRowMinHeight: 60,
+                    columnSpacing: 0,
+                    columns: [
+                      const DataColumn(
+                        label: SizedBox(
+                          width: 18,
+                          child: Text(
+                            '#',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
                           ),
-                          numeric: true,
                         ),
-                        ...widget.gameSession.players.map(
-                          (player) => DataColumn(
-                            label: SizedBox(
-                              width: columnWidth,
+                        numeric: true,
+                      ),
+                      ...widget.gameSession.players.map(
+                        (player) => DataColumn(
+                          label: SizedBox(
+                            width: columnWidth,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
                               child: Text(
                                 player,
                                 style: const TextStyle(
@@ -65,103 +66,103 @@ class _PointsViewState extends State<PointsView> {
                             ),
                           ),
                         ),
-                      ],
-                      rows: [
-                        ...List<DataRow>.generate(
-                          widget.gameSession.roundList.length,
-                          (roundIndex) {
-                            final round =
-                                widget.gameSession.roundList[roundIndex];
-                            return DataRow(
-                              cells: [
-                                DataCell(Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '${roundIndex + 1}',
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                )),
-                                ...List.generate(
-                                    widget.gameSession.players.length,
-                                    (playerIndex) {
-                                  final int score = round.scores[playerIndex];
-                                  final int update =
-                                      round.scoreUpdates[playerIndex];
-                                  final bool saidCabo =
-                                      round.caboPlayerIndex == playerIndex;
-                                  return DataCell(
-                                    Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
+                      ),
+                    ],
+                    rows: [
+                      ...List<DataRow>.generate(
+                        widget.gameSession.roundList.length,
+                        (roundIndex) {
+                          final round =
+                              widget.gameSession.roundList[roundIndex];
+                          return DataRow(
+                            cells: [
+                              DataCell(Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${roundIndex + 1}',
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              )),
+                              ...List.generate(
+                                  widget.gameSession.players.length,
+                                  (playerIndex) {
+                                final int score = round.scores[playerIndex];
+                                final int update =
+                                    round.scoreUpdates[playerIndex];
+                                final bool saidCabo =
+                                    round.caboPlayerIndex == playerIndex;
+                                return DataCell(
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: update <= 0
+                                                ? CustomTheme.pointLossColor
+                                                : CustomTheme.pointGainColor,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 6, vertical: 2),
-                                            decoration: BoxDecoration(
-                                              color: update <= 0
-                                                  ? CustomTheme.pointLossColor
-                                                  : CustomTheme.pointGainColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Text(
-                                              '${update >= 0 ? '+' : ''}$update',
-                                              style: const TextStyle(
-                                                color: CupertinoColors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                          child: Text(
+                                            '${update >= 0 ? '+' : ''}$update',
+                                            style: const TextStyle(
+                                              color: CupertinoColors.white,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          Text('$score',
-                                              style: TextStyle(
-                                                decorationThickness: 1,
-                                                decoration: saidCabo
-                                                    ? TextDecoration.underline
-                                                    : TextDecoration.none,
-                                                fontWeight: saidCabo
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal,
-                                              )),
-                                        ],
-                                      ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text('$score',
+                                            style: TextStyle(
+                                              decorationThickness: 1,
+                                              decoration: saidCabo
+                                                  ? TextDecoration.underline
+                                                  : TextDecoration.none,
+                                              fontWeight: saidCabo
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                            )),
+                                      ],
                                     ),
-                                  );
-                                }),
-                              ],
-                            );
-                          },
-                        ),
-                        DataRow(
-                          cells: [
-                            const DataCell(Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Σ',
-                                style: TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                            ...widget.gameSession.playerScores.map(
-                              (score) => DataCell(
-                                Center(
-                                  child: Text(
-                                    '$score',
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
                                   ),
+                                );
+                              }),
+                            ],
+                          );
+                        },
+                      ),
+                      DataRow(
+                        cells: [
+                          const DataCell(Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Σ',
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                          ...widget.gameSession.playerScores.map(
+                            (score) => DataCell(
+                              Center(
+                                child: Text(
+                                  '$score',
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ));
