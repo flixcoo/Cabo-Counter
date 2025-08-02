@@ -36,8 +36,8 @@ class _PointsViewState extends State<PointsView> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: tablePadding),
                   child: DataTable(
-                    dataRowMaxHeight: 65,
-                    dataRowMinHeight: 65,
+                    dataRowMaxHeight: 75,
+                    dataRowMinHeight: 75,
                     columnSpacing: 0,
                     horizontalMargin: 0,
                     columns: [
@@ -96,45 +96,47 @@ class _PointsViewState extends State<PointsView> {
                                     round.scoreUpdates[playerIndex];
                                 final bool saidCabo =
                                     round.caboPlayerIndex == playerIndex;
-                                return DataCell(
-                                  Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: update <= 0
-                                                ? CustomTheme.pointLossColor
-                                                : CustomTheme.pointGainColor,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                return DataCell(Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 6.0),
+                                    child: Container(
+                                      width: playerColWidth *
+                                          (playerCount *
+                                              0.2), // Adjust width based on amount of players
+                                      decoration: BoxDecoration(
+                                        color: saidCabo
+                                            ? CustomTheme.buttonBackgroundColor
+                                            : CupertinoColors.transparent,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
                                           ),
-                                          child: Text(
-                                            '${update >= 0 ? '+' : ''}$update',
-                                            style: const TextStyle(
-                                              color: CupertinoColors.white,
-                                              fontWeight: FontWeight.bold,
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 6, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: update <= 0
+                                                  ? CustomTheme.pointLossColor
+                                                  : CustomTheme.pointGainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              '${update >= 0 ? '+' : ''}$update',
+                                              style: const TextStyle(
+                                                color: CupertinoColors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: saidCabo
-                                                ? const Color(0xFF505050)
-                                                : CupertinoColors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Text(
+                                          const SizedBox(height: 4),
+                                          Text(
                                             '$score',
                                             style: TextStyle(
                                               color: CustomTheme.white,
@@ -143,11 +145,11 @@ class _PointsViewState extends State<PointsView> {
                                                   : FontWeight.normal,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                );
+                                ));
                               }),
                             ],
                           );
