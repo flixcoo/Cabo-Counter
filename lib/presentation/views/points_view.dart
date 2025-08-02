@@ -22,23 +22,31 @@ class _PointsViewState extends State<PointsView> {
           previousPageTitle: AppLocalizations.of(context).back,
         ),
         child: SafeArea(child: LayoutBuilder(builder: (context, constraints) {
-          final int columnCount = 1 + widget.gameSession.players.length;
-          final double columnWidth = constraints.maxWidth / columnCount;
+          const double roundColWidth = 35;
+          const double tablePadding = 8;
+          final int playerCount = widget.gameSession.players.length;
+          final double playerColWidth =
+              (constraints.maxWidth - roundColWidth - (tablePadding)) /
+                  playerCount;
+          print('Column width: $playerColWidth');
+          print('Max width: ${constraints.maxWidth}');
+          print('Round column width: $roundColWidth');
 
           return SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                constraints: BoxConstraints(maxWidth: constraints.maxWidth),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: tablePadding),
                   child: DataTable(
-                    dataRowMaxHeight: 60,
-                    dataRowMinHeight: 60,
+                    dataRowMaxHeight: 65,
+                    dataRowMinHeight: 65,
                     columnSpacing: 0,
+                    horizontalMargin: 0,
                     columns: [
                       const DataColumn(
                         label: SizedBox(
-                          width: 18,
+                          width: roundColWidth,
                           child: Text(
                             '#',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -50,10 +58,10 @@ class _PointsViewState extends State<PointsView> {
                       ...widget.gameSession.players.map(
                         (player) => DataColumn(
                           label: SizedBox(
-                            width: columnWidth,
+                            width: playerColWidth,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
                                 player,
                                 style: const TextStyle(
@@ -119,16 +127,26 @@ class _PointsViewState extends State<PointsView> {
                                           ),
                                         ),
                                         const SizedBox(height: 4),
-                                        Text('$score',
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: saidCabo
+                                                ? const Color(0xFF505050)
+                                                : CupertinoColors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            '$score',
                                             style: TextStyle(
-                                              decorationThickness: 1,
-                                              decoration: saidCabo
-                                                  ? TextDecoration.underline
-                                                  : TextDecoration.none,
+                                              color: CustomTheme.white,
                                               fontWeight: saidCabo
                                                   ? FontWeight.bold
                                                   : FontWeight.normal,
-                                            )),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
