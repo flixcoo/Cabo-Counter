@@ -358,8 +358,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loading => 'Loading...';
-
-  @override
-  String get about_text =>
-      'Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!';
 }

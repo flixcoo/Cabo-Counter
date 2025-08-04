@@ -361,8 +361,4 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get loading => 'Lädt...';
-
-  @override
-  String get about_text =>
-      'Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! ';
 }
