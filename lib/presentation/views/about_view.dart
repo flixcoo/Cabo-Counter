@@ -43,20 +43,45 @@ class AboutView extends StatelessWidget {
                     height: 200,
                     child: Image.asset('assets/cabo_counter-logo_rounded.png'),
                   )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    AppLocalizations.of(context).about_text,
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                  )),
-              const SizedBox(
-                height: 30,
+              Visibility(
+                visible: Constants.appDevPhase == 'Beta',
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          AppLocalizations.of(context).about_text,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
               CupertinoButton(
+                sizeStyle: CupertinoButtonSize.medium,
+                padding: EdgeInsets.zero,
+                child: Text(AppLocalizations.of(context).privacy_policy),
+                onPressed: () =>
+                    launchUrl(Uri.parse(Constants.kPrivacyPolicyLink)),
+              ),
+              CupertinoButton(
+                sizeStyle: CupertinoButtonSize.medium,
+                padding: EdgeInsets.zero,
+                child: Text(AppLocalizations.of(context).imprint),
+                onPressed: () => launchUrl(Uri.parse(Constants.kImprintLink)),
+              ),
+              CupertinoButton(
+                  sizeStyle: CupertinoButtonSize.medium,
+                  padding: EdgeInsets.zero,
                   child: Text(AppLocalizations.of(context).licenses),
                   onPressed: () => Navigator.push(context,
                       CupertinoPageRoute(builder: (_) => const LicenseView()))),
+              const SizedBox(
+                height: 10,
+              ),
               const Text(
                 '\u00A9 Felix Kirchner',
                 style: TextStyle(fontSize: 16),
