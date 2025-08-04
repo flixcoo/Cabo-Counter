@@ -22,6 +22,7 @@ class _PointsViewState extends State<PointsView> {
           previousPageTitle: AppLocalizations.of(context).back,
         ),
         child: SafeArea(child: LayoutBuilder(builder: (context, constraints) {
+          const double caboFieldWidthFactor = 0.2;
           const double roundColWidth = 35;
           const double tablePadding = 8;
           final int playerCount = widget.gameSession.players.length;
@@ -156,7 +157,7 @@ class _PointsViewState extends State<PointsView> {
                                           child: Container(
                                             width: playerColWidth *
                                                 (playerCount *
-                                                    0.2), // Adjust width based on amount of players
+                                                    caboFieldWidthFactor), // Adjust width based on amount of players
                                             decoration: BoxDecoration(
                                               color: saidCabo
                                                   ? CustomTheme
