@@ -14,7 +14,6 @@ class LicenseView extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(AppLocalizations.of(context).licenses),
-        previousPageTitle: AppLocalizations.of(context).about,
       ),
       child: SafeArea(
         child: ListView.builder(
