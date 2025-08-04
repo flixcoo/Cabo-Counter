@@ -1,7 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/licenses/license_view.dart';
 import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
@@ -186,22 +185,6 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.book,
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.kGithubWikiLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
-                      CustomFormRow(
-                        prefixText: AppLocalizations.of(context).privacy_policy,
-                        prefixIcon: CupertinoIcons.doc_append,
-                        onPressed: () =>
-                            launchUrl(Uri.parse(Constants.kPrivacyPolicyLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
-                      CustomFormRow(
-                        prefixText: AppLocalizations.of(context).licenses,
-                        prefixIcon: CupertinoIcons.doc_append,
-                        onPressed: () => Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (_) => const LicenseView())),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
