@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Lizenzdetails'**
   String get license_details;
 
+  /// No description provided for @imprint.
+  ///
+  /// In de, this message translates to:
+  /// **'Impressum'**
+  String get imprint;
+
   /// No description provided for @empty_text_1.
   ///
   /// In de, this message translates to:
