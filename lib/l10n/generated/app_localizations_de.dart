@@ -57,6 +57,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get about => 'Über';
 
   @override
+  String get licenses => 'Lizenzen';
+
+  @override
+  String get license_details => 'Lizenzdetails';
+
+  @override
   String get empty_text_1 => 'Ganz schön leer hier...';
 
   @override

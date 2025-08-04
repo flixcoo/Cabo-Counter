@@ -194,6 +194,18 @@ abstract class AppLocalizations {
   /// **'Über'**
   String get about;
 
+  /// No description provided for @licenses.
+  ///
+  /// In de, this message translates to:
+  /// **'Lizenzen'**
+  String get licenses;
+
+  /// No description provided for @license_details.
+  ///
+  /// In de, this message translates to:
+  /// **'Lizenzdetails'**
+  String get license_details;
+
   /// No description provided for @empty_text_1.
   ///
   /// In de, this message translates to:

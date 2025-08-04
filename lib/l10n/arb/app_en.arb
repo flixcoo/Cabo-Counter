@@ -18,6 +18,8 @@
 
   "home": "Home",
   "about": "About",
+  "licenses": "Licenses",
+  "license_details": "License Details",
 
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",

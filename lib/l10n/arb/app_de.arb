@@ -18,6 +18,8 @@
 
   "home": "Home",
   "about": "Über",
+  "licenses": "Lizenzen",
+  "license_details": "Lizenzdetails",
 
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
