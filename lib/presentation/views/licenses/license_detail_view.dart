@@ -12,7 +12,6 @@ class LicenceDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: AppLocalizations.of(context).licenses,
         middle: Text(
           AppLocalizations.of(context).license_details,
         ),
