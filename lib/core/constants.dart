@@ -1,7 +1,7 @@
 import 'package:rate_my_app/rate_my_app.dart';
 
 class Constants {
-  static const String appDevPhase = 'Stable';
+  static const String appDevPhase = 'Beta';
 
   static const String kInstagramLink = 'https://instagram.felixkirchner.de';
   static const String kGithubLink = 'https://github.felixkirchner.de';

@@ -43,23 +43,6 @@ class AboutView extends StatelessWidget {
                     height: 200,
                     child: Image.asset('assets/cabo_counter-logo_rounded.png'),
                   )),
-              Visibility(
-                visible: Constants.appDevPhase == 'Beta',
-                child: Column(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Text(
-                          AppLocalizations.of(context).about_text,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                        )),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
