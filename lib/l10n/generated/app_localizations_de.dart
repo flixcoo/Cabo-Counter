@@ -63,6 +63,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get license_details => 'Lizenzdetails';
 
   @override
+  String get no_license_text => 'Keine Lizenz verfügbar';
+
+  @override
   String get imprint => 'Impressum';
 
   @override

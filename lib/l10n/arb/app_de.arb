@@ -17,10 +17,13 @@
   "back": "Zurück",
 
   "home": "Home",
+
   "about": "Über",
   "licenses": "Lizenzen",
   "license_details": "Lizenzdetails",
+  "no_license_text": "Keine Lizenz verfügbar",
   "imprint": "Impressum",
+
 
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",

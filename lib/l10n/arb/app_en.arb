@@ -17,10 +17,13 @@
   "back": "Back",
 
   "home": "Home",
+
   "about": "About",
   "licenses": "Licenses",
   "license_details": "License Details",
   "imprint": "Imprint",
+  "no_license_text": "No license available",
+
 
 
   "empty_text_1": "Pretty empty here...",

@@ -206,6 +206,12 @@ abstract class AppLocalizations {
   /// **'Lizenzdetails'**
   String get license_details;
 
+  /// No description provided for @no_license_text.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Lizenz verfügbar'**
+  String get no_license_text;
+
   /// No description provided for @imprint.
   ///
   /// In de, this message translates to:

@@ -37,7 +37,8 @@ class LicenseView extends StatelessWidget {
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
                           title: ossLicenses[index].name,
-                          license: ossLicenses[index].license!,
+                          license: ossLicenses[index].license ??
+                              AppLocalizations.of(context).no_license_text,
                         ),
                       ),
                     );
