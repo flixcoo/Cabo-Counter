@@ -24,7 +24,6 @@
   "no_license_text": "Keine Lizenz verfügbar",
   "imprint": "Impressum",
 
-
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
   "delete_game_title": "Spiel löschen?",
@@ -161,6 +160,6 @@
   "wiki": "Wiki",
   "app_version": "App-Version",
   "privacy_policy": "Datenschutzerklärung",
-  "build": "Build-Nr.",
-  "loading": "Lädt..."
+  "loading": "Lädt...",
+  "build": "Build-Nr."
 }
