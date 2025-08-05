@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/licenses/license_detail_view.dart';
-import 'package:cabo_counter/presentation/views/licenses/oss_licenses.dart';
+import 'package:cabo_counter/presentation/views/about/licenses/license_detail_view.dart';
+import 'package:cabo_counter/presentation/views/about/licenses/oss_licenses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

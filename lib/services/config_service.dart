@@ -1,4 +1,4 @@
-import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// This class handles the configuration settings for the app.

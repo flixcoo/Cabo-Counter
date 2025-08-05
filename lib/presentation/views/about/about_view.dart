@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/licenses/license_view.dart';
+import 'package:cabo_counter/presentation/views/about/licenses/license_view.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
