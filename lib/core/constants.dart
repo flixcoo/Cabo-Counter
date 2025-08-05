@@ -12,7 +12,7 @@ class Constants {
   static const String kEmail = 'cabocounter@felixkirchner.de';
   static const String kPrivacyPolicyLink =
       'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
-  static const String kImprintLink = '';
+  static const String kImprintLink = 'https://imprint.felixkirchner.de';
 
   static RateMyApp rateMyApp = RateMyApp(
       appStoreIdentifier: '6747105718',
