@@ -33,10 +33,10 @@ class LicenseView extends StatelessWidget {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => LicenceDetailView(
+                        builder: (_) => LicenseDetailView(
                           title: ossLicenses[index].name[0].toUpperCase() +
                               ossLicenses[index].name.substring(1),
-                          licence: ossLicenses[index].license!,
+                          license: ossLicenses[index].license!,
                         ),
                       ),
                     );

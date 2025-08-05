@@ -3,10 +3,10 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart'
     show AppLocalizations;
 import 'package:flutter/cupertino.dart';
 
-class LicenceDetailView extends StatelessWidget {
-  final String title, licence;
-  const LicenceDetailView(
-      {super.key, required this.title, required this.licence});
+class LicenseDetailView extends StatelessWidget {
+  final String title, license;
+  const LicenseDetailView(
+      {super.key, required this.title, required this.license});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class LicenceDetailView extends StatelessWidget {
                     color: CustomTheme.buttonBackgroundColor,
                     borderRadius: BorderRadius.circular(16)),
                 child: Text(
-                  licence,
+                  license,
                   style: const TextStyle(fontSize: 15),
                 ),
               )
