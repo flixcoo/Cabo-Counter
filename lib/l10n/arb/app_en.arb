@@ -17,7 +17,12 @@
   "back": "Back",
 
   "home": "Home",
+
   "about": "About",
+  "licenses": "Licenses",
+  "license_details": "License Details",
+  "imprint": "Imprint",
+  "no_license_text": "No license available",
 
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",
@@ -156,7 +161,5 @@
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
   "loading": "Loading...",
-  "build": "Build No.",
-
-  "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"
+  "build": "Build No."
 }

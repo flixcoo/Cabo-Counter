@@ -194,6 +194,30 @@ abstract class AppLocalizations {
   /// **'Über'**
   String get about;
 
+  /// No description provided for @licenses.
+  ///
+  /// In de, this message translates to:
+  /// **'Lizenzen'**
+  String get licenses;
+
+  /// No description provided for @license_details.
+  ///
+  /// In de, this message translates to:
+  /// **'Lizenzdetails'**
+  String get license_details;
+
+  /// No description provided for @no_license_text.
+  ///
+  /// In de, this message translates to:
+  /// **'Keine Lizenz verfügbar'**
+  String get no_license_text;
+
+  /// No description provided for @imprint.
+  ///
+  /// In de, this message translates to:
+  /// **'Impressum'**
+  String get imprint;
+
   /// No description provided for @empty_text_1.
   ///
   /// In de, this message translates to:
@@ -699,23 +723,17 @@ abstract class AppLocalizations {
   /// **'Datenschutzerklärung'**
   String get privacy_policy;
 
-  /// No description provided for @build.
-  ///
-  /// In de, this message translates to:
-  /// **'Build-Nr.'**
-  String get build;
-
   /// No description provided for @loading.
   ///
   /// In de, this message translates to:
   /// **'Lädt...'**
   String get loading;
 
-  /// No description provided for @about_text.
+  /// No description provided for @build.
   ///
   /// In de, this message translates to:
-  /// **'Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! '**
-  String get about_text;
+  /// **'Build-Nr.'**
+  String get build;
 }
 
 class _AppLocalizationsDelegate

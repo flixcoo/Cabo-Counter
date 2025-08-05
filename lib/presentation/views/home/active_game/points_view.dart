@@ -23,9 +23,9 @@ class _PointsViewState extends State<PointsView> {
         ),
         child: SafeArea(child: LayoutBuilder(builder: (context, constraints) {
           const double caboFieldWidthFactor = 0.2;
-          const double roundColWidth = 35;
           const double tablePadding = 8;
           final int playerCount = widget.gameSession.players.length;
+          const double roundColWidth = 35;
           final double playerColWidth =
               (constraints.maxWidth - roundColWidth - (tablePadding)) /
                   playerCount;

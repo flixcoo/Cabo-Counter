@@ -57,6 +57,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get about => 'Über';
 
   @override
+  String get licenses => 'Lizenzen';
+
+  @override
+  String get license_details => 'Lizenzdetails';
+
+  @override
+  String get no_license_text => 'Keine Lizenz verfügbar';
+
+  @override
+  String get imprint => 'Impressum';
+
+  @override
   String get empty_text_1 => 'Ganz schön leer hier...';
 
   @override
@@ -348,12 +360,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get build => 'Build-Nr.';
-
-  @override
   String get loading => 'Lädt...';
 
   @override
-  String get about_text =>
-      'Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! ';
+  String get build => 'Build-Nr.';
 }
