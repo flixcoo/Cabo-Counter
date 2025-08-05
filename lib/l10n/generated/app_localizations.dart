@@ -723,17 +723,17 @@ abstract class AppLocalizations {
   /// **'Datenschutzerklärung'**
   String get privacy_policy;
 
-  /// No description provided for @build.
-  ///
-  /// In de, this message translates to:
-  /// **'Build-Nr.'**
-  String get build;
-
   /// No description provided for @loading.
   ///
   /// In de, this message translates to:
   /// **'Lädt...'**
   String get loading;
+
+  /// No description provided for @build.
+  ///
+  /// In de, this message translates to:
+  /// **'Build-Nr.'**
+  String get build;
 }
 
 class _AppLocalizationsDelegate

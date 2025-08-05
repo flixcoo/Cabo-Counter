@@ -357,8 +357,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacy_policy => 'Privacy Policy';
 
   @override
-  String get build => 'Build No.';
+  String get loading => 'Loading...';
 
   @override
-  String get loading => 'Loading...';
+  String get build => 'Build No.';
 }

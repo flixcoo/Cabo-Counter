@@ -360,8 +360,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get build => 'Build-Nr.';
+  String get loading => 'Lädt...';
 
   @override
-  String get loading => 'Lädt...';
+  String get build => 'Build-Nr.';
 }
