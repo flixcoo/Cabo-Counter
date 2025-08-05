@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// A view that displays information about the app, including its name, version,
+/// privacy policy, imprint, and licenses.
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
 
