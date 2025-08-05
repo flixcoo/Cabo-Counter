@@ -36,8 +36,7 @@ class LicenseView extends StatelessWidget {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
-                          title: ossLicenses[index].name[0].toUpperCase() +
-                              ossLicenses[index].name.substring(1),
+                          title: ossLicenses[index].name,
                           license: ossLicenses[index].license!,
                         ),
                       ),
@@ -45,8 +44,7 @@ class LicenseView extends StatelessWidget {
                   },
                   trailing: const CupertinoListTileChevron(),
                   title: Text(
-                    ossLicenses[index].name[0].toUpperCase() +
-                        ossLicenses[index].name.substring(1),
+                    ossLicenses[index].name,
                     style: GoogleFonts.roboto(),
                   ),
                   subtitle: Text(ossLicenses[index].description),
