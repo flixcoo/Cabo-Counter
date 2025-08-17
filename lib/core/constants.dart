@@ -6,12 +6,12 @@ class Constants {
   static const String kInstagramLink = 'https://instagram.felixkirchner.de';
   static const String kGithubLink = 'https://github.felixkirchner.de';
   static const String kGithubIssuesLink =
-      'https://cabocounter-issues.felixkirchner.de';
+      'https://cabo-counter-issues.felixkirchner.de';
   static const String kGithubWikiLink =
-      'https://cabocounter-wiki.felixkirchner.de';
+      'https://cabo-counter-wiki.felixkirchner.de';
   static const String kEmail = 'cabocounter@felixkirchner.de';
   static const String kPrivacyPolicyLink =
-      'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
+      'https://cabo-counter-privacy.felixkirchner.de';
   static const String kImprintLink = 'https://imprint.felixkirchner.de';
 
   static RateMyApp rateMyApp = RateMyApp(
