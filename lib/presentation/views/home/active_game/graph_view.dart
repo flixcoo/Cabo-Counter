@@ -28,7 +28,7 @@ class _GraphViewState extends State<GraphView> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
-          previousPageTitle: AppLocalizations.of(context).back,
+          previousPageTitle: AppLocalizations.of(context).overview,
         ),
         child: SafeArea(
           child: Visibility(

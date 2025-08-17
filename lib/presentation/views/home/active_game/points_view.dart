@@ -19,7 +19,7 @@ class _PointsViewState extends State<PointsView> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).point_overview),
-          previousPageTitle: AppLocalizations.of(context).back,
+          previousPageTitle: AppLocalizations.of(context).overview,
         ),
         child: SafeArea(child: LayoutBuilder(builder: (context, constraints) {
           const double caboFieldWidthFactor = 0.2;

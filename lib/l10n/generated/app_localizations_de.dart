@@ -36,6 +36,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game => 'Spiel';
 
   @override
+  String get games => 'Spiele';
+
+  @override
+  String get gamemode => 'Spielmodus';
+
+  @override
   String get ok => 'OK';
 
   @override
@@ -183,7 +189,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unlimited_description =>
-      'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.';
+      'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
   String get results => 'Ergebnisse';
@@ -265,7 +271,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
-  String get point_overview => 'Punkteübersicht';
+  String get point_overview => 'Punktetabelle';
 
   @override
   String get scoring_history => 'Spielverlauf';

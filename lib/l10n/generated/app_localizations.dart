@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'Spiel'**
   String get game;
 
+  /// No description provided for @games.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiele'**
+  String get games;
+
+  /// No description provided for @gamemode.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielmodus'**
+  String get gamemode;
+
   /// No description provided for @ok.
   ///
   /// In de, this message translates to:
@@ -425,7 +437,7 @@ abstract class AppLocalizations {
   /// No description provided for @unlimited_description.
   ///
   /// In de, this message translates to:
-  /// **'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.'**
+  /// **'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.'**
   String get unlimited_description;
 
   /// No description provided for @results.
@@ -546,7 +558,7 @@ abstract class AppLocalizations {
   /// No description provided for @point_overview.
   ///
   /// In de, this message translates to:
-  /// **'Punkteübersicht'**
+  /// **'Punktetabelle'**
   String get point_overview;
 
   /// No description provided for @scoring_history.

@@ -17,6 +17,7 @@ class LicenseDetailView extends StatelessWidget {
         middle: Text(
           AppLocalizations.of(context).license_details,
         ),
+        previousPageTitle: AppLocalizations.of(context).licenses,
       ),
       child: SafeArea(
         child: SingleChildScrollView(

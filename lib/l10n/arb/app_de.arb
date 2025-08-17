@@ -10,6 +10,8 @@
   "delete": "Löschen",
   "cancel": "Abbrechen",
   "game": "Spiel",
+  "games": "Spiele",
+  "gamemode": "Spielmodus",
   "ok": "OK",
   "player": "Spieler:in",
     "players": "Spieler:innen",
@@ -74,7 +76,7 @@
       }
     }
   },
-  "unlimited_description": "Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.",
+  "unlimited_description": "Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.",
 
   "results": "Ergebnisse",
   "who_said_cabo": "Wer hat CABO gesagt?",
@@ -126,7 +128,7 @@
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "statistics": "Statistiken",
-  "point_overview": "Punkteübersicht",
+  "point_overview": "Punktetabelle",
   "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 

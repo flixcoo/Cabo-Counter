@@ -80,7 +80,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     return CupertinoPageScaffold(
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
-          previousPageTitle: AppLocalizations.of(context).overview,
+          previousPageTitle: AppLocalizations.of(context).games,
           middle: Text(AppLocalizations.of(context).new_game),
         ),
         child: SafeArea(
@@ -452,10 +452,12 @@ class _CreateGameViewState extends State<CreateGameView> {
     gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(id) ?? gameSession;
 
-    Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(
-            builder: (context) => ActiveGameView(gameSession: session)));
+    Navigator.pushAndRemoveUntil(
+      context,
+      CupertinoPageRoute(
+          builder: (context) => ActiveGameView(gameSession: session)),
+      (Route<dynamic> route) => route.isFirst,
+    );
   }
 
   @override
