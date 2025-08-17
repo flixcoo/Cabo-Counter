@@ -1,10 +1,11 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
+import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/active_game_view.dart';
-import 'package:cabo_counter/presentation/views/create_game_view.dart';
-import 'package:cabo_counter/presentation/views/settings_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +38,8 @@ class _MainMenuViewState extends State<MainMenuView> {
     gameManager.addListener(_updateView);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      precacheImage(
+          const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
       await Constants.rateMyApp.init();
 
       if (Constants.rateMyApp.shouldOpenDialog &&
@@ -72,7 +75,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       });
                     },
                     icon: const Icon(CupertinoIcons.settings, size: 30)),
-                middle: Text(AppLocalizations.of(context).app_name),
+                middle: Text(AppLocalizations.of(context).games),
                 trailing: IconButton(
                     onPressed: () => Navigator.push(
                           context,
@@ -106,7 +109,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                               return Dismissible(
                                 key: Key(session.id),
                                 background: Container(
-                                  color: CupertinoColors.destructiveRed,
+                                  color: CustomTheme.red,
                                   alignment: Alignment.centerRight,
                                   padding: const EdgeInsets.only(right: 20.0),
                                   child: const Icon(
@@ -135,7 +138,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     subtitle: Visibility(
                                         visible: session.isGameFinished,
                                         replacement: Text(
-                                          '${AppLocalizations.of(context).mode}: ${_translateGameMode(session.isPointsLimitEnabled)}',
+                                          '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                         child: Text(
@@ -216,9 +219,9 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   /// Translates the game mode boolean into the corresponding String.
   /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
-  String _translateGameMode(bool isPointLimitEnabled) {
-    if (isPointLimitEnabled) {
-      return '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}';
+  String _translateGameMode(GameSession gameSession) {
+    if (gameSession.isPointsLimitEnabled) {
+      return '${gameSession.pointLimit} ${AppLocalizations.of(context).points}';
     }
     return AppLocalizations.of(context).unlimited;
   }
@@ -242,7 +245,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
 
     // so that the bad rating dialog is not shown immediately
-    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
+    await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
 
     switch (preRatingDecision) {
       case PreRatingDialogDecision.yes:

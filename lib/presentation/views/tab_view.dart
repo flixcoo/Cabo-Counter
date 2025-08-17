@@ -1,9 +1,10 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/about_view.dart';
-import 'package:cabo_counter/presentation/views/main_menu_view.dart';
+import 'package:cabo_counter/presentation/views/about/about_view.dart';
+import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
 import 'package:flutter/cupertino.dart';
 
+/// A view that provides a tabbed interface for navigating between the main menu and the about section.
 class TabView extends StatefulWidget {
   const TabView({super.key});
 

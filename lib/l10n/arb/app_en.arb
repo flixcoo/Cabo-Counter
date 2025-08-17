@@ -10,6 +10,8 @@
   "delete": "Delete",
   "cancel": "Cancel",
   "game": "Game",
+  "games": "Games",
+  "gamemode": "Gamemode",
   "ok": "OK",
   "player": "Player",
   "players": "Players",
@@ -17,7 +19,12 @@
   "back": "Back",
 
   "home": "Home",
+
   "about": "About",
+  "licenses": "Licenses",
+  "license_details": "License Details",
+  "imprint": "Imprint",
+  "no_license_text": "No license available",
 
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",
@@ -35,7 +42,7 @@
   "yes": "Yes",
   "no": "No",
   "bad_rating_title": "Not satisfied?",
-  "bad_rating_message": "If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.",
+  "bad_rating_message": "Feel free to send me an email directly so we can solve your problem!",
   "contact_email": "Contact via E-Mail",
   "email_subject": "Feedback: Cabo Counter App",
   "email_body": "I have the following feedback...",
@@ -69,7 +76,7 @@
       }
     }
   },
-  "unlimited_description": "The game continues until you decide to stop playing",
+  "unlimited_description": "The game continues until you decide to stop playing. The game can be ended manually at any time.",
 
   "results": "Results",
   "who_said_cabo": "Who called Cabo?",
@@ -156,7 +163,5 @@
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
   "loading": "Loading...",
-  "build": "Build No.",
-
-  "about_text": "Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!"
+  "build": "Build No."
 }

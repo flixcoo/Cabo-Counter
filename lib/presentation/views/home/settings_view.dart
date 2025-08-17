@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -32,6 +32,7 @@ class _SettingsViewState extends State<SettingsView> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(AppLocalizations.of(context).settings),
+        previousPageTitle: AppLocalizations.of(context).games,
       ),
       child: SafeArea(
           child: SingleChildScrollView(
@@ -185,13 +186,6 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.book,
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.kGithubWikiLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
-                      CustomFormRow(
-                        prefixText: AppLocalizations.of(context).privacy_policy,
-                        prefixIcon: CupertinoIcons.doc_append,
-                        onPressed: () =>
-                            launchUrl(Uri.parse(Constants.kPrivacyPolicyLink)),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(

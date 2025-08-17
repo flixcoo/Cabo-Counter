@@ -3,11 +3,12 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/game_manager.dart';
 import 'package:cabo_counter/data/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/create_game_view.dart';
-import 'package:cabo_counter/presentation/views/graph_view.dart';
-import 'package:cabo_counter/presentation/views/mode_selection_view.dart';
-import 'package:cabo_counter/presentation/views/points_view.dart';
-import 'package:cabo_counter/presentation/views/round_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
@@ -24,11 +25,19 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
+  /// Constant value to represent a press on the cancel button in round view.
+  static const int kRoundCancelled = -1;
+
   final confettiController = ConfettiController(
     duration: const Duration(seconds: 10),
   );
+
   late final GameSession gameSession;
+
+  /// A list of the ranks for each player corresponding to their index in sortedPlayerIndices
   late List<int> denseRanks;
+
+  /// A list of player indices sorted by their scores in ascending order.
   late List<int> sortedPlayerIndices;
 
   @override
@@ -49,16 +58,37 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   gameSession.playerScores, sortedPlayerIndices);
               return CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                    middle: Text(
-                      gameSession.gameTitle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    previousPageTitle: AppLocalizations.of(context).games,
+                    middle: Text(AppLocalizations.of(context).overview),
                   ),
                   child: SafeArea(
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).game,
+                              style: CustomTheme.rowTitle,
+                            ),
+                          ),
+                          CupertinoListTile(
+                            title: Text(AppLocalizations.of(context).name),
+                            trailing: Text(
+                              gameSession.gameTitle,
+                              style: TextStyle(color: CustomTheme.primaryColor),
+                            ),
+                          ),
+                          CupertinoListTile(
+                            title: Text(AppLocalizations.of(context).mode),
+                            trailing: Text(
+                              gameSession.isPointsLimitEnabled
+                                  ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
+                                  : AppLocalizations.of(context).unlimited,
+                              style: TextStyle(color: CustomTheme.primaryColor),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                             child: Text(
@@ -73,6 +103,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             itemBuilder: (BuildContext context, int index) {
                               int playerIndex = sortedPlayerIndices[index];
                               return CupertinoListTile(
+                                padding:
+                                    const EdgeInsets.fromLTRB(14, 5, 14, 0),
                                 title: Row(
                                   children: [
                                     _getPlacementTextWidget(index),
@@ -215,7 +247,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
                                 onTap: () {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
@@ -303,11 +335,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           content: Text(AppLocalizations.of(context).end_game_message),
           actions: [
             CupertinoDialogAction(
+              isDestructiveAction: true,
               child: Text(
                 AppLocalizations.of(context).end_game,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: CupertinoColors.destructiveRed),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onPressed: () {
                 setState(() {
@@ -453,6 +486,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       ),
     );
 
+    // If the user presses the cancel button
+    if (round == kRoundCancelled) return;
+
     if (widget.gameSession.isGameFinished && context.mounted) {
       _playFinishAnimation(context);
     }
@@ -461,7 +497,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (round != null && round >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Future.delayed(
-            const Duration(milliseconds: Constants.roundViewDelay));
+            const Duration(milliseconds: Constants.kRoundViewDelay));
         if (context.mounted) {
           _openRoundView(context, round);
         }
@@ -477,7 +513,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
     confettiController.play();
 
-    await Future.delayed(const Duration(milliseconds: Constants.popUpDelay));
+    await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
 
     if (context.mounted) {
       showCupertinoDialog(

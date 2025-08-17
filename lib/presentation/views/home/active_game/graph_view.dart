@@ -28,31 +28,30 @@ class _GraphViewState extends State<GraphView> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
-          previousPageTitle: AppLocalizations.of(context).back,
+          previousPageTitle: AppLocalizations.of(context).overview,
         ),
-        child: Visibility(
-          visible: widget.gameSession.roundNumber > 1 ||
-              widget.gameSession.isGameFinished,
-          replacement: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Center(
-                child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Text(
-                  AppLocalizations.of(context).empty_graph_text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16),
+        child: SafeArea(
+          child: Visibility(
+            visible: widget.gameSession.roundNumber > 1 ||
+                widget.gameSession.isGameFinished,
+            replacement: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Center(
+                  child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
                 ),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    AppLocalizations.of(context).empty_graph_text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
             child: SfCartesianChart(
               enableAxisAnimation: true,
               legend: const Legend(

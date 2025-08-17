@@ -36,6 +36,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game => 'Game';
 
   @override
+  String get games => 'Games';
+
+  @override
+  String get gamemode => 'Gamemode';
+
+  @override
   String get ok => 'OK';
 
   @override
@@ -55,6 +61,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about => 'About';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get license_details => 'License Details';
+
+  @override
+  String get no_license_text => 'No license available';
+
+  @override
+  String get imprint => 'Imprint';
 
   @override
   String get empty_text_1 => 'Pretty empty here...';
@@ -89,7 +107,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bad_rating_message =>
-      'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
+      'Feel free to send me an email directly so we can solve your problem!';
 
   @override
   String get contact_email => 'Contact via E-Mail';
@@ -168,7 +186,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unlimited_description =>
-      'The game continues until you decide to stop playing';
+      'The game continues until you decide to stop playing. The game can be ended manually at any time.';
 
   @override
   String get results => 'Results';
@@ -345,12 +363,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacy_policy => 'Privacy Policy';
 
   @override
-  String get build => 'Build No.';
-
-  @override
   String get loading => 'Loading...';
 
   @override
-  String get about_text =>
-      'Hey :) Thanks for being one of the first users of my app! I’ve put a lot of work into this project, and even though I tried to think of everything, it might not work perfectly just yet. So if you discover any bugs or have feedback on the design or usability, please let me know via the TestFlight app or by sending me a message or email. Thank you very much!';
+  String get build => 'Build No.';
 }

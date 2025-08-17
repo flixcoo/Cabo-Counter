@@ -42,6 +42,8 @@ class _RoundViewState extends State<RoundView> {
     (index) => FocusNode(),
   );
 
+  late List<GlobalKey> _textFieldKeys;
+
   @override
   void initState() {
     print('=== Runde ${widget.roundNumber} geöffnet ===');
@@ -62,6 +64,11 @@ class _RoundViewState extends State<RoundView> {
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
 
+    _textFieldKeys = List.generate(
+      widget.gameSession.players.length,
+      (index) => GlobalKey(),
+    );
+
     super.initState();
   }
 
@@ -75,12 +82,11 @@ class _RoundViewState extends State<RoundView> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => {
               LocalStorageService.saveGameSessions(),
-              Navigator.pop(context)
+              Navigator.pop(context, -1)
             },
             child: Text(AppLocalizations.of(context).cancel),
           ),
@@ -91,11 +97,11 @@ class _RoundViewState extends State<RoundView> {
                 CupertinoIcons.lock,
                 size: 25,
               ))),
-      child: Stack(
+      child: Column(
         children: [
-          Positioned.fill(
+          Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 100 + bottomInset),
+              padding: EdgeInsets.only(bottom: 20 + bottomInset),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,6 +201,7 @@ class _RoundViewState extends State<RoundView> {
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: SizedBox(
                                 width: 100,
+                                key: _textFieldKeys[originalIndex],
                                 child: CupertinoTextField(
                                   maxLength: 3,
                                   focusNode: _focusNodeList[originalIndex],
@@ -236,12 +243,10 @@ class _RoundViewState extends State<RoundView> {
                               _endOfRoundNavigation(context, true);
                             }
                           },
-                          child: Text(
-                            AppLocalizations.of(context).kamikaze,
-                            style: const TextStyle(
-                              color: CupertinoColors.destructiveRed,
-                            ),
-                          ),
+                          child: Text(AppLocalizations.of(context).kamikaze,
+                              style: TextStyle(
+                                color: CustomTheme.kamikazeColor,
+                              )),
                         ),
                       ),
                     ),
@@ -250,11 +255,8 @@ class _RoundViewState extends State<RoundView> {
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: bottomInset,
-            child: KeyboardVisibilityBuilder(builder: (context, visible) {
+          KeyboardVisibilityBuilder(
+            builder: (context, visible) {
               if (!visible) {
                 return Container(
                   height: 80,
@@ -286,34 +288,28 @@ class _RoundViewState extends State<RoundView> {
               } else {
                 return const SizedBox.shrink();
               }
-            }),
-          )
+            },
+          ),
         ],
       ),
     );
   }
 
   /// Gets the index of the player who won the previous round.
+  /// Returns 0 in the first round, as there is no previous round.
   int _getPreviousRoundWinnerIndex() {
     if (widget.roundNumber == 1) {
-      return 0; // If it's the first round, there's no previous round, so return 0.
+      return 0; // If it's the first round, the order should be the same as the players list.
     }
 
-    final previousRound = widget.gameSession.roundList[widget.roundNumber - 2];
-    final scores = previousRound.scoreUpdates;
+    final List<int> scores =
+        widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
+    final int winnerIndex = scores.indexOf(0);
 
-    // Find the index of the player with the minimum score
-    int minScore = scores[0];
-    int winnerIndex = 0;
-
-    // Iterate through the scores to find the player with the minimum score
-    for (int i = 1; i < scores.length; i++) {
-      if (scores[i] < minScore) {
-        minScore = scores[i];
-        winnerIndex = i;
-      }
+    // Fallback if no player has 0 points, which should not happen in a valid game.
+    if (winnerIndex == -1) {
+      return 0;
     }
-
     return winnerIndex;
   }
 
@@ -355,7 +351,10 @@ class _RoundViewState extends State<RoundView> {
                     _kamikazePlayerIndex = index;
                     Navigator.pop(context, true);
                   },
-                  child: Text(name),
+                  child: Text(
+                    name,
+                    style: TextStyle(color: CustomTheme.kamikazeColor),
+                  ),
                 );
               }).toList(),
               cancelButton: CupertinoActionSheetAction(
@@ -376,8 +375,21 @@ class _RoundViewState extends State<RoundView> {
     final currentPos = originalIndices.indexOf(index);
 
     if (currentPos < originalIndices.length - 1) {
+      final nextIndex = originalIndices[currentPos + 1];
       FocusScope.of(context)
           .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
+
+      final scrollContext = _textFieldKeys[nextIndex].currentContext;
+      if (scrollContext != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Scrollable.ensureVisible(
+            scrollContext,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            alignment: 0.55,
+          );
+        });
+      }
     } else {
       _focusNodeList[index].unfocus();
     }

@@ -18,7 +18,9 @@ class ModeSelectionMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).select_game_mode),
+        middle: Text(AppLocalizations.of(context).gamemode),
+        previousPageTitle:
+            !showDeselection ? AppLocalizations.of(context).new_game : '',
       ),
       child: ListView(
         children: [

@@ -36,6 +36,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game => 'Spiel';
 
   @override
+  String get games => 'Spiele';
+
+  @override
+  String get gamemode => 'Spielmodus';
+
+  @override
   String get ok => 'OK';
 
   @override
@@ -55,6 +61,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get about => 'Über';
+
+  @override
+  String get licenses => 'Lizenzen';
+
+  @override
+  String get license_details => 'Lizenzdetails';
+
+  @override
+  String get no_license_text => 'Keine Lizenz verfügbar';
+
+  @override
+  String get imprint => 'Impressum';
 
   @override
   String get empty_text_1 => 'Ganz schön leer hier...';
@@ -171,7 +189,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unlimited_description =>
-      'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.';
+      'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
   String get results => 'Ergebnisse';
@@ -253,7 +271,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
-  String get point_overview => 'Punkteübersicht';
+  String get point_overview => 'Punktetabelle';
 
   @override
   String get scoring_history => 'Spielverlauf';
@@ -348,12 +366,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get build => 'Build-Nr.';
-
-  @override
   String get loading => 'Lädt...';
 
   @override
-  String get about_text =>
-      'Hey :) Danke, dass du als eine:r der ersten User meiner ersten eigenen App dabei bist! Ich hab sehr viel Arbeit in dieses Projekt gesteckt und auch, wenn ich (hoffentlich) an vieles Gedacht hab, wird auf jeden Fall noch nicht alles 100% funktionieren. Solltest du also irgendwelche Fehler entdecken oder Feedback zum Design oder der Benutzerfreundlichkeit haben, teile Sie mir gern über die Testflight App oder auf den dir bekannten Wegen mit. Danke! ';
+  String get build => 'Build-Nr.';
 }

@@ -12,6 +12,7 @@ class Constants {
   static const String kEmail = 'cabocounter@felixkirchner.de';
   static const String kPrivacyPolicyLink =
       'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
+  static const String kImprintLink = 'https://imprint.felixkirchner.de';
 
   static RateMyApp rateMyApp = RateMyApp(
       appStoreIdentifier: '6747105718',
@@ -21,11 +22,14 @@ class Constants {
       remindLaunches: 40);
 
   /// Delay in milliseconds before a pop-up appears.
-  static const int popUpDelay = 300;
+  static const int kPopUpDelay = 300;
 
   /// Delay in milliseconds before the round view appears after the previous one is closed.
-  static const int roundViewDelay = 600;
+  static const int kRoundViewDelay = 600;
 
   /// Duration in milliseconds for the fade-in animation of texts.
-  static const int fadeInDuration = 300;
+  static const int kFadeInDuration = 300;
+
+  /// Duration in milliseconds for the keyboard to fully disappear.
+  static const int kKeyboardDelay = 300;
 }
