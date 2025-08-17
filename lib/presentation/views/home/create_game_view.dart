@@ -479,12 +479,12 @@ class _CreateGameViewState extends State<CreateGameView> {
     } else {
       FocusScope.of(context).unfocus();
       await Future.delayed(
-          const Duration(milliseconds: Constants.kKeyboardDelay), () {});
+          const Duration(milliseconds: Constants.kKeyboardDelay));
     }
   }
 
   @override
-  Future<void> dispose() async {
+  void dispose() {
     _gameTitleTextController.dispose();
     for (var controller in _playerNameTextControllers) {
       controller.dispose();
