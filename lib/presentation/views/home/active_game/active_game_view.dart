@@ -8,6 +8,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
@@ -66,6 +67,29 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Text(
+                              AppLocalizations.of(context).game,
+                              style: CustomTheme.rowTitle,
+                            ),
+                          ),
+                          CupertinoListTile(
+                            title: Text(AppLocalizations.of(context).name),
+                            trailing: Text(
+                              gameSession.gameTitle,
+                              style: TextStyle(color: CustomTheme.primaryColor),
+                            ),
+                          ),
+                          CupertinoListTile(
+                            title: Text(AppLocalizations.of(context).mode),
+                            trailing: Text(
+                              gameSession.isPointsLimitEnabled
+                                  ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
+                                  : AppLocalizations.of(context).unlimited,
+                              style: TextStyle(color: CustomTheme.primaryColor),
+                            ),
+                          ),
+                          Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                             child: Text(
                               AppLocalizations.of(context).players,
@@ -79,6 +103,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             itemBuilder: (BuildContext context, int index) {
                               int playerIndex = sortedPlayerIndices[index];
                               return CupertinoListTile(
+                                padding:
+                                    const EdgeInsets.fromLTRB(14, 5, 14, 0),
                                 title: Row(
                                   children: [
                                     _getPlacementTextWidget(index),
