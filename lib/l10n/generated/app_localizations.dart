@@ -437,7 +437,7 @@ abstract class AppLocalizations {
   /// No description provided for @unlimited_description.
   ///
   /// In de, this message translates to:
-  /// **'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.'**
+  /// **'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.'**
   String get unlimited_description;
 
   /// No description provided for @results.

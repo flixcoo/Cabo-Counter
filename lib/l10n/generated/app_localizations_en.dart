@@ -186,7 +186,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unlimited_description =>
-      'The game continues until you decide to stop playing';
+      'The game continues until you decide to stop playing. The game can be ended manually at any time.';
 
   @override
   String get results => 'Results';

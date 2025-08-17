@@ -76,7 +76,7 @@
       }
     }
   },
-  "unlimited_description": "The game continues until you decide to stop playing",
+  "unlimited_description": "The game continues until you decide to stop playing. The game can be ended manually at any time.",
 
   "results": "Results",
   "who_said_cabo": "Who called Cabo?",

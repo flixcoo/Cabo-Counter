@@ -189,7 +189,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unlimited_description =>
-      'Dem Spiel sind keine Grenzen gesetzt. Es wird so lange gespielt, bis ihr keine Lust mehr habt.';
+      'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
   String get results => 'Ergebnisse';
