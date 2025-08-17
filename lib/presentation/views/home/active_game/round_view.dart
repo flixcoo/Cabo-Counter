@@ -42,6 +42,8 @@ class _RoundViewState extends State<RoundView> {
     (index) => FocusNode(),
   );
 
+  late List<GlobalKey> _textFieldKeys;
+
   @override
   void initState() {
     print('=== Runde ${widget.roundNumber} geöffnet ===');
@@ -62,6 +64,11 @@ class _RoundViewState extends State<RoundView> {
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
 
+    _textFieldKeys = List.generate(
+      widget.gameSession.players.length,
+      (index) => GlobalKey(),
+    );
+
     super.initState();
   }
 
@@ -75,7 +82,6 @@ class _RoundViewState extends State<RoundView> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: true,
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => {
@@ -91,11 +97,11 @@ class _RoundViewState extends State<RoundView> {
                 CupertinoIcons.lock,
                 size: 25,
               ))),
-      child: Stack(
+      child: Column(
         children: [
-          Positioned.fill(
+          Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 100 + bottomInset),
+              padding: EdgeInsets.only(bottom: 20 + bottomInset),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,6 +201,7 @@ class _RoundViewState extends State<RoundView> {
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: SizedBox(
                                 width: 100,
+                                key: _textFieldKeys[originalIndex],
                                 child: CupertinoTextField(
                                   maxLength: 3,
                                   focusNode: _focusNodeList[originalIndex],
@@ -248,11 +255,8 @@ class _RoundViewState extends State<RoundView> {
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: bottomInset,
-            child: KeyboardVisibilityBuilder(builder: (context, visible) {
+          KeyboardVisibilityBuilder(
+            builder: (context, visible) {
               if (!visible) {
                 return Container(
                   height: 80,
@@ -284,8 +288,8 @@ class _RoundViewState extends State<RoundView> {
               } else {
                 return const SizedBox.shrink();
               }
-            }),
-          )
+            },
+          ),
         ],
       ),
     );
@@ -371,8 +375,18 @@ class _RoundViewState extends State<RoundView> {
     final currentPos = originalIndices.indexOf(index);
 
     if (currentPos < originalIndices.length - 1) {
+      final nextIndex = originalIndices[currentPos + 1];
       FocusScope.of(context)
           .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Scrollable.ensureVisible(
+          _textFieldKeys[nextIndex].currentContext!,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+          alignment: 0.55,
+        );
+      });
     } else {
       _focusNodeList[index].unfocus();
     }
