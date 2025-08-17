@@ -379,14 +379,17 @@ class _RoundViewState extends State<RoundView> {
       FocusScope.of(context)
           .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Scrollable.ensureVisible(
-          _textFieldKeys[nextIndex].currentContext!,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-          alignment: 0.55,
-        );
-      });
+      final scrollContext = _textFieldKeys[nextIndex].currentContext;
+      if (scrollContext != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Scrollable.ensureVisible(
+            scrollContext,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            alignment: 0.55,
+          );
+        });
+      }
     } else {
       _focusNodeList[index].unfocus();
     }
