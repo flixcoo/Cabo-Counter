@@ -36,6 +36,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game => 'Game';
 
   @override
+  String get games => 'Games';
+
+  @override
+  String get gamemode => 'Gamemode';
+
+  @override
   String get ok => 'OK';
 
   @override
@@ -101,7 +107,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bad_rating_message =>
-      'If you are not satisfied with the app, please let me know before leaving a bad rating. I will try to fix the issue as soon as possible.';
+      'Feel free to send me an email directly so we can solve your problem!';
 
   @override
   String get contact_email => 'Contact via E-Mail';

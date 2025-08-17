@@ -57,10 +57,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   gameSession.playerScores, sortedPlayerIndices);
               return CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                    middle: Text(
-                      gameSession.gameTitle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    previousPageTitle: AppLocalizations.of(context).games,
+                    middle: Text(AppLocalizations.of(context).overview),
                   ),
                   child: SafeArea(
                     child: SingleChildScrollView(

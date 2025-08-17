@@ -75,7 +75,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       });
                     },
                     icon: const Icon(CupertinoIcons.settings, size: 30)),
-                middle: Text(AppLocalizations.of(context).app_name),
+                middle: Text(AppLocalizations.of(context).games),
                 trailing: IconButton(
                     onPressed: () => Navigator.push(
                           context,

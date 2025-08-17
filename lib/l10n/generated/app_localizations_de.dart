@@ -36,6 +36,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get game => 'Spiel';
 
   @override
+  String get games => 'Spiele';
+
+  @override
+  String get gamemode => 'Spielmodus';
+
+  @override
   String get ok => 'OK';
 
   @override
@@ -265,7 +271,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
-  String get point_overview => 'Punkteübersicht';
+  String get point_overview => 'Punktetabelle';
 
   @override
   String get scoring_history => 'Spielverlauf';

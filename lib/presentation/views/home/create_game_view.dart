@@ -80,7 +80,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     return CupertinoPageScaffold(
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
-          previousPageTitle: AppLocalizations.of(context).overview,
+          previousPageTitle: AppLocalizations.of(context).games,
           middle: Text(AppLocalizations.of(context).new_game),
         ),
         child: SafeArea(

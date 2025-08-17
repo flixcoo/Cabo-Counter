@@ -32,6 +32,7 @@ class _SettingsViewState extends State<SettingsView> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(AppLocalizations.of(context).settings),
+        previousPageTitle: AppLocalizations.of(context).games,
       ),
       child: SafeArea(
           child: SingleChildScrollView(

@@ -10,6 +10,8 @@
   "delete": "Löschen",
   "cancel": "Abbrechen",
   "game": "Spiel",
+  "games": "Spiele",
+  "gamemode": "Spielmodus",
   "ok": "OK",
   "player": "Spieler:in",
     "players": "Spieler:innen",
@@ -126,7 +128,7 @@
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
 
   "statistics": "Statistiken",
-  "point_overview": "Punkteübersicht",
+  "point_overview": "Punktetabelle",
   "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
 
