@@ -221,7 +221,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
                                 onTap: () {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
