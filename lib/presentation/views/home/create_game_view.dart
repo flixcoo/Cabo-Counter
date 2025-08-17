@@ -471,6 +471,8 @@ class _CreateGameViewState extends State<CreateGameView> {
     );
   }
 
+  /// If the keyboard is visible, this method will unfocus the current text field
+  /// to prevent the keyboard from interfering with the navigation bar.
   Future<void> _keyboardDelay() async {
     if (!KeyboardVisibilityController().isVisible) {
       return;
