@@ -3,8 +3,8 @@ name: Flutter
 on:
   push:
     branches:
-      - "develop"
-      - "main"
+     - "develop"
+     - "main"
   pull_request:
 
 jobs:
@@ -28,23 +28,27 @@ jobs:
     - name: Generate oss_licenses.dart
       run: flutter pub run flutter_oss_licenses:generate -o lib/presentation/views/about/licenses/oss_licenses.dart
 
-    #- name: Check for changes
-    #  id: check_changes
-    #  run: |
-    #    if [[ $(git status --porcelain) ]]; then
-    #      echo "changes_detected=true" >> $GITHUB_OUTPUT
-    #    else
-    #      echo "changes_detected=false" >> $GITHUB_OUTPUT
-    #    fi
+    - name: Escape dollar signs in licenses
+      run: |
+        sed -i 's/\$/\\$/g' lib/presentation/views/about/licenses/oss_licenses.dart
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if [[ $(git status --porcelain) ]]; then
+          echo "changes_detected=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes_detected=false" >> $GITHUB_OUTPUT
+        fi
             
-    #- name: Commit Changes
-    #  if: steps.check_changes.outputs.changes_detected == 'true'
-    #  run: |
-    #    git config --global user.name "GitHub Actions"
-    #    git config --global user.email "actions@github.com"
-    #    git add .
-    #    git commit -m "Actions: Licenses updated [skip ci]"
-    #    git push
+    - name: Commit Changes
+      if: steps.check_changes.outputs.changes_detected == 'true'
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Actions: Licenses updated [skip ci]"
+        git push
 
   lint:
     runs-on: ubuntu-latest
