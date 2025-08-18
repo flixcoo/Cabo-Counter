@@ -2,14 +2,14 @@ name: Flutter
 
 on:
   push:
-    #branches:
-     #- "develop"
-     #- "main"
+    branches:
+     - "develop"
+     - "main"
   pull_request:
 
 jobs:
   generate_licenses:
-    if: github.event_name == 'push' #&& github.ref == 'refs/heads/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     steps:
