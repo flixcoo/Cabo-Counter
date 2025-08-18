@@ -37,14 +37,13 @@ jobs:
     #      echo "changes_detected=false" >> $GITHUB_OUTPUT
     #    fi
             
-    #- name: Commit Changes
-    #  if: steps.check_changes.outputs.changes_detected == 'true'
-    #  run: |
-    #    git config --global user.name "GitHub Actions"
-    #    git config --global user.email "actions@github.com"
-    #    git add .
-    #    git commit -m "Actions: Licenses updated [skip ci]"
-    #    git push
+    - name: Commit Changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Actions: Licenses updated [skip ci]"
+        git push
 
   lint:
     runs-on: ubuntu-latest
