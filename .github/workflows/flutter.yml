@@ -30,7 +30,7 @@ jobs:
 
     - name: Escape dollar signs in licenses
       run: |
-        sed -i 's/\$/\\$/g' lib/presentation/views/about/licenses/oss_licenses.dart'
+        sed -i 's/\$/\\$/g' lib/presentation/views/about/licenses/oss_licenses.dart
     
     - name: Check for changes
       id: check_changes
