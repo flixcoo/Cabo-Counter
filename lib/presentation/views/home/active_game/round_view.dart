@@ -8,6 +8,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// A view for displaying and managing a single round
+///
+/// This widget allows users to input and review scores for each player in a round,
+/// select the player who called CABO, and handle special cases such as Kamikaze rounds.
+/// It manages the round state, validates input, and coordinates navigation between rounds.
+///
+/// Features:
+/// - Rotates player order based on the previous round's winner.
+/// - Supports Kamikaze rounds with dedicated UI and logic.
+/// - Handles score input, validation, and updates to the game session.
+/// - Displays bonus point popups when applicable.
+///
+/// Requires a [GameSession] and the current [roundNumber].
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
   final int roundNumber;

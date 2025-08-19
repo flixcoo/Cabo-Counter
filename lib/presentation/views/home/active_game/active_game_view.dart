@@ -15,6 +15,13 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Displays the active game view, showing game details, player rankings, rounds, and statistics.
+///
+/// This view allows users to interact with an ongoing game session, including viewing player scores,
+/// navigating through rounds, ending or deleting the game, exporting game data, and starting a new game
+/// with the same settings. It also provides visual feedback such as confetti animation when the game ends.
+///
+/// The widget listens to changes in the provided [GameSession] and updates the UI accordingly.
 class ActiveGameView extends StatefulWidget {
   final GameSession gameSession;
   const ActiveGameView({super.key, required this.gameSession});

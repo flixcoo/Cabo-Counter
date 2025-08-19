@@ -4,6 +4,11 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+/// A widget that displays the cumulative scoring history of a game session as a line graph.
+///
+/// The [GraphView] visualizes the progression of each player's score over multiple rounds
+/// using a line chart. It supports dynamic coloring for each player, axis formatting,
+/// and handles cases where insufficient data is available to render the graph.
 class GraphView extends StatefulWidget {
   final GameSession gameSession;
 

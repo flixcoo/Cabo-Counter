@@ -11,6 +11,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Settings and information page for the app.
+///
+/// [SettingsView] is a settings page for the app, allowing users to configure game options,
+/// manage game data (import, export, delete), and view app information.
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 

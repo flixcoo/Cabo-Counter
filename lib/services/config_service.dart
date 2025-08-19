@@ -1,10 +1,12 @@
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// This class handles the configuration settings for the app.
-/// It uses SharedPreferences to store and retrieve the personal configuration of the app.
-/// Currently it provides methods to initialize, get, and set the point limit and cabo penalty.
+/// A service class for managing and persisting app configuration settings using `SharedPreferences`.
+///
+/// Provides methods to initialize, retrieve, update, and reset configuration values such as point limit,
+/// cabo penalty, and game mode. Ensures that user preferences are stored locally and persist across app restarts.
 class ConfigService {
+  // Keys for the stored values
   static const String _keyPointLimit = 'pointLimit';
   static const String _keyCaboPenalty = 'caboPenalty';
   static const String _keyGameMode = 'gameMode';

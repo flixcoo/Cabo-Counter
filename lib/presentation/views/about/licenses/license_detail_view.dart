@@ -3,8 +3,13 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart'
     show AppLocalizations;
 import 'package:flutter/cupertino.dart';
 
-/// A view that displays the details of a specific open source software license.
-/// It shows the title and the full license text in a scrollable view.
+/// Displays the details of a specific open source software license in a Cupertino-style view.
+///
+/// This view presents the license title and its full text in a scrollable layout.
+///
+/// Required parameters:
+/// - [title]: The name of the license.
+/// - [license]: The full license text to display.
 class LicenseDetailView extends StatelessWidget {
   final String title, license;
   const LicenseDetailView(

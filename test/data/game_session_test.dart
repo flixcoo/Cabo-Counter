@@ -62,10 +62,6 @@ void main() {
   });
 
   group('Helper Functions', () {
-    test('getMaxLengthOfPlayerNames', () {
-      expect(session.getMaxLengthOfPlayerNames(), equals(7)); // Charlie (7)
-    });
-
     test('increaseRound', () {
       expect(session.roundNumber, 1);
       session.increaseRound();

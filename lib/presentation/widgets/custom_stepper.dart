@@ -1,6 +1,17 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/cupertino.dart'; // Für iOS-Style
 
+/// A custom stepper widget for incrementing and decrementing a value.
+///
+/// The [CustomStepper] widget allows increasing and decreasing a value
+/// within a defined range ([minValue] to [maxValue]) in fixed steps.
+///
+/// Properties:
+/// - [minValue]: The minimum value.
+/// - [maxValue]: The maximum value.
+/// - [initialValue]: The initial value (optional, defaults to [minValue]).
+/// - [step]: The step size.
+/// - [onChanged]: Callback triggered when the value changes.
 class CustomStepper extends StatefulWidget {
   final int minValue;
   final int maxValue;
