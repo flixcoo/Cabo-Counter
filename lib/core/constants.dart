@@ -11,8 +11,8 @@ class Constants {
       'https://cabo-counter-wiki.felixkirchner.de';
   static const String kEmail = 'cabocounter@felixkirchner.de';
   static const String kPrivacyPolicyLink =
-      'https://cabo-counter-privacy.felixkirchner.de';
-  static const String kImprintLink = 'https://imprint.felixkirchner.de';
+      'https://cabo-counter-datenschutz.felixkirchner.de';
+  static const String kImprintLink = 'https://impressum.felixkirchner.de';
 
   static RateMyApp rateMyApp = RateMyApp(
       appStoreIdentifier: '6747105718',
