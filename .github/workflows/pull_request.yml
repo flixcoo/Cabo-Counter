@@ -1,4 +1,4 @@
-name: Pull_Request
+name: Pull Request Pipeline
 
 on:
   pull_request:
