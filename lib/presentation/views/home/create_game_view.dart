@@ -20,6 +20,12 @@ enum CreateStatus {
   noPlayerName,
 }
 
+/// A view for creating a new game session in the Cabo Counter app.
+///
+/// The [CreateGameView] allows users to input a game title, select a game mode,
+/// add and reorder player names, and validate all required fields before
+/// starting a new game. It provides feedback dialogs for missing or invalid
+/// input and navigates to the active game view upon successful creation.
 class CreateGameView extends StatefulWidget {
   final GameMode gameMode;
   final String? gameTitle;

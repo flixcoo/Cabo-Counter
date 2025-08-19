@@ -55,6 +55,7 @@ class LocalStorageService {
     try {
       final file = await _getFilePath();
 
+      // Check if the file exists
       if (!await file.exists()) {
         print(
             '[local_storage_service.dart] Es existiert noch keine Datei mit Spieldaten');
@@ -65,11 +66,13 @@ class LocalStorageService {
           '[local_storage_service.dart] Es existiert bereits eine Datei mit Spieldaten');
       final jsonString = await file.readAsString();
 
+      // Check if the file is empty
       if (jsonString.isEmpty) {
         print('[local_storage_service.dart] Die gefundene Datei ist leer');
         return false;
       }
 
+      // Validate the JSON schema
       if (!await _validateJsonSchema(jsonString, true)) {
         print(
             '[local_storage_service.dart] Die Datei konnte nicht validiert werden');
@@ -148,7 +151,6 @@ class LocalStorageService {
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<ImportStatus> importJsonFile() async {
     final path = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Wähle eine Datei mit Spieldaten aus',
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
@@ -162,9 +164,8 @@ class LocalStorageService {
     try {
       final jsonString = await _readFileContent(path.files.single);
 
+      // Checks if the JSON String is in the gameList format
       if (await _validateJsonSchema(jsonString, true)) {
-        // Checks if the JSON String is in the gameList format
-
         final jsonData = json.decode(jsonString) as List<dynamic>;
         List<GameSession> importedList = jsonData
             .map((jsonItem) =>

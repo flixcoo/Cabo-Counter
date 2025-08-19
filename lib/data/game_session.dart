@@ -77,17 +77,6 @@ class GameSession extends ChangeNotifier {
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
-  /// Returns the length of the longest player name.
-  int getMaxLengthOfPlayerNames() {
-    int length = 0;
-    for (String player in players) {
-      if (player.length >= length) {
-        length = player.length;
-      }
-    }
-    return length;
-  }
-
   /// Assigns 50 points to all players except the kamikaze player.
   /// [kamikazePlayerIndex] is the index of the kamikaze player.
   void applyKamikaze(int roundNum, int kamikazePlayerIndex) {
@@ -242,8 +231,8 @@ class GameSession extends ChangeNotifier {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
-  /// It returns a list of players indices who reached 100 points in the current
-  /// round for the [RoundView] to show a popup
+  /// It returns a list of players indices who reached 100 points (bonus player)
+  /// in the current round for the [RoundView] to show a popup
   List<int> updatePoints() {
     List<int> bonusPlayers = [];
     _sumPoints();

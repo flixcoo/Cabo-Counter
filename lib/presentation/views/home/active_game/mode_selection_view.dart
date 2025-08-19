@@ -8,6 +8,12 @@ enum GameMode {
   unlimited,
 }
 
+/// A stateless widget that displays a menu for selecting the game mode.
+///
+/// The [ModeSelectionMenu] allows the user to choose between different game modes:
+/// - Point limit mode with a specified [pointLimit]
+/// - Unlimited mode
+/// - Optionally, no default mode if [showDeselection] is true
 class ModeSelectionMenu extends StatelessWidget {
   final int pointLimit;
   final bool showDeselection;

@@ -2,6 +2,11 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
 
+/// A customizable form row widget with a prefix icon, text, and optional suffix widget.
+///
+/// Displays a row with an icon and text on the left side.
+/// Optionally, a suffix widget (e.g. a stepper) can be shown on the right side.
+/// The row is styled as a [CupertinoButton] and can react to taps.
 class CustomFormRow extends StatefulWidget {
   final String prefixText;
   final IconData prefixIcon;

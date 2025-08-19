@@ -9,8 +9,11 @@ import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Ensure the app runs in portrait mode only
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  // Initialize services
   await ConfigService.initConfig();
   await VersionService.init();
   runApp(const App());
@@ -38,6 +41,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
+
+  /// Every time the app goes into the background or is closed,
+  /// save the current game sessions to local storage.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {

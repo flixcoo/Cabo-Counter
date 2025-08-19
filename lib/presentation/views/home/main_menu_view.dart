@@ -16,6 +16,11 @@ enum PreRatingDialogDecision { yes, no, cancel }
 
 enum BadRatingDialogDecision { email, cancel }
 
+/// Home screen of the app that displays a list of game sessions.
+///
+/// The [MainMenuView] is the main entry point for the app's home screen.
+/// It displays a list of existing game sessions, allows users to create new games,
+/// access settings, and handles user feedback dialogs for app rating and support.
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
 
