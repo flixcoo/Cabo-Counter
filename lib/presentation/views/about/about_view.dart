@@ -55,7 +55,7 @@ class AboutView extends StatelessWidget {
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).imprint),
+                child: Text(AppLocalizations.of(context).legal_notice),
                 onPressed: () => launchUrl(Uri.parse(Constants.kLegalLink)),
               ),
               CupertinoButton(

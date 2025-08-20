@@ -72,7 +72,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_license_text => 'No license available';
 
   @override
-  String get imprint => 'Imprint';
+  String get legal_notice => 'Legal Notice';
 
   @override
   String get empty_text_1 => 'Pretty empty here...';
