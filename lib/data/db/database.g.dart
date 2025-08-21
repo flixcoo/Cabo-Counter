@@ -505,7 +505,7 @@ class $PlayersTableTable extends PlayersTable
   $PlayersTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+  late final GeneratedColumn<String> playerId = GeneratedColumn<String>(
       'id', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
@@ -517,7 +517,7 @@ class $PlayersTableTable extends PlayersTable
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  List<GeneratedColumn> get $columns => [playerId, name];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -529,7 +529,7 @@ class $PlayersTableTable extends PlayersTable
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+      context.handle(_idMeta, playerId.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
     }
@@ -1599,7 +1599,7 @@ final class $$GameSessionTableTableReferences extends BaseReferences<
       _playersTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
           db.playersTable,
           aliasName:
-              $_aliasNameGenerator(db.gameSessionTable.id, db.playersTable.id));
+              $_aliasNameGenerator(db.gameSessionTable.id, db.playersTable.playerId));
 
   $$PlayersTableTableProcessedTableManager get playersTableRefs {
     final manager = $$PlayersTableTableTableManager($_db, $_db.playersTable)
@@ -1688,7 +1688,7 @@ class $$GameSessionTableTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.playersTable,
-        getReferencedColumn: (t) => t.id,
+        getReferencedColumn: (t) => t.playerId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -1827,7 +1827,7 @@ class $$GameSessionTableTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.id,
         referencedTable: $db.playersTable,
-        getReferencedColumn: (t) => t.id,
+        getReferencedColumn: (t) => t.playerId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -2060,7 +2060,7 @@ final class $$PlayersTableTableReferences extends BaseReferences<_$AppDatabase,
 
   static $GameSessionTableTable _idTable(_$AppDatabase db) =>
       db.gameSessionTable.createAlias(
-          $_aliasNameGenerator(db.playersTable.id, db.gameSessionTable.id));
+          $_aliasNameGenerator(db.playersTable.playerId, db.gameSessionTable.id));
 
   $$GameSessionTableTableProcessedTableManager get id {
     final $_column = $_itemColumn<String>('id')!;
@@ -2109,7 +2109,7 @@ class $$PlayersTableTableFilterComposer
   $$GameSessionTableTableFilterComposer get id {
     final $$GameSessionTableTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.id,
+        getCurrentColumn: (t) => t.playerId,
         referencedTable: $db.gameSessionTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -2163,7 +2163,7 @@ class $$PlayersTableTableOrderingComposer
   $$GameSessionTableTableOrderingComposer get id {
     final $$GameSessionTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.id,
+        getCurrentColumn: (t) => t.playerId,
         referencedTable: $db.gameSessionTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -2196,7 +2196,7 @@ class $$PlayersTableTableAnnotationComposer
   $$GameSessionTableTableAnnotationComposer get id {
     final $$GameSessionTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.id,
+        getCurrentColumn: (t) => t.playerId,
         referencedTable: $db.gameSessionTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -2306,7 +2306,7 @@ class $$PlayersTableTableTableManager extends RootTableManager<
                 if (id) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.id,
+                    currentColumn: table.playerId,
                     referencedTable: $$PlayersTableTableReferences._idTable(db),
                     referencedColumn:
                         $$PlayersTableTableReferences._idTable(db).id,

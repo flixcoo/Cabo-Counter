@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/models/round.dart';
+import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 

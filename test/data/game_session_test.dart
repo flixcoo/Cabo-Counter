@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:test/test.dart';
 
 void main() {

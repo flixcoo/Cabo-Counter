@@ -1,5 +1,5 @@
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
-import 'package:cabo_counter/data/db/tables/player_scores.dart';
+import 'package:cabo_counter/data/db/tables/player_scores_table.dart';
 import 'package:cabo_counter/data/db/tables/players_table.dart';
 import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
 import 'package:cabo_counter/data/db/tables/rounds_table.dart';

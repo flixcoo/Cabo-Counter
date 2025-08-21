@@ -1,5 +1,3 @@
-import 'package:cabo_counter/data/models/game_session.dart';
-
 /// This class represents a single round in the game.
 /// It is stored within the [GameSession] class.
 /// [roundNum] is the number of the round its reppresenting.
