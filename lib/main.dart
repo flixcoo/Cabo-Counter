@@ -1,19 +1,21 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/tab_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/utility/globals.dart';
-import 'package:cabo_counter/views/tab_view.dart';
+import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Ensure the app runs in portrait mode only
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  // Initialize services
   await ConfigService.initConfig();
-  Globals.pointLimit = await ConfigService.getPointLimit();
-  Globals.caboPenalty = await ConfigService.getCaboPenalty();
+  await VersionService.init();
   runApp(const App());
 }
 
@@ -39,6 +41,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   @override
+
+  /// Every time the app goes into the background or is closed,
+  /// save the current game sessions to local storage.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
@@ -65,6 +70,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return supportedLocales.first;
       },
       theme: CupertinoThemeData(
+        applyThemeToAll: true,
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,
         scaffoldBackgroundColor: CustomTheme.backgroundColor,

@@ -1,0 +1,167 @@
+{
+  "@@locale": "en",
+
+  "app_name": "Cabo Counter",
+  "round": "Round",
+  "rounds": "Rounds",
+  "mode": "Mode",
+  "points": "Points",
+  "unlimited": "Unlimited",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "game": "Game",
+  "games": "Games",
+  "gamemode": "Gamemode",
+  "ok": "OK",
+  "player": "Player",
+  "players": "Players",
+  "name": "Name",
+  "back": "Back",
+
+  "home": "Home",
+
+  "about": "About",
+  "licenses": "Licenses",
+  "license_details": "License Details",
+  "legal_notice": "Legal Notice",
+  "no_license_text": "No license available",
+
+  "empty_text_1": "Pretty empty here...",
+  "empty_text_2": "Create a new game using the button in the top right.",
+  "delete_game_title": "Delete game?",
+  "delete_game_message": "Are you sure you want to delete the game \"{gameTitle}\"? This action cannot be undone.",
+  "@delete_game_message": {
+    "placeholders": {
+      "gameTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "pre_rating_title": "Do you like the app?",
+  "pre_rating_message": "Feedback helps me to continuously improve the app. Thank you!",
+  "yes": "Yes",
+  "no": "No",
+  "bad_rating_title": "Not satisfied?",
+  "bad_rating_message": "Feel free to send me an email directly so we can solve your problem!",
+  "contact_email": "Contact via E-Mail",
+  "email_subject": "Feedback: Cabo Counter App",
+  "email_body": "I have the following feedback...",
+
+  "overview": "Overview",
+  "new_game": "New Game",
+  "game_title": "Game Title",
+  "select_mode": "Select a mode",
+  "add_player": "Add Player",
+  "create_game": "Create Game",
+  "max_players_title": "Player Limit Reached",
+  "max_players_message": "You can add a maximum of 5 players.",
+  "no_gameTitle_title": "Missing Game Title",
+  "no_gameTitle_message": "Please enter a title for your game.",
+  "no_mode_title": "Game Mode Required",
+  "no_mode_message": "Please select a game mode to continue",
+  "min_players_title": "Too Few Players",
+  "min_players_message": "At least 2 players are required to start the game.",
+  "no_name_title": "Missing Player Names",
+  "no_name_message": "Each player must have a name.",
+
+  "select_game_mode": "Select game mode",
+  "no_mode_selected": "No mode selected",
+  "no_default_mode": "No default mode",
+  "no_default_description": "The default mode gets reset.",
+  "point_limit_description": "The game ends when a player scores more than {pointLimit} points.",
+  "@point_limit_description": {
+    "placeholders": {
+      "pointLimit": {
+        "type": "int"
+      }
+    }
+  },
+  "unlimited_description": "The game continues until you decide to stop playing. The game can be ended manually at any time.",
+
+  "results": "Results",
+  "who_said_cabo": "Who called Cabo?",
+  "kamikaze": "Kamikaze",
+  "who_has_kamikaze": "Who has Kamikaze?",
+  "done": "Done",
+  "next_round": "Next Round",
+  "bonus_points_title": "Bonus-Points!",
+  "bonus_points_message": "{playerCount, plural, =1{{names} has reached exactly the point limit of {pointLimit} points and therefore gets {bonusPoints} points deducted!} other{{names} have reached exactly the point limit of {pointLimit} points and therefore get {bonusPoints} points deducted!}}",
+  "@bonus_points_message": {
+    "placeholders": {
+      "playerCount": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      },
+      "pointLimit": {
+        "type": "int"
+      },
+      "bonusPoints": {
+        "type": "int"
+      }
+    }
+  },
+
+  "end_of_game_title": "End of Game",
+  "end_of_game_message": "{playerCount, plural, =1{{names} won the game with {points} points. Congratulations!} other{{names} won the game with {points} points. Congratulations to everyone!}}",
+  "@end_of_game_message": {
+    "placeholders": {
+      "playerCount": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      },
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "end_game": "End Game",
+  "delete_game": "Delete Game",
+  "new_game_same_settings": "New Game with same Settings",
+  "export_game": "Export Game",
+  "id_error_title": "ID Error",
+  "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
+  "end_game_title": "End the game?",
+  "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
+
+  "statistics": "Statistics",
+  "point_overview": "Point Overview",
+  "scoring_history": "Scoring History",
+  "empty_graph_text": "You must play at least one round for the game progress graph to be displayed.",
+
+  "settings": "Settings",
+  "cabo_penalty": "Cabo Penalty",
+  "point_limit": "Point Limit",
+  "standard_mode": "Default Mode",
+  "reset_to_default": "Reset to Default",
+  "game_data": "Game Data",
+  "import_data": "Import Data",
+  "export_data": "Export Data",
+  "delete_data": "Delete all Game Data",
+  "delete_data_title": "Delete game data?",
+  "delete_data_message": "Are you sure you want to delete all game data? This action cannot be undone.",
+  "app": "App",
+
+  "import_success_title": "Import successful",
+  "import_success_message":"The game data has been successfully imported.",
+  "import_validation_error_title": "Validation failed",
+  "import_validation_error_message": "No Cabo-Counter game data was found. Please make sure that this is a valid Cabo-Counter export file.",
+  "import_format_error_title": "Wrong format",
+  "import_format_error_message": "The file is not a valid JSON format or contains invalid data.",
+  "import_generic_error_title": "Import failed",
+  "import_generic_error_message": "The import has failed.",
+
+  "export_error_title": "Export failed",
+  "export_error_message": "Could not export file",
+
+  "error_found": "Found a bug?",
+  "create_issue": "Create Issue",
+  "wiki": "Wiki",
+  "app_version": "App Version",
+  "privacy_policy": "Privacy Policy",
+  "loading": "Loading...",
+  "build": "Build No."
+}

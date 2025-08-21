@@ -1,9 +1,18 @@
-import 'package:cabo_counter/l10n/app_localizations.dart';
-import 'package:cabo_counter/utility/custom_theme.dart';
-import 'package:cabo_counter/views/information_view.dart';
-import 'package:cabo_counter/views/main_menu_view.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/views/about/about_view.dart';
+import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
 import 'package:flutter/cupertino.dart';
 
+/// TabBar for navigating between the main menu and about section.
+///
+/// [TabView] is a [StatefulWidget] that provides a tabbed interface for navigating
+/// between the main menu and the about section of the app. It uses a
+/// [CupertinoTabScaffold] with two tabs:
+/// - Home (MainMenuView)
+/// - About (AboutView)
+///
+/// The tab labels are provided via localization.
 class TabView extends StatefulWidget {
   const TabView({super.key});
 
@@ -16,8 +25,9 @@ class _TabViewState extends State<TabView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      resizeToAvoidBottomInset: false,
       tabBar: CupertinoTabBar(
-          backgroundColor: CustomTheme.backgroundTintColor,
+          backgroundColor: CustomTheme.mainElementBackgroundColor,
           iconSize: 27,
           height: 55,
           items: <BottomNavigationBarItem>[
@@ -39,7 +49,7 @@ class _TabViewState extends State<TabView> {
           if (index == 0) {
             return const MainMenuView();
           } else {
-            return const InformationView();
+            return const AboutView();
           }
         });
       },

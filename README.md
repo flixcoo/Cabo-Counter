@@ -1,6 +1,6 @@
 # CABO Counter
 
-![Version](https://img.shields.io/badge/Version-0.3.0-orange)
+![Version](https://img.shields.io/badge/Version-0.5.8-orange)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.1-blue?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.8.1-blue?logo=dart)
 ![iOS](https://img.shields.io/badge/iOS-18.5-white?logo=apple)
@@ -12,25 +12,29 @@ A mobile score tracker for the card game Cabo, helping players effortlessly mana
 
 ## 📱 Description
 
-Cabo Counter is an intuitive Flutter-based mobile application designed to enhance your CABO card game experience. It eliminates manual scorekeeping by automatically calculating points per round.
+Cabo Counter is an intuitive Flutter-based mobile application designed to enhance your CABO card game experience. It eliminates manual scorekeeping by automatically calculating points per round. 
 
 ## ✨ Features
 
-- 🆕 Create new games with customizable rules
 - 👥 Support for 2-5 players
 - ⚖️ Two game modes: 
-  - **100 Points Mode** (Standard)
-  - **Infinite Mode** (Casual play)
+  - **Point Limit Mode**: Play until a certain point limit is reached
+  - **Unlimited Mode**: Play without an limit and end the round at any point
 - 🔢 Automatic score calculation with:
+  - Falsly calling Cabo
+  - Exact 100-point bonus (score halving)
   - Kamikaze rule handling
-  - Exact 100-point bonus (score halving)  
-- 📊 Round history tracking
+- 📊 Round history tracking via graph and table
+- 🎨 Customizable
+  - Change the default settings for point limits and cabo penaltys
+  - Choose a default game mode for every new created game
+- 💿 Im- and exporting certain games or the whole app data
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter 3.24.5+
-- Dart 3.5.4+
+- Flutter 3.32.1+
+- Dart 3.8.1+
 
 ### Installation
 
@@ -43,18 +47,22 @@ flutter run
 
 ## 🎮 Usage
 
-1. **Start New Game**
-- Choose game mode (100 Points or Infinite)
+1. **Start a new game**
+- Click the "+"-Button
+- Choose a game title and a game mode 
 - Add 2-5 players
 
 2. **Gameplay**
-- Track rounds with automatic scoring
-- Handle special rules (Kamikaze, exact 100 points)
-- View real-time standings
+- Open the first round
+- Choose the player who called Cabo
+- Enter the points of every player
+- If given: Choose a Kamikaze player
+- Navigate to the next round or back to the overview
+- Let the app calculate all points for you
 
-3. **Round Management**
-- Automatic winner detection
-- Penalty point calculation
+3. **Statistics**
+- View the progress graph for the game
+- Get a detailed table overview for every points made or lost
 - Game-over detection (100 Points mode)
 
 ## 🃏 Key Rules Overview
@@ -67,7 +75,8 @@ flutter run
 - Exact 100 points: Score halved
 
 ### Game End
-- First player ≥101 points triggers final scoring
+- First player ≥100 points triggers final scoring
+- In unlimited mode you can end the game via the End Game Button
 - Lowest total score wins
 
 ## 🤝 Contributing

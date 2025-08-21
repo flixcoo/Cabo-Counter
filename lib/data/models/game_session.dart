@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/models/round.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 
 /// This class represents a game session for  Cabo game.
 /// [createdAt] is the timestamp of when the game session was created.
@@ -12,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
+  final String id;
   final DateTime createdAt;
   final String gameTitle;
   final List<String> players;
@@ -25,6 +27,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList = [];
 
   GameSession({
+    required this.id,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -37,13 +40,14 @@ class GameSession extends ChangeNotifier {
 
   @override
   toString() {
-    return ('GameSession: [createdAt: $createdAt, gameTitle: $gameTitle, '
+    return ('GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
         'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
         ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
   }
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
+        'id': id,
         'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
         'players': players,
@@ -59,7 +63,8 @@ class GameSession extends ChangeNotifier {
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : createdAt = DateTime.parse(json['createdAt']),
+      : id = json['id'] ?? const Uuid().v1(),
+        createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
         players = List<String>.from(json['players']),
         pointLimit = json['pointLimit'],
@@ -71,15 +76,6 @@ class GameSession extends ChangeNotifier {
         playerScores = List<int>.from(json['playerScores']),
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
-
-  /// Returns the length of all player names combined.
-  int getLengthOfPlayerNames() {
-    int length = 0;
-    for (String player in players) {
-      length += player.length;
-    }
-    return length;
-  }
 
   /// Assigns 50 points to all players except the kamikaze player.
   /// [kamikazePlayerIndex] is the index of the kamikaze player.
@@ -227,7 +223,7 @@ class GameSession extends ChangeNotifier {
 
   /// This method updates the points of each player after a round.
   /// It first uses the _sumPoints() method to calculate the total points of each player.
-  /// Then, it checks if any player has reached 100 points. If so, it marks
+  /// Then, it checks if any player has reached 100 points. If so, saves their indices and marks
   /// that player as having reached 100 points in that corresponding [Round] object.
   /// If the game has the point limit activated, it first applies the
   /// _subtractPointsForReachingHundred() method to subtract 50 points
@@ -235,21 +231,31 @@ class GameSession extends ChangeNotifier {
   /// It then checks if any player has exceeded 100 points. If so, it sets
   /// isGameFinished to true and calls the _setWinner() method to determine
   /// the winner.
-  Future<void> updatePoints() async {
+  /// It returns a list of players indices who reached 100 points (bonus player)
+  /// in the current round for the [RoundView] to show a popup
+  List<int> updatePoints() {
+    List<int> bonusPlayers = [];
     _sumPoints();
+
     if (isPointsLimitEnabled) {
-      _checkHundredPointsReached();
+      bonusPlayers = _checkHundredPointsReached();
+      bool limitExceeded = false;
 
       for (int i = 0; i < playerScores.length; i++) {
         if (playerScores[i] > pointLimit) {
           isGameFinished = true;
+          limitExceeded = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
-          _setWinner();
+          setWinner();
         }
+      }
+      if (!limitExceeded) {
+        isGameFinished = false;
       }
     }
     notifyListeners();
+    return bonusPlayers;
   }
 
   @visibleForTesting
@@ -270,30 +276,37 @@ class GameSession extends ChangeNotifier {
   /// Checks if a player has reached 100 points in the current round.
   /// If so, it updates the [scoreUpdate] List by subtracting 50 points from
   /// the corresponding round update.
-  void _checkHundredPointsReached() {
+  List<int> _checkHundredPointsReached() {
+    List<int> bonusPlayers = [];
     for (int i = 0; i < players.length; i++) {
       if (playerScores[i] == pointLimit) {
+        bonusPlayers.add(i);
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
-            'deswegen 50 Punkte abgezogen');
-        roundList[roundNumber - 1].scoreUpdates[i] -= 50;
+            'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
+        roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
       }
     }
     _sumPoints();
+    return bonusPlayers;
   }
 
   /// Determines the winner of the game session.
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
-  void _setWinner() {
-    int score = playerScores[0];
-    String lowestPlayer = players[0];
+  void setWinner() {
+    int minScore = playerScores.reduce((a, b) => a < b ? a : b);
+    List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] < score) {
-        score = playerScores[i];
-        lowestPlayer = players[i];
+      if (playerScores[i] == minScore) {
+        lowestPlayers.add(players[i]);
       }
     }
-    winner = lowestPlayer;
+    if (lowestPlayers.length > 1) {
+      winner =
+          '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    } else {
+      winner = lowestPlayers.first;
+    }
     notifyListeners();
   }
 
