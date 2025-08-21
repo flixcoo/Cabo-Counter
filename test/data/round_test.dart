@@ -11,6 +11,8 @@ void main() {
 
   setUp(() {
     round = Round(
+      roundId: 'testRoundId',
+      gameId: 'testGameId',
       roundNum: testRoundNum,
       caboPlayerIndex: testCaboPlayerIndex,
       kamikazePlayerIndex: testKamikazePlayerIndex,
@@ -30,6 +32,8 @@ void main() {
 
     test('Constructor with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
+        roundId: 'testRoundId',
+        gameId: 'testGameId',
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
@@ -98,6 +102,8 @@ void main() {
 
     test('toString() with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
+        roundId: 'testRoundId',
+        gameId: 'testGameId',
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,

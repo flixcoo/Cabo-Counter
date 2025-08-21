@@ -458,14 +458,14 @@ class _CreateGameViewState extends State<CreateGameView> {
     bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-      id: id,
-      createdAt: DateTime.now(),
-      gameTitle: _gameTitleTextController.text,
-      players: players,
-      pointLimit: ConfigService.getPointLimit(),
-      caboPenalty: ConfigService.getCaboPenalty(),
-      isPointsLimitEnabled: isPointsLimitEnabled,
-    );
+        id: id,
+        createdAt: DateTime.now(),
+        gameTitle: _gameTitleTextController.text,
+        players: players,
+        pointLimit: ConfigService.getPointLimit(),
+        caboPenalty: ConfigService.getCaboPenalty(),
+        isPointsLimitEnabled: isPointsLimitEnabled,
+        isGameFinished: false);
     gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(id) ?? gameSession;
 

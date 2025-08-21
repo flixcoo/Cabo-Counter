@@ -3,4 +3,8 @@
 part of 'rounds_dao.dart';
 
 // ignore_for_file: type=lint
-mixin _$RoundsDaoMixin on DatabaseAccessor<AppDatabase> {}
+mixin _$RoundsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $GameSessionTableTable get gameSessionTable =>
+      attachedDatabase.gameSessionTable;
+  $RoundsTableTable get roundsTable => attachedDatabase.roundsTable;
+}

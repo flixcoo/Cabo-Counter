@@ -20,21 +20,25 @@ class GameSession extends ChangeNotifier {
   final int pointLimit;
   final int caboPenalty;
   final bool isPointsLimitEnabled;
-  bool isGameFinished = false;
-  String winner = '';
-  int roundNumber = 1;
-  late List<int> playerScores;
-  List<Round> roundList = [];
+  bool isGameFinished;
+  String winner;
+  int roundNumber;
+  List<int> playerScores;
+  List<Round> roundList;
 
-  GameSession({
-    required this.id,
-    required this.createdAt,
-    required this.gameTitle,
-    required this.players,
-    required this.pointLimit,
-    required this.caboPenalty,
-    required this.isPointsLimitEnabled,
-  }) {
+  GameSession(
+      {required this.id,
+      required this.createdAt,
+      required this.gameTitle,
+      required this.players,
+      required this.pointLimit,
+      required this.caboPenalty,
+      required this.isPointsLimitEnabled,
+      this.isGameFinished = false,
+      this.winner = '',
+      this.roundNumber = 1,
+      this.playerScores = const [],
+      this.roundList = const []}) {
     playerScores = List.filled(players.length, 0);
   }
 
@@ -207,6 +211,8 @@ class GameSession extends ChangeNotifier {
     int? kamikazePlayerIndex,
   ]) {
     Round newRound = Round(
+      roundId: const Uuid().v1(),
+      gameId: id,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,

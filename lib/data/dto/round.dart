@@ -6,6 +6,8 @@
 /// [kamikazePlayerIndex] is the index of the player who got kamikaze. If no one got
 /// kamikaze, this value is null.
 class Round {
+  final String roundId;
+  final String gameId;
   final int roundNum;
   final int caboPlayerIndex;
   final int? kamikazePlayerIndex;
@@ -13,6 +15,8 @@ class Round {
   final List<int> scoreUpdates;
 
   Round({
+    required this.roundId,
+    required this.gameId,
     required this.roundNum,
     required this.caboPlayerIndex,
     this.kamikazePlayerIndex,
@@ -29,6 +33,8 @@ class Round {
 
   /// Converts the Round object to a JSON map.
   Map<String, dynamic> toJson() => {
+        'roundId': roundId,
+        'gameId': gameId,
         'roundNum': roundNum,
         'caboPlayerIndex': caboPlayerIndex,
         'kamikazePlayerIndex': kamikazePlayerIndex,
@@ -38,7 +44,9 @@ class Round {
 
   /// Creates a Round object from a JSON map.
   Round.fromJson(Map<String, dynamic> json)
-      : roundNum = json['roundNum'],
+      : roundId = json['roundId'],
+        gameId = json['gameId'],
+        roundNum = json['roundNum'],
         caboPlayerIndex = json['caboPlayerIndex'],
         kamikazePlayerIndex = json['kamikazePlayerIndex'],
         scores = List<int>.from(json['scores']),

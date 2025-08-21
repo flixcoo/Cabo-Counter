@@ -6,7 +6,8 @@ class RoundsTable extends Table {
   TextColumn get gameId =>
       text().references(GameSessionTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get roundNumber => integer()();
-  TextColumn get kamikazePlayer => text().nullable()();
+  IntColumn get caboPlayerIndex => integer()();
+  IntColumn get kamikazePlayerIndex => integer().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {roundId};

@@ -9,14 +9,14 @@ void main() {
 
   setUp(() {
     session = GameSession(
-      id: '1',
-      createdAt: testDate,
-      gameTitle: testTitle,
-      players: testPlayers,
-      pointLimit: 100,
-      caboPenalty: 5,
-      isPointsLimitEnabled: true,
-    );
+        id: '1',
+        createdAt: testDate,
+        gameTitle: testTitle,
+        players: testPlayers,
+        pointLimit: 100,
+        caboPenalty: 5,
+        isPointsLimitEnabled: true,
+        isGameFinished: false);
   });
 
   group('Initialization & JSON', () {
