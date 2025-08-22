@@ -35,4 +35,22 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
 
     return result.position;
   }
+
+  /// Inserts a new player into the database.
+  Future<void> insertPlayers(String gameId, List<Player> players) async {
+    await batch((batch) {
+      for (int i = 0; i < players.length; i++) {
+        batch.insert(
+          playerTable,
+          PlayerTableCompanion.insert(
+            playerId: players[i].playerId,
+            gameId: gameId,
+            name: players[i].name,
+            position: i,
+            totalScore: players[i].totalScore,
+          ),
+        );
+      }
+    });
+  }
 }

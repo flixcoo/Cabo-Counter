@@ -94,7 +94,7 @@ class _GraphViewState extends State<GraphView> {
   List<LineSeries<(int, num), int>> getCumulativeScores() {
     final rounds = widget.gameSession.roundList;
     final playerCount = widget.gameSession.players.length;
-    final playerNames = widget.gameSession.players;
+    final playerNames = widget.gameSession.getPlayerNamesAsList();
 
     List<List<int>> cumulativeScores = List.generate(playerCount, (_) => []);
     List<int> runningTotals = List.filled(playerCount, 0);

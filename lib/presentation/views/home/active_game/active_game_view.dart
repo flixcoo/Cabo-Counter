@@ -62,7 +62,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
             builder: (context, _) {
               sortedPlayerIndices = _getSortedPlayerIndices();
               denseRanks = _calculateDenseRank(
-                  gameSession.playerScores, sortedPlayerIndices);
+                  gameSession.getPlayerScoresAsList(), sortedPlayerIndices);
               return CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
                     previousPageTitle: AppLocalizations.of(context).games,
@@ -117,7 +117,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     _getPlacementTextWidget(index),
                                     const SizedBox(width: 5),
                                     Text(
-                                      gameSession.players[playerIndex],
+                                      gameSession.players[playerIndex].name,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -127,7 +127,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   children: [
                                     const SizedBox(width: 5),
                                     Text(
-                                        '${gameSession.playerScores[playerIndex]} '
+                                        '${gameSession.getPlayerScoresAsList()[playerIndex]} '
                                         '${AppLocalizations.of(context).points}')
                                   ],
                                 ),
@@ -258,15 +258,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
-                                                gameTitle:
-                                                    gameSession.gameTitle,
-                                                gameMode: widget.gameSession
-                                                            .isPointsLimitEnabled ==
-                                                        true
-                                                    ? GameMode.pointLimit
-                                                    : GameMode.unlimited,
-                                                players: gameSession.players,
-                                              )));
+                                              gameTitle: gameSession.gameTitle,
+                                              gameMode: widget.gameSession
+                                                          .isPointsLimitEnabled ==
+                                                      true
+                                                  ? GameMode.pointLimit
+                                                  : GameMode.unlimited,
+                                              players: gameSession
+                                                  .getPlayerNamesAsList())));
                                 },
                               ),
                               CupertinoListTile(
@@ -374,8 +373,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         List<int>.generate(gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
-      int scoreA = gameSession.playerScores[a];
-      int scoreB = gameSession.playerScores[b];
+      int scoreA = gameSession.getPlayerScoresAsList()[a];
+      int scoreB = gameSession.getPlayerScoresAsList()[b];
       if (scoreA != scoreB) {
         return scoreA.compareTo(scoreB);
       }
@@ -515,7 +514,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Plays the confetti animation and shows a dialog with the winner's information.
   Future<void> _playFinishAnimation(BuildContext context) async {
     String winner = widget.gameSession.winner;
-    int winnerPoints = widget.gameSession.playerScores.min;
+
+    int winnerPoints = widget.gameSession.getPlayerScoresAsList().min;
     int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();

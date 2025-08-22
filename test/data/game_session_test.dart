@@ -1,9 +1,25 @@
 import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/dto/player.dart';
 import 'package:test/test.dart';
 
 void main() {
   late GameSession session;
-  final testPlayers = ['Alice', 'Bob', 'Charlie'];
+  final testPlayers = [
+    Player(
+        name: 'Alice',
+        totalScore: 0,
+        playerId: '0',
+        gameId: 'abc',
+        position: 0),
+    Player(
+        name: 'Bob', totalScore: 0, playerId: '1', gameId: 'abc', position: 1),
+    Player(
+        name: 'Charlie',
+        totalScore: 0,
+        playerId: '2',
+        gameId: 'abc',
+        position: 2)
+  ];
   final testDate = DateTime(2023, 1, 1);
   const testTitle = 'Test Game';
 
@@ -23,7 +39,7 @@ void main() {
     test('Initialization', () {
       expect(session.gameTitle, testTitle);
       expect(session.players, testPlayers);
-      expect(session.playerScores, [0, 0, 0]);
+      expect(session.getPlayerScoresAsList(), [0, 0, 0]);
       expect(session.roundNumber, 1);
       expect(session.isGameFinished, isFalse);
       expect(session.winner, isEmpty);
@@ -141,14 +157,14 @@ void main() {
       session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
       session.addRoundScoresToList(2, [5, 5, 5], [5, 5, 5], 1);
       session.testingSumPoints();
-      expect(session.playerScores, [15, 25, 35]);
+      expect(session.getPlayerScoresAsList(), [15, 25, 35]);
     });
 
     test('_checkHundredPointsReached via updatePoints', () {
       session.addRoundScoresToList(1, [50, 5, 15], [50, 0, 15], 1);
       session.addRoundScoresToList(2, [50, 5, 15], [50, 0, 15], 1);
       session.updatePoints();
-      expect(session.playerScores, equals([50, 0, 30]));
+      expect(session.getPlayerScoresAsList(), equals([50, 0, 30]));
     });
 
     test('_setWinner via updatePoints', () {

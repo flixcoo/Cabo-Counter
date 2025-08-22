@@ -7,4 +7,6 @@ mixin _$RoundsDaoMixin on DatabaseAccessor<AppDatabase> {
   $GameSessionTableTable get gameSessionTable =>
       attachedDatabase.gameSessionTable;
   $RoundsTableTable get roundsTable => attachedDatabase.roundsTable;
+  $RoundScoresTableTable get roundScoresTable =>
+      attachedDatabase.roundScoresTable;
 }

@@ -1,3 +1,4 @@
+import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
@@ -16,14 +17,13 @@ class GameSession extends ChangeNotifier {
   final String id;
   final DateTime createdAt;
   final String gameTitle;
-  final List<String> players;
+  final List<Player> players;
   final int pointLimit;
   final int caboPenalty;
   final bool isPointsLimitEnabled;
   bool isGameFinished;
   String winner;
   int roundNumber;
-  List<int> playerScores;
   List<Round> roundList;
 
   GameSession(
@@ -37,16 +37,13 @@ class GameSession extends ChangeNotifier {
       this.isGameFinished = false,
       this.winner = '',
       this.roundNumber = 1,
-      this.playerScores = const [],
-      this.roundList = const []}) {
-    playerScores = List.filled(players.length, 0);
-  }
+      this.roundList = const []});
 
   @override
   toString() {
-    return ('GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
+    return 'GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
         'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
-        ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
+        ' players: $players, roundList: $roundList, winner: $winner]';
   }
 
   /// Converts the GameSession object to a JSON map.
@@ -61,7 +58,6 @@ class GameSession extends ChangeNotifier {
         'isGameFinished': isGameFinished,
         'winner': winner,
         'roundNumber': roundNumber,
-        'playerScores': playerScores,
         'roundList': roundList.map((e) => e.toJson()).toList()
       };
 
@@ -70,14 +66,13 @@ class GameSession extends ChangeNotifier {
       : id = json['id'] ?? const Uuid().v1(),
         createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
-        players = List<String>.from(json['players']),
+        players = List<Player>.from(json['players']),
         pointLimit = json['pointLimit'],
         caboPenalty = json['caboPenalty'],
         isPointsLimitEnabled = json['isPointsLimitEnabled'],
         isGameFinished = json['isGameFinished'],
         winner = json['winner'],
         roundNumber = json['roundNumber'],
-        playerScores = List<int>.from(json['playerScores']),
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
@@ -247,8 +242,8 @@ class GameSession extends ChangeNotifier {
       bonusPlayers = _checkHundredPointsReached();
       bool limitExceeded = false;
 
-      for (int i = 0; i < playerScores.length; i++) {
-        if (playerScores[i] > pointLimit) {
+      for (int i = 0; i < players.length; i++) {
+        if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
           limitExceeded = true;
           print('${players[i]} hat die 100 Punkte ueberschritten, '
@@ -271,9 +266,9 @@ class GameSession extends ChangeNotifier {
   /// playerScores list.
   void _sumPoints() {
     for (int i = 0; i < players.length; i++) {
-      playerScores[i] = 0;
+      players[i].totalScore = 0;
       for (int j = 0; j < roundList.length; j++) {
-        playerScores[i] += roundList[j].scoreUpdates[i];
+        players[i].totalScore += roundList[j].scoreUpdates[i];
       }
     }
     notifyListeners();
@@ -285,7 +280,7 @@ class GameSession extends ChangeNotifier {
   List<int> _checkHundredPointsReached() {
     List<int> bonusPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == pointLimit) {
+      if (players[i].totalScore == pointLimit) {
         bonusPlayers.add(i);
         print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
             'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
@@ -296,15 +291,23 @@ class GameSession extends ChangeNotifier {
     return bonusPlayers;
   }
 
+  List<int> getPlayerScoresAsList() {
+    return players.map((player) => player.totalScore).toList();
+  }
+
+  List<String> getPlayerNamesAsList() {
+    return players.map((player) => player.name).toList();
+  }
+
   /// Determines the winner of the game session.
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
   void setWinner() {
-    int minScore = playerScores.reduce((a, b) => a < b ? a : b);
+    int minScore = getPlayerScoresAsList().reduce((a, b) => a < b ? a : b);
     List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == minScore) {
-        lowestPlayers.add(players[i]);
+      if (players[i].totalScore == minScore) {
+        lowestPlayers.add(players[i].name);
       }
     }
     if (lowestPlayers.length > 1) {

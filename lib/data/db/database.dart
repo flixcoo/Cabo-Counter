@@ -1,7 +1,7 @@
-import 'package:cabo_counter/data/db/dao/game_session_dao.dart';
-import 'package:cabo_counter/data/db/dao/player_dao.dart';
-import 'package:cabo_counter/data/db/dao/round_scores_dao.dart';
-import 'package:cabo_counter/data/db/dao/rounds_dao.dart';
+import 'package:cabo_counter/data/dao/game_session_dao.dart';
+import 'package:cabo_counter/data/dao/player_dao.dart';
+import 'package:cabo_counter/data/dao/round_scores_dao.dart';
+import 'package:cabo_counter/data/dao/rounds_dao.dart';
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:cabo_counter/data/db/tables/player_table.dart';
 import 'package:cabo_counter/data/db/tables/round_scores_table.dart';

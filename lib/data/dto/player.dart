@@ -14,7 +14,7 @@ class Player {
 
   @override
   String toString() {
-    return '(playerId: $playerId, gameId: $gameId, name: $name, position: $position)';
+    return 'Player: [playerId: $playerId, gameId: $gameId, name: $name, position: $position]';
   }
 
   Map<String, dynamic> toJson() => {
