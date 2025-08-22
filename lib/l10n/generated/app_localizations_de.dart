@@ -214,11 +214,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -370,7 +366,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get loading => 'Lädt...';
+  String get loading_games => 'Lade Spiele ...';
 
   @override
   String get build => 'Build-Nr.';

@@ -2,7 +2,7 @@ name: cabo_counter
 description: "Mobile app for the card game Cabo"
 publish_to: 'none'
 
-version: 0.5.8+674
+version: 0.5.8+685
 
 environment:
   sdk: ^3.5.4
@@ -35,6 +35,7 @@ dependencies:
   google_fonts: ^6.3.0
   drift: ^2.26.1
   drift_flutter: ^0.2.4
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:
