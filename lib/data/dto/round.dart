@@ -19,9 +19,9 @@ class Round {
     required this.gameId,
     required this.roundNum,
     required this.caboPlayerIndex,
-    this.kamikazePlayerIndex,
     required this.scores,
     required this.scoreUpdates,
+    this.kamikazePlayerIndex,
   });
 
   @override

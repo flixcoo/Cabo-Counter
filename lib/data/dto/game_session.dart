@@ -26,18 +26,19 @@ class GameSession extends ChangeNotifier {
   int roundNumber;
   List<Round> roundList;
 
-  GameSession(
-      {required this.id,
-      required this.createdAt,
-      required this.gameTitle,
-      required this.players,
-      required this.pointLimit,
-      required this.caboPenalty,
-      required this.isPointsLimitEnabled,
-      this.isGameFinished = false,
-      this.winner = '',
-      this.roundNumber = 1,
-      this.roundList = const []});
+  GameSession({
+    required this.id,
+    required this.createdAt,
+    required this.gameTitle,
+    required this.players,
+    required this.pointLimit,
+    required this.caboPenalty,
+    required this.isPointsLimitEnabled,
+    this.isGameFinished = false,
+    this.winner = '',
+    this.roundNumber = 1,
+    List<Round>? roundList,
+  }) : roundList = roundList ?? [];
 
   @override
   toString() {
