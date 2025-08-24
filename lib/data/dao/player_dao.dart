@@ -53,4 +53,21 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
       }
     });
   }
+
+  /// Updates the total scores of multiple players in a batch operation.
+  void updatePlayerScores(List<Player> players) {
+    batch((batch) {
+      for (int i = 0; i < players.length; i++) {
+        final player = players[i];
+        final updatedScore = players[i].totalScore;
+        batch.update(
+          playerTable,
+          PlayerTableCompanion(
+            totalScore: Value(updatedScore),
+          ),
+          where: (tbl) => tbl.playerId.equals(player.playerId),
+        );
+      }
+    });
+  }
 }
