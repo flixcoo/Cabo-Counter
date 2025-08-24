@@ -122,7 +122,6 @@
     "isGameFinished",
     "winner",
     "roundNumber",
-    "playerScores",
     "roundList"
   ]
 }
