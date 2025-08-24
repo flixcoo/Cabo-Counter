@@ -169,13 +169,14 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       isGameFinished: Value(true),
     ));
 
+    int currentRoundNumber = await (select(gameSessionTable)
+          ..where((tbl) => tbl.gameId.equals(gameId)))
+        .map((row) => row.roundNumber)
+        .getSingle();
+
     await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
         .write(GameSessionTableCompanion(
-      roundNumber: Value((await (select(gameSessionTable)
-                    ..where((tbl) => tbl.gameId.equals(gameId)))
-                  .getSingle())
-              .roundNumber -
-          1),
+      roundNumber: Value(currentRoundNumber - 1),
     ));
   }
 }
