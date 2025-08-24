@@ -1,4 +1,6 @@
-import 'package:cabo_counter/data/round.dart';
+import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,67 +15,67 @@ import 'package:uuid/uuid.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
-  final String id;
+  final String gameId;
   final DateTime createdAt;
   final String gameTitle;
-  final List<String> players;
+  final List<Player> players;
   final int pointLimit;
   final int caboPenalty;
   final bool isPointsLimitEnabled;
-  bool isGameFinished = false;
-  String winner = '';
-  int roundNumber = 1;
-  late List<int> playerScores;
-  List<Round> roundList = [];
+  bool isGameFinished;
+  String winner;
+  int roundNumber;
+  List<Round> roundList;
 
   GameSession({
-    required this.id,
+    required this.gameId,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
     required this.pointLimit,
     required this.caboPenalty,
     required this.isPointsLimitEnabled,
-  }) {
-    playerScores = List.filled(players.length, 0);
-  }
+    this.isGameFinished = false,
+    this.winner = '',
+    this.roundNumber = 1,
+    List<Round>? roundList,
+  }) : roundList = roundList ?? [];
 
   @override
   toString() {
-    return ('GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
+    return 'GameSession: [id: $gameId, createdAt: $createdAt, gameTitle: $gameTitle, '
         'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
-        ' players: $players, playerScores: $playerScores, roundList: $roundList, winner: $winner]');
+        ' players: $players, roundList: $roundList, winner: $winner]';
   }
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'id': gameId,
         'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
-        'players': players,
+        'players': players.map((p) => p.toJson()).toList(),
         'pointLimit': pointLimit,
         'caboPenalty': caboPenalty,
         'isPointsLimitEnabled': isPointsLimitEnabled,
         'isGameFinished': isGameFinished,
         'winner': winner,
         'roundNumber': roundNumber,
-        'playerScores': playerScores,
         'roundList': roundList.map((e) => e.toJson()).toList()
       };
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : id = json['id'] ?? const Uuid().v1(),
+      : gameId = json['id'] ?? const Uuid().v4(),
         createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
-        players = List<String>.from(json['players']),
+        players =
+            (json['players'] as List).map((e) => Player.fromJson(e)).toList(),
         pointLimit = json['pointLimit'],
         caboPenalty = json['caboPenalty'],
         isPointsLimitEnabled = json['isPointsLimitEnabled'],
         isGameFinished = json['isGameFinished'],
         winner = json['winner'],
         roundNumber = json['roundNumber'],
-        playerScores = List<int>.from(json['playerScores']),
         roundList =
             (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
 
@@ -105,31 +107,34 @@ class GameSession extends ChangeNotifier {
   ///  Every other player gets their round score.
   void calculateScoredPoints(
       int roundNum, List<int> roundScores, int caboPlayerIndex) {
-    print('Spieler: $players');
-    print('Punkte: $roundScores');
-    print('${players[caboPlayerIndex]} hat mit ${roundScores[caboPlayerIndex]} '
+    print('Spieler:');
+    for (int i = 0; i < players.length; i++) {
+      print('  ${players[i].name}: ${roundScores[i]} Punkte');
+    }
+    print(
+        '${players[caboPlayerIndex].name} hat mit ${roundScores[caboPlayerIndex]} '
         'Punkten CABO gesagt');
 
     /// List of the index of the player(s) with the lowest score
     List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
     print('Folgende Spieler haben die niedrigsten Punte:');
     for (int i in lowestScoreIndex) {
-      print('${players[i]} (${roundScores[i]} Punkte)');
+      print('${players[i].name} (${roundScores[i]} Punkte)');
     }
     // The player who said CABO is one of the players which have the
     // fewest points.
     if (lowestScoreIndex.contains(caboPlayerIndex)) {
-      print('${players[caboPlayerIndex]} hat CABO gesagt '
+      print('${players[caboPlayerIndex].name} hat CABO gesagt '
           'und bekommt 0 Punkte');
       print('Alle anderen Spieler bekommen ihre Punkte');
       _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
     } else {
       // A player other than the one who said CABO has the fewest points.
-      print('${players[caboPlayerIndex]} hat CABO gesagt, '
+      print('${players[caboPlayerIndex].name} hat CABO gesagt, '
           'jedoch nicht die wenigsten Punkte.');
       print('Folgende:r Spieler haben die wenigsten Punkte:');
       for (int i in lowestScoreIndex) {
-        print('${players[i]}: ${roundScores[i]} Punkte');
+        print('${players[i].name}: ${roundScores[i]} Punkte');
       }
       _assignPoints(roundNum, roundScores, caboPlayerIndex, lowestScoreIndex,
           caboPlayerIndex);
@@ -176,19 +181,19 @@ class GameSession extends ChangeNotifier {
     List<int> scoreUpdates = [...roundScores];
     print('Folgende Punkte wurden aus der Runde übernommen:');
     for (int i = 0; i < scoreUpdates.length; i++) {
-      print('${players[i]}: ${scoreUpdates[i]}');
+      print('${players[i].name}: ${scoreUpdates[i]}');
     }
     for (int i in winnerIndex) {
-      print('${players[i]} hat gewonnen und bekommt 0 Punkte');
+      print('${players[i].name} hat gewonnen und bekommt 0 Punkte');
       scoreUpdates[i] = 0;
     }
     if (loserIndex != null) {
-      print('${players[loserIndex]} bekommt 5 Fehlerpunkte');
+      print('${players[loserIndex].name} bekommt 5 Fehlerpunkte');
       scoreUpdates[loserIndex] += 5;
     }
     print('Aktualisierte Punkte:');
     for (int i = 0; i < scoreUpdates.length; i++) {
-      print('${players[i]}: ${scoreUpdates[i]}');
+      print('${players[i].name}: ${scoreUpdates[i]}');
     }
     print('scoreUpdates: $scoreUpdates, roundScores: $roundScores');
     addRoundScoresToList(roundNum, roundScores, scoreUpdates, caboPlayerIndex);
@@ -206,7 +211,10 @@ class GameSession extends ChangeNotifier {
     int caboPlayerIndex, [
     int? kamikazePlayerIndex,
   ]) {
+    const uuid = Uuid();
     Round newRound = Round(
+      roundId: uuid.v4(),
+      gameId: gameId,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,
@@ -215,9 +223,12 @@ class GameSession extends ChangeNotifier {
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
+      db.roundsDao.insertOneRound(gameId, newRound, players);
     } else {
       roundList[roundNum - 1] = newRound;
+      db.roundsDao.replaceRound(gameId, newRound, players);
     }
+
     notifyListeners();
   }
 
@@ -241,11 +252,11 @@ class GameSession extends ChangeNotifier {
       bonusPlayers = _checkHundredPointsReached();
       bool limitExceeded = false;
 
-      for (int i = 0; i < playerScores.length; i++) {
-        if (playerScores[i] > pointLimit) {
+      for (int i = 0; i < players.length; i++) {
+        if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
           limitExceeded = true;
-          print('${players[i]} hat die 100 Punkte ueberschritten, '
+          print('${players[i].name} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
           setWinner();
         }
@@ -254,6 +265,7 @@ class GameSession extends ChangeNotifier {
         isGameFinished = false;
       }
     }
+    db.gameSessionDao.setGameFinishStatus(gameId, isGameFinished);
     notifyListeners();
     return bonusPlayers;
   }
@@ -265,11 +277,12 @@ class GameSession extends ChangeNotifier {
   /// playerScores list.
   void _sumPoints() {
     for (int i = 0; i < players.length; i++) {
-      playerScores[i] = 0;
+      players[i].totalScore = 0;
       for (int j = 0; j < roundList.length; j++) {
-        playerScores[i] += roundList[j].scoreUpdates[i];
+        players[i].totalScore += roundList[j].scoreUpdates[i];
       }
     }
+    db.playerDao.updatePlayerScores(players);
     notifyListeners();
   }
 
@@ -279,9 +292,9 @@ class GameSession extends ChangeNotifier {
   List<int> _checkHundredPointsReached() {
     List<int> bonusPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == pointLimit) {
+      if (players[i].totalScore == pointLimit) {
         bonusPlayers.add(i);
-        print('${players[i]} hat genau 100 Punkte erreicht und bekommt '
+        print('${players[i].name} hat genau 100 Punkte erreicht und bekommt '
             'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
         roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
       }
@@ -290,15 +303,23 @@ class GameSession extends ChangeNotifier {
     return bonusPlayers;
   }
 
+  List<int> getPlayerScoresAsList() {
+    return players.map((player) => player.totalScore).toList();
+  }
+
+  List<String> getPlayerNamesAsList() {
+    return players.map((player) => player.name).toList();
+  }
+
   /// Determines the winner of the game session.
   /// It iterates through the player scores and finds the player
   /// with the lowest score.
   void setWinner() {
-    int minScore = playerScores.reduce((a, b) => a < b ? a : b);
+    int minScore = getPlayerScoresAsList().reduce((a, b) => a < b ? a : b);
     List<String> lowestPlayers = [];
     for (int i = 0; i < players.length; i++) {
-      if (playerScores[i] == minScore) {
-        lowestPlayers.add(players[i]);
+      if (players[i].totalScore == minScore) {
+        lowestPlayers.add(players[i].name);
       }
     }
     if (lowestPlayers.length > 1) {
@@ -307,14 +328,25 @@ class GameSession extends ChangeNotifier {
     } else {
       winner = lowestPlayers.first;
     }
+    db.gameSessionDao.setWinner(gameId, winner);
     notifyListeners();
   }
 
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
-    print('roundNumber erhöht: $roundNumber — Hash: ${identityHashCode(this)}');
+    db.gameSessionDao.setRoundNumber(gameId, roundNumber);
+    print('roundNumber erhöht: $roundNumber}');
 
     notifyListeners();
+  }
+
+  /// Ends the game if it is in unlimited mode.
+  /// It decreases the round number by 1, sets isGameFinished to true,
+  /// and calls the setWinner() method to determine the winner.
+  void endGame() {
+    roundNumber--;
+    isGameFinished = true;
+    setWinner();
   }
 }

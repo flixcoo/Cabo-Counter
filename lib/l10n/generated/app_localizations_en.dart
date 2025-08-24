@@ -363,7 +363,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacy_policy => 'Privacy Policy';
 
   @override
-  String get loading => 'Loading...';
+  String get loading_games => 'Loading Games ...';
 
   @override
   String get build => 'Build No.';

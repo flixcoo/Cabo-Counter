@@ -366,7 +366,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacy_policy => 'Datenschutzerklärung';
 
   @override
-  String get loading => 'Lädt...';
+  String get loading_games => 'Lade Spiele ...';
 
   @override
   String get build => 'Build-Nr.';

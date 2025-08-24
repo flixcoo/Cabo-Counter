@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_manager.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
@@ -9,7 +9,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/points_view.dar
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,7 +62,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
             builder: (context, _) {
               sortedPlayerIndices = _getSortedPlayerIndices();
               denseRanks = _calculateDenseRank(
-                  gameSession.playerScores, sortedPlayerIndices);
+                  gameSession.getPlayerScoresAsList(), sortedPlayerIndices);
               return CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
                     previousPageTitle: AppLocalizations.of(context).games,
@@ -117,7 +117,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     _getPlacementTextWidget(index),
                                     const SizedBox(width: 5),
                                     Text(
-                                      gameSession.players[playerIndex],
+                                      gameSession.players[playerIndex].name,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -127,7 +127,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   children: [
                                     const SizedBox(width: 5),
                                     Text(
-                                        '${gameSession.playerScores[playerIndex]} '
+                                        '${gameSession.getPlayerScoresAsList()[playerIndex]} '
                                         '${AppLocalizations.of(context).points}')
                                   ],
                                 ),
@@ -258,15 +258,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
-                                                gameTitle:
-                                                    gameSession.gameTitle,
-                                                gameMode: widget.gameSession
-                                                            .isPointsLimitEnabled ==
-                                                        true
-                                                    ? GameMode.pointLimit
-                                                    : GameMode.unlimited,
-                                                players: gameSession.players,
-                                              )));
+                                              gameTitle: gameSession.gameTitle,
+                                              gameMode: widget.gameSession
+                                                          .isPointsLimitEnabled ==
+                                                      true
+                                                  ? GameMode.pointLimit
+                                                  : GameMode.unlimited,
+                                              players: gameSession
+                                                  .getPlayerNamesAsList())));
                                 },
                               ),
                               CupertinoListTile(
@@ -276,7 +275,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                   backgroundColorActivated:
                                       CustomTheme.backgroundColor,
                                   onTap: () async {
-                                    final success = await LocalStorageService
+                                    final success = await DataTransferService
                                         .exportSingleGameSession(
                                             widget.gameSession);
                                     if (!success && context.mounted) {
@@ -351,7 +350,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               ),
               onPressed: () {
                 setState(() {
-                  gameManager.endGame(gameSession.id);
+                  gameManager.endGame(gameSession.gameId);
                   _playFinishAnimation(context);
                 });
                 Navigator.pop(context);
@@ -374,8 +373,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         List<int>.generate(gameSession.players.length, (index) => index);
     // Sort the indices based on the summed points
     playerIndices.sort((a, b) {
-      int scoreA = gameSession.playerScores[a];
-      int scoreB = gameSession.playerScores[b];
+      int scoreA = gameSession.getPlayerScoresAsList()[a];
+      int scoreB = gameSession.getPlayerScoresAsList()[b];
       if (scoreA != scoreB) {
         return scoreA.compareTo(scoreB);
       }
@@ -455,11 +454,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
-    if (gameManager.gameExistsInGameList(gameSession.id)) {
+    if (gameManager.gameExistsInGameList(gameSession.gameId)) {
       Navigator.pop(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        gameManager.removeGameSessionById(gameSession.id);
+        gameManager.deleteGameById(gameSession.gameId);
       });
     } else {
       showCupertinoDialog(
@@ -515,7 +514,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Plays the confetti animation and shows a dialog with the winner's information.
   Future<void> _playFinishAnimation(BuildContext context) async {
     String winner = widget.gameSession.winner;
-    int winnerPoints = widget.gameSession.playerScores.min;
+
+    int winnerPoints = widget.gameSession.getPlayerScoresAsList().min;
     int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();

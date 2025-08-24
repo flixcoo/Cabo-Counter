@@ -1,8 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/widgets/custom_button.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -98,7 +97,7 @@ class _RoundViewState extends State<RoundView> {
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => {
-              LocalStorageService.saveGameSessions(),
+              //LocalStorageService.saveGameSessions(),
               Navigator.pop(context, -1)
             },
             child: Text(AppLocalizations.of(context).cancel),
@@ -146,7 +145,7 @@ class _RoundViewState extends State<RoundView> {
                               .entries
                               .map((entry) {
                             final index = entry.key;
-                            final name = entry.value;
+                            final player = entry.value;
                             return MapEntry(
                               index,
                               Padding(
@@ -157,7 +156,7 @@ class _RoundViewState extends State<RoundView> {
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    name,
+                                    player.name,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
                                     style: const TextStyle(
@@ -210,7 +209,7 @@ class _RoundViewState extends State<RoundView> {
                                 ]))
                               ]),
                               subtitle: Text(
-                                  '${widget.gameSession.playerScores[originalIndex]}'
+                                  '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: SizedBox(
                                 width: 100,
@@ -329,10 +328,11 @@ class _RoundViewState extends State<RoundView> {
   /// Rotates the players list based on the previous round's winner.
   List<String> _getRotatedPlayers() {
     final winnerIndex = _getPreviousRoundWinnerIndex();
+    final playerList = widget.gameSession.getPlayerNamesAsList();
     return [
-      widget.gameSession.players[winnerIndex],
-      ...widget.gameSession.players.sublist(winnerIndex + 1),
-      ...widget.gameSession.players.sublist(0, winnerIndex)
+      playerList[winnerIndex],
+      ...playerList.sublist(winnerIndex + 1),
+      ...playerList.sublist(0, winnerIndex)
     ];
   }
 
@@ -358,14 +358,14 @@ class _RoundViewState extends State<RoundView> {
               message: Text(AppLocalizations.of(context).who_has_kamikaze),
               actions: widget.gameSession.players.asMap().entries.map((entry) {
                 final index = entry.key;
-                final name = entry.value;
+                final player = entry.value;
                 return CupertinoActionSheetAction(
                   onPressed: () {
                     _kamikazePlayerIndex = index;
                     Navigator.pop(context, true);
                   },
                   child: Text(
-                    name,
+                    player.name,
                     style: TextStyle(color: CustomTheme.kamikazeColor),
                   ),
                 );
@@ -494,7 +494,7 @@ class _RoundViewState extends State<RoundView> {
   String _getBonusPopupMessageString(
       int pointLimit, int bonusPoints, List<int> bonusPlayers) {
     List<String> nameList =
-        bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
+        bonusPlayers.map((i) => widget.gameSession.players[i].name).toList();
     String resultText = '';
     if (nameList.length == 1) {
       resultText = AppLocalizations.of(context).bonus_points_message(
@@ -525,7 +525,7 @@ class _RoundViewState extends State<RoundView> {
       await _showBonusPopup(context, bonusPlayersIndices);
     }
 
-    LocalStorageService.saveGameSessions();
+    //LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.

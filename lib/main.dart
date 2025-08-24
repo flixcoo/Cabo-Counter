@@ -1,11 +1,12 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/tab_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,12 @@ Future<void> main() async {
   // Initialize services
   await ConfigService.initConfig();
   await VersionService.init();
-  runApp(const App());
+  runApp(
+    Provider<AppDatabase>(
+      create: (_) => db,
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatefulWidget {
@@ -31,7 +37,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    LocalStorageService.loadGameSessions();
   }
 
   @override
@@ -46,14 +51,12 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   /// save the current game sessions to local storage.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      LocalStorageService.saveGameSessions();
-    }
+        state == AppLifecycleState.detached) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    LocalStorageService.loadGameSessions();
+    //LocalStorageService.loadGameSessions();
 
     return CupertinoApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,

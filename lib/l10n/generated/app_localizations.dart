@@ -735,11 +735,11 @@ abstract class AppLocalizations {
   /// **'Datenschutzerklärung'**
   String get privacy_policy;
 
-  /// No description provided for @loading.
+  /// No description provided for @loading_games.
   ///
   /// In de, this message translates to:
-  /// **'Lädt...'**
-  String get loading;
+  /// **'Lade Spiele ...'**
+  String get loading_games;
 
   /// No description provided for @build.
   ///

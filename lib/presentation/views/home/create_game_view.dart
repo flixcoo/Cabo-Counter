@@ -1,7 +1,8 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_manager.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
@@ -448,26 +449,44 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// It then adds the game session to the game manager and navigates to the active game view.
   void _createGame() {
     var uuid = const Uuid();
-    final String id = uuid.v1();
+    final String gameId = uuid.v4();
 
-    List<String> players = [];
+    // Collect player names from the text controllers.
+    List<String> playerNames = [];
     for (var controller in _playerNameTextControllers) {
-      players.add(controller.text);
+      playerNames.add(controller.text);
+    }
+
+    // Create a list of Player objects with unique IDs and the corresponding attributes
+    List<Player> playerList = [];
+    for (int i = 0; i < playerNames.length; i++) {
+      String playerId = uuid.v4();
+      print('playerId: $playerId');
+      playerList.add(Player(
+        playerId: playerId,
+        gameId: gameId,
+        name: playerNames[i],
+        position: i,
+      ));
     }
 
     bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-      id: id,
-      createdAt: DateTime.now(),
-      gameTitle: _gameTitleTextController.text,
-      players: players,
-      pointLimit: ConfigService.getPointLimit(),
-      caboPenalty: ConfigService.getCaboPenalty(),
-      isPointsLimitEnabled: isPointsLimitEnabled,
-    );
+        gameId: gameId,
+        createdAt: DateTime.now(),
+        gameTitle: _gameTitleTextController.text,
+        players: playerList,
+        pointLimit: ConfigService.getPointLimit(),
+        caboPenalty: ConfigService.getCaboPenalty(),
+        isPointsLimitEnabled: isPointsLimitEnabled,
+        isGameFinished: false);
+
+    print('created players: $playerList');
+    print('created gameSession: $gameSession');
+
     gameManager.addGameSession(gameSession);
-    final session = gameManager.getGameSessionById(id) ?? gameSession;
+    final session = gameManager.getGameSessionById(gameId) ?? gameSession;
 
     Navigator.pushAndRemoveUntil(
       context,
