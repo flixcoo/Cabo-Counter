@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -7,9 +8,9 @@ import 'package:cabo_counter/presentation/views/home/active_game/active_game_vie
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum PreRatingDialogDecision { yes, no, cancel }
@@ -31,16 +32,34 @@ class MainMenuView extends StatefulWidget {
 
 class _MainMenuViewState extends State<MainMenuView> {
   bool _isLoading = true;
+  late final AppDatabase db;
 
   @override
   initState() {
     super.initState();
-    LocalStorageService.loadGameSessions().then((_) {
+    db = Provider.of<AppDatabase>(context, listen: false);
+
+    db.gameSessionDao.getAllGameSessions().then((gameSessions) {
+      print(
+          '[MainMenuView] Loaded ${gameSessions.length} game sessions from the database.');
+      for (final session in gameSessions) {
+        gameManager.addGameSession(session, db);
+      }
+
+      print('[MainMenuView] Game sessions loaded successfully.');
+      setState(() {
+        _isLoading = false;
+      });
+    }).catchError((error) {
+      print('[MainMenuView] Error loading game sessions: $error');
+    });
+
+    /* LocalStorageService.loadGameSessions().then((_) {
       setState(() {
         _isLoading = false;
       });
     });
-    gameManager.addListener(_updateView);
+    gameManager.addListener(_updateView);*/
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       precacheImage(
@@ -216,7 +235,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
-                  child: const Center(child: CupertinoActivityIndicator()),
+                  child: Center(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CupertinoActivityIndicator(),
+                      const SizedBox(height: 10),
+                      Text(AppLocalizations.of(context).loading_games)
+                    ],
+                  )),
                 ),
               )));
         });

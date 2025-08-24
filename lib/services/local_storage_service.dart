@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:file_picker/file_picker.dart';
@@ -173,12 +174,12 @@ class LocalStorageService {
             .toList();
 
         for (GameSession s in importedList) {
-          _importSession(s);
+          _importSession(s, db);
         }
       } else if (await _validateJsonSchema(jsonString, false)) {
         // Checks if the JSON String is in the single game format
         final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-        _importSession(GameSession.fromJson(jsonData));
+        _importSession(GameSession.fromJson(jsonData), db);
       } else {
         return ImportStatus.validationError;
       }
@@ -199,13 +200,14 @@ class LocalStorageService {
   }
 
   /// Imports a single game session into the gameList.
-  static Future<void> _importSession(GameSession session) async {
+  static Future<void> _importSession(
+      GameSession session, AppDatabase db) async {
     if (gameManager.gameExistsInGameList(session.id)) {
       print(
           '[local_storage_service.dart] Die Session mit der ID ${session.id} existiert bereits. Sie wird überschrieben.');
       gameManager.removeGameSessionById(session.id);
     }
-    gameManager.addGameSession(session);
+    gameManager.addGameSession(session, db);
     print(
         '[local_storage_service.dart] Die Session mit der ID ${session.id} wurde erfolgreich importiert.');
   }

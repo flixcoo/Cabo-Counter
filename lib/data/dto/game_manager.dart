@@ -1,3 +1,4 @@
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:collection/collection.dart';
@@ -11,7 +12,7 @@ class GameManager extends ChangeNotifier {
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
   /// Returns the index of the newly added session in the sorted list.
-  int addGameSession(GameSession session) {
+  int addGameSession(GameSession session, AppDatabase db) {
     session.addListener(() {
       notifyListeners(); // Propagate session changes
     });
@@ -19,6 +20,7 @@ class GameManager extends ChangeNotifier {
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
     LocalStorageService.saveGameSessions();
+    db.gameSessionDao.insertGameSession(session);
     return gameList.indexOf(session);
   }
 
