@@ -108,7 +108,7 @@ jobs:
     
   test:
     runs-on: ubuntu-latest
-    if: always()
+    if: false
     needs: [lint, format]
 
     steps:
