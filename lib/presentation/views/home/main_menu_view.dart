@@ -54,13 +54,6 @@ class _MainMenuViewState extends State<MainMenuView> {
       print('[MainMenuView] Error loading game sessions: $error');
     });
 
-    /* LocalStorageService.loadGameSessions().then((_) {
-      setState(() {
-        _isLoading = false;
-      });
-    });
-    gameManager.addListener(_updateView);*/
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       precacheImage(
           const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
