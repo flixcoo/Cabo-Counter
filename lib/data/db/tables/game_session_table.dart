@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 
 class GameSessionTable extends Table {
-  TextColumn get id => text()();
+  TextColumn get gameId => text()();
   DateTimeColumn get createdAt => dateTime()();
   TextColumn get gameTitle => text()();
   IntColumn get pointLimit => integer()();
@@ -12,5 +12,5 @@ class GameSessionTable extends Table {
   IntColumn get roundNumber => integer()();
 
   @override
-  Set<Column<Object>> get primaryKey => {id};
+  Set<Column<Object>> get primaryKey => {gameId};
 }

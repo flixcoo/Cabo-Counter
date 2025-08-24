@@ -18,14 +18,15 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// It constructs and returns a `GameSession` object containing all relevant data.
   /// [gameId] The ID of the game session to retrieve.
   Future<GameSession> getGameSession(String gameId) async {
-    final query = select(gameSessionTable)..where((tbl) => tbl.id.equals(gameId));
+    final query = select(gameSessionTable)
+      ..where((tbl) => tbl.gameId.equals(gameId));
     final gameSessionResult = await query.getSingle();
 
     List<Player> playerList = await db.playerDao.getPlayersByGameId(gameId);
     List<Round> roundList = await db.roundsDao.getRoundsByGameId(gameId);
 
     GameSession gameSession = GameSession(
-        gameId: gameSessionResult.id,
+        gameId: gameSessionResult.gameId,
         createdAt: gameSessionResult.createdAt,
         gameTitle: gameSessionResult.gameTitle,
         players: playerList,
@@ -52,11 +53,16 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
 
     List<GameSession> gameSessions = await Future.wait(
       gameSessionResults.map((row) async {
-        List<Player> playerList = await db.playerDao.getPlayersByGameId(row.id);
-        List<Round> roundList = await db.roundsDao.getRoundsByGameId(row.id);
+        List<Player> playerList =
+            await db.playerDao.getPlayersByGameId(row.gameId);
+        List<Round> roundList =
+            await db.roundsDao.getRoundsByGameId(row.gameId);
 
+        print(
+            'Fetched Game Session: ${row.gameId}, Players: ${playerList.length}, Rounds: ${roundList.length}');
+        print('roundList: $roundList');
         return GameSession(
-          gameId: row.id,
+          gameId: row.gameId,
           createdAt: row.createdAt,
           gameTitle: row.gameTitle,
           players: playerList,
@@ -75,9 +81,11 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<void> insertGameSession(GameSession gameSession) async {
+    print('Inserting Game Session: ${gameSession.gameId}');
+
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
-        id: gameSession.gameId,
+        gameId: gameSession.gameId,
         createdAt: gameSession.createdAt,
         gameTitle: gameSession.gameTitle,
         pointLimit: gameSession.pointLimit,
@@ -101,9 +109,22 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// [gameId] The ID of the game session to update.
   /// [isFinished] The new finish status to set.
   Future<void> setGameFinishStatus(String gameId, bool isFinished) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
+    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
         .write(GameSessionTableCompanion(
       isGameFinished: Value(isFinished),
     ));
+  }
+
+  Future<void> setRoundNumber(String gameId, int roundNumber) async {
+    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
+        .write(GameSessionTableCompanion(
+      roundNumber: Value(roundNumber),
+    ));
+  }
+
+  Future<void> deleteGameSession(String gameId) async {
+    await (delete(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
+        .go();
+    print('Deleted Game Session: $gameId');
   }
 }

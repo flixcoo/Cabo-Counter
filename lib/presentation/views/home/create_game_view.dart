@@ -451,7 +451,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// It then adds the game session to the game manager and navigates to the active game view.
   void _createGame() {
     var uuid = const Uuid();
-    final String gameId = uuid.v1();
+    final String gameId = uuid.v4();
 
     // Collect player names from the text controllers.
     List<String> playerNames = [];
@@ -462,8 +462,10 @@ class _CreateGameViewState extends State<CreateGameView> {
     // Create a list of Player objects with unique IDs and the corresponding attributes
     List<Player> playerList = [];
     for (int i = 0; i < playerNames.length; i++) {
+      String playerId = uuid.v4();
+      print('playerId: $playerId');
       playerList.add(Player(
-        playerId: uuid.v1(),
+        playerId: playerId,
         gameId: gameId,
         name: playerNames[i],
         position: i,
@@ -481,6 +483,9 @@ class _CreateGameViewState extends State<CreateGameView> {
         caboPenalty: ConfigService.getCaboPenalty(),
         isPointsLimitEnabled: isPointsLimitEnabled,
         isGameFinished: false);
+
+    print('created players: $playerList');
+    print('created gameSession: $gameSession');
 
     final db = Provider.of<AppDatabase>(context, listen: false);
     gameManager.addGameSession(gameSession, db);

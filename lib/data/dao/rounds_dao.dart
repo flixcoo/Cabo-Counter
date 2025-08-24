@@ -25,6 +25,9 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         final roundScores =
             await db.roundScoresDao.getScoreUpdatesByRoundId(row.roundId);
 
+        print(
+            'Fetched Round: ${row.roundId}, Scores: $scores, Score Updates: $roundScores');
+
         return Round(
           roundId: row.roundId,
           gameId: row.gameId,
@@ -75,7 +78,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   Future<void> insertOneRound(
       String gameId, Round round, List<Player> players) async {
     var uuid = const Uuid();
-    String roundId = uuid.v1();
+    String roundId = uuid.v4();
 
     final roundEntry = RoundsTableCompanion.insert(
       roundId: roundId,
@@ -98,18 +101,17 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       await into(roundScoresTable).insert(roundScoreEntry);
     }
   }
+
   /// Replaces an already existing round with a new one.
   /// [gameId] is the ID of the game session this round belongs to.
   /// [round] is the round data to be inserted.
   /// [players] is the list of players in the game session.
   Future<void> replaceRound(
       String gameId, Round round, List<Player> players) async {
-
     await deleteRound(gameId, round.roundNum);
 
     await insertOneRound(gameId, round, players);
-    }
-
+  }
 
   /// Inserts multiple rounds into the database.
   /// This method uses a batch operation to insert all rounds and their scores
@@ -126,7 +128,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       final roundScoreEntries = <RoundScoresTableCompanion>[];
 
       for (final round in rounds) {
-        final roundId = uuid.v1();
+        final roundId = uuid.v4();
         roundEntries.add(RoundsTableCompanion.insert(
           roundId: roundId,
           gameId: gameId,

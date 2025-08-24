@@ -2,7 +2,6 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// This class represents a game session for  Cabo game.
@@ -66,7 +65,7 @@ class GameSession extends ChangeNotifier {
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : gameId = json['id'] ?? const Uuid().v1(),
+      : gameId = json['id'] ?? const Uuid().v4(),
         createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
         players = List<Player>.from(json['players']),
@@ -211,8 +210,9 @@ class GameSession extends ChangeNotifier {
     int caboPlayerIndex, [
     int? kamikazePlayerIndex,
   ]) {
+    const uuid = Uuid();
     Round newRound = Round(
-      roundId: const Uuid().v1(),
+      roundId: uuid.v4(),
       gameId: gameId,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
@@ -333,7 +333,8 @@ class GameSession extends ChangeNotifier {
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
-    print('roundNumber erhöht: $roundNumber — Hash: ${identityHashCode(this)}');
+    db.gameSessionDao.setRoundNumber(gameId, roundNumber);
+    print('roundNumber erhöht: $roundNumber}');
 
     notifyListeners();
   }
