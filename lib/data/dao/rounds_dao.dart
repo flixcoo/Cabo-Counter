@@ -98,6 +98,18 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       await into(roundScoresTable).insert(roundScoreEntry);
     }
   }
+  /// Replaces an already existing round with a new one.
+  /// [gameId] is the ID of the game session this round belongs to.
+  /// [round] is the round data to be inserted.
+  /// [players] is the list of players in the game session.
+  Future<void> replaceRound(
+      String gameId, Round round, List<Player> players) async {
+
+    await deleteRound(gameId, round.roundNum);
+
+    await insertOneRound(gameId, round, players);
+    }
+
 
   /// Inserts multiple rounds into the database.
   /// This method uses a batch operation to insert all rounds and their scores
@@ -136,5 +148,24 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       batch.insertAll(roundsTable, roundEntries);
       batch.insertAll(roundScoresTable, roundScoreEntries);
     });
+  }
+
+  /// Deletes a specific round by its [gameId] and [roundNumber].
+  /// Returns true if the round was found and deleted, false otherwise.
+  /// Also deletes all associated scores due to foreign key constraints.
+  /// [gameId] is the ID of the game session this round belongs to.
+  /// [roundNumber] is the number of the round to be deleted.
+  Future<bool> deleteRound(String gameId, int roundNumber) async {
+    final query = select(roundsTable)
+      ..where((tbl) =>
+          tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber));
+    final roundResult = await query.getSingleOrNull();
+    if (roundResult == null) return false;
+
+    final deleteQuery = delete(roundsTable)
+      ..where((tbl) =>
+          tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber));
+    await deleteQuery.go();
+    return true;
   }
 }
