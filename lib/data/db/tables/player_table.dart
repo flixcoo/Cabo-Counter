@@ -2,12 +2,12 @@ import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:drift/drift.dart';
 
 class PlayerTable extends Table {
-  TextColumn get playerId => text()();
-  TextColumn get gameId => text()
+  late final playerId = text()();
+  late final gameId = text()
       .references(GameSessionTable, #gameId, onDelete: KeyAction.cascade)();
-  IntColumn get totalScore => integer()();
-  IntColumn get position => integer()();
-  TextColumn get name => text()();
+  late final totalScore = integer()();
+  late final position = integer()();
+  late final name = text()();
 
   @override
   Set<Column<Object>> get primaryKey => {playerId};
