@@ -41,27 +41,13 @@ class GameManager extends ChangeNotifier {
     return gameList.firstWhereOrNull((session) => session.gameId == id);
   }
 
-  /// Removes a game session from the list and sorts it by creation date.
-  /// Takes a [index] as input. It then removes the session at the specified index from the `gameList`,
-  /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
-  /// It also saves the updated game sessions to local storage.
-  void removeGameSessionByIndex(int index) {
-    gameList[index].removeListener(notifyListeners);
-    gameList.removeAt(index);
-    notifyListeners();
-    LocalStorageService.saveGameSessions();
-  }
-
   /// Removes a game session by its ID.
-  /// Takes a String [id] as input. It finds the index of the game session with the matching ID
-  /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
+  /// Takes a String [id] as input. It removes the game session with the matching id
+  /// from the `gameList`, deletes it from the database, and notifies listeners of the change.
+  /// If no session with the given ID exists, the method does nothing.
   void removeGameSessionById(String id) {
     gameList.removeWhere((session) => session.gameId == id);
     db.gameSessionDao.deleteGameSession(id);
-    /*  final int index =
-        gameList.indexWhere((session) => session.gameId.toString() == id);
-    if (index == -1) return;
-    removeGameSessionByIndex(index);*/
     notifyListeners();
   }
 
