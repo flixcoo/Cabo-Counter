@@ -24,6 +24,15 @@ class GameManager extends ChangeNotifier {
     return gameList.indexOf(session);
   }
 
+  void addGameSessionFromDataBase(GameSession session) {
+    session.addListener(() {
+      notifyListeners();
+    });
+    gameList.add(session);
+    gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    notifyListeners();
+  }
+
   /// Retrieves a game session by its id.
   /// Takes a String [id] as input. It searches the `gameList` for a session
   /// with a matching id and returns it if found.
@@ -47,10 +56,13 @@ class GameManager extends ChangeNotifier {
   /// Takes a String [id] as input. It finds the index of the game session with the matching ID
   /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
   void removeGameSessionById(String id) {
-    final int index =
+    gameList.removeWhere((session) => session.gameId == id);
+    db.gameSessionDao.deleteGameSession(id);
+    /*  final int index =
         gameList.indexWhere((session) => session.gameId.toString() == id);
     if (index == -1) return;
-    removeGameSessionByIndex(index);
+    removeGameSessionByIndex(index);*/
+    notifyListeners();
   }
 
   /// Retrieves a game session by its ID.

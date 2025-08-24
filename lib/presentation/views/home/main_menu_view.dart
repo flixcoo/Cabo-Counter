@@ -43,7 +43,7 @@ class _MainMenuViewState extends State<MainMenuView> {
       print(
           '[MainMenuView] Loaded ${gameSessions.length} game sessions from the database.');
       for (final session in gameSessions) {
-        gameManager.addGameSession(session, db);
+        gameManager.addGameSessionFromDataBase(session);
       }
 
       print('[MainMenuView] Game sessions loaded successfully.');
