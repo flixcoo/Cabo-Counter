@@ -1,6 +1,5 @@
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,7 +18,6 @@ class GameManager extends ChangeNotifier {
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
-    LocalStorageService.saveGameSessions();
     db.gameSessionDao.insertGameSession(session);
     return gameList.indexOf(session);
   }
@@ -80,7 +78,6 @@ class GameManager extends ChangeNotifier {
     gameList[index].endGame();
     db.gameSessionDao.endGame(gameId);
     notifyListeners();
-    LocalStorageService.saveGameSessions();
   }
 }
 

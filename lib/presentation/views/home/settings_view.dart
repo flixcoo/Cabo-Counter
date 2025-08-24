@@ -6,7 +6,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -156,7 +156,7 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.square_arrow_down,
                         onPressed: () async {
                           final status =
-                              await LocalStorageService.importJsonFile();
+                              await DataTransferService.importJsonFile();
                           showFeedbackDialog(status);
                         },
                         suffixWidget: const CupertinoListTileChevron(),
@@ -164,7 +164,7 @@ class _SettingsViewState extends State<SettingsView> {
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).export_data,
                         prefixIcon: CupertinoIcons.square_arrow_up,
-                        onPressed: () => LocalStorageService.exportGameData(),
+                        onPressed: () => DataTransferService.exportGameData(),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(

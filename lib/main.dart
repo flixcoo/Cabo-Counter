@@ -3,7 +3,6 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/tab_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -52,9 +51,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   /// save the current game sessions to local storage.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      LocalStorageService.saveGameSessions();
-    }
+        state == AppLifecycleState.detached) {}
   }
 
   @override

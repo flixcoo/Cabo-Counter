@@ -1,6 +1,5 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
@@ -12,7 +11,6 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 enum CreateStatus {
@@ -487,7 +485,6 @@ class _CreateGameViewState extends State<CreateGameView> {
     print('created players: $playerList');
     print('created gameSession: $gameSession');
 
-    final db = Provider.of<AppDatabase>(context, listen: false);
     gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(gameId) ?? gameSession;
 
