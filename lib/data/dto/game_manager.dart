@@ -29,7 +29,7 @@ class GameManager extends ChangeNotifier {
   /// with a matching id and returns it if found.
   /// If no session is found, it returns null.
   GameSession? getGameSessionById(String id) {
-    return gameList.firstWhereOrNull((session) => session.id == id);
+    return gameList.firstWhereOrNull((session) => session.gameId == id);
   }
 
   /// Removes a game session from the list and sorts it by creation date.
@@ -48,7 +48,7 @@ class GameManager extends ChangeNotifier {
   /// in the `gameList`, and then calls `removeGameSessionByIndex` with that index.
   void removeGameSessionById(String id) {
     final int index =
-        gameList.indexWhere((session) => session.id.toString() == id);
+        gameList.indexWhere((session) => session.gameId.toString() == id);
     if (index == -1) return;
     removeGameSessionByIndex(index);
   }
@@ -56,7 +56,7 @@ class GameManager extends ChangeNotifier {
   /// Retrieves a game session by its ID.
   /// Takes a String [id] as input. It finds the game session with the matching id
   bool gameExistsInGameList(String id) {
-    return gameList.any((session) => session.id.toString() == id);
+    return gameList.any((session) => session.gameId.toString() == id);
   }
 
   /// Ends a game session if its in unlimited mode.
@@ -64,7 +64,7 @@ class GameManager extends ChangeNotifier {
   /// session with the matching ID marks it as finished,
   void endGame(String id) {
     final int index =
-        gameList.indexWhere((session) => session.id.toString() == id);
+        gameList.indexWhere((session) => session.gameId.toString() == id);
 
     // Game session not found or not in unlimited mode
     if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;

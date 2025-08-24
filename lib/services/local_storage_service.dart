@@ -92,7 +92,7 @@ class LocalStorageService {
 
       for (GameSession session in gameManager.gameList) {
         print(
-            '[local_storage_service.dart] Geladene Session: ${session.gameTitle} - ${session.id}');
+            '[local_storage_service.dart] Geladene Session: ${session.gameTitle} - ${session.gameId}');
       }
 
       print(
@@ -145,7 +145,7 @@ class LocalStorageService {
   /// Opens the file picker to save a single game session as a JSON file.
   static Future<bool> exportSingleGameSession(GameSession session) async {
     String jsonString = json.encode(session.toJson());
-    String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
+    String fileName = 'cabo_counter-game_${session.gameId.substring(0, 7)}';
     return _exportJsonData(jsonString, fileName);
   }
 
@@ -202,14 +202,14 @@ class LocalStorageService {
   /// Imports a single game session into the gameList.
   static Future<void> _importSession(
       GameSession session, AppDatabase db) async {
-    if (gameManager.gameExistsInGameList(session.id)) {
+    if (gameManager.gameExistsInGameList(session.gameId)) {
       print(
-          '[local_storage_service.dart] Die Session mit der ID ${session.id} existiert bereits. Sie wird überschrieben.');
-      gameManager.removeGameSessionById(session.id);
+          '[local_storage_service.dart] Die Session mit der ID ${session.gameId} existiert bereits. Sie wird überschrieben.');
+      gameManager.removeGameSessionById(session.gameId);
     }
     gameManager.addGameSession(session, db);
     print(
-        '[local_storage_service.dart] Die Session mit der ID ${session.id} wurde erfolgreich importiert.');
+        '[local_storage_service.dart] Die Session mit der ID ${session.gameId} wurde erfolgreich importiert.');
   }
 
   /// Helper method to read file content from either bytes or path

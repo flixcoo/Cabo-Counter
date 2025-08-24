@@ -25,7 +25,7 @@ void main() {
 
   setUp(() {
     session = GameSession(
-        id: '1',
+        gameId: '1',
         createdAt: testDate,
         gameTitle: testTitle,
         players: testPlayers,

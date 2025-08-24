@@ -1,6 +1,8 @@
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// This class represents a game session for  Cabo game.
@@ -14,7 +16,7 @@ import 'package:uuid/uuid.dart';
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession extends ChangeNotifier {
-  final String id;
+  final String gameId;
   final DateTime createdAt;
   final String gameTitle;
   final List<Player> players;
@@ -27,7 +29,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList;
 
   GameSession({
-    required this.id,
+    required this.gameId,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -42,14 +44,14 @@ class GameSession extends ChangeNotifier {
 
   @override
   toString() {
-    return 'GameSession: [id: $id, createdAt: $createdAt, gameTitle: $gameTitle, '
+    return 'GameSession: [id: $gameId, createdAt: $createdAt, gameTitle: $gameTitle, '
         'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
         ' players: $players, roundList: $roundList, winner: $winner]';
   }
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'id': gameId,
         'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
         'players': players,
@@ -64,7 +66,7 @@ class GameSession extends ChangeNotifier {
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : id = json['id'] ?? const Uuid().v1(),
+      : gameId = json['id'] ?? const Uuid().v1(),
         createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
         players = List<Player>.from(json['players']),
@@ -211,7 +213,7 @@ class GameSession extends ChangeNotifier {
   ]) {
     Round newRound = Round(
       roundId: const Uuid().v1(),
-      gameId: id,
+      gameId: gameId,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,
@@ -223,6 +225,7 @@ class GameSession extends ChangeNotifier {
     } else {
       roundList[roundNum - 1] = newRound;
     }
+    db.roundsDao.insertOneRound(gameId, round, players)
     notifyListeners();
   }
 

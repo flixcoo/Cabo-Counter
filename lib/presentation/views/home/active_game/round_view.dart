@@ -98,7 +98,7 @@ class _RoundViewState extends State<RoundView> {
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => {
-              LocalStorageService.saveGameSessions(),
+              //LocalStorageService.saveGameSessions(),
               Navigator.pop(context, -1)
             },
             child: Text(AppLocalizations.of(context).cancel),
@@ -526,7 +526,7 @@ class _RoundViewState extends State<RoundView> {
       await _showBonusPopup(context, bonusPlayersIndices);
     }
 
-    LocalStorageService.saveGameSessions();
+    //LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.

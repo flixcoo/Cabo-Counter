@@ -350,7 +350,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               ),
               onPressed: () {
                 setState(() {
-                  gameManager.endGame(gameSession.id);
+                  gameManager.endGame(gameSession.gameId);
                   _playFinishAnimation(context);
                 });
                 Navigator.pop(context);
@@ -454,11 +454,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
-    if (gameManager.gameExistsInGameList(gameSession.id)) {
+    if (gameManager.gameExistsInGameList(gameSession.gameId)) {
       Navigator.pop(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        gameManager.removeGameSessionById(gameSession.id);
+        gameManager.removeGameSessionById(gameSession.gameId);
       });
     } else {
       showCupertinoDialog(

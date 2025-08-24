@@ -21,7 +21,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     List<Round> roundList = await db.roundsDao.getRoundsByGameId(id);
 
     GameSession gameSession = GameSession(
-        id: gameSessionResult.id,
+        gameId: gameSessionResult.id,
         createdAt: gameSessionResult.createdAt,
         gameTitle: gameSessionResult.gameTitle,
         players: playerList,
@@ -47,7 +47,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         List<Round> roundList = await db.roundsDao.getRoundsByGameId(row.id);
 
         return GameSession(
-          id: row.id,
+          gameId: row.id,
           createdAt: row.createdAt,
           gameTitle: row.gameTitle,
           players: playerList,
@@ -68,7 +68,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertGameSession(GameSession gameSession) async {
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
-        id: gameSession.id,
+        id: gameSession.gameId,
         createdAt: gameSession.createdAt,
         gameTitle: gameSession.gameTitle,
         pointLimit: gameSession.pointLimit,
@@ -80,9 +80,9 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       ),
     );
 
-    db.playerDao.insertPlayers(gameSession.id, gameSession.players);
+    db.playerDao.insertPlayers(gameSession.gameId, gameSession.players);
 
     db.roundsDao.insertMultipleRounds(
-        gameSession.id, gameSession.roundList, gameSession.players);
+        gameSession.gameId, gameSession.roundList, gameSession.players);
   }
 }

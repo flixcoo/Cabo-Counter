@@ -131,7 +131,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             listenable: session,
                             builder: (context, _) {
                               return Dismissible(
-                                key: Key(session.id),
+                                key: Key(session.gameId),
                                 background: Container(
                                   color: CustomTheme.red,
                                   alignment: Alignment.centerRight,
@@ -147,7 +147,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       context, session.gameTitle);
                                 },
                                 onDismissed: (direction) {
-                                  gameManager.removeGameSessionById(session.id);
+                                  gameManager.removeGameSessionById(session.gameId);
                                 },
                                 dismissThresholds: const {
                                   DismissDirection.startToEnd: 0.6
