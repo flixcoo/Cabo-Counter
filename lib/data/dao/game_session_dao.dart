@@ -13,12 +13,16 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   GameSessionDao(super.db);
 
   /// Retrieves a game session by its ID.
-  Future<GameSession> getGameSession(String id) async {
-    final query = select(gameSessionTable)..where((tbl) => tbl.id.equals(id));
+  /// This method fetches the game session details from the `gameSessionTable`,
+  /// along with associated players and rounds from their respective DAOs.
+  /// It constructs and returns a `GameSession` object containing all relevant data.
+  /// [gameId] The ID of the game session to retrieve.
+  Future<GameSession> getGameSession(String gameId) async {
+    final query = select(gameSessionTable)..where((tbl) => tbl.id.equals(gameId));
     final gameSessionResult = await query.getSingle();
 
-    List<Player> playerList = await db.playerDao.getPlayersByGameId(id);
-    List<Round> roundList = await db.roundsDao.getRoundsByGameId(id);
+    List<Player> playerList = await db.playerDao.getPlayersByGameId(gameId);
+    List<Round> roundList = await db.roundsDao.getRoundsByGameId(gameId);
 
     GameSession gameSession = GameSession(
         gameId: gameSessionResult.id,
@@ -37,6 +41,11 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Retrieves all game sessions from the database.
+  /// This method fetches all entries from the `gameSessionTable`,
+  /// along with associated players and rounds for each session from their respective DAOs.
+  /// It constructs and returns a list of `GameSession` objects containing all relevant data.
+  /// Returns an empty list if no game sessions are found.
+  /// Returns a [List] of [GameSession] objects.
   Future<List<GameSession>> getAllGameSessions() async {
     final query = select(gameSessionTable);
     final gameSessionResults = await query.get();
