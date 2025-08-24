@@ -254,7 +254,7 @@ class GameSession extends ChangeNotifier {
       for (int i = 0; i < players.length; i++) {
         if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
-          db.gameSessionDao.setGameFinishedStatus(gameId, true);
+          db.gameSessionDao.setGameFinishStatus(gameId, true);
           limitExceeded = true;
           print('${players[i].name} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
@@ -263,7 +263,7 @@ class GameSession extends ChangeNotifier {
       }
       if (!limitExceeded) {
         isGameFinished = false;
-        db.gameSessionDao.setGameFinishedStatus(gameId, false);
+        db.gameSessionDao.setGameFinishStatus(gameId, false);
       }
     }
     notifyListeners();

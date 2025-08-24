@@ -94,4 +94,16 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     db.roundsDao.insertMultipleRounds(
         gameSession.gameId, gameSession.roundList, gameSession.players);
   }
+
+  /// Updates the game finish status of a specific game session.
+  /// This method updates the [isGameFinished] field in the [gameSessionTable]
+  /// for the game session with the given [gameId].
+  /// [gameId] The ID of the game session to update.
+  /// [isFinished] The new finish status to set.
+  Future<void> setGameFinishStatus(String gameId, bool isFinished) async {
+    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
+        .write(GameSessionTableCompanion(
+      isGameFinished: Value(isFinished),
+    ));
+  }
 }
