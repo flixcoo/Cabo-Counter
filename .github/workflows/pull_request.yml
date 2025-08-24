@@ -35,7 +35,12 @@ jobs:
         else
           echo "changes_detected=false" >> $GITHUB_OUTPUT
         fi
-            
+
+    - name: Checkout PR branch
+      if: steps.check_changes.outputs.changes_detected == 'true'
+      run: |
+        git checkout ${{ github.head_ref }}
+    
     - name: Commit Changes
       if: steps.check_changes.outputs.changes_detected == 'true'
       run: |
