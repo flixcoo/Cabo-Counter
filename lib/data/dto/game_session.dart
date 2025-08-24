@@ -68,7 +68,8 @@ class GameSession extends ChangeNotifier {
       : gameId = json['id'] ?? const Uuid().v4(),
         createdAt = DateTime.parse(json['createdAt']),
         gameTitle = json['gameTitle'],
-        players = List<Player>.from(json['players']),
+        players =
+            (json['players'] as List).map((e) => Player.fromJson(e)).toList(),
         pointLimit = json['pointLimit'],
         caboPenalty = json['caboPenalty'],
         isPointsLimitEnabled = json['isPointsLimitEnabled'],
