@@ -53,7 +53,7 @@ class GameSession extends ChangeNotifier {
         'id': gameId,
         'createdAt': createdAt.toIso8601String(),
         'gameTitle': gameTitle,
-        'players': players,
+        'players': players.map((p) => p.toJson()).toList(),
         'pointLimit': pointLimit,
         'caboPenalty': caboPenalty,
         'isPointsLimitEnabled': isPointsLimitEnabled,

@@ -1,8 +1,10 @@
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:test/test.dart';
 
 void main() {
+  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
   late GameSession session;
   final testPlayers = [
     Player(
@@ -12,7 +14,11 @@ void main() {
         gameId: 'abc',
         position: 0),
     Player(
-        name: 'Bob', totalScore: 0, playerId: '1', gameId: 'abc', position: 1),
+        name: 'Bobby',
+        totalScore: 0,
+        playerId: '1',
+        gameId: 'abc',
+        position: 1),
     Player(
         name: 'Charlie',
         totalScore: 0,
@@ -50,8 +56,8 @@ void main() {
       session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
       session.addRoundScoresToList(2, [15, 25, 35], [5, 5, 5], 1);
 
-      final json = session.toJson();
-      final fromJsonSession = GameSession.fromJson(json);
+      final jsonFile = session.toJson();
+      final fromJsonSession = GameSession.fromJson(jsonFile);
 
       expect(fromJsonSession.gameTitle, testTitle);
       expect(fromJsonSession.players, testPlayers);
@@ -63,7 +69,7 @@ void main() {
           () => GameSession.fromJson({
                 'createdAt': testDate.toIso8601String(),
                 'gameTitle': null, // Invalid
-                'players': testPlayers,
+                'players': session.players.map((p) => p.toJson()).toList(),
                 'pointLimit': 100,
                 'caboPenalty': 50,
                 'isPointsLimitEnabled': true,
