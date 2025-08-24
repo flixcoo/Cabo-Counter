@@ -222,10 +222,12 @@ class GameSession extends ChangeNotifier {
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
+      db.roundsDao.insertOneRound(gameId, newRound, players);
     } else {
       roundList[roundNum - 1] = newRound;
+      db.roundsDao.replaceRound(gameId, newRound, players);
     }
-    db.roundsDao.insertOneRound(gameId, round, players)
+
     notifyListeners();
   }
 
@@ -252,6 +254,7 @@ class GameSession extends ChangeNotifier {
       for (int i = 0; i < players.length; i++) {
         if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
+          db.gameSessionDao.setGameFinishedStatus(gameId, true);
           limitExceeded = true;
           print('${players[i].name} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
@@ -260,6 +263,7 @@ class GameSession extends ChangeNotifier {
       }
       if (!limitExceeded) {
         isGameFinished = false;
+        db.gameSessionDao.setGameFinishedStatus(gameId, false);
       }
     }
     notifyListeners();
