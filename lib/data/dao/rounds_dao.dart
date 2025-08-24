@@ -77,11 +77,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// [players] is the list of players in the game session.
   Future<void> insertOneRound(
       String gameId, Round round, List<Player> players) async {
-    var uuid = const Uuid();
-    String roundId = uuid.v4();
-
     final roundEntry = RoundsTableCompanion.insert(
-      roundId: roundId,
+      roundId: round.roundId,
       gameId: gameId,
       roundNumber: round.roundNum,
       caboPlayerIndex: round.caboPlayerIndex,
@@ -93,7 +90,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     for (int i = 0; i < players.length; i++) {
       final player = players[i];
       final roundScoreEntry = RoundScoresTableCompanion.insert(
-        roundId: roundId,
+        roundId: round.roundId,
         playerId: player.playerId,
         score: round.scores[i],
         scoreUpdate: round.scoreUpdates[i],
