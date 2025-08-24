@@ -55,7 +55,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   }
 
   /// Updates the total scores of multiple players in a batch operation.
-  void updatePlayerScores(List<Player> players) {
+  Future<void> updatePlayerScores(List<Player> players) async {
     batch((batch) {
       for (int i = 0; i < players.length; i++) {
         final player = players[i];
