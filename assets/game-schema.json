@@ -15,11 +15,32 @@
     "players": {
       "type": "array",
       "items": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "string"
+       {
+          "type": "object",
+          "properties": {
+            "playerId": {
+              "type": "string"
+            },
+            "gameId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "position": {
+              "type": "integer"
+            },
+            "totalScore": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "playerId",
+            "gameId",
+            "name",
+            "position",
+            "totalScore"
+          ]
         }
       ]
     },
@@ -41,192 +62,9 @@
     "roundNumber": {
       "type": "integer"
     },
-    "playerScores": {
-      "type": "array",
-      "items": [
-        {
-          "type": "integer"
-        },
-        {
-          "type": "integer"
-        }
-      ]
-    },
     "roundList": {
       "type": "array",
       "items": [
-        {
-          "type": "object",
-          "properties": {
-            "roundNum": {
-              "type": "integer"
-            },
-            "caboPlayerIndex": {
-              "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": "null"
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            }
-          },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "roundNum": {
-              "type": "integer"
-            },
-            "caboPlayerIndex": {
-              "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": "null"
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            }
-          },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "roundNum": {
-              "type": "integer"
-            },
-            "caboPlayerIndex": {
-              "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": "null"
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            }
-          },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "roundNum": {
-              "type": "integer"
-            },
-            "caboPlayerIndex": {
-              "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": "null"
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            }
-          },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        },
         {
           "type": "object",
           "properties": {

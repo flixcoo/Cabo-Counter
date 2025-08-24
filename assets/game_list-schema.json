@@ -16,15 +16,41 @@
       },
       "players": {
         "type": "array",
-        "items": {
-          "type": "string"
-        }
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string"
+              },
+              "gameId": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "totalScore": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "playerId",
+              "gameId",
+              "name",
+              "position",
+              "totalScore"
+            ]
+          }
+        ]
       },
       "pointLimit": {
-        "type": "number"
+        "type": "integer"
       },
       "caboPenalty": {
-        "type": "number"
+        "type": "integer"
       },
       "isPointsLimitEnabled": {
         "type": "boolean"
@@ -36,51 +62,59 @@
         "type": "string"
       },
       "roundNumber": {
-        "type": "number"
-      },
-      "playerScores": {
-        "type": "array",
-        "items": {
-          "type": "number"
-        }
+        "type": "integer"
       },
       "roundList": {
         "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "roundNum": {
-              "type": "number"
-            },
-            "caboPlayerIndex": {
-              "type": "number"
-            },
-            "kamikazePlayerIndex": {
-              "type": ["number", "null"]
-            },
-            "scores": {
-              "type": "array",
-              "items": {
-                "type": "number"
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "roundNum": {
+                "type": "integer"
+              },
+              "caboPlayerIndex": {
+                "type": "integer"
+              },
+              "kamikazePlayerIndex": {
+                "type": "null"
+              },
+              "scores": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "scoreUpdates": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
               }
             },
-            "scoreUpdates": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
-            }
-          },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        }
+            "required": [
+              "roundNum",
+              "caboPlayerIndex",
+              "kamikazePlayerIndex",
+              "scores",
+              "scoreUpdates"
+            ]
+          }
+        ]
       }
     },
     "required": [
+      "id",
       "createdAt",
       "gameTitle",
       "players",
