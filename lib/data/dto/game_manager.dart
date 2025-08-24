@@ -72,18 +72,17 @@ class GameManager extends ChangeNotifier {
   }
 
   /// Ends a game session if its in unlimited mode.
-  /// Takes a String [id] as input. It finds the index of the game
+  /// Takes a String [gameId] as input. It finds the index of the game
   /// session with the matching ID marks it as finished,
-  void endGame(String id) {
+  void endGame(String gameId) {
     final int index =
-        gameList.indexWhere((session) => session.gameId.toString() == id);
+        gameList.indexWhere((session) => session.gameId.toString() == gameId);
 
     // Game session not found or not in unlimited mode
     if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
 
-    gameList[index].roundNumber--;
-    gameList[index].isGameFinished = true;
-    gameList[index].setWinner();
+    gameList[index].endGame();
+    db.gameSessionDao.endGame(gameId);
     notifyListeners();
     LocalStorageService.saveGameSessions();
   }

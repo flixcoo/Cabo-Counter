@@ -254,7 +254,6 @@ class GameSession extends ChangeNotifier {
       for (int i = 0; i < players.length; i++) {
         if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
-          db.gameSessionDao.setGameFinishStatus(gameId, true);
           limitExceeded = true;
           print('${players[i].name} hat die 100 Punkte ueberschritten, '
               'deswegen wurde das Spiel beendet');
@@ -263,9 +262,9 @@ class GameSession extends ChangeNotifier {
       }
       if (!limitExceeded) {
         isGameFinished = false;
-        db.gameSessionDao.setGameFinishStatus(gameId, false);
       }
     }
+    db.gameSessionDao.setGameFinishStatus(gameId, isGameFinished);
     notifyListeners();
     return bonusPlayers;
   }
@@ -282,6 +281,7 @@ class GameSession extends ChangeNotifier {
         players[i].totalScore += roundList[j].scoreUpdates[i];
       }
     }
+    db.playerDao.updatePlayerScores(players);
     notifyListeners();
   }
 
@@ -327,6 +327,7 @@ class GameSession extends ChangeNotifier {
     } else {
       winner = lowestPlayers.first;
     }
+    db.gameSessionDao.setWinner(gameId, winner);
     notifyListeners();
   }
 
@@ -337,5 +338,14 @@ class GameSession extends ChangeNotifier {
     print('roundNumber erhöht: $roundNumber}');
 
     notifyListeners();
+  }
+
+  /// Ends the game if it is in unlimited mode.
+  /// It decreases the round number by 1, sets isGameFinished to true,
+  /// and calls the setWinner() method to determine the winner.
+  void endGame() {
+    roundNumber--;
+    isGameFinished = true;
+    setWinner();
   }
 }
