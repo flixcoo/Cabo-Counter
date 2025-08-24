@@ -12,7 +12,7 @@ class GameManager extends ChangeNotifier {
   /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
   /// It also saves the updated game sessions to local storage.
   /// Returns the index of the newly added session in the sorted list.
-  int addGameSession(GameSession session, AppDatabase db) {
+  int addGameSession(GameSession session) {
     session.addListener(() {
       notifyListeners(); // Propagate session changes
     });
@@ -24,6 +24,10 @@ class GameManager extends ChangeNotifier {
     return gameList.indexOf(session);
   }
 
+  /// Adds a game session from the database to the list and sorts it by creation date.
+  /// Takes a [GameSession] object as input. It adds the session to the [gameList],
+  /// sorts the list in descending order based on the creation date, and notifies listeners of the change.
+  /// This method is used during the start of the app.
   void addGameSessionFromDataBase(GameSession session) {
     session.addListener(() {
       notifyListeners();
@@ -45,9 +49,15 @@ class GameManager extends ChangeNotifier {
   /// Takes a String [id] as input. It removes the game session with the matching id
   /// from the `gameList`, deletes it from the database, and notifies listeners of the change.
   /// If no session with the given ID exists, the method does nothing.
-  void removeGameSessionById(String id) {
+  void deleteGameById(String id) {
     gameList.removeWhere((session) => session.gameId == id);
     db.gameSessionDao.deleteGameSession(id);
+    notifyListeners();
+  }
+
+  void deleteAllGames() {
+    gameList.clear();
+    db.gameSessionDao.deleteAllGames();
     notifyListeners();
   }
 

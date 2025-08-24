@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
@@ -242,7 +243,7 @@ class _SettingsViewState extends State<SettingsView> {
               isDefaultAction: true,
               child: Text(AppLocalizations.of(context).delete),
               onPressed: () {
-                LocalStorageService.deleteAllGames();
+                gameManager.deleteAllGames();
                 Navigator.pop(context);
               },
             ),

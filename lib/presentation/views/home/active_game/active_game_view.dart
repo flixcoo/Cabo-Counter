@@ -458,7 +458,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       Navigator.pop(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        gameManager.removeGameSessionById(gameSession.gameId);
+        gameManager.deleteGameById(gameSession.gameId);
       });
     } else {
       showCupertinoDialog(

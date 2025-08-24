@@ -117,6 +117,12 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         .go();
   }
 
+  /// Deletes all game sessions from the database.
+  /// This method removes all entries from the [gameSessionTable].
+  void deleteAllGames() {
+    delete(gameSessionTable).go();
+  }
+
   /// Updates the game finish status of a specific game session.
   /// This method updates the [isGameFinished] field in the [gameSessionTable]
   /// for the game session with the given [gameId].

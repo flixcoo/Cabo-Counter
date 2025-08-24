@@ -488,7 +488,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     print('created gameSession: $gameSession');
 
     final db = Provider.of<AppDatabase>(context, listen: false);
-    gameManager.addGameSession(gameSession, db);
+    gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(gameId) ?? gameSession;
 
     Navigator.pushAndRemoveUntil(

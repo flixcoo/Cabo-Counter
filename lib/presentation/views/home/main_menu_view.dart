@@ -147,7 +147,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       context, session.gameTitle);
                                 },
                                 onDismissed: (direction) {
-                                  gameManager.removeGameSessionById(session.gameId);
+                                  gameManager.deleteGameById(session.gameId);
                                 },
                                 dismissThresholds: const {
                                   DismissDirection.startToEnd: 0.6
