@@ -11,12 +11,16 @@ import 'package:flutter/cupertino.dart';
 /// - [title]: The name of the license.
 /// - [license]: The full license text to display.
 class LicenseDetailView extends StatelessWidget {
-  final String title, license;
+  final String title, description, license;
   const LicenseDetailView(
-      {super.key, required this.title, required this.license});
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.license});
 
   @override
   Widget build(BuildContext context) {
+    print(description);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(
@@ -45,12 +49,22 @@ class LicenseDetailView extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.all(8),
+                margin: const EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                 padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                     color: CustomTheme.buttonBackgroundColor,
-                    borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   license,
                   style: const TextStyle(fontSize: 15),

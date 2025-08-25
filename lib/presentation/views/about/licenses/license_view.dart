@@ -30,7 +30,7 @@ class LicenseView extends StatelessWidget {
           itemCount: ossLicenses.length,
           itemBuilder: (_, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
@@ -44,6 +44,7 @@ class LicenseView extends StatelessWidget {
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
                           title: ossLicenses[index].name,
+                          description: ossLicenses[index].description,
                           license: ossLicenses[index].license ??
                               AppLocalizations.of(context).no_license_text,
                         ),
