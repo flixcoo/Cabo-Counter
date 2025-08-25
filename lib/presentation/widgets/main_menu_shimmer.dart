@@ -52,7 +52,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(3),
                       ),
                     ),
                     const SizedBox(width: 3),
@@ -70,7 +70,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(3),
                       ),
                     ),
                     const SizedBox(width: 3),
