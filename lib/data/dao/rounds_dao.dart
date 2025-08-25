@@ -25,9 +25,6 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         final roundScores =
             await db.roundScoresDao.getScoreUpdatesByRoundId(row.roundId);
 
-        print(
-            'Fetched Round: ${row.roundId}, Scores: $scores, Score Updates: $roundScores');
-
         return Round(
           roundId: row.roundId,
           gameId: row.gameId,

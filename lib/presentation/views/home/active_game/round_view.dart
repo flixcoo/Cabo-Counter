@@ -58,12 +58,8 @@ class _RoundViewState extends State<RoundView> {
 
   @override
   void initState() {
-    print('=== Runde ${widget.roundNumber} geöffnet ===');
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
-      print(
-          'Diese wurde bereits gespielt, deshalb werden die alten Punktestaende angezeigt');
-
       // If the current round has already been played, the text fields
       // are filled with the scores from this round
       for (int i = 0; i < _scoreControllerList.length; i++) {
@@ -434,17 +430,7 @@ class _RoundViewState extends State<RoundView> {
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
   List<int> _finishRound() {
-    print('====================================');
-    print('Runde ${widget.roundNumber} beendet');
-    // The shown round is smaller than the newest round
-    if (widget.roundNumber < widget.gameSession.roundNumber) {
-      print('Da diese Runde bereits gespielt wurde, werden die alten '
-          'Punktestaende ueberschrieben');
-    }
     if (_kamikazePlayerIndex != null) {
-      print('${widget.gameSession.players[_kamikazePlayerIndex!]} hat Kamikaze '
-          'und bekommt 0 Punkte');
-      print('Alle anderen Spieler bekommen 50 Punkte');
       widget.gameSession
           .applyKamikaze(widget.roundNumber, _kamikazePlayerIndex!);
     } else {
@@ -456,9 +442,7 @@ class _RoundViewState extends State<RoundView> {
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
-    if (widget.gameSession.isGameFinished == true) {
-      print('Das Spiel ist beendet');
-    } else if (widget.roundNumber == widget.gameSession.roundNumber) {
+    if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
     }
     return bonusPlayers;

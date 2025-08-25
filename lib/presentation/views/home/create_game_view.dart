@@ -461,7 +461,6 @@ class _CreateGameViewState extends State<CreateGameView> {
     List<Player> playerList = [];
     for (int i = 0; i < playerNames.length; i++) {
       String playerId = uuid.v4();
-      print('playerId: $playerId');
       playerList.add(Player(
         playerId: playerId,
         gameId: gameId,
@@ -481,9 +480,6 @@ class _CreateGameViewState extends State<CreateGameView> {
         caboPenalty: ConfigService.getCaboPenalty(),
         isPointsLimitEnabled: isPointsLimitEnabled,
         isGameFinished: false);
-
-    print('created players: $playerList');
-    print('created gameSession: $gameSession');
 
     gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(gameId) ?? gameSession;

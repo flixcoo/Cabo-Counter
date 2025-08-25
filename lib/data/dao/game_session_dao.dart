@@ -18,8 +18,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// using the respective DAOs.
   /// [gameSession] The [GameSession] object to insert into the database.
   Future<void> insertGameSession(GameSession gameSession) async {
-    print('Inserting Game Session: ${gameSession.gameId}');
-
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
         gameId: gameSession.gameId,
@@ -57,9 +55,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         List<Round> roundList =
             await db.roundsDao.getRoundsByGameId(row.gameId);
 
-        print(
-            'Fetched Game Session: ${row.gameId}, Players: ${playerList.length}, Rounds: ${roundList.length}');
-        print('roundList: $roundList');
         return GameSession(
           gameId: row.gameId,
           createdAt: row.createdAt,

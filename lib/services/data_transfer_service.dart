@@ -33,22 +33,16 @@ class DataTransferService {
   ) async {
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
-      final path = await FileSaver.instance.saveAs(
+      await FileSaver.instance.saveAs(
         name: fileName,
         bytes: bytes,
         ext: 'json',
         mimeType: MimeType.json,
       );
-      if (path == null) {
-        print('[data_transfer_service.dart]: Export abgebrochen');
-      } else {
-        print(
-            '[data_transfer_service.dart] Die Spieldaten wurden exportiert. Dateipfad: $path');
-      }
       return true;
-    } catch (e) {
-      print(
-          '[data_transfer_service.dart] Fehler beim Exportieren der Spieldaten. Exception: $e');
+    } catch (e, stack) {
+      print('[DataTransferService] $e');
+      print(stack);
       return false;
     }
   }
@@ -75,8 +69,6 @@ class DataTransferService {
     );
 
     if (path == null) {
-      print(
-          '[data_transfer_service.dart] Der Filepicker-Dialog wurde abgebrochen');
       return ImportStatus.canceled;
     }
 
@@ -102,16 +94,14 @@ class DataTransferService {
         return ImportStatus.validationError;
       }
 
-      print(
-          '[data_transfer_service.dart] Die Datei wurde erfolgreich Importiert');
       return ImportStatus.success;
-    } on FormatException catch (e) {
-      print(
-          '[data_transfer_service.dart] Ungültiges JSON-Format. Exception: $e');
+    } on FormatException catch (e, stack) {
+      print('[DataTransferService] $e');
+      print(stack);
       return ImportStatus.formatError;
-    } on Exception catch (e) {
-      print(
-          '[data_transfer_service.dart] Fehler beim Dateizugriff. Exception: $e');
+    } on Exception catch (e, stack) {
+      print('[DataTransferService] $e');
+      print(stack);
       return ImportStatus.genericError;
     }
   }
@@ -119,13 +109,9 @@ class DataTransferService {
   /// Imports a single game session into the gameList.
   static Future<void> _importSession(GameSession session) async {
     if (gameManager.gameExistsInGameList(session.gameId)) {
-      print(
-          '[data_transfer_service.dart] Die Session mit der ID ${session.gameId} existiert bereits. Sie wird überschrieben.');
       gameManager.deleteGameById(session.gameId);
     }
     gameManager.addGameSession(session);
-    print(
-        '[data_transfer_service.dart] Die Session mit der ID ${session.gameId} wurde erfolgreich importiert.');
   }
 
   /// Helper method to read file content from either bytes or path
@@ -157,16 +143,12 @@ class DataTransferService {
       final result = schema.validate(jsonData);
 
       if (result.isValid) {
-        print(
-            '[data_transfer_service.dart] JSON ist erfolgreich validiert. Typ: ${isGameList ? 'Game List' : 'Single Game'}');
         return true;
       }
-      print(
-          '[data_transfer_service.dart] JSON ist nicht gültig.\nFehler: ${result.errors}');
       return false;
-    } catch (e) {
-      print(
-          '[data_transfer_service.dart] Fehler beim Validieren des JSON-Schemas: $e');
+    } catch (e, stack) {
+      print('[DataTransferService] $e');
+      print(stack);
       return false;
     }
   }
