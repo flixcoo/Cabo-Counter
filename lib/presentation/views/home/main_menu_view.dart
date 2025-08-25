@@ -7,6 +7,7 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
+import 'package:cabo_counter/presentation/widgets/main_menu_shimmer.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,20 +39,19 @@ class _MainMenuViewState extends State<MainMenuView> {
   initState() {
     super.initState();
     db.gameSessionDao.getAllGameSessions().then((gameSessions) {
-      print(
-          '[MainMenuView] Loaded ${gameSessions.length} game sessions from the database.');
       for (final session in gameSessions) {
         gameManager.addGameSessionFromDataBase(session);
       }
-      print('[MainMenuView] Game sessions loaded successfully.');
-
-      _migrateData();
-
-      setState(() {
-        _isLoading = false;
+      return Future.delayed(const Duration(milliseconds: 500), () {
+        _migrateData();
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }).catchError((error) {
-      print('[MainMenuView] Error loading game sessions: $error');
+      print('[MainMenuView] $error');
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -61,7 +61,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
       if (Constants.rateMyApp.shouldOpenDialog &&
           Constants.appDevPhase != 'Beta') {
-        await Future.delayed(const Duration(milliseconds: 600));
+        await Future.delayed(
+            const Duration(milliseconds: Constants.kMinimumLoadingDuration));
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
@@ -156,11 +157,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         visible: session.isGameFinished,
                                         replacement: Text(
                                           '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         ),
                                         child: Text(
                                           '\u{1F947} ${session.winner}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         )),
                                     trailing: Row(
                                       children: [
@@ -228,16 +231,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
-                  child: Center(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CupertinoActivityIndicator(),
-                      const SizedBox(height: 10),
-                      Text(AppLocalizations.of(context).loading_games)
-                    ],
-                  )),
+                  child: const MainMenuShimmer(),
                 ),
               )));
         });
@@ -405,7 +399,8 @@ class _MainMenuViewState extends State<MainMenuView> {
             context: context,
             builder: (context) => CupertinoAlertDialog(
               title: const Text('Migration erfolgreich'),
-              content: Text('Es wurden $migratedGames Spiele migriert.'),
+              content: Text(
+                  '$migratedGames Spiele konnten aus den gefundenen Spieldaten migriert werden.'),
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,

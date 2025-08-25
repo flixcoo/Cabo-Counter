@@ -107,35 +107,15 @@ class GameSession extends ChangeNotifier {
   ///  Every other player gets their round score.
   void calculateScoredPoints(
       int roundNum, List<int> roundScores, int caboPlayerIndex) {
-    print('Spieler:');
-    for (int i = 0; i < players.length; i++) {
-      print('  ${players[i].name}: ${roundScores[i]} Punkte');
-    }
-    print(
-        '${players[caboPlayerIndex].name} hat mit ${roundScores[caboPlayerIndex]} '
-        'Punkten CABO gesagt');
-
     /// List of the index of the player(s) with the lowest score
     List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
-    print('Folgende Spieler haben die niedrigsten Punte:');
-    for (int i in lowestScoreIndex) {
-      print('${players[i].name} (${roundScores[i]} Punkte)');
-    }
-    // The player who said CABO is one of the players which have the
-    // fewest points.
+
     if (lowestScoreIndex.contains(caboPlayerIndex)) {
-      print('${players[caboPlayerIndex].name} hat CABO gesagt '
-          'und bekommt 0 Punkte');
-      print('Alle anderen Spieler bekommen ihre Punkte');
+      // The player who said CABO is one of the players which have the
+      // fewest points.
       _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
     } else {
       // A player other than the one who said CABO has the fewest points.
-      print('${players[caboPlayerIndex].name} hat CABO gesagt, '
-          'jedoch nicht die wenigsten Punkte.');
-      print('Folgende:r Spieler haben die wenigsten Punkte:');
-      for (int i in lowestScoreIndex) {
-        print('${players[i].name}: ${roundScores[i]} Punkte');
-      }
       _assignPoints(roundNum, roundScores, caboPlayerIndex, lowestScoreIndex,
           caboPlayerIndex);
     }
@@ -179,23 +159,13 @@ class GameSession extends ChangeNotifier {
       [int? loserIndex]) {
     /// List of the updates for every player score
     List<int> scoreUpdates = [...roundScores];
-    print('Folgende Punkte wurden aus der Runde übernommen:');
-    for (int i = 0; i < scoreUpdates.length; i++) {
-      print('${players[i].name}: ${scoreUpdates[i]}');
-    }
+
     for (int i in winnerIndex) {
-      print('${players[i].name} hat gewonnen und bekommt 0 Punkte');
       scoreUpdates[i] = 0;
     }
     if (loserIndex != null) {
-      print('${players[loserIndex].name} bekommt 5 Fehlerpunkte');
       scoreUpdates[loserIndex] += 5;
     }
-    print('Aktualisierte Punkte:');
-    for (int i = 0; i < scoreUpdates.length; i++) {
-      print('${players[i].name}: ${scoreUpdates[i]}');
-    }
-    print('scoreUpdates: $scoreUpdates, roundScores: $roundScores');
     addRoundScoresToList(roundNum, roundScores, scoreUpdates, caboPlayerIndex);
   }
 
@@ -256,8 +226,6 @@ class GameSession extends ChangeNotifier {
         if (players[i].totalScore > pointLimit) {
           isGameFinished = true;
           limitExceeded = true;
-          print('${players[i].name} hat die 100 Punkte ueberschritten, '
-              'deswegen wurde das Spiel beendet');
           setWinner();
         }
       }
@@ -294,8 +262,6 @@ class GameSession extends ChangeNotifier {
     for (int i = 0; i < players.length; i++) {
       if (players[i].totalScore == pointLimit) {
         bonusPlayers.add(i);
-        print('${players[i].name} hat genau 100 Punkte erreicht und bekommt '
-            'deswegen ${(pointLimit / 2).round()} Punkte abgezogen');
         roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
       }
     }
@@ -336,7 +302,6 @@ class GameSession extends ChangeNotifier {
   void increaseRound() {
     roundNumber++;
     db.gameSessionDao.setRoundNumber(gameId, roundNumber);
-    print('roundNumber erhöht: $roundNumber}');
 
     notifyListeners();
   }

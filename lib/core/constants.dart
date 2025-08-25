@@ -54,4 +54,6 @@ class Constants {
 
   /// Duration in milliseconds for the keyboard to fully disappear.
   static const int kKeyboardDelay = 300;
+
+  static const int kMinimumLoadingDuration = 500;
 }
