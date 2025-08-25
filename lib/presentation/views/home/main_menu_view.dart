@@ -157,11 +157,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         visible: session.isGameFinished,
                                         replacement: Text(
                                           '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         ),
                                         child: Text(
                                           '\u{1F947} ${session.winner}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         )),
                                     trailing: Row(
                                       children: [
