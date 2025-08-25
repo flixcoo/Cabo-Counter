@@ -56,11 +56,23 @@ class DataMigrationService {
         }
         gameManager.addGameSession(session);
       }
-
+      await _deleteOldGameDataFile();
       return {'success': 1, 'gameCount': gameList.length};
     } catch (e, stack) {
       print('$e\n$stack');
       return {'success': -1};
+    }
+  }
+
+  /// Deletes the old game data file after successful migration.
+  static Future<void> _deleteOldGameDataFile() async {
+    try {
+      final file = await _getFilePath();
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e, stack) {
+      print('$e\n$stack');
     }
   }
 
