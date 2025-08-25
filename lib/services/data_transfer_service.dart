@@ -84,7 +84,7 @@ class DataTransferService {
       final jsonString = await _readFileContent(path.files.single);
 
       // Checks if the JSON String is in the gameList format
-      if (await _validateJsonSchema(jsonString, true)) {
+      if (await validateJsonSchema(jsonString, true)) {
         final jsonData = json.decode(jsonString) as List<dynamic>;
         List<GameSession> importedList = jsonData
             .map((jsonItem) =>
@@ -94,7 +94,7 @@ class DataTransferService {
         for (GameSession s in importedList) {
           _importSession(s);
         }
-      } else if (await _validateJsonSchema(jsonString, false)) {
+      } else if (await validateJsonSchema(jsonString, false)) {
         // Checks if the JSON String is in the single game format
         final jsonData = json.decode(jsonString) as Map<String, dynamic>;
         _importSession(GameSession.fromJson(jsonData));
@@ -140,7 +140,7 @@ class DataTransferService {
   /// This method checks if the provided [jsonString] is valid against the
   /// JSON schema. It takes a boolean [isGameList] to determine
   /// which schema to use (game list or single game).
-  static Future<bool> _validateJsonSchema(
+  static Future<bool> validateJsonSchema(
       String jsonString, bool isGameList) async {
     final String schemaString;
 
