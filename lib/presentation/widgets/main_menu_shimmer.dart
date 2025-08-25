@@ -1,0 +1,89 @@
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
+class MainMenuShimmer extends StatelessWidget {
+  const MainMenuShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: CustomTheme.primaryColor.withValues(alpha: 0.3),
+      highlightColor: CustomTheme.primaryColor.withValues(alpha: 1.0),
+      child: ListView.separated(
+        itemCount: 9, // Anzahl der Placeholder-Items
+        separatorBuilder: (context, index) => Divider(
+          height: 1,
+          thickness: 0.5,
+          color: CustomTheme.white.withAlpha(50),
+          indent: 50,
+          endIndent: 50,
+        ),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: CupertinoListTile(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                title: Container(
+                  width: 170,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    color: CustomTheme.white.withAlpha(50),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                subtitle: Container(
+                  width: 120,
+                  height: 15,
+                  color: CustomTheme.white.withAlpha(50),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                      width: 15,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Container(
+                      width: 15,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        },
+      ),
+    );
+  }
+}
