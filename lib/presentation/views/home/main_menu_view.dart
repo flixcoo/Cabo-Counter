@@ -396,7 +396,8 @@ class _MainMenuViewState extends State<MainMenuView> {
             context: context,
             builder: (context) => CupertinoAlertDialog(
               title: const Text('Migration erfolgreich'),
-              content: Text('Es wurden $migratedGames Spiele migriert.'),
+              content: Text(
+                  '$migratedGames Spiele konnten aus den gefundenen Spieldaten migriert werden.'),
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
