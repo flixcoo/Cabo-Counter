@@ -61,7 +61,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
       if (Constants.rateMyApp.shouldOpenDialog &&
           Constants.appDevPhase != 'Beta') {
-        await Future.delayed(const Duration(milliseconds: 600));
+        await Future.delayed(
+            const Duration(milliseconds: Constants.kMinimumLoadingDuration));
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
