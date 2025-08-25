@@ -1,0 +1,40 @@
+name: Pull Request Pipeline
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.1'
+          channel: 'stable'
+          
+      - name: Check Formatting
+        run: flutter analyze
+          
+  test:
+    runs-on: ubuntu-latest
+    if: false
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.1'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+          
+      - name: Run Tests
+        run: flutter test

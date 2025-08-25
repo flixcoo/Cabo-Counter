@@ -1,29 +1,51 @@
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/dto/player.dart';
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:test/test.dart';
 
 void main() {
+  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
   late GameSession session;
-  final testPlayers = ['Alice', 'Bob', 'Charlie'];
+  final testPlayers = [
+    Player(
+        name: 'Alice',
+        totalScore: 0,
+        playerId: '0',
+        gameId: 'abc',
+        position: 0),
+    Player(
+        name: 'Bobby',
+        totalScore: 0,
+        playerId: '1',
+        gameId: 'abc',
+        position: 1),
+    Player(
+        name: 'Charlie',
+        totalScore: 0,
+        playerId: '2',
+        gameId: 'abc',
+        position: 2)
+  ];
   final testDate = DateTime(2023, 1, 1);
   const testTitle = 'Test Game';
 
   setUp(() {
     session = GameSession(
-      id: '1',
-      createdAt: testDate,
-      gameTitle: testTitle,
-      players: testPlayers,
-      pointLimit: 100,
-      caboPenalty: 5,
-      isPointsLimitEnabled: true,
-    );
+        gameId: '1',
+        createdAt: testDate,
+        gameTitle: testTitle,
+        players: testPlayers,
+        pointLimit: 100,
+        caboPenalty: 5,
+        isPointsLimitEnabled: true,
+        isGameFinished: false);
   });
 
   group('Initialization & JSON', () {
     test('Initialization', () {
       expect(session.gameTitle, testTitle);
       expect(session.players, testPlayers);
-      expect(session.playerScores, [0, 0, 0]);
+      expect(session.getPlayerScoresAsList(), [0, 0, 0]);
       expect(session.roundNumber, 1);
       expect(session.isGameFinished, isFalse);
       expect(session.winner, isEmpty);
@@ -34,8 +56,8 @@ void main() {
       session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
       session.addRoundScoresToList(2, [15, 25, 35], [5, 5, 5], 1);
 
-      final json = session.toJson();
-      final fromJsonSession = GameSession.fromJson(json);
+      final jsonFile = session.toJson();
+      final fromJsonSession = GameSession.fromJson(jsonFile);
 
       expect(fromJsonSession.gameTitle, testTitle);
       expect(fromJsonSession.players, testPlayers);
@@ -47,7 +69,7 @@ void main() {
           () => GameSession.fromJson({
                 'createdAt': testDate.toIso8601String(),
                 'gameTitle': null, // Invalid
-                'players': testPlayers,
+                'players': session.players.map((p) => p.toJson()).toList(),
                 'pointLimit': 100,
                 'caboPenalty': 50,
                 'isPointsLimitEnabled': true,
@@ -62,10 +84,6 @@ void main() {
   });
 
   group('Helper Functions', () {
-    test('getMaxLengthOfPlayerNames', () {
-      expect(session.getMaxLengthOfPlayerNames(), equals(7)); // Charlie (7)
-    });
-
     test('increaseRound', () {
       expect(session.roundNumber, 1);
       session.increaseRound();
@@ -145,14 +163,14 @@ void main() {
       session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
       session.addRoundScoresToList(2, [5, 5, 5], [5, 5, 5], 1);
       session.testingSumPoints();
-      expect(session.playerScores, [15, 25, 35]);
+      expect(session.getPlayerScoresAsList(), [15, 25, 35]);
     });
 
     test('_checkHundredPointsReached via updatePoints', () {
       session.addRoundScoresToList(1, [50, 5, 15], [50, 0, 15], 1);
       session.addRoundScoresToList(2, [50, 5, 15], [50, 0, 15], 1);
       session.updatePoints();
-      expect(session.playerScores, equals([50, 0, 30]));
+      expect(session.getPlayerScoresAsList(), equals([50, 0, 30]));
     });
 
     test('_setWinner via updatePoints', () {

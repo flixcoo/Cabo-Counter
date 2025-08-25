@@ -23,7 +23,7 @@
   "about": "About",
   "licenses": "Licenses",
   "license_details": "License Details",
-  "imprint": "Imprint",
+  "legal_notice": "Legal Notice",
   "no_license_text": "No license available",
 
   "empty_text_1": "Pretty empty here...",
@@ -162,6 +162,6 @@
   "wiki": "Wiki",
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
-  "loading": "Loading...",
+  "loading_games": "Loading Games ...",
   "build": "Build No."
 }

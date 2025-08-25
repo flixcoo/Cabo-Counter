@@ -24,7 +24,7 @@
   "licenses": "Lizenzen",
   "license_details": "Lizenzdetails",
   "no_license_text": "Keine Lizenz verfügbar",
-  "imprint": "Impressum",
+  "legal_notice": "Impressum",
 
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
@@ -162,6 +162,6 @@
   "wiki": "Wiki",
   "app_version": "App-Version",
   "privacy_policy": "Datenschutzerklärung",
-  "loading": "Lädt...",
+  "loading_games": "Lade Spiele ...",
   "build": "Build-Nr."
 }

@@ -1,9 +1,16 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Displays an overview of points for each player and round in the current game session.
+///
+/// The [PointsView] widget shows a table with all rounds and player scores,
+/// including score updates and highlights for players who said "Cabo".
+/// It uses a Cupertino-style layout and adapts to the number of players.
+///
+/// Requires a [GameSession] to provide player and round data.
 class PointsView extends StatefulWidget {
   final GameSession gameSession;
 
@@ -61,7 +68,7 @@ class _PointsViewState extends State<PointsView> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
-                                player,
+                                player.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                                 overflow: TextOverflow.ellipsis,
@@ -113,7 +120,7 @@ class _PointsViewState extends State<PointsView> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
                                     child: Text(
-                                      player,
+                                      player.name,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                       overflow: TextOverflow.ellipsis,
@@ -229,18 +236,20 @@ class _PointsViewState extends State<PointsView> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 )),
-                                ...widget.gameSession.playerScores.map(
-                                  (score) => DataCell(
-                                    Center(
-                                      child: Text(
-                                        '$score',
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                ...widget.gameSession
+                                    .getPlayerScoresAsList()
+                                    .map(
+                                      (score) => DataCell(
+                                        Center(
+                                          child: Text(
+                                            '$score',
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
                               ],
                             ),
                           ],

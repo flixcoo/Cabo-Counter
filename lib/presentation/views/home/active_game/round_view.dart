@@ -1,13 +1,25 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/widgets/custom_button.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// A view for displaying and managing a single round
+///
+/// This widget allows users to input and review scores for each player in a round,
+/// select the player who called CABO, and handle special cases such as Kamikaze rounds.
+/// It manages the round state, validates input, and coordinates navigation between rounds.
+///
+/// Features:
+/// - Rotates player order based on the previous round's winner.
+/// - Supports Kamikaze rounds with dedicated UI and logic.
+/// - Handles score input, validation, and updates to the game session.
+/// - Displays bonus point popups when applicable.
+///
+/// Requires a [GameSession] and the current [roundNumber].
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
   final int roundNumber;
@@ -46,12 +58,8 @@ class _RoundViewState extends State<RoundView> {
 
   @override
   void initState() {
-    print('=== Runde ${widget.roundNumber} geöffnet ===');
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
-      print(
-          'Diese wurde bereits gespielt, deshalb werden die alten Punktestaende angezeigt');
-
       // If the current round has already been played, the text fields
       // are filled with the scores from this round
       for (int i = 0; i < _scoreControllerList.length; i++) {
@@ -85,7 +93,7 @@ class _RoundViewState extends State<RoundView> {
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => {
-              LocalStorageService.saveGameSessions(),
+              //LocalStorageService.saveGameSessions(),
               Navigator.pop(context, -1)
             },
             child: Text(AppLocalizations.of(context).cancel),
@@ -133,7 +141,7 @@ class _RoundViewState extends State<RoundView> {
                               .entries
                               .map((entry) {
                             final index = entry.key;
-                            final name = entry.value;
+                            final player = entry.value;
                             return MapEntry(
                               index,
                               Padding(
@@ -144,7 +152,7 @@ class _RoundViewState extends State<RoundView> {
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    name,
+                                    player.name,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
                                     style: const TextStyle(
@@ -197,7 +205,7 @@ class _RoundViewState extends State<RoundView> {
                                 ]))
                               ]),
                               subtitle: Text(
-                                  '${widget.gameSession.playerScores[originalIndex]}'
+                                  '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
                                   ' ${AppLocalizations.of(context).points}'),
                               trailing: SizedBox(
                                 width: 100,
@@ -316,10 +324,11 @@ class _RoundViewState extends State<RoundView> {
   /// Rotates the players list based on the previous round's winner.
   List<String> _getRotatedPlayers() {
     final winnerIndex = _getPreviousRoundWinnerIndex();
+    final playerList = widget.gameSession.getPlayerNamesAsList();
     return [
-      widget.gameSession.players[winnerIndex],
-      ...widget.gameSession.players.sublist(winnerIndex + 1),
-      ...widget.gameSession.players.sublist(0, winnerIndex)
+      playerList[winnerIndex],
+      ...playerList.sublist(winnerIndex + 1),
+      ...playerList.sublist(0, winnerIndex)
     ];
   }
 
@@ -345,14 +354,14 @@ class _RoundViewState extends State<RoundView> {
               message: Text(AppLocalizations.of(context).who_has_kamikaze),
               actions: widget.gameSession.players.asMap().entries.map((entry) {
                 final index = entry.key;
-                final name = entry.value;
+                final player = entry.value;
                 return CupertinoActionSheetAction(
                   onPressed: () {
                     _kamikazePlayerIndex = index;
                     Navigator.pop(context, true);
                   },
                   child: Text(
-                    name,
+                    player.name,
                     style: TextStyle(color: CustomTheme.kamikazeColor),
                   ),
                 );
@@ -421,17 +430,7 @@ class _RoundViewState extends State<RoundView> {
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
   List<int> _finishRound() {
-    print('====================================');
-    print('Runde ${widget.roundNumber} beendet');
-    // The shown round is smaller than the newest round
-    if (widget.roundNumber < widget.gameSession.roundNumber) {
-      print('Da diese Runde bereits gespielt wurde, werden die alten '
-          'Punktestaende ueberschrieben');
-    }
     if (_kamikazePlayerIndex != null) {
-      print('${widget.gameSession.players[_kamikazePlayerIndex!]} hat Kamikaze '
-          'und bekommt 0 Punkte');
-      print('Alle anderen Spieler bekommen 50 Punkte');
       widget.gameSession
           .applyKamikaze(widget.roundNumber, _kamikazePlayerIndex!);
     } else {
@@ -443,9 +442,7 @@ class _RoundViewState extends State<RoundView> {
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
-    if (widget.gameSession.isGameFinished == true) {
-      print('Das Spiel ist beendet');
-    } else if (widget.roundNumber == widget.gameSession.roundNumber) {
+    if (widget.roundNumber == widget.gameSession.roundNumber) {
       widget.gameSession.increaseRound();
     }
     return bonusPlayers;
@@ -481,7 +478,7 @@ class _RoundViewState extends State<RoundView> {
   String _getBonusPopupMessageString(
       int pointLimit, int bonusPoints, List<int> bonusPlayers) {
     List<String> nameList =
-        bonusPlayers.map((i) => widget.gameSession.players[i]).toList();
+        bonusPlayers.map((i) => widget.gameSession.players[i].name).toList();
     String resultText = '';
     if (nameList.length == 1) {
       resultText = AppLocalizations.of(context).bonus_points_message(
@@ -512,7 +509,7 @@ class _RoundViewState extends State<RoundView> {
       await _showBonusPopup(context, bonusPlayersIndices);
     }
 
-    LocalStorageService.saveGameSessions();
+    //LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.

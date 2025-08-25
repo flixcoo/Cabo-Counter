@@ -1,13 +1,15 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/game_manager.dart';
-import 'package:cabo_counter/data/game_session.dart';
+import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
+import 'package:cabo_counter/presentation/widgets/main_menu_skeleton.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +18,11 @@ enum PreRatingDialogDecision { yes, no, cancel }
 
 enum BadRatingDialogDecision { email, cancel }
 
+/// Home screen of the app that displays a list of game sessions.
+///
+/// The [MainMenuView] is the main entry point for the app's home screen.
+/// It displays a list of existing game sessions, allows users to create new games,
+/// access settings, and handles user feedback dialogs for app rating and support.
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
 
@@ -26,16 +33,26 @@ class MainMenuView extends StatefulWidget {
 
 class _MainMenuViewState extends State<MainMenuView> {
   bool _isLoading = true;
+  late Map<String, dynamic> migrationStatus;
 
   @override
   initState() {
     super.initState();
-    LocalStorageService.loadGameSessions().then((_) {
-      setState(() {
-        _isLoading = false;
+    db.gameSessionDao.getAllGameSessions().then((gameSessions) {
+      for (final session in gameSessions) {
+        gameManager.addGameSessionFromDataBase(session);
+      }
+      return Future.delayed(const Duration(milliseconds: 500), () {
+        _migrateData();
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
+    }).catchError((error) {
+      print('[MainMenuView] $error');
     });
-    gameManager.addListener(_updateView);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       precacheImage(
@@ -44,7 +61,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
       if (Constants.rateMyApp.shouldOpenDialog &&
           Constants.appDevPhase != 'Beta') {
-        await Future.delayed(const Duration(milliseconds: 600));
+        await Future.delayed(const Duration(
+            milliseconds: Constants.kMinimumSkeletonScreenDuration));
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
@@ -107,7 +125,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             listenable: session,
                             builder: (context, _) {
                               return Dismissible(
-                                key: Key(session.id),
+                                key: Key(session.gameId),
                                 background: Container(
                                   color: CustomTheme.red,
                                   alignment: Alignment.centerRight,
@@ -123,7 +141,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       context, session.gameTitle);
                                 },
                                 onDismissed: (direction) {
-                                  gameManager.removeGameSessionById(session.id);
+                                  gameManager.deleteGameById(session.gameId);
                                 },
                                 dismissThresholds: const {
                                   DismissDirection.startToEnd: 0.6
@@ -139,11 +157,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         visible: session.isGameFinished,
                                         replacement: Text(
                                           '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         ),
                                         child: Text(
                                           '\u{1F947} ${session.winner}',
-                                          style: const TextStyle(fontSize: 14),
+                                          style:
+                                              const TextStyle(fontSize: 14.5),
                                         )),
                                     trailing: Row(
                                       children: [
@@ -211,7 +231,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
-                  child: const Center(child: CupertinoActivityIndicator()),
+                  child: const MainMenuSkeleton(),
                 ),
               )));
         });
@@ -364,6 +384,57 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ],
                 )) ??
         BadRatingDialogDecision.cancel;
+  }
+
+  void _migrateData() async {
+    if (!ConfigService.isMigrationDone()) {
+      migrationStatus = await DataMigrationService.loadOldGameData();
+      final success = migrationStatus['success'] ?? 0;
+      if (success == 1) {
+        ConfigService.setMigrationDone(true);
+
+        if (mounted) {
+          final int migratedGames = migrationStatus['gameCount'] ?? 0;
+          await showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: const Text('Migration erfolgreich'),
+              content: Text(
+                  '$migratedGames Spiele konnten aus den gefundenen Spieldaten migriert werden.'),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        }
+      } else if (success == -1) {
+        ConfigService.setMigrationDone(true);
+
+        if (mounted) {
+          await showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: const Text('Migration fehlgeschlagen'),
+              content: const Text(
+                  'Deine alten Spieldaten konnten leider nicht migriert werden.'),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    } else {
+      print('[MainMenuView] Data migration already completed. Skipping.');
+    }
   }
 
   @override

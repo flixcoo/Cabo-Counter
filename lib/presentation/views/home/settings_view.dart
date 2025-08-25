@@ -1,16 +1,21 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/local_storage_service.dart';
+import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Settings and information page for the app.
+///
+/// [SettingsView] is a settings page for the app, allowing users to configure game options,
+/// manage game data (import, export, delete), and view app information.
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
@@ -151,7 +156,7 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: CupertinoIcons.square_arrow_down,
                         onPressed: () async {
                           final status =
-                              await LocalStorageService.importJsonFile();
+                              await DataTransferService.importJsonFile();
                           showFeedbackDialog(status);
                         },
                         suffixWidget: const CupertinoListTileChevron(),
@@ -159,7 +164,7 @@ class _SettingsViewState extends State<SettingsView> {
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).export_data,
                         prefixIcon: CupertinoIcons.square_arrow_up,
-                        onPressed: () => LocalStorageService.exportGameData(),
+                        onPressed: () => DataTransferService.exportGameData(),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
@@ -238,7 +243,7 @@ class _SettingsViewState extends State<SettingsView> {
               isDefaultAction: true,
               child: Text(AppLocalizations.of(context).delete),
               onPressed: () {
-                LocalStorageService.deleteAllGames();
+                gameManager.deleteAllGames();
                 Navigator.pop(context);
               },
             ),

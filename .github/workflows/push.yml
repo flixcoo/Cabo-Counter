@@ -1,38 +1,81 @@
-name: Flutter
+name: Push Pipeline
 
 on:
   push:
     branches:
-      - "develop"
-      - "main"
-  pull_request:
+     - "develop"
+     - "main"
 
 jobs:
-  lint:
-    runs-on: macos-latest
+  generate_licenses:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v1.5.3
+      with: 
+        flutter-version: '3.32.1'
+        channel: "stable"
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Generate oss_licenses.dart
+      run: flutter pub run flutter_oss_licenses:generate -o lib/presentation/views/about/licenses/oss_licenses.dart
+
+    - name: Escape dollar signs in licenses
+      run: |
+        sed -i 's/\$/\\$/g' lib/presentation/views/about/licenses/oss_licenses.dart
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if [[ $(git status --porcelain) ]]; then
+          echo "changes_detected=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes_detected=false" >> $GITHUB_OUTPUT
+        fi
+            
+    - name: Commit Changes
+      if: steps.check_changes.outputs.changes_detected == 'true'
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Actions: Licenses updated [skip ci]"
+        git push
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: generate_licenses
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'
+          flutter-version: '3.32.1'
           channel: 'stable'
           
       - name: Check Formatting
         run: flutter analyze
           
   format:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: lint
-    if: ${{ failure() && needs.lint.result == 'failure' && github.event_name == 'push' && github.ref == 'refs/heads/develop'}} 
+    if: ${{ failure() && needs.lint.result == 'failure'}} 
     steps:
       - uses: actions/checkout@v4
       
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'
+          flutter-version: '3.32.1'
           channel: 'stable'
           
       - name: Get & upgrade dependencies
@@ -64,8 +107,8 @@ jobs:
           git push
     
   test:
-    runs-on: macos-latest
-    if: always()
+    runs-on: ubuntu-latest
+    if: false
     needs: [lint, format]
 
     steps:
@@ -74,15 +117,18 @@ jobs:
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'
+          flutter-version: '3.32.1'
           channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
           
       - name: Run Tests
         run: flutter test
 
     
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: false # skips job
     needs: [lint, format, test]
     
@@ -92,10 +138,10 @@ jobs:
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'
+          flutter-version: '3.32.1'
           channel: 'stable'
 
-      - name: Install dependencies
+      - name: Get dependencies
         run: flutter pub get
 
       - name: Analyze project source

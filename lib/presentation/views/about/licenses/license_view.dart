@@ -6,8 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// A view that displays a list of the open source software licenses used in the app.
-/// It allows users to tap on a license to view its details in a separate screen.
+/// Displays a list of open source software licenses used in the app.
+///
+/// Users can tap on a license to view its details on a separate screen.
+/// This view uses a Cupertino design and supports localization.
+///
+/// See also:
+///   - [LicenseDetailView] for displaying license details.
+///   - [ossLicenses] for the list of licenses.
 class LicenseView extends StatelessWidget {
   const LicenseView({super.key});
 
@@ -24,7 +30,7 @@ class LicenseView extends StatelessWidget {
           itemCount: ossLicenses.length,
           itemBuilder: (_, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
@@ -38,6 +44,7 @@ class LicenseView extends StatelessWidget {
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
                           title: ossLicenses[index].name,
+                          description: ossLicenses[index].description,
                           license: ossLicenses[index].license ??
                               AppLocalizations.of(context).no_license_text,
                         ),

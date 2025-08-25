@@ -1,19 +1,41 @@
 import 'package:rate_my_app/rate_my_app.dart';
 
+/// A utility class that holds constant values and configuration settings
+/// used throughout the application, such as external links, email addresses,
+/// and timing parameters for UI elements.
+///
+/// This class also provides an instance of [RateMyApp] for managing
+/// in-app rating prompts.
 class Constants {
+  /// Indicates the current development phase of the app
   static const String appDevPhase = 'Beta';
 
+  /// Links to various social media profiles and resources related to the app.
+  /// URL to my Instagram profile
   static const String kInstagramLink = 'https://instagram.felixkirchner.de';
-  static const String kGithubLink = 'https://github.felixkirchner.de';
-  static const String kGithubIssuesLink =
-      'https://cabocounter-issues.felixkirchner.de';
-  static const String kGithubWikiLink =
-      'https://cabocounter-wiki.felixkirchner.de';
-  static const String kEmail = 'cabocounter@felixkirchner.de';
-  static const String kPrivacyPolicyLink =
-      'https://www.privacypolicies.com/live/1b3759d4-b2f1-4511-8e3b-21bb1626be68';
-  static const String kImprintLink = 'https://imprint.felixkirchner.de';
 
+  /// URL to my GitHub profile
+  static const String kGithubLink = 'https://github.felixkirchner.de';
+
+  /// URL to the GitHub issues page for reporting bugs or requesting features.
+  static const String kGithubIssuesLink =
+      'https://cabo-counter-issues.felixkirchner.de';
+
+  /// URL to the GitHub wiki for additional documentation and guides.
+  static const String kGithubWikiLink =
+      'https://cabo-counter-wiki.felixkirchner.de';
+
+  /// Official email address for user inquiries and support.
+  static const String kEmail = 'cabocounter@felixkirchner.de';
+
+  /// URL to the app's privacy policy page.
+  static const String kPrivacyPolicyLink =
+      'https://cabo-counter-datenschutz.felixkirchner.de';
+
+  /// URL to the app's imprint page, containing legal information.
+  static const String kLegalLink = 'https://impressum.felixkirchner.de';
+
+  /// Instance of [RateMyApp] configured to prompt users for app store ratings.
   static RateMyApp rateMyApp = RateMyApp(
       appStoreIdentifier: '6747105718',
       minDays: 15,
@@ -32,4 +54,7 @@ class Constants {
 
   /// Duration in milliseconds for the keyboard to fully disappear.
   static const int kKeyboardDelay = 300;
+
+  /// Minimum duration in milliseconds that the skeleton screen should be displayed.
+  static const int kMinimumSkeletonScreenDuration = 500;
 }

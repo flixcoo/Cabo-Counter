@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/round.dart';
+import 'package:cabo_counter/data/dto/round.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -8,9 +8,13 @@ void main() {
   const testKamikazePlayerIndex = 1;
   const testScores = [10, 20, 30];
   const testScoreUpdates = [5, 15, 25];
+  const testRoundId = 'testRoundId';
+  const testGameId = 'testGameId';
 
   setUp(() {
     round = Round(
+      roundId: 'testRoundId',
+      gameId: 'testGameId',
       roundNum: testRoundNum,
       caboPlayerIndex: testCaboPlayerIndex,
       kamikazePlayerIndex: testKamikazePlayerIndex,
@@ -30,6 +34,8 @@ void main() {
 
     test('Constructor with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
+        roundId: testRoundId,
+        gameId: testGameId,
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
@@ -45,6 +51,8 @@ void main() {
     test('toJson() returns correct map', () {
       final jsonMap = round.toJson();
 
+      expect(jsonMap['roundId'], equals(testRoundId));
+      expect(jsonMap['gameId'], equals(testGameId));
       expect(jsonMap['roundNum'], equals(testRoundNum));
       expect(jsonMap['caboPlayerIndex'], equals(testCaboPlayerIndex));
       expect(jsonMap['kamikazePlayerIndex'], equals(testKamikazePlayerIndex));
@@ -54,6 +62,8 @@ void main() {
 
     test('fromJson() creates correct Round object', () {
       final jsonMap = {
+        'roundId': testRoundId,
+        'gameId': testGameId,
         'roundNum': testRoundNum,
         'caboPlayerIndex': testCaboPlayerIndex,
         'kamikazePlayerIndex': testKamikazePlayerIndex,
@@ -72,6 +82,8 @@ void main() {
 
     test('fromJson() with null kamikazePlayerIndex', () {
       final jsonMap = {
+        'roundId': testRoundId,
+        'gameId': testGameId,
         'roundNum': testRoundNum,
         'caboPlayerIndex': testCaboPlayerIndex,
         'kamikazePlayerIndex': null,
@@ -98,6 +110,8 @@ void main() {
 
     test('toString() with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
+        roundId: 'testRoundId',
+        gameId: 'testGameId',
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
