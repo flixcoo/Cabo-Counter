@@ -9,10 +9,10 @@ class MainMenuShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: CustomTheme.primaryColor.withValues(alpha: 0.3),
-      highlightColor: CustomTheme.primaryColor.withValues(alpha: 1.0),
+      baseColor: CupertinoColors.systemGrey2.withValues(alpha: 0.5),
+      highlightColor: CupertinoColors.systemGrey2.withValues(alpha: 2),
       child: ListView.separated(
-        itemCount: 9, // Anzahl der Placeholder-Items
+        itemCount: 9,
         separatorBuilder: (context, index) => Divider(
           height: 1,
           thickness: 0.5,
@@ -36,7 +36,10 @@ class MainMenuShimmer extends StatelessWidget {
                 subtitle: Container(
                   width: 120,
                   height: 15,
-                  color: CustomTheme.white.withAlpha(50),
+                  decoration: BoxDecoration(
+                    color: CustomTheme.white.withAlpha(50),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -49,7 +52,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     const SizedBox(width: 3),
@@ -58,7 +61,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -67,7 +70,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     const SizedBox(width: 3),
@@ -76,7 +79,7 @@ class MainMenuShimmer extends StatelessWidget {
                       height: 25,
                       decoration: BoxDecoration(
                         color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                   ],
