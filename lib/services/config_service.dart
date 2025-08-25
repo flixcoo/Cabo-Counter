@@ -10,14 +10,17 @@ class ConfigService {
   static const String _keyPointLimit = 'pointLimit';
   static const String _keyCaboPenalty = 'caboPenalty';
   static const String _keyGameMode = 'gameMode';
+  static const String _keyMigrationDone = 'migrationDone';
   // Actual values used in the app
   static int _pointLimit = 100;
   static int _caboPenalty = 5;
   static int _gameMode = -1;
+  static bool _migrationDone = false;
   // Default values
   static const int _defaultPointLimit = 100;
   static const int _defaultCaboPenalty = 5;
   static const int _defaultGameMode = -1;
+  static const bool _defaultMigrationDone = false;
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,11 +30,13 @@ class ConfigService {
     _pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
     _caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
     _gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
+    _migrationDone = prefs.getBool(_keyMigrationDone) ?? _defaultMigrationDone;
 
     // Save the initial values to SharedPreferences
     prefs.setInt(_keyPointLimit, _pointLimit);
     prefs.setInt(_keyCaboPenalty, _caboPenalty);
     prefs.setInt(_keyGameMode, _gameMode);
+    prefs.setBool(_keyMigrationDone, _migrationDone);
   }
 
   /// Retrieves the current game mode.
@@ -97,6 +102,16 @@ class ConfigService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyCaboPenalty, newCaboPenalty);
     _caboPenalty = newCaboPenalty;
+  }
+
+  static bool isMigrationDone() => _migrationDone;
+
+  /// Setter for the migration done flag.
+  /// [done] is the new value to be set.
+  static Future<void> setMigrationDone(bool done) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyMigrationDone, done);
+    _migrationDone = done;
   }
 
   /// Resets the configuration to default values.

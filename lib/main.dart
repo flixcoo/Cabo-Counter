@@ -13,10 +13,10 @@ Future<void> main() async {
   // Ensure the app runs in portrait mode only
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
   // Initialize services
   await ConfigService.initConfig();
   await VersionService.init();
+  await ConfigService.setMigrationDone(false);
   runApp(
     Provider<AppDatabase>(
       create: (_) => db,
