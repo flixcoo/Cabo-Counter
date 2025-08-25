@@ -11,6 +11,7 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum PreRatingDialogDecision { yes, no, cancel }
@@ -40,18 +41,18 @@ class _MainMenuViewState extends State<MainMenuView> {
     db = Provider.of<AppDatabase>(context, listen: false);
 
     db.gameSessionDao.getAllGameSessions().then((gameSessions) {
-      print(
-          '[MainMenuView] Loaded ${gameSessions.length} game sessions from the database.');
       for (final session in gameSessions) {
         gameManager.addGameSessionFromDataBase(session);
       }
-
-      print('[MainMenuView] Game sessions loaded successfully.');
-      setState(() {
-        _isLoading = false;
+      return Future.delayed(const Duration(milliseconds: 0), () {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }).catchError((error) {
-      print('[MainMenuView] Error loading game sessions: $error');
+      print('[MainMenuView] $error');
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -228,16 +229,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
-                  child: Center(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CupertinoActivityIndicator(),
-                      const SizedBox(height: 10),
-                      Text(AppLocalizations.of(context).loading_games)
-                    ],
-                  )),
+                  child: _buildShimmerLoading(),
                 ),
               )));
         });
@@ -390,6 +382,86 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ],
                 )) ??
         BadRatingDialogDecision.cancel;
+  }
+
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: CustomTheme.primaryColor.withValues(alpha: 0.3),
+      highlightColor: CustomTheme.primaryColor.withValues(alpha: 1.0),
+      child: ListView.separated(
+        itemCount: 9, // Anzahl der Placeholder-Items
+        separatorBuilder: (context, index) => Divider(
+          height: 1,
+          thickness: 0.5,
+          color: CustomTheme.white.withAlpha(50),
+          indent: 50,
+          endIndent: 50,
+        ),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: CupertinoListTile(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                title: Container(
+                  width: 170,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    color: CustomTheme.white.withAlpha(50),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                subtitle: Container(
+                  width: 120,
+                  height: 15,
+                  color: CustomTheme.white.withAlpha(50),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                      width: 15,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Container(
+                      width: 15,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.white.withAlpha(50),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        },
+      ),
+    );
   }
 
   @override
