@@ -7,7 +7,7 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
-import 'package:cabo_counter/presentation/widgets/main_menu_shimmer.dart';
+import 'package:cabo_counter/presentation/widgets/main_menu_skeleton.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,8 +61,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
       if (Constants.rateMyApp.shouldOpenDialog &&
           Constants.appDevPhase != 'Beta') {
-        await Future.delayed(
-            const Duration(milliseconds: Constants.kMinimumLoadingDuration));
+        await Future.delayed(const Duration(
+            milliseconds: Constants.kMinimumSkeletonScreenDuration));
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
@@ -231,7 +231,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                       ],
                     ),
                   ),
-                  child: const MainMenuShimmer(),
+                  child: const MainMenuSkeleton(),
                 ),
               )));
         });

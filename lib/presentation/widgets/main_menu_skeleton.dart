@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MainMenuShimmer extends StatelessWidget {
-  const MainMenuShimmer({super.key});
+class MainMenuSkeleton extends StatelessWidget {
+  const MainMenuSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
