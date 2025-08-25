@@ -34,30 +34,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> with WidgetsBindingObserver {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-
-  /// Every time the app goes into the background or is closed,
-  /// save the current game sessions to local storage.
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {}
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //LocalStorageService.loadGameSessions();
-
     return CupertinoApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: const [
