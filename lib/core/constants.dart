@@ -19,21 +19,21 @@ class Constants {
 
   /// URL to the GitHub issues page for reporting bugs or requesting features.
   static const String kGithubIssuesLink =
-      'https://cabo-counter-issues.felixkirchner.de';
+      'https://felixkirchner.de/cabo-counter/issues';
 
   /// URL to the GitHub wiki for additional documentation and guides.
   static const String kGithubWikiLink =
-      'https://cabo-counter-wiki.felixkirchner.de';
+      'https://felixkirchner.de/cabo-counter/wiki';
 
   /// Official email address for user inquiries and support.
   static const String kEmail = 'cabocounter@felixkirchner.de';
 
   /// URL to the app's privacy policy page.
   static const String kPrivacyPolicyLink =
-      'https://cabo-counter-datenschutz.felixkirchner.de';
+      'https://felixkirchner.de/cabo-counter/datenschutz';
 
   /// URL to the app's imprint page, containing legal information.
-  static const String kLegalLink = 'https://impressum.felixkirchner.de';
+  static const String kLegalLink = 'https://felixkirchner.de/impressum';
 
   /// Instance of [RateMyApp] configured to prompt users for app store ratings.
   static RateMyApp rateMyApp = RateMyApp(
