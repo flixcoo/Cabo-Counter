@@ -55,8 +55,6 @@
   "create_game": "Spiel erstellen",
   "max_players_title": "Maximale Anzahl erreicht",
   "max_players_message": "Es können maximal 5 Spieler:innen hinzugefügt werden.",
-  "no_gameTitle_title": "Kein Titel",
-  "no_gameTitle_message": "Es muss ein Titel für das Spiel eingegeben werden.",
   "no_mode_title": "Kein Modus",
   "no_mode_message": "Es muss ein Spielmodus ausgewählt werden.",
   "min_players_title": "Zu wenig Spieler:innen",
@@ -77,6 +75,15 @@
     }
   },
   "unlimited_description": "Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.",
+  "standard_game_title": "Spiel vom {date}",
+  "@fallback_title": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
 
   "results": "Ergebnisse",
   "who_said_cabo": "Wer hat CABO gesagt?",
