@@ -94,15 +94,28 @@ class _MainMenuViewState extends State<MainMenuView> {
                     },
                     icon: const Icon(CupertinoIcons.settings, size: 30)),
                 middle: Text(AppLocalizations.of(context).games),
-                trailing: IconButton(
-                    onPressed: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => CreateGameView(
-                                gameMode: ConfigService.getGameMode()),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () => _showSortActionSheet(context),
+                      icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
+                      iconSize: 26,
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => CreateGameView(
+                            gameMode: ConfigService.getGameMode(),
                           ),
                         ),
-                    icon: const Icon(CupertinoIcons.add)),
+                      ),
+                      icon: const Icon(CupertinoIcons.add),
+                    ),
+                  ],
+                ),
               ),
               child: CupertinoPageScaffold(
                   child: SafeArea(
@@ -435,6 +448,67 @@ class _MainMenuViewState extends State<MainMenuView> {
     } else {
       print('[MainMenuView] Data migration already completed. Skipping.');
     }
+  }
+
+  void _sortGames({bool byDate = true, bool ascending = true}) {
+    if (byDate) {
+      gameManager.gameList.sort((a, b) {
+        return ascending
+            ? a.createdAt.compareTo(b.createdAt)
+            : b.createdAt.compareTo(a.createdAt);
+      });
+    } else {
+      gameManager.gameList.sort((a, b) {
+        return ascending
+            ? a.gameTitle.compareTo(b.gameTitle)
+            : b.gameTitle.compareTo(a.gameTitle);
+      });
+    }
+    _updateView();
+  }
+
+  Future<void> _showSortActionSheet(BuildContext context) async {
+    await showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text('Sortieren nach'),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _sortGames(byDate: true, ascending: true);
+            },
+            child: Text('Datum (Aufsteigend)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _sortGames(byDate: true, ascending: false);
+            },
+            child: Text('Datum (Absteigend)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _sortGames(byDate: false, ascending: true);
+            },
+            child: Text('Titel (Aufsteigend)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _sortGames(byDate: false, ascending: false);
+            },
+            child: Text('Titel (Absteigend)'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context).cancel),
+        ),
+      ),
+    );
   }
 
   @override
