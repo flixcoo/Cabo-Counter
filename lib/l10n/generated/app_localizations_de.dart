@@ -144,13 +144,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Es können maximal 5 Spieler:innen hinzugefügt werden.';
 
   @override
-  String get no_gameTitle_title => 'Kein Titel';
-
-  @override
-  String get no_gameTitle_message =>
-      'Es muss ein Titel für das Spiel eingegeben werden.';
-
-  @override
   String get no_mode_title => 'Kein Modus';
 
   @override
@@ -192,6 +185,11 @@ class AppLocalizationsDe extends AppLocalizations {
       'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
+  String standard_game_title(Object date) {
+    return 'Spiel vom $date';
+  }
+
+  @override
   String get results => 'Ergebnisse';
 
   @override
@@ -214,11 +212,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,

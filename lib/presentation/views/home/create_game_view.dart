@@ -11,10 +11,10 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 enum CreateStatus {
-  noGameTitle,
   noModeSelected,
   minPlayers,
   maxPlayers,
@@ -115,10 +115,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                     padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                     child: CupertinoTextField(
                       decoration: const BoxDecoration(),
-                      maxLength: 20,
+                      maxLength: 24,
                       prefix: Text(AppLocalizations.of(context).name),
                       textAlign: TextAlign.right,
-                      placeholder: AppLocalizations.of(context).game_title,
+                      placeholder: getFallbackGameTitle(),
                       controller: _gameTitleTextController,
                       onSubmitted: (_) {
                         _playerNameFocusNodes.isNotEmpty
@@ -358,11 +358,6 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// If any attribute is invalid, it shows a feedback dialog.
   /// If all attributes are valid, it calls the `_createGame` method.
   void _checkAllGameAttributes() {
-    if (_gameTitleTextController.text == '') {
-      _showFeedbackDialog(CreateStatus.noGameTitle);
-      return;
-    }
-
     if (gameMode == GameMode.none) {
       _showFeedbackDialog(CreateStatus.noModeSelected);
       return;
@@ -415,11 +410,6 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Returns the title and message for the dialog based on the [CreateStatus].
   (String, String) _getDialogContent(CreateStatus status) {
     switch (status) {
-      case CreateStatus.noGameTitle:
-        return (
-          AppLocalizations.of(context).no_gameTitle_title,
-          AppLocalizations.of(context).no_gameTitle_message
-        );
       case CreateStatus.noModeSelected:
         return (
           AppLocalizations.of(context).no_mode_title,
@@ -469,12 +459,16 @@ class _CreateGameViewState extends State<CreateGameView> {
       ));
     }
 
-    bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+    final String gameTitle = _gameTitleTextController.text == ''
+        ? getFallbackGameTitle()
+        : _gameTitleTextController.text;
+
+    final bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
         gameId: gameId,
         createdAt: DateTime.now(),
-        gameTitle: _gameTitleTextController.text,
+        gameTitle: gameTitle,
         players: playerList,
         pointLimit: ConfigService.getPointLimit(),
         caboPenalty: ConfigService.getCaboPenalty(),
@@ -502,6 +496,24 @@ class _CreateGameViewState extends State<CreateGameView> {
       await Future.delayed(
           const Duration(milliseconds: Constants.kKeyboardDelay));
     }
+  }
+
+  /// Generates a fallback game title based on the current date and locale.
+  /// If the user does not provide a game title, this method will create one
+  /// using the current date formatted according to the user's locale.
+  String getFallbackGameTitle() {
+    final now = DateTime.now();
+    final String formattedDate;
+
+    Locale currentLocale = Localizations.localeOf(context);
+    switch (currentLocale.languageCode) {
+      case 'en':
+        formattedDate = DateFormat('MMMM d, y', 'en_US').format(now);
+      default:
+        formattedDate = DateFormat('dd.MM.yy').format(now);
+    }
+
+    return AppLocalizations.of(context).standard_game_title(formattedDate);
   }
 
   @override

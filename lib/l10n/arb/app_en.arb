@@ -55,8 +55,6 @@
   "create_game": "Create Game",
   "max_players_title": "Player Limit Reached",
   "max_players_message": "You can add a maximum of 5 players.",
-  "no_gameTitle_title": "Missing Game Title",
-  "no_gameTitle_message": "Please enter a title for your game.",
   "no_mode_title": "Game Mode Required",
   "no_mode_message": "Please select a game mode to continue",
   "min_players_title": "Too Few Players",
@@ -77,7 +75,14 @@
     }
   },
   "unlimited_description": "The game continues until you decide to stop playing. The game can be ended manually at any time.",
-
+  "standard_game_title": "Game on {date}",
+  "@fallback_title": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "results": "Results",
   "who_said_cabo": "Who called Cabo?",
   "kamikaze": "Kamikaze",
