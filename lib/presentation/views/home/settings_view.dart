@@ -129,7 +129,7 @@ class _SettingsViewState extends State<SettingsView> {
                             AppLocalizations.of(context).reset_to_default,
                         prefixIcon: CupertinoIcons.arrow_counterclockwise,
                         onPressed: () {
-                          ConfigService.resetConfig();
+                          ConfigService.resetUserConfig();
                           setState(() {
                             _stepperKey1 = UniqueKey();
                             _stepperKey2 = UniqueKey();

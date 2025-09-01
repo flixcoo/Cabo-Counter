@@ -7,45 +7,82 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Provides methods to initialize, retrieve, update, and reset configuration values such as point limit,
 /// cabo penalty, and game mode. Ensures that user preferences are stored locally and persist across app restarts.
 class ConfigService {
-  // Keys for the stored values
-  static const String _keyPointLimit = 'pointLimit';
-  static const String _keyCaboPenalty = 'caboPenalty';
-  static const String _keyGameMode = 'gameMode';
-  static const String _keyMigrationDone = 'migrationDone';
-  static const String _keySortingOption = 'sortingOption';
-  static const String _keySortingDirection = 'sortingDirection';
-  static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
-
-  // Actual values used in the app
+  /// Current point limit for every game.
   static int _pointLimit = 100;
+
+  /// Default value of [_pointLimit]
+  static const int _defaultPointLimit = 100;
+
+  /// Key for the stored point limit value.
+  static const String _keyPointLimit = 'pointLimit';
+
+  /// Current cabo penalty for every game.
   static int _caboPenalty = 5;
+
+  /// Key for the stored cabo penalty value.
+  static const String _keyCaboPenalty = 'caboPenalty';
+
+  /// Default value of [_caboPenalty]
+  static const int _defaultCaboPenalty = 5;
+
+  /// Current game mode for every game.<br>
+  /// [-1] = no mode <br>
+  /// [0] = point limit <br>
+  /// [1] = unlimited
   static int _gameMode = -1;
+
+  /// Default value of [_gameMode]
+  static const _defaultGameMode = -1;
+
+  /// Key for the stored game mode value.
+  static const String _keyGameMode = 'gameMode';
+
+  /// Migration done flag.
+  /// false = migration not done, true = migration done
   static bool _migrationDone = false;
 
-  /// Sorting option for player list.
-  /// true = sort by date, false = sort by name
+  /// Default value of [_migrationDone]
+  static const bool _defaultMigrationDone = false;
+
+  /// Key for the stored migration done flag.
+  static const String _keyMigrationDone = 'migrationDone';
+
+  /// Sorting option for the game list in the main menu.
+  /// true = sort by date, false = sort by title
   static bool _sortingOption = true;
 
-  /// Sorting direction for player list.
+  /// Default value of [_sortingOption]
+  static const bool _defaultSortingOption = true;
+
+  /// Key for the stored sorting option.
+  static const String _keySortingOption = 'sortingOption';
+
+  /// Sorting direction for the game list in the main menu.
   /// true = descending, false = ascending
   static bool _sortingDirection = true;
 
+  /// Default value of [_sortingDirection]
+  static const bool _defaultSortingDirection = true;
+
+  /// Key for the stored sorting direction.
+  static const String _keySortingDirection = 'sortingDirection';
+
+  /// Show active games only flag.
+  /// false = show all games, true = show only active games
   static bool _showActiveGamesOnly = false;
 
-  // Default values
-  static const int _defaultPointLimit = 100;
-  static const int _defaultCaboPenalty = 5;
-  static const int _defaultGameMode = -1;
-  static const bool _defaultMigrationDone = false;
-  static const bool _defaultSortingOption = true;
-  static const bool _defaultSortingDirection = true;
+  /// Default value of [_showActiveGamesOnly]
   static const bool _defaultShowActiveGamesOnly = false;
+
+  /// Key for the stored show active games only flag.
+  static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Initialize pointLimit, caboPenalty, and gameMode from SharedPreferences
-    // If they are not set, use the default values
+    // Initialize all config values from SharedPreferences
+    // If they are already set, use the stored values
+    // If not, use the default values
     _pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
     _caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
     _gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
@@ -181,8 +218,8 @@ class ConfigService {
     _showActiveGamesOnly = showActiveGamesOnly;
   }
 
-  /// Resets the configuration to default values.
-  static Future<void> resetConfig() async {
+  /// Resets the user configuration to default values.
+  static Future<void> resetUserConfig() async {
     ConfigService._pointLimit = _defaultPointLimit;
     ConfigService._caboPenalty = _defaultCaboPenalty;
     ConfigService._gameMode = _defaultGameMode;
