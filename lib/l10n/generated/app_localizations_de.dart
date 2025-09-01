@@ -92,7 +92,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get empty_filter_button => 'Alle Spiele anzeigen';
 
   @override
-  String get sort_and_filter_options => 'Sort & Filter Options';
+  String get sort_and_filter_options => 'Sortier- & Filteroptionen';
 
   @override
   String get ascending => 'Aufsteigend';

@@ -263,7 +263,7 @@ abstract class AppLocalizations {
   /// No description provided for @sort_and_filter_options.
   ///
   /// In de, this message translates to:
-  /// **'Sort & Filter Options'**
+  /// **'Sortier- & Filteroptionen'**
   String get sort_and_filter_options;
 
   /// No description provided for @ascending.

@@ -581,7 +581,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     final compare = sortOption == SortOption.date
         ? (a, b) => a.createdAt.compareTo(b.createdAt)
-        : (a, b) => b.gameTitle.compareTo(a.gameTitle);
+        : (a, b) => a.gameTitle.compareTo(b.gameTitle);
 
     displayedGames.sort(
       sortDirection == SortDirection.ascending
