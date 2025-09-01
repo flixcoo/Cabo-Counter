@@ -14,7 +14,6 @@ class DataMigrationService {
   static Future<File> _getFilePath() async {
     final directory = await getApplicationDocumentsDirectory();
     final path = '${directory.path}/$_fileName';
-    print(path);
     return File(path);
   }
 
