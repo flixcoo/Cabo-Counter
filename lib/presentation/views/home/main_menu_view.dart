@@ -44,10 +44,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   late Map<String, dynamic> migrationStatus;
 
   /// Current sorting option for the game list
-  SortOption currentSortOption = SortOption.title;
+  SortOption currentSortOption = ConfigService.getSortingOption();
 
   /// Current sorting direction for the game list
-  SortDirection currentSortDirection = SortDirection.descending;
+  SortDirection currentSortDirection = ConfigService.getSortingDirection();
 
   /// If true, only active (unfinished) games are shown in the list
   bool showOnlyActiveGames = false;
@@ -518,6 +518,10 @@ class _MainMenuViewState extends State<MainMenuView> {
     }
   }
 
+  /// Sorts the game list based on the provided sort option and direction.
+  /// Updates the configuration service with the new sorting preferences.
+  /// [sortOption] The option to sort by (date or title).
+  /// [sortDirection] The direction to sort (ascending or descending).
   void _sortGames(
       {required SortOption sortOption, required SortDirection sortDirection}) {
     final compare = sortOption == SortOption.date
@@ -529,6 +533,8 @@ class _MainMenuViewState extends State<MainMenuView> {
           ? (GameSession a, GameSession b) => compare(a, b)
           : (GameSession a, GameSession b) => compare(b, a),
     );
+    ConfigService.setSortingOption(sortOption);
+    ConfigService.setSortingDirection(sortDirection);
 
     _updateView();
   }
