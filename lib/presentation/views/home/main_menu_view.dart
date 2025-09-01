@@ -12,11 +12,16 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum PreRatingDialogDecision { yes, no, cancel }
 
 enum BadRatingDialogDecision { email, cancel }
+
+enum SortOption { date, title }
+
+enum SortDirection { ascending, descending }
 
 /// Home screen of the app that displays a list of game sessions.
 ///
@@ -32,8 +37,20 @@ class MainMenuView extends StatefulWidget {
 }
 
 class _MainMenuViewState extends State<MainMenuView> {
+  /// Indicates whether the view is currently loading data from the database
   bool _isLoading = true;
+
+  /// Map to hold the status of data migration and amount of migrated games
   late Map<String, dynamic> migrationStatus;
+
+  /// Current sorting option for the game list
+  SortOption currentSortOption = SortOption.title;
+
+  /// Current sorting direction for the game list
+  SortDirection currentSortDirection = SortDirection.descending;
+
+  /// If true, only active (unfinished) games are shown in the list
+  bool showOnlyActiveGames = false;
 
   @override
   initState() {
@@ -81,40 +98,87 @@ class _MainMenuViewState extends State<MainMenuView> {
           return CupertinoPageScaffold(
               resizeToAvoidBottomInset: false,
               navigationBar: CupertinoNavigationBar(
-                leading: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => const SettingsView(),
-                        ),
-                      ).then((_) {
-                        setState(() {});
-                      });
-                    },
-                    icon: const Icon(CupertinoIcons.settings, size: 30)),
-                middle: Text(AppLocalizations.of(context).games),
-                trailing: Row(
+                leading: Row(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 0,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                      onPressed: () => _showSortActionSheet(context),
-                      icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
-                      iconSize: 26,
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => CreateGameView(
-                            gameMode: ConfigService.getGameMode(),
-                          ),
+                        iconSize: Constants.mainMenuButtonIconSize,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const SettingsView(),
+                            ),
+                          ).then((_) {
+                            setState(() {});
+                          });
+                        },
+                        icon: const Icon(CupertinoIcons.settings)),
+                    PullDownButton(
+                      itemBuilder: (context) => [
+                        const PullDownMenuTitle(
+                            title: Text('Sortier- und Filter-Optionen')),
+                        PullDownMenuItem.selectable(
+                          onTap: () => _setSortOption(SortOption.date),
+                          selected: currentSortOption == SortOption.date,
+                          title: 'Datum',
+                          icon: CupertinoIcons.calendar,
                         ),
+                        PullDownMenuItem.selectable(
+                          onTap: () => _setSortOption(SortOption.title),
+                          selected: currentSortOption == SortOption.title,
+                          title: 'Spieltitel',
+                          icon: CupertinoIcons.textformat_abc,
+                        ),
+                        const PullDownMenuDivider.large(),
+                        PullDownMenuItem.selectable(
+                          onTap: () =>
+                              _setSortDirection(SortDirection.descending),
+                          selected:
+                              currentSortDirection == SortDirection.descending,
+                          title: 'Absteigend',
+                          icon: CupertinoIcons.sort_down,
+                        ),
+                        PullDownMenuItem.selectable(
+                          onTap: () =>
+                              _setSortDirection(SortDirection.ascending),
+                          selected:
+                              currentSortDirection == SortDirection.ascending,
+                          title: 'Aufsteigend',
+                          icon: CupertinoIcons.sort_up,
+                        ),
+                        const PullDownMenuDivider.large(),
+                        PullDownMenuItem.selectable(
+                          onTap: () => _toggleShowOnlyActiveGames(),
+                          selected: showOnlyActiveGames,
+                          title: 'Nur aktive Spiele',
+                          subtitle: 'Beendete Spiele werden ausgeblendet.',
+                          icon: CupertinoIcons.eye_slash,
+                        ),
+                      ],
+                      buttonBuilder: (context, showMenu) => IconButton(
+                        onPressed: showMenu,
+                        padding: EdgeInsets.zero,
+                        icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
+                        iconSize: Constants.mainMenuButtonIconSize,
                       ),
-                      icon: const Icon(CupertinoIcons.add),
                     ),
                   ],
+                ),
+                middle: Text(AppLocalizations.of(context).games),
+                trailing: IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => CreateGameView(
+                        gameMode: ConfigService.getGameMode(),
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(CupertinoIcons.add),
+                  iconSize: Constants.mainMenuButtonIconSize,
                 ),
               ),
               child: CupertinoPageScaffold(
@@ -124,7 +188,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                   replacement: Visibility(
                     visible: gameManager.gameList.isEmpty,
                     replacement: ListView.separated(
-                      itemCount: gameManager.gameList.length,
+                      itemCount: showOnlyActiveGames
+                          ? gameManager.gameList
+                              .where((s) => !s.isGameFinished)
+                              .length
+                          : gameManager.gameList.length,
                       separatorBuilder: (context, index) => Divider(
                         height: 1,
                         thickness: 0.5,
@@ -450,65 +518,44 @@ class _MainMenuViewState extends State<MainMenuView> {
     }
   }
 
-  void _sortGames({bool byDate = true, bool ascending = true}) {
-    if (byDate) {
-      gameManager.gameList.sort((a, b) {
-        return ascending
-            ? a.createdAt.compareTo(b.createdAt)
-            : b.createdAt.compareTo(a.createdAt);
-      });
-    } else {
-      gameManager.gameList.sort((a, b) {
-        return ascending
-            ? a.gameTitle.compareTo(b.gameTitle)
-            : b.gameTitle.compareTo(a.gameTitle);
-      });
-    }
+  void _sortGames(
+      {required SortOption sortOption, required SortDirection sortDirection}) {
+    final compare = sortOption == SortOption.date
+        ? (a, b) => a.createdAt.compareTo(b.createdAt)
+        : (a, b) => a.gameTitle.compareTo(b.gameTitle);
+
+    gameManager.gameList.sort(
+      sortDirection == SortDirection.ascending
+          ? (GameSession a, GameSession b) => compare(a, b)
+          : (GameSession a, GameSession b) => compare(b, a),
+    );
+
     _updateView();
   }
 
-  Future<void> _showSortActionSheet(BuildContext context) async {
-    await showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text('Sortieren nach'),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _sortGames(byDate: true, ascending: true);
-            },
-            child: Text('Datum (Aufsteigend)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _sortGames(byDate: true, ascending: false);
-            },
-            child: Text('Datum (Absteigend)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _sortGames(byDate: false, ascending: true);
-            },
-            child: Text('Titel (Aufsteigend)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              _sortGames(byDate: false, ascending: false);
-            },
-            child: Text('Titel (Absteigend)'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.pop(context),
-          child: Text(AppLocalizations.of(context).cancel),
-        ),
-      ),
-    );
+  /// Sets the current sort direction and updates the game list accordingly.
+  /// [direction] The new sort direction to be set.
+  void _setSortDirection(SortDirection direction) {
+    setState(() {
+      currentSortDirection = direction;
+      _sortGames(sortOption: currentSortOption, sortDirection: direction);
+    });
+  }
+
+  /// Sets the current sort option and updates the game list accordingly.
+  /// [option] The new sort option to be set.
+  void _setSortOption(SortOption option) {
+    setState(() {
+      currentSortOption = option;
+      _sortGames(sortOption: option, sortDirection: currentSortDirection);
+    });
+  }
+
+  /// Toggles the filter to show only active (unfinished) games in the list.
+  void _toggleShowOnlyActiveGames() {
+    setState(() {
+      showOnlyActiveGames = !showOnlyActiveGames;
+    });
   }
 
   @override
