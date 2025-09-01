@@ -90,10 +90,6 @@ class _MainMenuViewState extends State<MainMenuView> {
     });
   }
 
-  void _updateView() {
-    if (mounted) setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -128,7 +124,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.date),
                           selected: currentSortOption == SortOption.date,
-                          title: AppLocalizations.of(context).name,
+                          title: AppLocalizations.of(context).date,
                           icon: CupertinoIcons.calendar,
                         ),
                         PullDownMenuItem.selectable(
@@ -286,7 +282,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                                                       gameSession: session),
                                             ),
                                           ).then((_) {
-                                            setState(() {});
+                                            setState(() {
+                                              _sortGames(
+                                                  sortOption: currentSortOption,
+                                                  sortDirection:
+                                                      currentSortDirection);
+                                            });
                                           });
                                         },
                                       ),
@@ -621,7 +622,6 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   void dispose() {
-    gameManager.removeListener(_updateView);
     super.dispose();
   }
 }
