@@ -565,26 +565,20 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// [sortDirection] The direction to sort (ascending or descending).
   void _sortGames(
       {required SortOption sortOption, required SortDirection sortDirection}) {
-    if (_showOnlyActiveGames) {
-      displayedGames =
-          displayedGames.where((game) => !game.isGameFinished).toList();
-    } else {
-      displayedGames = List.from(gameManager.gameList);
-    }
+    displayedGames = _showOnlyActiveGames
+        ? displayedGames.where((game) => !game.isGameFinished).toList()
+        : List.from(gameManager.gameList);
 
     final compare = sortOption == SortOption.date
-        ? (a, b) => b.createdAt.compareTo(a.createdAt)
-        : (a, b) => a.gameTitle.compareTo(b.gameTitle);
+        ? (a, b) => a.createdAt.compareTo(b.createdAt)
+        : (a, b) => b.gameTitle.compareTo(a.gameTitle);
 
     displayedGames.sort(
       sortDirection == SortDirection.ascending
-          ? (GameSession a, GameSession b) => compare(b, a)
-          : (GameSession a, GameSession b) => compare(a, b),
+          ? (GameSession a, GameSession b) => compare(a, b)
+          : (GameSession a, GameSession b) => compare(b, a),
     );
 
-    setState(() {
-      displayedGames;
-    });
     _updateView();
   }
 
