@@ -14,9 +14,9 @@ class ConfigService {
   static const String _keyMigrationDone = 'migrationDone';
   static const String _keySortingOption = 'sortingOption';
   static const String _keySortingDirection = 'sortingDirection';
+  static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
 
   // Actual values used in the app
-
   static int _pointLimit = 100;
   static int _caboPenalty = 5;
   static int _gameMode = -1;
@@ -30,6 +30,8 @@ class ConfigService {
   /// true = descending, false = ascending
   static bool _sortingDirection = true;
 
+  static bool _showActiveGamesOnly = false;
+
   // Default values
   static const int _defaultPointLimit = 100;
   static const int _defaultCaboPenalty = 5;
@@ -37,6 +39,7 @@ class ConfigService {
   static const bool _defaultMigrationDone = false;
   static const bool _defaultSortingOption = true;
   static const bool _defaultSortingDirection = true;
+  static const bool _defaultShowActiveGamesOnly = false;
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
@@ -50,6 +53,8 @@ class ConfigService {
     _sortingOption = prefs.getBool(_keySortingOption) ?? _defaultSortingOption;
     _sortingDirection =
         prefs.getBool(_keySortingDirection) ?? _defaultSortingDirection;
+    _showActiveGamesOnly =
+        prefs.getBool(_keyShowActiveGamesOnly) ?? _defaultShowActiveGamesOnly;
 
     // Save the initial values to SharedPreferences
     prefs.setInt(_keyPointLimit, _pointLimit);
@@ -58,6 +63,7 @@ class ConfigService {
     prefs.setBool(_keyMigrationDone, _migrationDone);
     prefs.setBool(_keySortingOption, _sortingOption);
     prefs.setBool(_keySortingDirection, _sortingDirection);
+    prefs.setBool(_keyShowActiveGamesOnly, _showActiveGamesOnly);
   }
 
   /// Retrieves the current game mode.
@@ -163,6 +169,16 @@ class ConfigService {
     final direction = sortDirection == SortDirection.descending;
     await prefs.setBool(_keySortingDirection, direction);
     _sortingDirection = direction;
+  }
+
+  static bool getShowActiveGamesOnly() => _showActiveGamesOnly;
+
+  /// Setter for the show active games only flag.
+  /// [showActiveGamesOnly] is the new value to be set.
+  static Future<void> setShowActiveGamesOnly(bool showActiveGamesOnly) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyShowActiveGamesOnly, showActiveGamesOnly);
+    _showActiveGamesOnly = showActiveGamesOnly;
   }
 
   /// Resets the configuration to default values.
