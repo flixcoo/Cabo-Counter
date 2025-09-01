@@ -54,6 +54,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get date => 'Datum';
+
+  @override
   String get back => 'Back';
 
   @override
@@ -80,6 +83,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get empty_text_2 =>
       'Create a new game using the button in the top right.';
+
+  @override
+  String get empty_filter_text => 'Adjust the filter options to see all games';
+
+  @override
+  String get empty_filter_button => 'Show all games';
+
+  @override
+  String get sort_and_filter_options => 'Sort & Filter Options';
+
+  @override
+  String get ascending => 'Ascending';
+
+  @override
+  String get descending => 'Descending';
+
+  @override
+  String get only_active_games => 'Only active games';
+
+  @override
+  String get only_active_games_description => 'Finished games will be hidden.';
 
   @override
   String get delete_game_title => 'Delete game?';
@@ -210,11 +234,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,

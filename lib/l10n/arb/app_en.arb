@@ -16,6 +16,7 @@
   "player": "Player",
   "players": "Players",
   "name": "Name",
+  "date": "Datum",
   "back": "Back",
 
   "home": "Home",
@@ -28,6 +29,13 @@
 
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",
+  "empty_filter_text": "Adjust the filter options to see all games",
+  "empty_filter_button": "Show all games",
+  "sort_and_filter_options": "Sort & Filter Options",
+  "ascending": "Ascending",
+  "descending": "Descending",
+  "only_active_games": "Only active games",
+  "only_active_games_description": "Finished games will be hidden.",
   "delete_game_title": "Delete game?",
   "delete_game_message": "Are you sure you want to delete the game \"{gameTitle}\"? This action cannot be undone.",
   "@delete_game_message": {

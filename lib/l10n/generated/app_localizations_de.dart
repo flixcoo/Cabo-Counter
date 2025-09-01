@@ -54,6 +54,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get date => 'Datum';
+
+  @override
   String get back => 'Zurück';
 
   @override
@@ -80,6 +83,29 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get empty_text_2 =>
       'Füge über den Button oben rechts eine neue Runde hinzu';
+
+  @override
+  String get empty_filter_text =>
+      'Passe die Filteroptionen an um alle Spiele zu sehen';
+
+  @override
+  String get empty_filter_button => 'Alle Spiele anzeigen';
+
+  @override
+  String get sort_and_filter_options => 'Sortier- & Filteroptionen';
+
+  @override
+  String get ascending => 'Aufsteigend';
+
+  @override
+  String get descending => 'Absteigend';
+
+  @override
+  String get only_active_games => 'Nur aktive Spiele';
+
+  @override
+  String get only_active_games_description =>
+      'Beendete Spiele werden ausgeblendet.';
 
   @override
   String get delete_game_title => 'Spiel löschen?';
@@ -125,7 +151,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get new_game => 'Neues Spiel';
 
   @override
-  String get game_title => 'Titel des Spiels';
+  String get game_title => 'Spieltitel';
 
   @override
   String get select_mode => 'Wähle einen Modus';
@@ -212,11 +238,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
