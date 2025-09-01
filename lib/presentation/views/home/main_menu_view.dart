@@ -317,7 +317,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             ),
                           ),
                           CupertinoButton(
-                              onPressed: () => {_toggleShowOnlyActiveGames()},
+                              onPressed: () => _toggleShowOnlyActiveGames(),
                               child: const Text('Alle Spiele anzeigen'))
                         ],
                       ),
