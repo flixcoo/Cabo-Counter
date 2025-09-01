@@ -122,18 +122,19 @@ class _MainMenuViewState extends State<MainMenuView> {
                         icon: const Icon(CupertinoIcons.settings)),
                     PullDownButton(
                       itemBuilder: (context) => [
-                        const PullDownMenuTitle(
-                            title: Text('Sortier- und Filter-Optionen')),
+                        PullDownMenuTitle(
+                            title: Text(AppLocalizations.of(context)
+                                .sort_and_filter_options)),
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.date),
                           selected: currentSortOption == SortOption.date,
-                          title: 'Datum',
+                          title: AppLocalizations.of(context).name,
                           icon: CupertinoIcons.calendar,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.title),
                           selected: currentSortOption == SortOption.title,
-                          title: 'Spieltitel',
+                          title: AppLocalizations.of(context).game_title,
                           icon: CupertinoIcons.textformat_abc,
                         ),
                         const PullDownMenuDivider.large(),
@@ -142,7 +143,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                               _setSortDirection(SortDirection.descending),
                           selected:
                               currentSortDirection == SortDirection.descending,
-                          title: 'Absteigend',
+                          title: AppLocalizations.of(context).descending,
                           icon: CupertinoIcons.sort_down,
                         ),
                         PullDownMenuItem.selectable(
@@ -150,15 +151,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                               _setSortDirection(SortDirection.ascending),
                           selected:
                               currentSortDirection == SortDirection.ascending,
-                          title: 'Aufsteigend',
+                          title: AppLocalizations.of(context).ascending,
                           icon: CupertinoIcons.sort_up,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
                           onTap: () => _toggleShowOnlyActiveGames(),
                           selected: _showOnlyActiveGames,
-                          title: 'Nur aktive Spiele',
-                          subtitle: 'Beendete Spiele werden ausgeblendet.',
+                          title: AppLocalizations.of(context).only_active_games,
+                          subtitle: AppLocalizations.of(context)
+                              .only_active_games_description,
                           icon: CupertinoIcons.eye_slash,
                         ),
                       ],
@@ -208,6 +210,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                             return ListenableBuilder(
                                 listenable: session,
                                 builder: (context, _) {
+                                  _sortGames(
+                                      sortOption: currentSortOption,
+                                      sortDirection: currentSortDirection);
                                   return Dismissible(
                                     key: Key(session.gameId),
                                     background: Container(
@@ -228,6 +233,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     onDismissed: (direction) {
                                       gameManager
                                           .deleteGameById(session.gameId);
+                                      _sortGames(
+                                          sortOption: currentSortOption,
+                                          sortDirection: currentSortDirection);
                                     },
                                     dismissThresholds: const {
                                       DismissDirection.startToEnd: 0.6
@@ -308,17 +316,18 @@ class _MainMenuViewState extends State<MainMenuView> {
                             ),
                           )),
                           const SizedBox(height: 10),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 70),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 70),
                             child: Text(
-                              'Passe die Filteroptionen an um alle Spiele zu sehen',
+                              AppLocalizations.of(context).empty_filter_text,
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                           CupertinoButton(
                               onPressed: () => _toggleShowOnlyActiveGames(),
-                              child: const Text('Alle Spiele anzeigen'))
+                              child: Text(AppLocalizations.of(context)
+                                  .empty_filter_button))
                         ],
                       ),
                     ),
@@ -578,8 +587,6 @@ class _MainMenuViewState extends State<MainMenuView> {
           ? (GameSession a, GameSession b) => compare(a, b)
           : (GameSession a, GameSession b) => compare(b, a),
     );
-
-    _updateView();
   }
 
   /// Sets the current sort direction and updates the game list accordingly.

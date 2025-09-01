@@ -16,6 +16,7 @@
   "player": "Spieler:in",
     "players": "Spieler:innen",
   "name": "Name",
+  "date": "Datum",
   "back": "Zurück",
 
   "home": "Home",
@@ -28,6 +29,13 @@
 
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
+  "empty_filter_text": "Passe die Filteroptionen an um alle Spiele zu sehen",
+  "empty_filter_button": "Alle Spiele anzeigen",
+  "sort_and_filter_options": "Sort & Filter Options",
+  "ascending": "Aufsteigend",
+  "descending": "Absteigend",
+  "only_active_games": "Nur aktive Spiele",
+  "only_active_games_description": "Beendete Spiele werden ausgeblendet.",
   "delete_game_title": "Spiel löschen?",
   "delete_game_message": "Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "@delete_game_message": {
@@ -49,7 +57,7 @@
 
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
-  "game_title": "Titel des Spiels",
+  "game_title": "Spieltitel",
   "select_mode": "Wähle einen Modus",
   "add_player": "Spieler:in hinzufügen",
   "create_game": "Spiel erstellen",

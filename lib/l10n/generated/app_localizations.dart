@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @date.
+  ///
+  /// In de, this message translates to:
+  /// **'Datum'**
+  String get date;
+
   /// No description provided for @back.
   ///
   /// In de, this message translates to:
@@ -241,6 +247,48 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Füge über den Button oben rechts eine neue Runde hinzu'**
   String get empty_text_2;
+
+  /// No description provided for @empty_filter_text.
+  ///
+  /// In de, this message translates to:
+  /// **'Passe die Filteroptionen an um alle Spiele zu sehen'**
+  String get empty_filter_text;
+
+  /// No description provided for @empty_filter_button.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Spiele anzeigen'**
+  String get empty_filter_button;
+
+  /// No description provided for @sort_and_filter_options.
+  ///
+  /// In de, this message translates to:
+  /// **'Sort & Filter Options'**
+  String get sort_and_filter_options;
+
+  /// No description provided for @ascending.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufsteigend'**
+  String get ascending;
+
+  /// No description provided for @descending.
+  ///
+  /// In de, this message translates to:
+  /// **'Absteigend'**
+  String get descending;
+
+  /// No description provided for @only_active_games.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur aktive Spiele'**
+  String get only_active_games;
+
+  /// No description provided for @only_active_games_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Beendete Spiele werden ausgeblendet.'**
+  String get only_active_games_description;
 
   /// No description provided for @delete_game_title.
   ///
@@ -323,7 +371,7 @@ abstract class AppLocalizations {
   /// No description provided for @game_title.
   ///
   /// In de, this message translates to:
-  /// **'Titel des Spiels'**
+  /// **'Spieltitel'**
   String get game_title;
 
   /// No description provided for @select_mode.
