@@ -456,10 +456,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   }
 
   /// Shows a dialog asking the user if they like the app.
-  /// Returns the user's decision as an integer.
-  /// - PRE_RATING_DIALOG_YES: User likes the app and wants to rate it.
-  /// - PRE_RATING_DIALOG_NO: User does not like the app and wants to provide feedback.
-  /// - PRE_RATING_DIALOG_CANCEL: User cancels the dialog.
+  /// Returns the user's decision as enum [PreRatingDialogDecision].
+  /// PreRatingDialogDecision.yes: User likes the app.
+  /// PreRatingDialogDecision.no: User does not like the app.
+  /// PreRatingDialogDecision.cancel: User cancels the dialog.
   Future<PreRatingDialogDecision> _showPreRatingDialog(
       BuildContext context) async {
     return await showCupertinoDialog<PreRatingDialogDecision>(
@@ -491,9 +491,9 @@ class _MainMenuViewState extends State<MainMenuView> {
   }
 
   /// Shows a dialog asking the user for feedback if they do not like the app.
-  /// Returns the user's decision as an integer.
-  /// - BAD_RATING_DIALOG_EMAIL: User wants to send an email with feedback.
-  /// - BAD_RATING_DIALOG_CANCEL: User cancels the dialog.
+  /// Returns the user's decision as enum [BadRatingDialogDecision].
+  /// BadRatingDialogDecision.email: User wants to send an email for feedback.
+  /// BadRatingDialogDecision.cancel: User cancels the dialog.
   Future<BadRatingDialogDecision> _showBadRatingDialog(
       BuildContext context) async {
     return await showCupertinoDialog<BadRatingDialogDecision>(
@@ -518,6 +518,10 @@ class _MainMenuViewState extends State<MainMenuView> {
         BadRatingDialogDecision.cancel;
   }
 
+  /// TODO: Temporary method, will be removed till release 1.0.0
+  /// Migrates old game data if the migration has not been done yet.
+  /// This Method migrates the old JSON based game data to the new database structure.
+  /// It shows a dialog with the migration result (success or failure) after the migration is
   void _migrateData() async {
     if (!ConfigService.isMigrationDone()) {
       migrationStatus = await DataMigrationService.loadOldGameData();
