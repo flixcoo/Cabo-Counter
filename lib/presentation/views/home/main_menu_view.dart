@@ -106,7 +106,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                        iconSize: Constants.mainMenuButtonIconSize,
+                        iconSize: Constants.navBarIconSize,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -166,7 +166,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         onPressed: showMenu,
                         padding: EdgeInsets.zero,
                         icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
-                        iconSize: Constants.mainMenuButtonIconSize,
+                        iconSize: Constants.navBarIconSize,
                       ),
                     ),
                   ],
@@ -182,7 +182,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     ),
                   ),
                   icon: const Icon(CupertinoIcons.add),
-                  iconSize: Constants.mainMenuButtonIconSize,
+                  iconSize: Constants.navBarIconSize,
                 ),
               ),
               child: CupertinoPageScaffold(
