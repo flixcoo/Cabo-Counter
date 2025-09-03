@@ -70,6 +70,8 @@ class _MainMenuViewState extends State<MainMenuView> {
           });
         }
         displayedGames = List.from(gameManager.gameList);
+        _sortGames(
+            sortOption: currentSortOption, sortDirection: currentSortDirection);
       });
     }).catchError((error) {
       print('[MainMenuView] $error');
@@ -272,8 +274,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                           ],
                                         ),
                                         onTap: () {
-                                          final session =
-                                              gameManager.gameList[index];
+                                          final session = displayedGames[index];
                                           Navigator.push(
                                             context,
                                             CupertinoPageRoute(
