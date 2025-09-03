@@ -155,7 +155,7 @@ class _GraphViewState extends State<GraphView> {
 
   /// Captures the current state of the graph as an image and shares it using the SharePlus package.
   /// The image is saved as a PNG file and shared via available sharing options on the device.
-  /// The method uses a pixel ratio of 3.0 for high-resolution images.
+  /// The method uses a pixel ratio of 5.0 for high-resolution images.
   Future<void> _shareImage() async {
     final image = await _key.currentState?.toImage(pixelRatio: 5.0);
     final byteData =
