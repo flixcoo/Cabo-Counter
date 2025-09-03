@@ -58,6 +58,6 @@ class Constants {
   /// Minimum duration in milliseconds that the skeleton screen should be displayed.
   static const int kMinimumSkeletonScreenDuration = 500;
 
-  /// Size of the icons used on the buttons in the main menu.
-  static const double mainMenuButtonIconSize = 25.0;
+  /// Size of the icons used on the buttons in the nav bar.
+  static const double navBarIconSize = 25.0;
 }

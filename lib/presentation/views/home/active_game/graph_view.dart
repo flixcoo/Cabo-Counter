@@ -44,7 +44,7 @@ class _GraphViewState extends State<GraphView> {
           trailing: IconButton(
             onPressed: () => _shareImage(),
             icon: const Icon(CupertinoIcons.share),
-            iconSize: Constants.mainMenuButtonIconSize,
+            iconSize: Constants.navBarIconSize,
           ),
           previousPageTitle: AppLocalizations.of(context).overview,
         ),
