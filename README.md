@@ -38,8 +38,8 @@ The complete rules of the game are also available in the repository wiki at [Cab
 ### Installation
 
 ```bash
-git clone https://github.com/flixcoo/Cabo-Counter.git
-cd Cabo-Counter
+git clone https://github.com/flixcoo/cabo-counter.git
+cd cabo-counter
 flutter pub get
 flutter run
 ```
