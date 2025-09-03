@@ -1,7 +1,12 @@
+import 'dart:ui' as dart_ui;
+
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 /// A widget that displays the cumulative scoring history of a game session as a line graph.
@@ -28,11 +33,19 @@ class _GraphViewState extends State<GraphView> {
     CustomTheme.graphColor5
   ];
 
+  /// Global key to access the state of the SfCartesianChart for image capturing.
+  final GlobalKey<SfCartesianChartState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
+          trailing: IconButton(
+            onPressed: () => _shareImage(),
+            icon: const Icon(CupertinoIcons.share),
+            iconSize: Constants.mainMenuButtonIconSize,
+          ),
           previousPageTitle: AppLocalizations.of(context).overview,
         ),
         child: SafeArea(
@@ -58,9 +71,12 @@ class _GraphViewState extends State<GraphView> {
               ],
             ),
             child: SfCartesianChart(
+              key: _key,
+              backgroundColor: CustomTheme.backgroundColor,
               enableAxisAnimation: true,
               legend: const Legend(
-                  overflowMode: LegendItemOverflowMode.wrap,
+                  alignment: ChartAlignment.near,
+                  overflowMode: LegendItemOverflowMode.scroll,
                   isVisible: true,
                   position: LegendPosition.bottom),
               primaryXAxis: const NumericAxis(
@@ -135,5 +151,26 @@ class _GraphViewState extends State<GraphView> {
         color: lineColors[i],
       );
     });
+  }
+
+  /// Captures the current state of the graph as an image and shares it using the SharePlus package.
+  /// The image is saved as a PNG file and shared via available sharing options on the device.
+  /// The method uses a pixel ratio of 3.0 for high-resolution images.
+  Future<void> _shareImage() async {
+    final image = await _key.currentState?.toImage(pixelRatio: 5.0);
+    final byteData =
+        await image?.toByteData(format: dart_ui.ImageByteFormat.png);
+    if (byteData == null) return;
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [
+          XFile.fromData(
+            byteData.buffer.asUint8List(),
+            mimeType: 'image/png',
+            name: 'scoring_history.png',
+          ),
+        ],
+      ),
+    );
   }
 }
