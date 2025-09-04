@@ -59,5 +59,5 @@ class Constants {
   static const int kMinimumSkeletonScreenDuration = 500;
 
   /// Size of the icons used on the buttons in the nav bar.
-  static const double navBarIconSize = 28.0;
+  static const double navBarIconSize = 30.0;
 }
