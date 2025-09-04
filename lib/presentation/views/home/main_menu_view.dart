@@ -182,7 +182,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     ),
                   ),
                   icon: const Icon(CupertinoIcons.add),
-                  iconSize: Constants.navBarIconSize,
+                  iconSize: Constants.navBarIconSize + 2,
                 ),
               ),
               child: CupertinoPageScaffold(
