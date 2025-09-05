@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/tab_view.dart';
+import 'package:cabo_counter/presentation/components/tab_bar.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,7 +60,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Cabo Counter',
-      home: const TabView(),
+      home: const TabBar(),
     );
   }
 }

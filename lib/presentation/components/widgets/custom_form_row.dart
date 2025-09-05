@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
 
 /// A customizable form row widget with a prefix icon, text, and optional suffix widget.
