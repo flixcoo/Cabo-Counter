@@ -3,6 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+/// A skeleton screen for the [MainMenuView]
+///
+/// Displays a list of animated placeholder tiles to simulate the loading state
+/// of game entries in the main menu. Each tile mimics the structure of a
+/// [CupertinoListTile].
 class MainMenuSkeleton extends StatelessWidget {
   const MainMenuSkeleton({super.key});
 

@@ -4,10 +4,12 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/placeholders/empty_filter_placeholder.dart';
+import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
+import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
-import 'package:cabo_counter/presentation/widgets/main_menu_skeleton.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -178,6 +180,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     CupertinoPageRoute(
                       builder: (context) => CreateGameView(
                         gameMode: ConfigService.getGameMode(),
+                        previousPageTitle: AppLocalizations.of(context).games,
                       ),
                     ),
                   ),
@@ -192,177 +195,120 @@ class _MainMenuViewState extends State<MainMenuView> {
                   replacement: Visibility(
                     visible: gameManager.gameList.isEmpty,
                     replacement: Visibility(
-                      visible: displayedGames.isEmpty,
-                      replacement: Builder(builder: (context) {
-                        return ListView.separated(
-                          itemCount: displayedGames.length,
-                          separatorBuilder: (context, index) => Divider(
-                            height: 1,
-                            thickness: 0.5,
-                            color: CustomTheme.white.withAlpha(50),
-                            indent: 50,
-                            endIndent: 50,
-                          ),
-                          itemBuilder: (context, index) {
-                            final session = displayedGames[index];
-                            return ListenableBuilder(
-                                listenable: session,
-                                builder: (context, _) {
-                                  _sortGames(
-                                      sortOption: currentSortOption,
-                                      sortDirection: currentSortDirection);
-                                  return Dismissible(
-                                    key: Key(session.gameId),
-                                    background: Container(
-                                      color: CustomTheme.red,
-                                      alignment: Alignment.centerRight,
-                                      padding:
-                                          const EdgeInsets.only(right: 20.0),
-                                      child: const Icon(
-                                        CupertinoIcons.delete,
-                                        color: CupertinoColors.white,
-                                      ),
-                                    ),
-                                    direction: DismissDirection.endToStart,
-                                    confirmDismiss: (direction) async {
-                                      return await _showDeleteGamePopup(
-                                          context, session.gameTitle);
-                                    },
-                                    onDismissed: (direction) {
-                                      gameManager
-                                          .deleteGameById(session.gameId);
-                                      _sortGames(
-                                          sortOption: currentSortOption,
-                                          sortDirection: currentSortDirection);
-                                    },
-                                    dismissThresholds: const {
-                                      DismissDirection.startToEnd: 0.6
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      child: CupertinoListTile(
-                                        backgroundColorActivated:
-                                            CustomTheme.backgroundColor,
-                                        title: Text(session.gameTitle),
-                                        subtitle: Visibility(
-                                            visible: session.isGameFinished,
-                                            replacement: Text(
-                                              '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                              style: const TextStyle(
-                                                  fontSize: 14.5),
-                                            ),
-                                            child: Text(
-                                              '\u{1F947} ${session.winner}',
-                                              style: const TextStyle(
-                                                  fontSize: 14.5),
-                                            )),
-                                        trailing: Row(
-                                          children: [
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text('${session.roundNumber}'),
-                                            const SizedBox(width: 3),
-                                            const Icon(CupertinoIcons
-                                                .arrow_2_circlepath_circle_fill),
-                                            const SizedBox(width: 15),
-                                            Text('${session.players.length}'),
-                                            const SizedBox(width: 3),
-                                            const Icon(
-                                                CupertinoIcons.person_2_fill),
-                                          ],
+                        visible: displayedGames.isEmpty,
+                        replacement: Builder(builder: (context) {
+                          return ListView.separated(
+                            itemCount: displayedGames.length,
+                            separatorBuilder: (context, index) => Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: CustomTheme.white.withAlpha(50),
+                              indent: 50,
+                              endIndent: 50,
+                            ),
+                            itemBuilder: (context, index) {
+                              final session = displayedGames[index];
+                              return ListenableBuilder(
+                                  listenable: session,
+                                  builder: (context, _) {
+                                    _sortGames(
+                                        sortOption: currentSortOption,
+                                        sortDirection: currentSortDirection);
+                                    return Dismissible(
+                                      key: Key(session.gameId),
+                                      background: Container(
+                                        color: CustomTheme.red,
+                                        alignment: Alignment.centerRight,
+                                        padding:
+                                            const EdgeInsets.only(right: 20.0),
+                                        child: const Icon(
+                                          CupertinoIcons.delete,
+                                          color: CupertinoColors.white,
                                         ),
-                                        onTap: () {
-                                          final session = displayedGames[index];
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ActiveGameView(
-                                                      gameSession: session),
-                                            ),
-                                          ).then((_) {
-                                            setState(() {
-                                              _sortGames(
-                                                  sortOption: currentSortOption,
-                                                  sortDirection:
-                                                      currentSortDirection);
-                                            });
-                                          });
-                                        },
                                       ),
-                                    ),
-                                  );
-                                });
-                          },
-                        );
-                      }),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 30),
-                          Center(
-                              child: GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => CreateGameView(
-                                    gameMode: ConfigService.getGameMode()),
-                              ),
-                            ),
-                            child: Icon(
-                              CupertinoIcons.eye_slash,
-                              size: 60,
-                              color: CustomTheme.primaryColor,
-                            ),
-                          )),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 70),
-                            child: Text(
-                              AppLocalizations.of(context).empty_filter_text,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          CupertinoButton(
-                              onPressed: () => _toggleShowOnlyActiveGames(),
-                              child: Text(AppLocalizations.of(context)
-                                  .empty_filter_button))
-                        ],
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 30),
-                        Center(
-                            child: GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => CreateGameView(
-                                  gameMode: ConfigService.getGameMode()),
-                            ),
-                          ),
-                          child: Icon(
-                            CupertinoIcons.plus,
-                            size: 60,
-                            color: CustomTheme.primaryColor,
-                          ),
-                        )),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 70),
-                          child: Text(
-                            '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
+                                      direction: DismissDirection.endToStart,
+                                      confirmDismiss: (direction) async {
+                                        return await _showDeleteGamePopup(
+                                            context, session.gameTitle);
+                                      },
+                                      onDismissed: (direction) {
+                                        gameManager
+                                            .deleteGameById(session.gameId);
+                                        _sortGames(
+                                            sortOption: currentSortOption,
+                                            sortDirection:
+                                                currentSortDirection);
+                                        setState(() {});
+                                      },
+                                      dismissThresholds: const {
+                                        DismissDirection.startToEnd: 0.6
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: CupertinoListTile(
+                                          backgroundColorActivated:
+                                              CustomTheme.backgroundColor,
+                                          title: Text(session.gameTitle),
+                                          subtitle: Visibility(
+                                              visible: session.isGameFinished,
+                                              replacement: Text(
+                                                '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
+                                                style: const TextStyle(
+                                                    fontSize: 14.5),
+                                              ),
+                                              child: Text(
+                                                '\u{1F947} ${session.winner}',
+                                                style: const TextStyle(
+                                                    fontSize: 14.5),
+                                              )),
+                                          trailing: Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text('${session.roundNumber}'),
+                                              const SizedBox(width: 3),
+                                              const Icon(CupertinoIcons
+                                                  .arrow_2_circlepath_circle_fill),
+                                              const SizedBox(width: 15),
+                                              Text('${session.players.length}'),
+                                              const SizedBox(width: 3),
+                                              const Icon(
+                                                  CupertinoIcons.person_2_fill),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            final session =
+                                                displayedGames[index];
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    ActiveGameView(
+                                                        gameSession: session),
+                                              ),
+                                            ).then((_) {
+                                              setState(() {
+                                                _sortGames(
+                                                    sortOption:
+                                                        currentSortOption,
+                                                    sortDirection:
+                                                        currentSortDirection);
+                                              });
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            },
+                          );
+                        }),
+                        child: EmptyFilterPlaceholder(
+                            toggleShowOnlyActiveGames:
+                                _toggleShowOnlyActiveGames)),
+                    child: const EmptyGamesPlaceholder(),
                   ),
                   child: const MainMenuSkeleton(),
                 ),
@@ -581,7 +527,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   void _sortGames(
       {required SortOption sortOption, required SortDirection sortDirection}) {
     displayedGames = _showOnlyActiveGames
-        ? displayedGames.where((game) => !game.isGameFinished).toList()
+        ? gameManager.gameList.where((game) => !game.isGameFinished).toList()
         : List.from(gameManager.gameList);
 
     final compare = sortOption == SortOption.date
