@@ -128,14 +128,7 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixText:
                             AppLocalizations.of(context).reset_to_default,
                         prefixIcon: CupertinoIcons.arrow_counterclockwise,
-                        onPressed: () {
-                          ConfigService.resetUserConfig();
-                          setState(() {
-                            _stepperKey1 = UniqueKey();
-                            _stepperKey2 = UniqueKey();
-                            defaultMode = ConfigService.getGameMode();
-                          });
-                        },
+                        onPressed: () => showConfirmPopup(),
                       )
                     ])),
             Padding(
@@ -235,12 +228,12 @@ class _SettingsViewState extends State<SettingsView> {
           content: Text(AppLocalizations.of(context).delete_data_message),
           actions: [
             CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
+              isDefaultAction: true,
               onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             CupertinoDialogAction(
               isDestructiveAction: true,
-              isDefaultAction: true,
               child: Text(AppLocalizations.of(context).delete),
               onPressed: () {
                 gameManager.deleteAllGames();
@@ -299,5 +292,38 @@ class _SettingsViewState extends State<SettingsView> {
       case ImportStatus.canceled:
         return ('', '');
     }
+  }
+
+  /// Shows a popup for the user to confirm the reset of their settings
+  void showConfirmPopup() {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context).reset_config_title),
+          content: Text(AppLocalizations.of(context).reset_config_message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(AppLocalizations.of(context).cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              isDefaultAction: true,
+              child: Text(AppLocalizations.of(context).reset),
+              onPressed: () {
+                ConfigService.resetUserConfig();
+                setState(() {
+                  _stepperKey1 = UniqueKey();
+                  _stepperKey2 = UniqueKey();
+                  defaultMode = ConfigService.getGameMode();
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
