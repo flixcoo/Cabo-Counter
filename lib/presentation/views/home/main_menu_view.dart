@@ -178,6 +178,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     CupertinoPageRoute(
                       builder: (context) => CreateGameView(
                         gameMode: ConfigService.getGameMode(),
+                        previousPageTitle: AppLocalizations.of(context).games,
                       ),
                     ),
                   ),
@@ -303,20 +304,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                         children: [
                           const SizedBox(height: 30),
                           Center(
-                              child: GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => CreateGameView(
-                                    gameMode: ConfigService.getGameMode()),
-                              ),
-                            ),
                             child: Icon(
                               CupertinoIcons.eye_slash,
                               size: 60,
                               color: CustomTheme.primaryColor,
                             ),
-                          )),
+                          ),
                           const SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 70),
@@ -343,7 +336,10 @@ class _MainMenuViewState extends State<MainMenuView> {
                             context,
                             CupertinoPageRoute(
                               builder: (context) => CreateGameView(
-                                  gameMode: ConfigService.getGameMode()),
+                                gameMode: ConfigService.getGameMode(),
+                                previousPageTitle:
+                                    AppLocalizations.of(context).games,
+                              ),
                             ),
                           ),
                           child: Icon(

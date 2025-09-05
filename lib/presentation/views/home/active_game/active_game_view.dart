@@ -258,14 +258,19 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
-                                              gameTitle: gameSession.gameTitle,
-                                              gameMode: widget.gameSession
-                                                          .isPointsLimitEnabled ==
-                                                      true
-                                                  ? GameMode.pointLimit
-                                                  : GameMode.unlimited,
-                                              players: gameSession
-                                                  .getPlayerNamesAsList())));
+                                                gameTitle:
+                                                    gameSession.gameTitle,
+                                                gameMode: widget.gameSession
+                                                            .isPointsLimitEnabled ==
+                                                        true
+                                                    ? GameMode.pointLimit
+                                                    : GameMode.unlimited,
+                                                players: gameSession
+                                                    .getPlayerNamesAsList(),
+                                                previousPageTitle:
+                                                    AppLocalizations.of(context)
+                                                        .overview,
+                                              )));
                                 },
                               ),
                               CupertinoListTile(
