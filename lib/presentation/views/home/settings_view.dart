@@ -228,12 +228,12 @@ class _SettingsViewState extends State<SettingsView> {
           content: Text(AppLocalizations.of(context).delete_data_message),
           actions: [
             CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
+              isDefaultAction: true,
               onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             CupertinoDialogAction(
               isDestructiveAction: true,
-              isDefaultAction: true,
               child: Text(AppLocalizations.of(context).delete),
               onPressed: () {
                 gameManager.deleteAllGames();
