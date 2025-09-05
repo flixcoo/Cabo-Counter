@@ -31,13 +31,14 @@ class CreateGameView extends StatefulWidget {
   final GameMode gameMode;
   final String? gameTitle;
   final List<String>? players;
+  final String previousPageTitle;
 
-  const CreateGameView({
-    super.key,
-    this.gameTitle,
-    this.players,
-    required this.gameMode,
-  });
+  const CreateGameView(
+      {super.key,
+      this.gameTitle,
+      this.players,
+      required this.gameMode,
+      required this.previousPageTitle});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -95,7 +96,7 @@ class _CreateGameViewState extends State<CreateGameView> {
         child: CupertinoPageScaffold(
             resizeToAvoidBottomInset: false,
             navigationBar: CupertinoNavigationBar(
-              previousPageTitle: AppLocalizations.of(context).games,
+              previousPageTitle: widget.previousPageTitle,
               middle: Text(AppLocalizations.of(context).new_game),
             ),
             child: SafeArea(
