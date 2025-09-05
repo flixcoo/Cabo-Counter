@@ -6,14 +6,9 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:flutter/cupertino.dart';
 
 /// A placeholder for the [MainMenuView] when the app contains no games
-class EmptyGamesPlaceholder extends StatefulWidget {
+class EmptyGamesPlaceholder extends StatelessWidget {
   const EmptyGamesPlaceholder({super.key});
 
-  @override
-  State<EmptyGamesPlaceholder> createState() => _EmptyGamesPlaceholderState();
-}
-
-class _EmptyGamesPlaceholderState extends State<EmptyGamesPlaceholder> {
   @override
   Widget build(BuildContext context) {
     return Column(

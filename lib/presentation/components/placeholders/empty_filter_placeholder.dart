@@ -3,17 +3,12 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
 /// A placeholder for the [MainMenuView] when the filter does not return any games
-class EmptyFilterPlaceholder extends StatefulWidget {
+class EmptyFilterPlaceholder extends StatelessWidget {
   final void Function() toggleShowOnlyActiveGames;
 
   const EmptyFilterPlaceholder(
       {super.key, required this.toggleShowOnlyActiveGames});
 
-  @override
-  State<EmptyFilterPlaceholder> createState() => _EmptyFilterPlaceholderState();
-}
-
-class _EmptyFilterPlaceholderState extends State<EmptyFilterPlaceholder> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +32,7 @@ class _EmptyFilterPlaceholderState extends State<EmptyFilterPlaceholder> {
           ),
         ),
         CupertinoButton(
-            onPressed: () => widget.toggleShowOnlyActiveGames(),
+            onPressed: () => toggleShowOnlyActiveGames(),
             child: Text(AppLocalizations.of(context).empty_filter_button))
       ],
     );
