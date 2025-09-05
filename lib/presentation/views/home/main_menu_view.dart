@@ -235,6 +235,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                       _sortGames(
                                           sortOption: currentSortOption,
                                           sortDirection: currentSortDirection);
+                                      setState(() {});
                                     },
                                     dismissThresholds: const {
                                       DismissDirection.startToEnd: 0.6
@@ -577,7 +578,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   void _sortGames(
       {required SortOption sortOption, required SortDirection sortDirection}) {
     displayedGames = _showOnlyActiveGames
-        ? displayedGames.where((game) => !game.isGameFinished).toList()
+        ? gameManager.gameList.where((game) => !game.isGameFinished).toList()
         : List.from(gameManager.gameList);
 
     final compare = sortOption == SortOption.date
