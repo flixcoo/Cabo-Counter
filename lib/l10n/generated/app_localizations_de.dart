@@ -238,11 +238,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -322,6 +318,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
+
+  @override
+  String get reset_config_title => 'Einstellungen zurücksetzen?';
+
+  @override
+  String get reset_config_message =>
+      'Möchtest du deine Einstellungen zurücksetzen?';
+
+  @override
+  String get reset => 'Zurücksetzen';
 
   @override
   String get game_data => 'Spieldaten';
