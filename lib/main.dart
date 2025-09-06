@@ -34,6 +34,27 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> with WidgetsBindingObserver {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      /// Preload images when the app is resumed
+      precacheImage(
+          const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CupertinoApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
