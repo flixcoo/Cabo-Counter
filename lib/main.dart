@@ -48,7 +48,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      /// Preload images when the app is resumed
       precacheImage(
           const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
     }
