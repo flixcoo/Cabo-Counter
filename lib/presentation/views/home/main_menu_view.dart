@@ -187,7 +187,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                         previousPageTitle: AppLocalizations.of(context).games,
                       ),
                     ),
-                  ),
+                  ).then((_) {
+                    setState(() {
+                      _sortGames(
+                          sortOption: currentSortOption,
+                          sortDirection: currentSortDirection);
+                    });
+                  }),
                   icon: const Icon(CupertinoIcons.add),
                   iconSize: Constants.navBarIconSize + 2,
                 ),
