@@ -116,7 +116,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                               builder: (context) => const SettingsView(),
                             ),
                           ).then((_) {
-                            setState(() {});
+                            setState(() {
+                              _sortGames(
+                                  sortOption: currentSortOption,
+                                  sortDirection: currentSortDirection);
+                            });
                           });
                         },
                         icon: const Icon(CupertinoIcons.settings)),
@@ -211,9 +215,6 @@ class _MainMenuViewState extends State<MainMenuView> {
                               return ListenableBuilder(
                                   listenable: session,
                                   builder: (context, _) {
-                                    _sortGames(
-                                        sortOption: currentSortOption,
-                                        sortDirection: currentSortDirection);
                                     return Dismissible(
                                       key: Key(session.gameId),
                                       background: Container(
