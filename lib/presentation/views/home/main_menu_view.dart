@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
@@ -16,14 +17,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-enum PreRatingDialogDecision { yes, no, cancel }
-
-enum BadRatingDialogDecision { email, cancel }
-
-enum SortOption { date, title }
-
-enum SortDirection { ascending, descending }
 
 /// Home screen of the app that displays a list of game sessions.
 ///
@@ -239,13 +232,14 @@ class _MainMenuViewState extends State<MainMenuView> {
                                             context, session.gameTitle);
                                       },
                                       onDismissed: (direction) {
-                                        gameManager
-                                            .deleteGameById(session.gameId);
-                                        _sortGames(
-                                            sortOption: currentSortOption,
-                                            sortDirection:
-                                                currentSortDirection);
-                                        setState(() {});
+                                        setState(() {
+                                          gameManager
+                                              .deleteGameById(session.gameId);
+                                          _sortGames(
+                                              sortOption: currentSortOption,
+                                              sortDirection:
+                                                  currentSortDirection);
+                                        });
                                       },
                                       dismissThresholds: const {
                                         DismissDirection.startToEnd: 0.6

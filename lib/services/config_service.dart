@@ -1,5 +1,4 @@
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
-import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A service class for managing and persisting app configuration settings using `SharedPreferences`.
