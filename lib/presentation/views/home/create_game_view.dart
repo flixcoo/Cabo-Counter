@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
@@ -13,13 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-
-enum CreateStatus {
-  noModeSelected,
-  minPlayers,
-  maxPlayers,
-  noPlayerName,
-}
 
 /// A view for creating a new game session in the Cabo Counter app.
 ///

@@ -1,12 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
-
-enum GameMode {
-  none,
-  pointLimit,
-  unlimited,
-}
 
 /// A stateless widget that displays a menu for selecting the game mode.
 ///
