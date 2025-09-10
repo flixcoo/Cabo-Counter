@@ -35,7 +35,7 @@ class Constants {
   /// URL to the app's imprint page, containing legal information.
   static const String kLegalLink = 'https://felixkirchner.de/impressum';
 
-  /// URL to the app's imprint page, containing legal information.
+  /// URL to my PayPal donation page for users who wish to support the app.
   static const String kDonateLink = 'https://www.paypal.me/flixcoo';
 
   /// Instance of [RateMyApp] configured to prompt users for app store ratings.
