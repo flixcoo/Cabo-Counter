@@ -24,8 +24,9 @@
   "about": "About",
   "licenses": "Licenses",
   "license_details": "License Details",
-  "legal_notice": "Legal Notice",
   "no_license_text": "No license available",
+  "legal_notice": "Legal Notice",
+  "support_me": "Support Me",
 
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",

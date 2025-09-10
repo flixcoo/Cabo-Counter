@@ -78,6 +78,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get legal_notice => 'Impressum';
 
   @override
+  String get support_me => 'Unterstütze mich';
+
+  @override
   String get empty_text_1 => 'Ganz schön leer hier...';
 
   @override
@@ -238,11 +241,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
