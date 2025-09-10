@@ -78,6 +78,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legal_notice => 'Legal Notice';
 
   @override
+  String get support_me => 'Support Me';
+
+  @override
   String get empty_text_1 => 'Pretty empty here...';
 
   @override
@@ -234,11 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
