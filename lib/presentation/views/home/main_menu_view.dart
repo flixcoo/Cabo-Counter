@@ -219,32 +219,26 @@ class _MainMenuViewState extends State<MainMenuView> {
                             itemBuilder: (context, index) {
                               if (_showOnlyActiveGames &&
                                   index == displayedGames.length) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 0.0),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          CupertinoIcons.eye_slash,
+                                return Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.eye_slash,
+                                        color: CustomTheme.white.withAlpha(150),
+                                        size: 16.0,
+                                      ),
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .only_active_games,
+                                        style: TextStyle(
                                           color:
                                               CustomTheme.white.withAlpha(150),
-                                          size: 16.0,
+                                          fontSize: 12.0,
                                         ),
-                                        const SizedBox(width: 6.0),
-                                        Text(
-                                          AppLocalizations.of(context)
-                                              .only_active_games,
-                                          style: TextStyle(
-                                            color: CustomTheme.white
-                                                .withAlpha(150),
-                                            fontSize: 12.0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               }
