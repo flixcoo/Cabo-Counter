@@ -235,7 +235,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         ),
                                         const SizedBox(width: 6.0),
                                         Text(
-                                          'Filter aktiv',
+                                          AppLocalizations.of(context)
+                                              .only_active_games,
                                           style: TextStyle(
                                             color: CustomTheme.white
                                                 .withAlpha(150),
