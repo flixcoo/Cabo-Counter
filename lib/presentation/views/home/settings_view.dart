@@ -57,7 +57,7 @@ class _SettingsViewState extends State<SettingsView> {
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                 child: CupertinoFormSection.insetGrouped(
                     footer: Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
+                      padding: const EdgeInsets.only(top: 5.0),
                       child:
                           Text(AppLocalizations.of(context).config_change_info),
                     ),
