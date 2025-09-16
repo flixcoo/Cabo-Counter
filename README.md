@@ -1,8 +1,8 @@
 # CABO Counter
 
-![Version](https://img.shields.io/badge/Version-0.6.2-orange)
-![Flutter](https://img.shields.io/badge/Flutter-3.32.1-blue?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.8.1-blue?logo=dart)
+![Version](https://img.shields.io/badge/App--Version-1.0.0-orange)
+![Flutter](https://img.shields.io/badge/Flutter-3.35.3-027DFD?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
 ![iOS](https://img.shields.io/badge/iOS-18.5-white?logo=apple)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
 
@@ -10,21 +10,21 @@ Cabo Counter is a Flutter-based mobile app for automated score tracking in the c
 
 🔗 App Store: [Cabo Counter on Apple App Store]() `//todo`
 
-## ✨ Features
+## 🃏 Features
 
-- 👥 Support for 2-5 players
-- ⚖️ Two game modes: 
+- Supports games with 2 - 5 players
+- Two game modes: 
   - **Point Limit Mode**: Play until a certain point limit is reached
   - **Unlimited Mode**: Play without an limit and end the round at any point
-- 🔢 Automatic score calculation with:
+- Automatic score calculation with:
   - Falsly calling Cabo
   - Exact 100-point bonus (score halving)
   - Kamikaze rule handling
-- 📊 Round history tracking via graph and table
-- 🎨 Customizable
+- Round history tracking via graph and table
+- Customizable
   - Change the default settings for point limits and cabo penaltys
   - Choose a default game mode for every new created game
-- 💿 Im- and exporting certain games or the whole app data
+- Im- and exporting certain games or the whole app data
 
 The complete rules of the game are also available in the repository wiki at [Cabo Rules (English)](https://github.com/flixcoo/cabo-counter/wiki/CABO-Rules-(English))
 
@@ -34,6 +34,7 @@ The complete rules of the game are also available in the repository wiki at [Cab
 - Flutter 3.32.1+
 - Dart 3.8.1+
 - Xcode (for iOS builds)
+- A device or simulator running iOS 18.5+
 
 ### Installation
 
