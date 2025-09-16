@@ -79,7 +79,18 @@ class GameManager extends ChangeNotifier {
     gameList[index].endGame();
     db.gameSessionDao.endGame(gameId);
     notifyListeners();
-    Vibrate.vibrate();
+    _vibrateIfPossible();
+  }
+
+  /// Vibrates the device if vibration is supported.
+  void _vibrateIfPossible() async {
+    try {
+      if (await Vibrate.canVibrate) {
+        Vibrate.vibrate();
+      }
+    } catch (e) {
+      print('Vibration error: $e');
+    }
   }
 }
 
