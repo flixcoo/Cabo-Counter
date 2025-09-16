@@ -26,6 +26,7 @@
   "license_details": "Lizenzdetails",
   "no_license_text": "Keine Lizenz verfügbar",
   "legal_notice": "Impressum",
+  "support_me": "Unterstütze mich",
 
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu",
@@ -152,8 +153,9 @@
   "point_limit": "Punkte-Limit",
   "standard_mode": "Standard-Modus",
   "reset_to_default": "Auf Standard zurücksetzen",
-  "reset_config_title": "Einstellungen zurücksetzen?",
+  "reset_config_title": "Einstellungen zurücksetzen",
   "reset_config_message": "Möchtest du deine Einstellungen zurücksetzen?",
+  "config_change_info" : "Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.",
   "reset": "Zurücksetzen",
   "game_data": "Spieldaten",
   "import_data": "Spieldaten importieren",

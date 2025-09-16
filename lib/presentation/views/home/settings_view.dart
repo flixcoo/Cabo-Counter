@@ -54,8 +54,13 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                 child: CupertinoFormSection.insetGrouped(
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          Text(AppLocalizations.of(context).config_change_info),
+                    ),
                     backgroundColor: CustomTheme.backgroundColor,
                     margin: EdgeInsets.zero,
                     children: [

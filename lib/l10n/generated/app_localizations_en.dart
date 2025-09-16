@@ -78,6 +78,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legal_notice => 'Legal Notice';
 
   @override
+  String get support_me => 'Support Me';
+
+  @override
   String get empty_text_1 => 'Pretty empty here...';
 
   @override
@@ -316,10 +319,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reset_to_default => 'Reset to Default';
 
   @override
-  String get reset_config_title => 'Reset Settings?';
+  String get reset_config_title => 'Reset Settings';
 
   @override
   String get reset_config_message => 'Do you want to reset your settings?';
+
+  @override
+  String get config_change_info =>
+      'Changed values only apply to newly created games. Existing games retain their original settings.';
 
   @override
   String get reset => 'Reset';

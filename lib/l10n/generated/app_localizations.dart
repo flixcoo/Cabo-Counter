@@ -236,6 +236,12 @@ abstract class AppLocalizations {
   /// **'Impressum'**
   String get legal_notice;
 
+  /// No description provided for @support_me.
+  ///
+  /// In de, this message translates to:
+  /// **'Unterstütze mich'**
+  String get support_me;
+
   /// No description provided for @empty_text_1.
   ///
   /// In de, this message translates to:
@@ -648,7 +654,7 @@ abstract class AppLocalizations {
   /// No description provided for @reset_config_title.
   ///
   /// In de, this message translates to:
-  /// **'Einstellungen zurücksetzen?'**
+  /// **'Einstellungen zurücksetzen'**
   String get reset_config_title;
 
   /// No description provided for @reset_config_message.
@@ -656,6 +662,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Möchtest du deine Einstellungen zurücksetzen?'**
   String get reset_config_message;
+
+  /// No description provided for @config_change_info.
+  ///
+  /// In de, this message translates to:
+  /// **'Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.'**
+  String get config_change_info;
 
   /// No description provided for @reset.
   ///
