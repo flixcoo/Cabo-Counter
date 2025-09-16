@@ -100,7 +100,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get descending => 'Descending';
 
   @override
-  String get only_active_games => 'Only active games';
+  String get only_active_games => 'Only active games are shown';
 
   @override
   String get only_active_games_description => 'Finished games will be hidden.';

@@ -281,7 +281,7 @@ abstract class AppLocalizations {
   /// No description provided for @only_active_games.
   ///
   /// In de, this message translates to:
-  /// **'Nur aktive Spiele'**
+  /// **'Nur aktive Spiele werden angezeigt'**
   String get only_active_games;
 
   /// No description provided for @only_active_games_description.
