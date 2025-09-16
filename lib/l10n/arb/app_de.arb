@@ -35,7 +35,7 @@
   "sort_and_filter_options": "Sortier- & Filteroptionen",
   "ascending": "Aufsteigend",
   "descending": "Absteigend",
-  "only_active_games": "Nur aktive Spiele",
+  "only_active_games": "Nur aktive Spiele werden angezeigt",
   "only_active_games_description": "Beendete Spiele werden ausgeblendet.",
   "delete_game_title": "Spiel löschen?",
   "delete_game_message": "Bist du sicher, dass du das Spiel \"{gameTitle}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",

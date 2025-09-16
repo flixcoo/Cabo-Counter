@@ -201,15 +201,47 @@ class _MainMenuViewState extends State<MainMenuView> {
                         visible: displayedGames.isEmpty,
                         replacement: Builder(builder: (context) {
                           return ListView.separated(
-                            itemCount: displayedGames.length,
-                            separatorBuilder: (context, index) => Divider(
-                              height: 1,
-                              thickness: 0.5,
-                              color: CustomTheme.white.withAlpha(50),
-                              indent: 50,
-                              endIndent: 50,
-                            ),
+                            itemCount: displayedGames.length +
+                                (_showOnlyActiveGames ? 1 : 0),
+                            separatorBuilder: (context, index) {
+                              bool isLastGameIndex =
+                                  index == displayedGames.length - 1;
+                              return isLastGameIndex
+                                  ? const SizedBox.shrink()
+                                  : Divider(
+                                      height: 1,
+                                      thickness: 0.5,
+                                      color: CustomTheme.white.withAlpha(50),
+                                      indent: 50,
+                                      endIndent: 50,
+                                    );
+                            },
                             itemBuilder: (context, index) {
+                              if (_showOnlyActiveGames &&
+                                  index == displayedGames.length) {
+                                return Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.eye_slash,
+                                        color: CustomTheme.white.withAlpha(150),
+                                        size: 16.0,
+                                      ),
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .only_active_games,
+                                        style: TextStyle(
+                                          color:
+                                              CustomTheme.white.withAlpha(150),
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                               final session = displayedGames[index];
                               return ListenableBuilder(
                                   listenable: session,

@@ -104,7 +104,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get descending => 'Absteigend';
 
   @override
-  String get only_active_games => 'Nur aktive Spiele';
+  String get only_active_games => 'Nur aktive Spiele werden angezeigt';
 
   @override
   String get only_active_games_description =>
@@ -241,11 +241,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,

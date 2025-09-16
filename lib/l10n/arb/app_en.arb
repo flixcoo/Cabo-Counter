@@ -35,7 +35,7 @@
   "sort_and_filter_options": "Sort & Filter Options",
   "ascending": "Ascending",
   "descending": "Descending",
-  "only_active_games": "Only active games",
+  "only_active_games": "Only active games are shown",
   "only_active_games_description": "Finished games will be hidden.",
   "delete_game_title": "Delete game?",
   "delete_game_message": "Are you sure you want to delete the game \"{gameTitle}\"? This action cannot be undone.",
