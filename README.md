@@ -1,8 +1,8 @@
 # CABO Counter
 
 ![Version](https://img.shields.io/badge/App--Version-1.0.0-orange)
-![Flutter](https://img.shields.io/badge/Flutter-3.35.3-027DFD?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
+![Flutter](https://img.shields.io/badge/Flutter-3.32.1-027DFD?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.8.1-027DFD?logo=dart)
 ![iOS](https://img.shields.io/badge/iOS-18.5-white?logo=apple)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
 
