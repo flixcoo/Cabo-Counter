@@ -106,6 +106,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get only_active_games => 'Only active games are shown';
 
   @override
+  String get only_active_game_title => 'Only active games';
+
+  @override
   String get only_active_games_description => 'Finished games will be hidden.';
 
   @override

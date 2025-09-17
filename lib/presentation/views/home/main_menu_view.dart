@@ -155,7 +155,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                         PullDownMenuItem.selectable(
                           onTap: () => _toggleShowOnlyActiveGames(),
                           selected: _showOnlyActiveGames,
-                          title: AppLocalizations.of(context).only_active_games,
+                          title: AppLocalizations.of(context)
+                              .only_active_game_title,
                           subtitle: AppLocalizations.of(context)
                               .only_active_games_description,
                           icon: CupertinoIcons.eye_slash,
