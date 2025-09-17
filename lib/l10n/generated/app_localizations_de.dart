@@ -241,11 +241,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -396,13 +392,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_error_message => 'Datei konnte nicht exportiert werden';
 
   @override
-  String get error_found => 'Fehler gefunden?';
+  String get report_error => 'Fehler melden';
 
   @override
-  String get create_issue => 'Issue erstellen';
-
-  @override
-  String get wiki => 'Wiki';
+  String get mail_developer => 'E-Mail an Entwickler';
 
   @override
   String get app_version => 'App-Version';

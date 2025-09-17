@@ -186,14 +186,14 @@ class _SettingsViewState extends State<SettingsView> {
                     margin: EdgeInsets.zero,
                     children: [
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).wiki,
-                        prefixIcon: CupertinoIcons.book,
+                        prefixText: AppLocalizations.of(context).mail_developer,
+                        prefixIcon: CupertinoIcons.mail,
                         onPressed: () =>
-                            launchUrl(Uri.parse(Constants.kGithubWikiLink)),
+                            launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).error_found,
+                        prefixText: AppLocalizations.of(context).report_error,
                         prefixIcon: FontAwesomeIcons.github,
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.kGithubIssuesLink)),

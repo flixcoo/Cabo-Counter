@@ -21,10 +21,6 @@ class Constants {
   static const String kGithubIssuesLink =
       'https://felixkirchner.de/cabo-counter/issues';
 
-  /// URL to the GitHub wiki for additional documentation and guides.
-  static const String kGithubWikiLink =
-      'https://felixkirchner.de/cabo-counter/wiki';
-
   /// Official email address for user inquiries and support.
   static const String kEmail = 'cabocounter@felixkirchner.de';
 
