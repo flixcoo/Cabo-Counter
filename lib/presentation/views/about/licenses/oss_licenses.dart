@@ -4155,9 +4155,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'pool',
     description: 'Manage a finite pool of resources. Useful for controlling concurrent file system or network requests.',
-    repository: 'https://github.com/dart-lang/pool',
+    repository: 'https://github.com/dart-lang/tools/tree/main/pkgs/pool',
     authors: [],
-    version: '1.5.1',
+    version: '1.5.2',
     license: '''Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
