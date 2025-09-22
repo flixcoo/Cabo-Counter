@@ -8,7 +8,7 @@ import 'package:rate_my_app/rate_my_app.dart';
 /// in-app rating prompts.
 class Constants {
   /// Indicates the current development phase of the app
-  static const String appDevPhase = 'Beta';
+  static const String appDevPhase = 'Stable';
 
   /// Links to various social media profiles and resources related to the app.
   /// URL to my Instagram profile
