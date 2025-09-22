@@ -157,12 +157,27 @@ class _GraphViewState extends State<GraphView> {
   /// The image is saved as a PNG file and shared via available sharing options on the device.
   /// The method uses a pixel ratio of 5.0 for high-resolution images.
   Future<void> _shareImage() async {
+    // Get the RenderBox of the current view to determine its position on screen.
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+
+    // Capture the chart as an image with a pixel ratio of 5.0 for high quality.
     final image = await _key.currentState?.toImage(pixelRatio: 5.0);
     final byteData =
         await image?.toByteData(format: dart_ui.ImageByteFormat.png);
+
+    // Exit if image capture failed.
     if (byteData == null) return;
+
+    // Set the share position origin:
+    // - Use the view's position if available.
+    // - Fall back to a default position (top-left corner) if the view's position is unavailable.
+    Rect sharePositionOrigin = renderBox == null
+        ? const Rect.fromLTWH(0, 0, 100, 100)
+        : renderBox.localToGlobal(Offset.zero) & renderBox.size;
+
     await SharePlus.instance.share(
       ShareParams(
+        sharePositionOrigin: sharePositionOrigin,
         files: [
           XFile.fromData(
             byteData.buffer.asUint8List(),
