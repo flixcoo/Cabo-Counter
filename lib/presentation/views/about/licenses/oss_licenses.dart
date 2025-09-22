@@ -1691,7 +1691,7 @@ SOFTWARE.''',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.28.1',
+    version: '2.28.2',
     license: '''MIT License
 
 Copyright (c) 2021 Simon Binder
@@ -1723,7 +1723,7 @@ SOFTWARE.''',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.28.2',
+    version: '2.28.3',
     license: '''MIT License
 
 Copyright (c) 2021 Simon Binder
@@ -1755,7 +1755,7 @@ SOFTWARE.''',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '0.2.6',
+    version: '0.2.7',
     license: '''MIT License
 
 Copyright (c) 2024 Simon Binder
