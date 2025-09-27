@@ -19,28 +19,28 @@ class Constants {
 
   /// URL to the GitHub issues page for reporting bugs or requesting features.
   static const String kGithubIssuesLink =
-      'https://felixkirchner.de/cabo-counter/issues';
+      'https://github.com/flixcoo/cabo-counter/issues';
 
   /// Official email address for user inquiries and support.
   static const String kEmail = 'cabocounter@felixkirchner.de';
 
   /// URL to the app's privacy policy page.
   static const String kPrivacyPolicyLink =
-      'https://felixkirchner.de/cabo-counter/datenschutz';
+      'https://felixkirchner.de/projects/cabo-counter/privacy/';
 
   /// URL to the app's imprint page, containing legal information.
-  static const String kLegalLink = 'https://felixkirchner.de/impressum';
+  static const String kLegalLink = 'https://felixkirchner.de/legal';
 
   /// URL to my PayPal donation page for users who wish to support the app.
   static const String kDonateLink = 'https://www.paypal.me/flixcoo';
 
   /// Instance of [RateMyApp] configured to prompt users for app store ratings.
   static RateMyApp rateMyApp = RateMyApp(
-      appStoreIdentifier: '6747105718',
-      minDays: 15,
-      remindDays: 45,
-      minLaunches: 15,
-      remindLaunches: 40);
+      appStoreIdentifier: '6751843294',
+      minDays: 14,
+      remindDays: 28,
+      minLaunches: 10,
+      remindLaunches: 30);
 
   /// Delay in milliseconds before a pop-up appears.
   static const int kPopUpDelay = 300;
