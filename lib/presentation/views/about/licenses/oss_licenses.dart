@@ -2686,8 +2686,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'A Flutter package to use fonts from fonts.google.com. Supports HTTP fetching, caching, and asset bundling.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/google_fonts',
     authors: [],
-    version: '6.3.1',
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    version: '6.3.2',
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -4765,7 +4765,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Android implementation of the shared_preferences plugin',
     repository: 'https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_android',
     authors: [],
-    version: '2.4.12',
+    version: '2.4.13',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
