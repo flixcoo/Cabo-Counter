@@ -2472,7 +2472,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: true,
+    isDirectDependency: false,
   ),
   Package(
     name: 'flutter_plugin_android_lifecycle',
@@ -3206,39 +3206,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     isMarkdown: false,
     isSdk: false,
     isDirectDependency: false,
-  ),
-  Package(
-    name: 'logger',
-    description: 'Small, easy to use and extensible logger which prints beautiful logs.',
-    repository: 'https://github.com/SourceHorizon/logger',
-    authors: [],
-    version: '2.6.1',
-    license: '''MIT License
-
-Copyright (c) 2019 Simon Leier
-Copyright (c) 2019 Harm Aarts
-Copyright (c) 2023 Severin Hamader
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.''',
-    isMarkdown: false,
-    isSdk: false,
-    isDirectDependency: true,
   ),
   Package(
     name: 'logging',
@@ -4588,37 +4555,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     isDirectDependency: false,
   ),
   Package(
-    name: 'reorderables',
-    description: 'Reorderable table, row, column, wrap, sliver list that allow drag and drop of their children.',
-    homepage: 'https://github.com/hanshengchiu/reorderables',
-    authors: [],
-    version: '0.4.4',
-    license: '''MIT License
-
-Copyright (c) 2019 Hansheng Chiu
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.''',
-    isMarkdown: false,
-    isSdk: false,
-    isDirectDependency: true,
-  ),
-  Package(
     name: 'rfc_6901',
     description: 'JSON Pointer (RFC 6901). Reads/writes referred values in JSON documents.',
     homepage: 'https://github.com/f3ath/rfc-6901-dart',
@@ -5842,7 +5778,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: true,
+    isDirectDependency: false,
   ),
   Package(
     name: 'uri',
