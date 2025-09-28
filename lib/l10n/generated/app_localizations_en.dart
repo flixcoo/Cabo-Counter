@@ -88,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Create a new game using the button in the top right.';
 
   @override
-  String get empty_filter_text => 'Adjust the filter options to see all games';
+  String get empty_filter_text => 'Adjust the filter options to see all games.';
 
   @override
   String get empty_filter_button => 'Show all games';

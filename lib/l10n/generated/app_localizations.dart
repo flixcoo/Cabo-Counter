@@ -251,13 +251,13 @@ abstract class AppLocalizations {
   /// No description provided for @empty_text_2.
   ///
   /// In de, this message translates to:
-  /// **'Füge über den Button oben rechts eine neue Runde hinzu'**
+  /// **'Füge über den Button oben rechts eine neue Runde hinzu.'**
   String get empty_text_2;
 
   /// No description provided for @empty_filter_text.
   ///
   /// In de, this message translates to:
-  /// **'Passe die Filteroptionen an um alle Spiele zu sehen'**
+  /// **'Passe die Filteroptionen an um alle Spiele zu sehen.'**
   String get empty_filter_text;
 
   /// No description provided for @empty_filter_button.
