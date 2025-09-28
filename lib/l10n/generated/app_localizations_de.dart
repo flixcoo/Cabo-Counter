@@ -85,11 +85,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get empty_text_2 =>
-      'Füge über den Button oben rechts eine neue Runde hinzu';
+      'Füge über den Button oben rechts eine neue Runde hinzu.';
 
   @override
   String get empty_filter_text =>
-      'Passe die Filteroptionen an um alle Spiele zu sehen';
+      'Passe die Filteroptionen an um alle Spiele zu sehen.';
 
   @override
   String get empty_filter_button => 'Alle Spiele anzeigen';
