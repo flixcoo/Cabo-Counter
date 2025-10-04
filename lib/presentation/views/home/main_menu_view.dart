@@ -8,11 +8,12 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_filter_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/data_migration_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -58,7 +59,6 @@ class _MainMenuViewState extends State<MainMenuView> {
         gameManager.addGameSessionFromDataBase(session);
       }
       return Future.delayed(const Duration(milliseconds: 500), () {
-        _migrateData();
         if (mounted) {
           setState(() {
             _isLoading = false;
@@ -374,7 +374,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     );
 
     PreRatingDialogDecision preRatingDecision =
-        await _showPreRatingDialog(context);
+        await PopupService.showPreRatingDialog(context);
     BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
 
     // so that the bad rating dialog is not shown immediately
@@ -386,7 +386,7 @@ class _MainMenuViewState extends State<MainMenuView> {
         break;
       case PreRatingDialogDecision.no:
         if (context.mounted) {
-          badRatingDecision = await _showBadRatingDialog(context);
+          badRatingDecision = await PopupService.showBadRatingDialog(context);
         }
         if (badRatingDecision == BadRatingDialogDecision.email) {
           if (context.mounted) {
@@ -404,154 +404,25 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// [gameTitle] is the title of the game session to be deleted.
   Future<bool> _showDeleteGamePopup(
       BuildContext context, String gameTitle) async {
-    return await showCupertinoDialog<bool>(
+    return await PopupService.showSelectionPopup<bool>(
           context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-                title: Text(
-                  AppLocalizations.of(context).delete_game_title,
-                ),
-                content: Text(AppLocalizations.of(context)
-                    .delete_game_message(gameTitle)),
-                actions: [
-                  CupertinoDialogAction(
-                    isDefaultAction: true,
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Text(AppLocalizations.of(context).cancel),
-                  ),
-                  CupertinoDialogAction(
-                    isDestructiveAction: true,
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: Text(
-                      AppLocalizations.of(context).delete,
-                    ),
-                  )
-                ]);
-          },
+          title: Text(AppLocalizations.of(context).delete_game_title),
+          message:
+              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
+          actions: [
+            CustomDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.of(context).pop(false),
+              actionText: AppLocalizations.of(context).cancel,
+            ),
+            CustomDialogAction(
+              isDestructiveAction: true,
+              onPressed: () => Navigator.of(context).pop(true),
+              actionText: AppLocalizations.of(context).delete,
+            ),
+          ],
         ) ??
         false;
-  }
-
-  /// Shows a dialog asking the user if they like the app.
-  /// Returns the user's decision as enum [PreRatingDialogDecision].
-  /// PreRatingDialogDecision.yes: User likes the app.
-  /// PreRatingDialogDecision.no: User does not like the app.
-  /// PreRatingDialogDecision.cancel: User cancels the dialog.
-  Future<PreRatingDialogDecision> _showPreRatingDialog(
-      BuildContext context) async {
-    return await showCupertinoDialog<PreRatingDialogDecision>(
-            context: context,
-            builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: Text(AppLocalizations.of(context).pre_rating_title),
-                  content:
-                      Text(AppLocalizations.of(context).pre_rating_message),
-                  actions: [
-                    CupertinoDialogAction(
-                      onPressed: () => Navigator.of(context)
-                          .pop(PreRatingDialogDecision.yes),
-                      isDefaultAction: true,
-                      child: Text(AppLocalizations.of(context).yes),
-                    ),
-                    CupertinoDialogAction(
-                      onPressed: () =>
-                          Navigator.of(context).pop(PreRatingDialogDecision.no),
-                      child: Text(AppLocalizations.of(context).no),
-                    ),
-                    CupertinoDialogAction(
-                      onPressed: () => Navigator.of(context).pop(),
-                      isDestructiveAction: true,
-                      child: Text(AppLocalizations.of(context).cancel),
-                    )
-                  ],
-                )) ??
-        PreRatingDialogDecision.cancel;
-  }
-
-  /// Shows a dialog asking the user for feedback if they do not like the app.
-  /// Returns the user's decision as enum [BadRatingDialogDecision].
-  /// BadRatingDialogDecision.email: User wants to send an email for feedback.
-  /// BadRatingDialogDecision.cancel: User cancels the dialog.
-  Future<BadRatingDialogDecision> _showBadRatingDialog(
-      BuildContext context) async {
-    return await showCupertinoDialog<BadRatingDialogDecision>(
-            context: context,
-            builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: Text(AppLocalizations.of(context).bad_rating_title),
-                  content:
-                      Text(AppLocalizations.of(context).bad_rating_message),
-                  actions: [
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                      onPressed: () => Navigator.of(context)
-                          .pop(BadRatingDialogDecision.email),
-                      child: Text(AppLocalizations.of(context).contact_email),
-                    ),
-                    CupertinoDialogAction(
-                        isDestructiveAction: true,
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(AppLocalizations.of(context).cancel))
-                  ],
-                )) ??
-        BadRatingDialogDecision.cancel;
-  }
-
-  /// TODO: Temporary method, will be removed till release 1.0.0
-  /// Migrates old game data if the migration has not been done yet.
-  /// This Method migrates the old JSON based game data to the new database structure.
-  /// It shows a dialog with the migration result (success or failure) after the migration is
-  void _migrateData() async {
-    if (!ConfigService.isMigrationDone()) {
-      migrationStatus = await DataMigrationService.loadOldGameData();
-      final success = migrationStatus['success'] ?? 0;
-      if (success == 1) {
-        ConfigService.setMigrationDone(true);
-
-        if (mounted) {
-          final int migratedGames = migrationStatus['gameCount'] ?? 0;
-          await showCupertinoDialog(
-            context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: const Text('Migration erfolgreich'),
-              content: Text(
-                  '$migratedGames Spiele konnten aus den gefundenen Spieldaten migriert werden.'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      } else if (success == -1) {
-        ConfigService.setMigrationDone(true);
-
-        if (mounted) {
-          await showCupertinoDialog(
-            context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: const Text('Migration fehlgeschlagen'),
-              content: const Text(
-                  'Deine alten Spieldaten konnten leider nicht migriert werden.'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      }
-    } else {
-      print('[MainMenuView] Data migration already completed. Skipping.');
-    }
   }
 
   /// Sorts the game list based on the provided sort option and direction.

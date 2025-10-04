@@ -9,6 +9,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_button.dart'
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -386,20 +387,8 @@ class _CreateGameViewState extends State<CreateGameView> {
   void _showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
-    showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+    PopupService.showInfoPopup(
+        context: context, title: Text(title), content: Text(message));
   }
 
   /// Returns the title and message for the dialog based on the [CreateStatus].

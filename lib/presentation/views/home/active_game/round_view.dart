@@ -2,6 +2,7 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -457,19 +458,10 @@ class _RoundViewState extends State<RoundView> {
     String resultText =
         _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
 
-    await showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
+    await PopupService.showInfoPopup(
+        context: context,
         title: Text(AppLocalizations.of(context).bonus_points_title),
-        content: Text(resultText),
-        actions: [
-          CupertinoDialogAction(
-            child: Text(AppLocalizations.of(context).ok),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-    );
+        content: Text(resultText));
   }
 
   /// Generates the message string for the bonus popup.
