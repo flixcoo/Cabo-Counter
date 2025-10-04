@@ -2,7 +2,7 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class GameManager extends ChangeNotifier {
   List<GameSession> gameList = [];
@@ -79,11 +79,11 @@ class GameManager extends ChangeNotifier {
     gameList[index].endGame();
     db.gameSessionDao.endGame(gameId);
     notifyListeners();
-    // _vibrateIfPossible();
+    _vibrateIfPossible();
   }
 
   /// Vibrates the device if vibration is supported.
-/*  void _vibrateIfPossible() async {
+  void _vibrateIfPossible() async {
     try {
       if (await Vibrate.canVibrate) {
         Vibrate.vibrate();
@@ -91,7 +91,7 @@ class GameManager extends ChangeNotifier {
     } catch (e) {
       print('Vibration error: $e');
     }
-  }*/
+  }
 }
 
 final gameManager = GameManager();
