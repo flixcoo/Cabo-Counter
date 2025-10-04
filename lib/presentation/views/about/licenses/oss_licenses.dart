@@ -5277,7 +5277,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Provides lightweight yet convenient bindings to SQLite by using dart:ffi',
     homepage: 'https://github.com/simolus3/sqlite3.dart/tree/main/sqlite3',
     authors: [],
-    version: '2.9.0',
+    version: '2.9.1',
     license: '''MIT License
 
 Copyright (c) 2020 Simon Binder
@@ -5308,7 +5308,7 @@ SOFTWARE.''',
     description: 'Flutter plugin to include native sqlite3 libraries with your app',
     homepage: 'https://github.com/simolus3/sqlite3.dart/tree/main/sqlite3_flutter_libs',
     authors: [],
-    version: '0.5.39',
+    version: '0.5.40',
     license: '''MIT License
 
 Copyright (c) 2020 Simon Binder
@@ -6416,7 +6416,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'A file system watcher. It monitors changes to contents of directories and sends notifications when files have been added, removed, or modified.',
     repository: 'https://github.com/dart-lang/tools/tree/main/pkgs/watcher',
     authors: [],
-    version: '1.1.3',
+    version: '1.1.4',
     license: '''Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
