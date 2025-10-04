@@ -11,7 +11,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
-import 'package:cabo_counter/services/poup_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
