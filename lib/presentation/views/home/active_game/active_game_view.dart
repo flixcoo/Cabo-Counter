@@ -4,12 +4,14 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/poup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
@@ -284,27 +286,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         .exportSingleGameSession(
                                             widget.gameSession);
                                     if (!success && context.mounted) {
-                                      showCupertinoDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            CupertinoAlertDialog(
-                                          title: Text(
-                                              AppLocalizations.of(context)
-                                                  .export_error_title),
-                                          content: Text(
-                                              AppLocalizations.of(context)
-                                                  .export_error_message),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .ok),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ),
-                                      );
+                                      PopupService.showInfoPopup(
+                                          context,
+                                          AppLocalizations.of(context)
+                                              .export_error_title,
+                                          AppLocalizations.of(context)
+                                              .export_error_message);
                                     }
                                   }),
                             ],
@@ -338,37 +325,27 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
   void _showEndGameDialog() {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).end_game_title),
-          content: Text(AppLocalizations.of(context).end_game_message),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text(
-                AppLocalizations.of(context).end_game,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  gameManager.endGame(gameSession.gameId);
-                  _playFinishAnimation(context);
-                });
-                Navigator.pop(context);
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
+    final endGameAction = CustomDialogAction(
+      isDestructiveAction: true,
+      onPressed: () {
+        setState(() {
+          gameManager.endGame(gameSession.gameId);
+          _playFinishAnimation(context);
+        });
+        Navigator.pop(context);
       },
+      actionText: AppLocalizations.of(context).end_game,
     );
+    final cancelAction = CustomDialogAction(
+      actionText: AppLocalizations.of(context).cancel,
+      onPressed: () => Navigator.pop(context),
+    );
+
+    PopupService.showSelectionPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).end_game_title),
+        message: Text(AppLocalizations.of(context).end_game_message),
+        actions: [endGameAction, cancelAction]);
   }
 
   /// Returns a list of player indices sorted by their scores in
@@ -425,33 +402,23 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
-    return await showCupertinoDialog<bool>(
+    return await PopupService.showSelectionPopup<bool>(
           context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).delete_game_title),
-              content: Text(
-                AppLocalizations.of(context)
-                    .delete_game_message(gameSession.gameTitle),
-              ),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).cancel),
-                  onPressed: () => Navigator.pop(context, false),
-                ),
-                CupertinoDialogAction(
-                  child: Text(
-                    AppLocalizations.of(context).delete,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.red),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                ),
-              ],
-            );
-          },
+          title: Text(AppLocalizations.of(context).delete_game_title),
+          message: Text(AppLocalizations.of(context)
+              .delete_game_message(gameSession.gameTitle)),
+          actions: [
+            CustomDialogAction(
+              onPressed: () => Navigator.pop(context, false),
+              actionText: AppLocalizations.of(context).cancel,
+            ),
+            CustomDialogAction(
+              actionText: AppLocalizations.of(context).delete,
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
         ) ??
         false;
   }
@@ -466,20 +433,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         gameManager.deleteGameById(gameSession.gameId);
       });
     } else {
-      showCupertinoDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).id_error_title),
-              content: Text(AppLocalizations.of(context).id_error_message),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            );
-          });
+      PopupService.showInfoPopup(
+          context,
+          AppLocalizations.of(context).id_error_title,
+          AppLocalizations.of(context).id_error_message);
     }
   }
 
@@ -536,8 +493,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               content: Text(AppLocalizations.of(context)
                   .end_of_game_message(winnerAmount, winner, winnerPoints)),
               actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
+                CustomDialogAction(
+                  actionText: AppLocalizations.of(context).ok,
                   onPressed: () {
                     confettiController.stop();
                     Navigator.pop(context);

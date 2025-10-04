@@ -19,7 +19,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_vibrate: ^1.3.0
+  # flutter_vibrate: ^1.3.0
   font_awesome_flutter: ^10.8.0
   google_fonts: ^6.3.0
   intl: any

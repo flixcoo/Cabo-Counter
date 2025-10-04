@@ -3,11 +3,13 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/poup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,6 +30,7 @@ class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
   GameMode defaultMode = ConfigService.getGameMode();
+
   @override
   void initState() {
     super.initState();
@@ -226,50 +229,34 @@ class _SettingsViewState extends State<SettingsView> {
   /// Shows a dialog to confirm the deletion of all game data.
   /// When confirmed, it deletes all game data from local storage.
   void _deleteAllGames() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).delete_data_title),
-          content: Text(AppLocalizations.of(context).delete_data_message),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context).cancel),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text(AppLocalizations.of(context).delete),
-              onPressed: () {
-                gameManager.deleteAllGames();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+    final dialogActions = [
+      CustomDialogAction(
+        isDefaultAction: true,
+        onPressed: () => Navigator.pop(context),
+        actionText: AppLocalizations.of(context).cancel,
+      ),
+      CustomDialogAction(
+        isDestructiveAction: true,
+        onPressed: () {
+          gameManager.deleteAllGames();
+          Navigator.pop(context);
+        },
+        actionText: AppLocalizations.of(context).delete,
+      )
+    ];
+
+    PopupService.showSelectionPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).delete_data_title),
+        message: Text(AppLocalizations.of(context).delete_data_message),
+        actions: dialogActions);
   }
 
   void showFeedbackDialog(ImportStatus status) {
     if (status == ImportStatus.canceled) return;
     final (title, message) = _getDialogContent(status);
 
-    showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+    PopupService.showInfoPopup(context, title, message);
   }
 
   (String, String) _getDialogContent(ImportStatus status) {
@@ -302,34 +289,30 @@ class _SettingsViewState extends State<SettingsView> {
 
   /// Shows a popup for the user to confirm the reset of their settings
   void showConfirmPopup() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).reset_config_title),
-          content: Text(AppLocalizations.of(context).reset_config_message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              isDefaultAction: true,
-              child: Text(AppLocalizations.of(context).reset),
-              onPressed: () {
-                ConfigService.resetUserConfig();
-                setState(() {
-                  _stepperKey1 = UniqueKey();
-                  _stepperKey2 = UniqueKey();
-                  defaultMode = ConfigService.getGameMode();
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+    final dialogActions = [
+      CustomDialogAction(
+        actionText: AppLocalizations.of(context).cancel,
+        onPressed: () => Navigator.pop(context),
+      ),
+      CustomDialogAction(
+        isDestructiveAction: true,
+        isDefaultAction: true,
+        actionText: AppLocalizations.of(context).reset,
+        onPressed: () {
+          ConfigService.resetUserConfig();
+          setState(() {
+            _stepperKey1 = UniqueKey();
+            _stepperKey2 = UniqueKey();
+            defaultMode = ConfigService.getGameMode();
+          });
+          Navigator.pop(context);
+        },
+      ),
+    ];
+    PopupService.showSelectionPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).reset_config_title),
+        message: Text(AppLocalizations.of(context).reset_config_message),
+        actions: dialogActions);
   }
 }
