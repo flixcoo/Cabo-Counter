@@ -12,7 +12,6 @@ import 'package:cabo_counter/presentation/views/home/active_game/active_game_vie
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
-import 'package:cabo_counter/services/data_migration_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -58,7 +57,6 @@ class _MainMenuViewState extends State<MainMenuView> {
         gameManager.addGameSessionFromDataBase(session);
       }
       return Future.delayed(const Duration(milliseconds: 500), () {
-        _migrateData();
         if (mounted) {
           setState(() {
             _isLoading = false;
@@ -497,61 +495,6 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ],
                 )) ??
         BadRatingDialogDecision.cancel;
-  }
-
-  /// TODO: Temporary method, will be removed till release 1.0.0
-  /// Migrates old game data if the migration has not been done yet.
-  /// This Method migrates the old JSON based game data to the new database structure.
-  /// It shows a dialog with the migration result (success or failure) after the migration is
-  void _migrateData() async {
-    if (!ConfigService.isMigrationDone()) {
-      migrationStatus = await DataMigrationService.loadOldGameData();
-      final success = migrationStatus['success'] ?? 0;
-      if (success == 1) {
-        ConfigService.setMigrationDone(true);
-
-        if (mounted) {
-          final int migratedGames = migrationStatus['gameCount'] ?? 0;
-          await showCupertinoDialog(
-            context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: const Text('Migration erfolgreich'),
-              content: Text(
-                  '$migratedGames Spiele konnten aus den gefundenen Spieldaten migriert werden.'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      } else if (success == -1) {
-        ConfigService.setMigrationDone(true);
-
-        if (mounted) {
-          await showCupertinoDialog(
-            context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: const Text('Migration fehlgeschlagen'),
-              content: const Text(
-                  'Deine alten Spieldaten konnten leider nicht migriert werden.'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      }
-    } else {
-      print('[MainMenuView] Data migration already completed. Skipping.');
-    }
   }
 
   /// Sorts the game list based on the provided sort option and direction.
