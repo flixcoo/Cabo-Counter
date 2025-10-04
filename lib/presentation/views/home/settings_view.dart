@@ -256,7 +256,8 @@ class _SettingsViewState extends State<SettingsView> {
     if (status == ImportStatus.canceled) return;
     final (title, message) = _getDialogContent(status);
 
-    PopupService.showInfoPopup(context, title, message);
+    PopupService.showInfoPopup(
+        context: context, title: Text(title), content: Text(message));
   }
 
   (String, String) _getDialogContent(ImportStatus status) {

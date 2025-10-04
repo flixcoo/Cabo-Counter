@@ -14,23 +14,23 @@ class PopupService {
   /// [message]: The message content of the pop-up.
   /// Returns a Future that completes when the dialog is dismissed.
   static Future<void> showInfoPopup(
-      BuildContext context, String title, String message) async {
+      {required BuildContext context,
+      required Widget title,
+      required Widget content}) async {
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            Platform.isIOS
-                ? CupertinoDialogAction(
-                    child: Text(AppLocalizations.of(context).ok),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-                : TextButton(
-                    child: Text(AppLocalizations.of(context).ok),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-          ]),
+      builder: (context) =>
+          AlertDialog.adaptive(title: title, content: content, actions: [
+        Platform.isIOS
+            ? CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            : TextButton(
+                child: Text(AppLocalizations.of(context).ok),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+      ]),
     );
   }
 

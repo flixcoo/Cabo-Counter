@@ -287,11 +287,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                             widget.gameSession);
                                     if (!success && context.mounted) {
                                       PopupService.showInfoPopup(
-                                          context,
-                                          AppLocalizations.of(context)
-                                              .export_error_title,
-                                          AppLocalizations.of(context)
-                                              .export_error_message);
+                                          context: context,
+                                          title: Text(
+                                              AppLocalizations.of(context)
+                                                  .export_error_title),
+                                          content: Text(
+                                              AppLocalizations.of(context)
+                                                  .export_error_message));
                                     }
                                   }),
                             ],
@@ -434,9 +436,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       });
     } else {
       PopupService.showInfoPopup(
-          context,
-          AppLocalizations.of(context).id_error_title,
-          AppLocalizations.of(context).id_error_message);
+          context: context,
+          title: Text(AppLocalizations.of(context).id_error_title),
+          content: Text(AppLocalizations.of(context).id_error_message));
     }
   }
 

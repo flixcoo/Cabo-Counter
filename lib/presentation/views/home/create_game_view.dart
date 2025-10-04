@@ -387,7 +387,8 @@ class _CreateGameViewState extends State<CreateGameView> {
   void _showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
-    PopupService.showInfoPopup(context, title, message);
+    PopupService.showInfoPopup(
+        context: context, title: Text(title), content: Text(message));
   }
 
   /// Returns the title and message for the dialog based on the [CreateStatus].

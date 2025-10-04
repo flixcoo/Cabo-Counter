@@ -459,7 +459,9 @@ class _RoundViewState extends State<RoundView> {
         _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
 
     await PopupService.showInfoPopup(
-        context, AppLocalizations.of(context).bonus_points_title, resultText);
+        context: context,
+        title: Text(AppLocalizations.of(context).bonus_points_title),
+        content: Text(resultText));
   }
 
   /// Generates the message string for the bonus popup.
