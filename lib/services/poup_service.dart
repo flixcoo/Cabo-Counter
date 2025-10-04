@@ -23,11 +23,11 @@ class PopupService {
           actions: [
             Platform.isIOS
                 ? CupertinoDialogAction(
-                    child: const Text('iOS Button'),
+                    child: Text(AppLocalizations.of(context).ok),
                     onPressed: () => Navigator.of(context).pop(),
                   )
                 : TextButton(
-                    child: const Text('Android Button'),
+                    child: Text(AppLocalizations.of(context).ok),
                     onPressed: () => Navigator.of(context).pop(),
                   )
           ]),
