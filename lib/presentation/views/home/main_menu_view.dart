@@ -13,6 +13,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/active_game_vie
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             });
                           });
                         },
-                        icon: const Icon(CupertinoIcons.settings)),
+                        icon: Icon(IconService.settings)),
                     PullDownButton(
                       itemBuilder: (context) => [
                         PullDownMenuTitle(
@@ -126,13 +127,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                           onTap: () => _setSortOption(SortOption.date),
                           selected: currentSortOption == SortOption.date,
                           title: AppLocalizations.of(context).date,
-                          icon: CupertinoIcons.calendar,
+                          icon: IconService.calendar,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.title),
                           selected: currentSortOption == SortOption.title,
                           title: AppLocalizations.of(context).game_title,
-                          icon: CupertinoIcons.textformat_abc,
+                          icon: IconService.textformat_abc,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
@@ -141,7 +142,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.descending,
                           title: AppLocalizations.of(context).descending,
-                          icon: CupertinoIcons.sort_down,
+                          icon: IconService.sort_down,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () =>
@@ -149,7 +150,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.ascending,
                           title: AppLocalizations.of(context).ascending,
-                          icon: CupertinoIcons.sort_up,
+                          icon: IconService.sort_up,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
@@ -159,13 +160,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                               .only_active_game_title,
                           subtitle: AppLocalizations.of(context)
                               .only_active_games_description,
-                          icon: CupertinoIcons.eye_slash,
+                          icon: IconService.eye_slash,
                         ),
                       ],
                       buttonBuilder: (context, showMenu) => IconButton(
                         onPressed: showMenu,
                         padding: EdgeInsets.zero,
-                        icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
+                        icon: Icon(IconService.arrow_up_arrow_down),
                         iconSize: Constants.navBarIconSize,
                       ),
                     ),
@@ -188,7 +189,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           sortDirection: currentSortDirection);
                     });
                   }),
-                  icon: const Icon(CupertinoIcons.add),
+                  icon: Icon(IconService.add),
                   iconSize: Constants.navBarIconSize + 2,
                 ),
               ),
@@ -225,7 +226,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        CupertinoIcons.eye_slash,
+                                        IconService.eye_slash,
                                         color: CustomTheme.white.withAlpha(150),
                                         size: 16.0,
                                       ),
@@ -254,8 +255,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         alignment: Alignment.centerRight,
                                         padding:
                                             const EdgeInsets.only(right: 20.0),
-                                        child: const Icon(
-                                          CupertinoIcons.delete,
+                                        child: Icon(
+                                          IconService.delete,
                                           color: CupertinoColors.white,
                                         ),
                                       ),
@@ -303,13 +304,12 @@ class _MainMenuViewState extends State<MainMenuView> {
                                               ),
                                               Text('${session.roundNumber}'),
                                               const SizedBox(width: 3),
-                                              const Icon(CupertinoIcons
+                                              Icon(IconService
                                                   .arrow_2_circlepath_circle_fill),
                                               const SizedBox(width: 15),
                                               Text('${session.players.length}'),
                                               const SizedBox(width: 3),
-                                              const Icon(
-                                                  CupertinoIcons.person_2_fill),
+                                              Icon(IconService.person_2_fill),
                                             ],
                                           ),
                                           onTap: () {

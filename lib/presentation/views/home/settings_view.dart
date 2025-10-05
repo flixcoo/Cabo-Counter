@@ -9,6 +9,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,7 +70,7 @@ class _SettingsViewState extends State<SettingsView> {
                     children: [
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).cabo_penalty,
-                        prefixIcon: CupertinoIcons.bolt_fill,
+                        prefixIcon: IconService.bolt_fill,
                         suffixWidget: CustomStepper(
                           key: _stepperKey1,
                           initialValue: ConfigService.getCaboPenalty(),
@@ -101,7 +102,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).standard_mode,
-                        prefixIcon: CupertinoIcons.square_stack,
+                        prefixIcon: IconService.square_stack,
                         suffixWidget: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -136,7 +137,7 @@ class _SettingsViewState extends State<SettingsView> {
                       CustomFormRow(
                         prefixText:
                             AppLocalizations.of(context).reset_to_default,
-                        prefixIcon: CupertinoIcons.arrow_counterclockwise,
+                        prefixIcon: IconService.arrow_counterclockwise,
                         onPressed: () => showConfirmPopup(),
                       )
                     ])),
@@ -155,7 +156,7 @@ class _SettingsViewState extends State<SettingsView> {
                     children: [
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).import_data,
-                        prefixIcon: CupertinoIcons.square_arrow_down,
+                        prefixIcon: IconService.square_arrow_down,
                         onPressed: () async {
                           final status =
                               await DataTransferService.importJsonFile();
@@ -165,13 +166,13 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).export_data,
-                        prefixIcon: CupertinoIcons.square_arrow_up,
+                        prefixIcon: IconService.square_arrow_up,
                         onPressed: () => DataTransferService.exportGameData(),
                         suffixWidget: const CupertinoListTileChevron(),
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).delete_data,
-                        prefixIcon: CupertinoIcons.trash,
+                        prefixIcon: IconService.trash,
                         onPressed: () => _deleteAllGames(),
                       ),
                     ])),
@@ -190,7 +191,7 @@ class _SettingsViewState extends State<SettingsView> {
                     children: [
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).mail_developer,
-                        prefixIcon: CupertinoIcons.mail,
+                        prefixIcon: IconService.mail,
                         onPressed: () =>
                             launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
                         suffixWidget: const CupertinoListTileChevron(),
@@ -204,7 +205,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).app_version,
-                          prefixIcon: CupertinoIcons.tag,
+                          prefixIcon: IconService.tray,
                           onPressed: null,
                           suffixWidget: Text(VersionService.getVersion(),
                               style: TextStyle(
@@ -212,7 +213,7 @@ class _SettingsViewState extends State<SettingsView> {
                               ))),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).build,
-                          prefixIcon: CupertinoIcons.number,
+                          prefixIcon: IconService.number,
                           onPressed: null,
                           suffixWidget: Text(VersionService.getBuildNumber(),
                               style: TextStyle(

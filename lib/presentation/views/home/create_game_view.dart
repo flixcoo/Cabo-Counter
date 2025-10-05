@@ -9,6 +9,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_button.dart'
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +193,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               CupertinoButton(
                                 padding: EdgeInsets.zero,
                                 child: Icon(
-                                  CupertinoIcons.minus_circle_fill,
+                                  IconService.minus_circle_fill,
                                   color: CustomTheme.red,
                                   size: 25,
                                 ),
@@ -237,8 +238,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: ReorderableDragStartListener(
                                     index: index,
-                                    child: const Icon(
-                                      CupertinoIcons.line_horizontal_3,
+                                    child: Icon(
+                                      IconService.line_horizontal_3,
                                       color: CupertinoColors.systemGrey,
                                     ),
                                   ),
@@ -259,7 +260,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               padding: EdgeInsets.zero,
                               onPressed: null,
                               child: Icon(
-                                CupertinoIcons.plus_circle_fill,
+                                IconService.plus_circle_fill,
                                 color: CustomTheme.primaryColor,
                                 size: 25,
                               ),
