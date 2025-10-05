@@ -88,7 +88,7 @@ class AboutView extends StatelessWidget {
                   IconButton(
                       onPressed: () =>
                           launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
-                      icon: Icon(IconService.envelope)),
+                      icon: Icon(IconService.e_mail)),
                   IconButton(
                       onPressed: () =>
                           launchUrl(Uri.parse(Constants.kGithubLink)),

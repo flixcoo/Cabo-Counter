@@ -34,7 +34,7 @@ class _TabBarState extends State<TabBar> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
-                IconService.house_fill,
+                IconService.home,
               ),
               label: AppLocalizations.of(context).home,
             ),

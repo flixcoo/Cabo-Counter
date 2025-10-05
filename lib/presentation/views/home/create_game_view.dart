@@ -193,7 +193,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               CupertinoButton(
                                 padding: EdgeInsets.zero,
                                 child: Icon(
-                                  IconService.minus_circle_fill,
+                                  IconService.remove_player,
                                   color: CustomTheme.red,
                                   size: 25,
                                 ),
@@ -239,7 +239,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                   child: ReorderableDragStartListener(
                                     index: index,
                                     child: Icon(
-                                      IconService.line_horizontal_3,
+                                      IconService.drag,
                                       color: CupertinoColors.systemGrey,
                                     ),
                                   ),
@@ -260,7 +260,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               padding: EdgeInsets.zero,
                               onPressed: null,
                               child: Icon(
-                                IconService.plus_circle_fill,
+                                IconService.add_player,
                                 color: CustomTheme.primaryColor,
                                 size: 25,
                               ),

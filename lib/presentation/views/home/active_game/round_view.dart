@@ -104,7 +104,7 @@ class _RoundViewState extends State<RoundView> {
           trailing: Visibility(
               visible: widget.gameSession.isGameFinished,
               child: Icon(
-                IconService.lock,
+                IconService.locked,
                 size: 25,
               ))),
       child: Column(

@@ -58,7 +58,7 @@ class _GraphViewState extends State<GraphView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Center(
-                  child: Icon(IconService.chart_bar_alt_fill, size: 60),
+                  child: Icon(IconService.chart, size: 60),
                 ),
                 const SizedBox(height: 10),
                 Padding(

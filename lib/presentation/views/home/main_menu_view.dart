@@ -127,13 +127,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                           onTap: () => _setSortOption(SortOption.date),
                           selected: currentSortOption == SortOption.date,
                           title: AppLocalizations.of(context).date,
-                          icon: IconService.calendar,
+                          icon: IconService.sort_by_date,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.title),
                           selected: currentSortOption == SortOption.title,
                           title: AppLocalizations.of(context).game_title,
-                          icon: IconService.textformat_abc,
+                          icon: IconService.sort_by_name,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
@@ -160,13 +160,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                               .only_active_game_title,
                           subtitle: AppLocalizations.of(context)
                               .only_active_games_description,
-                          icon: IconService.eye_slash,
+                          icon: IconService.visibility_off,
                         ),
                       ],
                       buttonBuilder: (context, showMenu) => IconButton(
                         onPressed: showMenu,
                         padding: EdgeInsets.zero,
-                        icon: Icon(IconService.arrow_up_arrow_down),
+                        icon: Icon(IconService.sort),
                         iconSize: Constants.navBarIconSize,
                       ),
                     ),
@@ -226,7 +226,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        IconService.eye_slash,
+                                        IconService.visibility_off,
                                         color: CustomTheme.white.withAlpha(150),
                                         size: 16.0,
                                       ),
@@ -304,12 +304,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                                               ),
                                               Text('${session.roundNumber}'),
                                               const SizedBox(width: 3),
-                                              Icon(IconService
-                                                  .arrow_2_circlepath_circle_fill),
+                                              Icon(IconService.rounds),
                                               const SizedBox(width: 15),
                                               Text('${session.players.length}'),
                                               const SizedBox(width: 3),
-                                              Icon(IconService.person_2_fill),
+                                              Icon(IconService.players),
                                             ],
                                           ),
                                           onTap: () {

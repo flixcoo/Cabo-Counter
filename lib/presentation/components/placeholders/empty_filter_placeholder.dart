@@ -18,7 +18,7 @@ class EmptyFilterPlaceholder extends StatelessWidget {
         const SizedBox(height: 30),
         Center(
           child: Icon(
-            IconService.eye_slash,
+            IconService.visibility_off,
             size: 60,
             color: CustomTheme.primaryColor,
           ),
