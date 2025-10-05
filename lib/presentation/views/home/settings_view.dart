@@ -191,7 +191,7 @@ class _SettingsViewState extends State<SettingsView> {
                     children: [
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).mail_developer,
-                        prefixIcon: IconService.mail,
+                        prefixIcon: IconService.e_mail,
                         onPressed: () =>
                             launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
                         suffixWidget: const CupertinoListTileChevron(),

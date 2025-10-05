@@ -142,7 +142,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.descending,
                           title: AppLocalizations.of(context).descending,
-                          icon: IconService.sort_down,
+                          icon: IconService.sort_desc,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () =>
@@ -150,7 +150,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.ascending,
                           title: AppLocalizations.of(context).ascending,
-                          icon: IconService.sort_up,
+                          icon: IconService.sort_asc,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
