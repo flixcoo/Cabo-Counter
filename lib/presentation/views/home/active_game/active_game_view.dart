@@ -415,6 +415,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               actionText: AppLocalizations.of(context).cancel,
             ),
             CustomDialogAction(
+              isDestructiveAction: true,
               actionText: AppLocalizations.of(context).delete,
               onPressed: () {
                 Navigator.pop(context, true);

@@ -31,12 +31,8 @@ class CustomDialogAction extends StatelessWidget {
         child: Text(
           actionText,
           style: TextStyle(
-              color: isDestructiveAction
-                  ? Theme.of(context).colorScheme.error
-                  : Theme.of(context).colorScheme.primary,
-              fontWeight: isDefaultAction || isDestructiveAction
-                  ? FontWeight.bold
-                  : FontWeight.normal),
+              color: isDestructiveAction ? Colors.red : null,
+              fontWeight: isDefaultAction ? FontWeight.bold : null),
         ),
       );
     }
