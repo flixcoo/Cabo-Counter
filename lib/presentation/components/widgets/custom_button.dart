@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// A customizable button widget using Cupertino style.
 ///
@@ -12,12 +15,29 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      sizeStyle: CupertinoButtonSize.medium,
-      borderRadius: BorderRadius.circular(12),
-      color: CustomTheme.buttonBackgroundColor,
-      onPressed: onPressed,
-      child: child,
-    );
+    if (Platform.isIOS) {
+      return CupertinoButton(
+        sizeStyle: CupertinoButtonSize.medium,
+        borderRadius: BorderRadius.circular(12),
+        color: CustomTheme.buttonBackgroundColor,
+        onPressed: onPressed,
+        child: child,
+      );
+    } else {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomTheme.buttonBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        ),
+        onPressed: onPressed,
+        child: DefaultTextStyle.merge(
+          style: const TextStyle(fontSize: 18),
+          child: child,
+        ),
+      );
+    }
   }
 }
