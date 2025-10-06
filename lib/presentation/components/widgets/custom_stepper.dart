@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart'; // Für iOS-Style
 
 /// A custom stepper widget for incrementing and decrementing a value.
@@ -51,7 +52,7 @@ class _CustomStepperState extends State<CustomStepper> {
         CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: _decrement,
-          child: const Icon(CupertinoIcons.minus),
+          child: Icon(IconService.minus),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -61,7 +62,7 @@ class _CustomStepperState extends State<CustomStepper> {
         CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: _increment,
-          child: const Icon(CupertinoIcons.add),
+          child: Icon(IconService.add),
         ),
       ],
     );

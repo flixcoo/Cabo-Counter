@@ -2,6 +2,7 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/about/about_view.dart';
 import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
 /// TabBar for navigating between the main menu and about section.
@@ -32,14 +33,14 @@ class _TabBarState extends State<TabBar> {
           height: 55,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: const Icon(
-                CupertinoIcons.house_fill,
+              icon: Icon(
+                IconService.home,
               ),
               label: AppLocalizations.of(context).home,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(
-                CupertinoIcons.info,
+              icon: Icon(
+                IconService.info,
               ),
               label: AppLocalizations.of(context).about,
             ),

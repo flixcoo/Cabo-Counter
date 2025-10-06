@@ -4,6 +4,7 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,7 +44,7 @@ class _GraphViewState extends State<GraphView> {
           middle: Text(AppLocalizations.of(context).scoring_history),
           trailing: IconButton(
             onPressed: () => _shareImage(),
-            icon: const Icon(CupertinoIcons.share),
+            icon: Icon(IconService.share),
             iconSize: Constants.navBarIconSize,
           ),
           previousPageTitle: AppLocalizations.of(context).overview,
@@ -56,8 +57,8 @@ class _GraphViewState extends State<GraphView> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Center(
-                  child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
+                Center(
+                  child: Icon(IconService.chart, size: 60),
                 ),
                 const SizedBox(height: 10),
                 Padding(

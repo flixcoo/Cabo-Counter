@@ -13,6 +13,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/active_game_vie
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                             });
                           });
                         },
-                        icon: const Icon(CupertinoIcons.settings)),
+                        icon: Icon(IconService.settings)),
                     PullDownButton(
                       itemBuilder: (context) => [
                         PullDownMenuTitle(
@@ -126,13 +127,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                           onTap: () => _setSortOption(SortOption.date),
                           selected: currentSortOption == SortOption.date,
                           title: AppLocalizations.of(context).date,
-                          icon: CupertinoIcons.calendar,
+                          icon: IconService.sort_by_date,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () => _setSortOption(SortOption.title),
                           selected: currentSortOption == SortOption.title,
                           title: AppLocalizations.of(context).game_title,
-                          icon: CupertinoIcons.textformat_abc,
+                          icon: IconService.sort_by_name,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
@@ -141,7 +142,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.descending,
                           title: AppLocalizations.of(context).descending,
-                          icon: CupertinoIcons.sort_down,
+                          icon: IconService.sort_desc,
                         ),
                         PullDownMenuItem.selectable(
                           onTap: () =>
@@ -149,7 +150,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           selected:
                               currentSortDirection == SortDirection.ascending,
                           title: AppLocalizations.of(context).ascending,
-                          icon: CupertinoIcons.sort_up,
+                          icon: IconService.sort_asc,
                         ),
                         const PullDownMenuDivider.large(),
                         PullDownMenuItem.selectable(
@@ -159,13 +160,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                               .only_active_game_title,
                           subtitle: AppLocalizations.of(context)
                               .only_active_games_description,
-                          icon: CupertinoIcons.eye_slash,
+                          icon: IconService.visibility_off,
                         ),
                       ],
                       buttonBuilder: (context, showMenu) => IconButton(
                         onPressed: showMenu,
                         padding: EdgeInsets.zero,
-                        icon: const Icon(CupertinoIcons.arrow_up_arrow_down),
+                        icon: Icon(IconService.sort),
                         iconSize: Constants.navBarIconSize,
                       ),
                     ),
@@ -188,7 +189,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           sortDirection: currentSortDirection);
                     });
                   }),
-                  icon: const Icon(CupertinoIcons.add),
+                  icon: Icon(IconService.add),
                   iconSize: Constants.navBarIconSize + 2,
                 ),
               ),
@@ -225,7 +226,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        CupertinoIcons.eye_slash,
+                                        IconService.visibility_off,
                                         color: CustomTheme.white.withAlpha(150),
                                         size: 16.0,
                                       ),
@@ -254,8 +255,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                                         alignment: Alignment.centerRight,
                                         padding:
                                             const EdgeInsets.only(right: 20.0),
-                                        child: const Icon(
-                                          CupertinoIcons.delete,
+                                        child: Icon(
+                                          IconService.delete,
                                           color: CupertinoColors.white,
                                         ),
                                       ),
@@ -303,13 +304,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                                               ),
                                               Text('${session.roundNumber}'),
                                               const SizedBox(width: 3),
-                                              const Icon(CupertinoIcons
-                                                  .arrow_2_circlepath_circle_fill),
+                                              Icon(IconService.rounds),
                                               const SizedBox(width: 15),
                                               Text('${session.players.length}'),
                                               const SizedBox(width: 3),
-                                              const Icon(
-                                                  CupertinoIcons.person_2_fill),
+                                              Icon(IconService.players),
                                             ],
                                           ),
                                           onTap: () {
@@ -402,8 +401,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
-  Future<bool> _showDeleteGamePopup(
-      BuildContext context, String gameTitle) async {
+  static Future<bool> _showDeleteGamePopup(
+    BuildContext context,
+    String gameTitle,
+  ) async {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           title: Text(AppLocalizations.of(context).delete_game_title),
@@ -411,13 +412,13 @@ class _MainMenuViewState extends State<MainMenuView> {
               Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
           actions: [
             CustomDialogAction(
+              returnValue: false,
               isDefaultAction: true,
-              onPressed: () => Navigator.of(context).pop(false),
               actionText: AppLocalizations.of(context).cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
-              onPressed: () => Navigator.of(context).pop(true),
+              returnValue: true,
               actionText: AppLocalizations.of(context).delete,
             ),
           ],

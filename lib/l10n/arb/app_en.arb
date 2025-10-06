@@ -176,7 +176,7 @@
   "export_error_title": "Export failed",
   "export_error_message": "Could not export file",
 
-  "report_error": "Report an error a bug?",
+  "report_error": "Report a bug",
   "mail_developer": "E-Mail the Developer",
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
