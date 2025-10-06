@@ -45,7 +45,7 @@ class _GraphViewState extends State<GraphView> {
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
           trailing: IconButton(
-            onPressed: () => isGraphAvailable ? _shareImage() : null,
+            onPressed: isGraphAvailable ? () => _shareImage() : null,
             icon: Icon(IconService.share),
             iconSize: Constants.navBarIconSize,
           ),
