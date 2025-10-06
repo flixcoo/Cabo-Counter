@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -5,6 +7,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_button.dart'
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -196,14 +199,11 @@ class _RoundViewState extends State<RoundView> {
                                     name,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Visibility(
-                                    visible: shouldShowMedal,
-                                    child: const SizedBox(width: 10),
-                                  ),
-                                  Visibility(
-                                      visible: shouldShowMedal,
-                                      child: const Icon(FontAwesomeIcons.crown,
-                                          size: 15))
+                                  if (shouldShowMedal) ...[
+                                    const SizedBox(width: 10),
+                                    const Icon(FontAwesomeIcons.crown,
+                                        size: 15),
+                                  ],
                                 ]))
                               ]),
                               subtitle: Text(
@@ -255,8 +255,8 @@ class _RoundViewState extends State<RoundView> {
                           },
                           child: Text(AppLocalizations.of(context).kamikaze,
                               style: TextStyle(
-                                color: CustomTheme.kamikazeColor,
-                              )),
+                                  color: CustomTheme.kamikazeColor,
+                                  fontSize: Platform.isIOS ? null : 18)),
                         ),
                       ),
                     ),
@@ -348,35 +348,104 @@ class _RoundViewState extends State<RoundView> {
   /// Shows a Cupertino action sheet to select the player who has Kamikaze.
   /// It returns true if a player was selected, false if the action was cancelled.
   Future<bool> _showKamikazeSheet(BuildContext context) async {
-    return await showCupertinoModalPopup<bool?>(
-          context: context,
-          builder: (BuildContext context) {
-            return CupertinoActionSheet(
-              title: Text(AppLocalizations.of(context).kamikaze),
-              message: Text(AppLocalizations.of(context).who_has_kamikaze),
-              actions: widget.gameSession.players.asMap().entries.map((entry) {
-                final index = entry.key;
-                final player = entry.value;
-                return CupertinoActionSheetAction(
-                  onPressed: () {
-                    _kamikazePlayerIndex = index;
-                    Navigator.pop(context, true);
-                  },
-                  child: Text(
-                    player.name,
-                    style: TextStyle(color: CustomTheme.kamikazeColor),
-                  ),
-                );
-              }).toList(),
-              cancelButton: CupertinoActionSheetAction(
-                onPressed: () => Navigator.pop(context, false),
-                isDestructiveAction: true,
-                child: Text(AppLocalizations.of(context).cancel),
-              ),
-            );
-          },
-        ) ??
-        false;
+    if (Platform.isIOS) {
+      return await showCupertinoModalPopup<bool?>(
+            context: context,
+            builder: (BuildContext context) {
+              return CupertinoActionSheet(
+                title: Text(AppLocalizations.of(context).kamikaze),
+                message: Text(AppLocalizations.of(context).who_has_kamikaze),
+                actions:
+                    widget.gameSession.players.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final player = entry.value;
+                  return CupertinoActionSheetAction(
+                    onPressed: () {
+                      _kamikazePlayerIndex = index;
+                      Navigator.pop(context, true);
+                    },
+                    child: Text(
+                      player.name,
+                      style: TextStyle(color: CustomTheme.kamikazeColor),
+                    ),
+                  );
+                }).toList(),
+                cancelButton: CupertinoActionSheetAction(
+                  onPressed: () => Navigator.pop(context, false),
+                  isDestructiveAction: true,
+                  child: Text(AppLocalizations.of(context).cancel),
+                ),
+              );
+            },
+          ) ??
+          false;
+    } else {
+      return await showModalBottomSheet<bool?>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            backgroundColor: CustomTheme.mainElementBackgroundColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (BuildContext context) {
+              return SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).kamikaze,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        AppLocalizations.of(context).who_has_kamikaze,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const Divider(
+                      indent: 40,
+                      endIndent: 40,
+                    ),
+                    ...widget.gameSession.players.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final player = entry.value;
+                      return Center(
+                        child: ListTile(
+                          title: Text(
+                            player.name,
+                            style: TextStyle(
+                                color: CustomTheme.kamikazeColor, fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
+                          onTap: () {
+                            _kamikazePlayerIndex = index;
+                            Navigator.pop(context, true);
+                          },
+                        ),
+                      );
+                    }),
+                    ListTile(
+                      title: Text(
+                        AppLocalizations.of(context).cancel,
+                        style: const TextStyle(color: Colors.red, fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      onTap: () => Navigator.pop(context, false),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ) ??
+          false;
+    }
   }
 
   /// Focuses the next text field in the list of text fields.
