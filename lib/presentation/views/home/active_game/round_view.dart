@@ -435,7 +435,7 @@ class _RoundViewState extends State<RoundView> {
                     ListTile(
                       title: Text(
                         AppLocalizations.of(context).cancel,
-                        style: const TextStyle(color: Colors.red, fontSize: 18),
+                        style: TextStyle(color: CustomTheme.red, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                       onTap: () => Navigator.pop(context, false),
