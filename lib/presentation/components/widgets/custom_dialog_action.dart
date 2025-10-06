@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,13 @@ class CustomDialogAction<T> extends StatelessWidget {
                 onAfterPop?.call();
               });
             },
-            child: Text(actionText),
+            child: Text(
+              actionText,
+              style: TextStyle(
+                color: isDestructiveAction ? CustomTheme.red : null,
+                fontWeight: isDefaultAction ? FontWeight.bold : null,
+              ),
+            ),
           );
   }
 }
