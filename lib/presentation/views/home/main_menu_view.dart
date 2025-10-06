@@ -401,8 +401,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
-  Future<bool> _showDeleteGamePopup(
-      BuildContext context, String gameTitle) async {
+  static Future<bool> _showDeleteGamePopup(
+    BuildContext context,
+    String gameTitle,
+  ) async {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           title: Text(AppLocalizations.of(context).delete_game_title),
@@ -410,13 +412,13 @@ class _MainMenuViewState extends State<MainMenuView> {
               Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
           actions: [
             CustomDialogAction(
+              returnValue: false,
               isDefaultAction: true,
-              onPressed: () => Navigator.of(context).pop(false),
               actionText: AppLocalizations.of(context).cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
-              onPressed: () => Navigator.of(context).pop(true),
+              returnValue: true,
               actionText: AppLocalizations.of(context).delete,
             ),
           ],

@@ -327,27 +327,30 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
   void _showEndGameDialog() {
-    final endGameAction = CustomDialogAction(
+    final endGameAction = CustomDialogAction<bool>(
       isDestructiveAction: true,
-      onPressed: () {
-        setState(() {
-          gameManager.endGame(gameSession.gameId);
-          _playFinishAnimation(context);
-        });
-        Navigator.pop(context);
-      },
       actionText: AppLocalizations.of(context).end_game,
+      returnValue: true,
+      onAfterPop: () {
+        if (mounted) {
+          setState(() {
+            gameManager.endGame(gameSession.gameId);
+            _playFinishAnimation(context);
+          });
+        }
+      },
     );
-    final cancelAction = CustomDialogAction(
+    final cancelAction = CustomDialogAction<bool>(
       actionText: AppLocalizations.of(context).cancel,
-      onPressed: () => Navigator.pop(context),
+      returnValue: false,
     );
 
-    PopupService.showSelectionPopup(
-        context: context,
-        title: Text(AppLocalizations.of(context).end_game_title),
-        message: Text(AppLocalizations.of(context).end_game_message),
-        actions: [endGameAction, cancelAction]);
+    PopupService.showSelectionPopup<bool>(
+      context: context,
+      title: Text(AppLocalizations.of(context).end_game_title),
+      message: Text(AppLocalizations.of(context).end_game_message),
+      actions: [endGameAction, cancelAction],
+    );
   }
 
   /// Returns a list of player indices sorted by their scores in
@@ -411,15 +414,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               .delete_game_message(gameSession.gameTitle)),
           actions: [
             CustomDialogAction(
-              onPressed: () => Navigator.pop(context, false),
+              returnValue: false,
               actionText: AppLocalizations.of(context).cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
               actionText: AppLocalizations.of(context).delete,
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
+              returnValue: true,
             ),
           ],
         ) ??
@@ -488,24 +489,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
 
     if (context.mounted) {
-      showCupertinoDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).end_of_game_title),
-              content: Text(AppLocalizations.of(context)
-                  .end_of_game_message(winnerAmount, winner, winnerPoints)),
-              actions: [
-                CustomDialogAction(
-                  actionText: AppLocalizations.of(context).ok,
-                  onPressed: () {
-                    confettiController.stop();
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          });
+      PopupService.showInfoPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).end_of_game_title),
+        content: Text(AppLocalizations.of(context)
+            .end_of_game_message(winnerAmount, winner, winnerPoints)),
+        onAfterPop: () => confettiController.stop(),
+      );
     }
   }
 

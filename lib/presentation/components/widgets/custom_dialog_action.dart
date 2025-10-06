@@ -3,38 +3,44 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomDialogAction extends StatelessWidget {
-  final void Function() onPressed;
+class CustomDialogAction<T> extends StatelessWidget {
+  final String actionText;
   final bool isDefaultAction;
   final bool isDestructiveAction;
-  final String actionText;
+  final T? returnValue;
+  final VoidCallback? onAfterPop;
+
   const CustomDialogAction({
     super.key,
-    required this.onPressed,
     required this.actionText,
-    this.isDestructiveAction = false,
     this.isDefaultAction = false,
+    this.isDestructiveAction = false,
+    this.returnValue,
+    this.onAfterPop,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return CupertinoDialogAction(
-        onPressed: () => Navigator.of(context).pop(),
-        isDefaultAction: isDefaultAction,
-        isDestructiveAction: isDestructiveAction,
-        child: Text(actionText),
-      );
-    } else {
-      return TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: Text(
-          actionText,
-          style: TextStyle(
-              color: isDestructiveAction ? Colors.red : null,
-              fontWeight: isDefaultAction ? FontWeight.bold : null),
-        ),
-      );
-    }
+    return Platform.isIOS
+        ? CupertinoDialogAction(
+            isDefaultAction: isDefaultAction,
+            isDestructiveAction: isDestructiveAction,
+            onPressed: () {
+              Navigator.of(context).pop(returnValue);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                onAfterPop?.call();
+              });
+            },
+            child: Text(actionText),
+          )
+        : TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(returnValue);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                onAfterPop?.call();
+              });
+            },
+            child: Text(actionText),
+          );
   }
 }
