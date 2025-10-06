@@ -243,23 +243,24 @@ class _RoundViewState extends State<RoundView> {
                       },
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Center(
-                        heightFactor: 1,
-                        child: CustomButton(
-                          onPressed: () async {
-                            if (await _showKamikazeSheet(context)) {
-                              if (!context.mounted) return;
-                              _endOfRoundNavigation(context, true);
-                            }
-                          },
-                          child: Text(AppLocalizations.of(context).kamikaze,
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Center(
+                          heightFactor: 1,
+                          child: CustomButton(
+                            onPressed: () async {
+                              if (await _showKamikazeSheet(context)) {
+                                if (!context.mounted) return;
+                                _endOfRoundNavigation(context, true);
+                              }
+                            },
+                            child: Text(
+                              AppLocalizations.of(context).kamikaze,
                               style: TextStyle(
-                                  color: CustomTheme.kamikazeColor,
-                                  fontSize: Platform.isIOS ? null : 18)),
-                        ),
-                      ),
-                    ),
+                                color: CustomTheme.kamikazeColor,
+                              ),
+                            ),
+                          ),
+                        )),
                   ],
                 ),
               ),
