@@ -104,11 +104,11 @@ abstract class IconService {
 
   /// Icon for sorting in ascending order.
   static IconData get sort_asc =>
-      Platform.isIOS ? CupertinoIcons.sort_up : Icons.sort;
+      Platform.isIOS ? CupertinoIcons.sort_up : Icons.arrow_upward;
 
   /// Icon for sorting in descending order.
   static IconData get sort_desc =>
-      Platform.isIOS ? CupertinoIcons.sort_down : Icons.sort;
+      Platform.isIOS ? CupertinoIcons.sort_down : Icons.arrow_downward;
 
   /// Icon for sorting.
   static IconData get sort =>
