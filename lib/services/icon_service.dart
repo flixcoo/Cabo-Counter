@@ -118,7 +118,7 @@ abstract class IconService {
   static IconData get settings =>
       Platform.isIOS ? CupertinoIcons.settings : Icons.settings;
 
-  /// Icon for no games available.
+  /// Icon for version information.
   static IconData get version =>
       Platform.isIOS ? CupertinoIcons.tag : Icons.label;
 
