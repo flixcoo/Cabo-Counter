@@ -39,11 +39,13 @@ class _GraphViewState extends State<GraphView> {
 
   @override
   Widget build(BuildContext context) {
+    bool isGraphAvailable =
+        widget.gameSession.roundNumber > 1 || widget.gameSession.isGameFinished;
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
           trailing: IconButton(
-            onPressed: () => _shareImage(),
+            onPressed: isGraphAvailable ? () => _shareImage() : null,
             icon: Icon(IconService.share),
             iconSize: Constants.navBarIconSize,
           ),
@@ -51,8 +53,7 @@ class _GraphViewState extends State<GraphView> {
         ),
         child: SafeArea(
           child: Visibility(
-            visible: widget.gameSession.roundNumber > 1 ||
-                widget.gameSession.isGameFinished,
+            visible: isGraphAvailable,
             replacement: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
