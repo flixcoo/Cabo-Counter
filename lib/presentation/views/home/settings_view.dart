@@ -205,7 +205,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).app_version,
-                          prefixIcon: IconService.no_games,
+                          prefixIcon: IconService.version,
                           onPressed: null,
                           suffixWidget: Text(VersionService.getVersion(),
                               style: TextStyle(
@@ -233,14 +233,12 @@ class _SettingsViewState extends State<SettingsView> {
     final dialogActions = [
       CustomDialogAction(
         isDefaultAction: true,
-        onPressed: () => Navigator.pop(context),
         actionText: AppLocalizations.of(context).cancel,
       ),
       CustomDialogAction(
         isDestructiveAction: true,
-        onPressed: () {
+        onAfterPop: () {
           gameManager.deleteAllGames();
-          Navigator.pop(context);
         },
         actionText: AppLocalizations.of(context).delete,
       )
@@ -294,20 +292,18 @@ class _SettingsViewState extends State<SettingsView> {
     final dialogActions = [
       CustomDialogAction(
         actionText: AppLocalizations.of(context).cancel,
-        onPressed: () => Navigator.pop(context),
       ),
       CustomDialogAction(
         isDestructiveAction: true,
         isDefaultAction: true,
         actionText: AppLocalizations.of(context).reset,
-        onPressed: () {
+        onAfterPop: () {
           ConfigService.resetUserConfig();
           setState(() {
             _stepperKey1 = UniqueKey();
             _stepperKey2 = UniqueKey();
             defaultMode = ConfigService.getGameMode();
           });
-          Navigator.pop(context);
         },
       ),
     ];

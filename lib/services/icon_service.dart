@@ -21,7 +21,7 @@ abstract class IconService {
 
   /// Icon for cabo penalty.
   static IconData get cabo_penalty =>
-      Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.bolt_rounded;
+      Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.electric_bolt;
 
   /// Icon for deleting.
   static IconData get delete =>
@@ -37,7 +37,7 @@ abstract class IconService {
 
   /// Icon for exporting files.
   static IconData get export => Platform.isIOS
-      ? CupertinoIcons.arrow_up_square
+      ? CupertinoIcons.square_arrow_up
       : Icons.file_upload_outlined;
 
   /// Icon for home.
@@ -46,12 +46,12 @@ abstract class IconService {
 
   /// Icon for importing files.
   static IconData get import => Platform.isIOS
-      ? CupertinoIcons.arrow_down_square
+      ? CupertinoIcons.square_arrow_down
       : Icons.file_download_outlined;
 
   /// Icon for information.
   static IconData get info =>
-      Platform.isIOS ? CupertinoIcons.info_circle_fill : Icons.info_rounded;
+      Platform.isIOS ? CupertinoIcons.info_circle : Icons.info_outline;
 
   /// Icon for lock.
   static IconData get locked =>
@@ -117,6 +117,10 @@ abstract class IconService {
   /// Icon for settings.
   static IconData get settings =>
       Platform.isIOS ? CupertinoIcons.settings : Icons.settings;
+
+  /// Icon for no games available.
+  static IconData get version =>
+      Platform.isIOS ? CupertinoIcons.tag : Icons.label;
 
   /// Icon for visibility off.
   static IconData get visibility_off => Platform.isIOS
