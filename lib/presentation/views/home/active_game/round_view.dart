@@ -2,6 +2,7 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -102,8 +103,8 @@ class _RoundViewState extends State<RoundView> {
           middle: Text(AppLocalizations.of(context).results),
           trailing: Visibility(
               visible: widget.gameSession.isGameFinished,
-              child: const Icon(
-                CupertinoIcons.lock,
+              child: Icon(
+                IconService.locked,
                 size: 25,
               ))),
       child: Column(

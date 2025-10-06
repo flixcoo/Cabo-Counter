@@ -13,24 +13,35 @@ class PopupService {
   /// [title]: The title of the pop-up.
   /// [message]: The message content of the pop-up.
   /// Returns a Future that completes when the dialog is dismissed.
-  static Future<void> showInfoPopup(
-      {required BuildContext context,
-      required Widget title,
-      required Widget content}) async {
-    await showDialog(
+  static Future<void> showInfoPopup({
+    required BuildContext context,
+    required Widget title,
+    required Widget content,
+    VoidCallback? onAfterPop,
+  }) async {
+    await showAdaptiveDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog.adaptive(title: title, content: content, actions: [
-        Platform.isIOS
-            ? CupertinoDialogAction(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            : TextButton(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-      ]),
+      builder: (context) => AlertDialog.adaptive(
+        title: title,
+        content: content,
+        actions: [
+          Platform.isIOS
+              ? CupertinoDialogAction(
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (onAfterPop != null) onAfterPop();
+                  },
+                )
+              : TextButton(
+                  child: Text(AppLocalizations.of(context).ok),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (onAfterPop != null) onAfterPop();
+                  },
+                )
+        ],
+      ),
     );
   }
 
@@ -45,15 +56,17 @@ class PopupService {
     required BuildContext context,
     required Widget title,
     required Widget message,
-    required List<CustomDialogAction> actions,
+    required List<CustomDialogAction<T>> actions,
   }) async {
-    return await showDialog<T>(
+    return await showAdaptiveDialog<T>(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
-        title: title,
-        content: message,
-        actions: actions,
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog.adaptive(
+          title: title,
+          content: message,
+          actions: actions.map((action) => action.build(context)).toList(),
+        );
+      },
     );
   }
 
@@ -68,18 +81,16 @@ class PopupService {
           context: context,
           actions: [
             CustomDialogAction(
-              onPressed: () =>
-                  Navigator.of(context).pop(PreRatingDialogDecision.yes),
+              returnValue: PreRatingDialogDecision.yes,
               isDefaultAction: true,
               actionText: AppLocalizations.of(context).yes,
             ),
             CustomDialogAction(
-              onPressed: () =>
-                  Navigator.of(context).pop(PreRatingDialogDecision.no),
+              returnValue: PreRatingDialogDecision.no,
               actionText: AppLocalizations.of(context).no,
             ),
             CustomDialogAction(
-              onPressed: () => Navigator.of(context).pop(),
+              returnValue: PreRatingDialogDecision.cancel,
               isDestructiveAction: true,
               actionText: AppLocalizations.of(context).cancel,
             )
@@ -103,16 +114,39 @@ class PopupService {
           actions: [
             CustomDialogAction(
               actionText: AppLocalizations.of(context).contact_email,
-              onPressed: () =>
-                  Navigator.of(context).pop(BadRatingDialogDecision.email),
+              returnValue: BadRatingDialogDecision.email,
             ),
             CustomDialogAction(
               actionText: AppLocalizations.of(context).cancel,
-              onPressed: () =>
-                  Navigator.of(context).pop(BadRatingDialogDecision.cancel),
+              returnValue: BadRatingDialogDecision.cancel,
             ),
           ],
         ) ??
         BadRatingDialogDecision.cancel;
+  }
+
+  static Future<bool> showDeleteGameDialog({
+    required BuildContext context,
+    required String gameTitle,
+  }) async {
+    return await PopupService.showSelectionPopup<bool>(
+          context: context,
+          title: Text(AppLocalizations.of(context).delete_game_title),
+          message:
+              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
+          actions: [
+            CustomDialogAction(
+              returnValue: false,
+              isDefaultAction: true,
+              actionText: AppLocalizations.of(context).cancel,
+            ),
+            CustomDialogAction(
+              isDestructiveAction: true,
+              returnValue: true,
+              actionText: AppLocalizations.of(context).delete,
+            ),
+          ],
+        ) ??
+        false;
   }
 }
