@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.1+909
+version: 1.0.1+916
 publish_to: none
 
 environment:
@@ -20,7 +20,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_vibrate:
-    path: ../../../.pub-cache/hosted/pub.dev/flutter_vibrate_patched
+    # Temporary fix included until the package is updated on pub.dev
+    git:
+      url: https://github.com/dev-mahmoud-elshenawy/flutter_vibrate-xcode16.3-fix
+      ref: master
   font_awesome_flutter: ^10.8.0
   google_fonts: ^6.3.0
   intl: any
