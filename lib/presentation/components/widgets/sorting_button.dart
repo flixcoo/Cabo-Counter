@@ -16,7 +16,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 ///
 /// [currentSortDirection] is the currently selected sorting direction.
 ///
-/// [showOnlyActiveGames] indicates whether the filter and show only active games is active.
+/// [showOnlyActiveGames] indicates whether only active games should be shown.
 ///
 /// [onSortOptionChanged] is a callback function to handle changes in the sorting option.
 ///
