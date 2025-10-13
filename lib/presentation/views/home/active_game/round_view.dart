@@ -514,7 +514,8 @@ class _RoundViewState extends State<RoundView> {
           widget.roundNumber, roundScores, _caboPlayerIndex);
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
-    if (widget.roundNumber == widget.gameSession.roundNumber) {
+    if (widget.roundNumber == widget.gameSession.roundNumber &&
+        !widget.gameSession.isGameFinished) {
       widget.gameSession.increaseRound();
     }
     return bonusPlayers;
