@@ -396,8 +396,16 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     final compare = sortOption == SortOption.date
         ? (a, b) => a.createdAt.compareTo(b.createdAt)
-        : (a, b) =>
-            a.gameTitle.toLowerCase().compareTo(b.gameTitle.toLowerCase());
+        : (a, b) {
+            // Normalize strings for consistent comparison, handling special characters
+            String normalize(String s) => s
+                .toLowerCase()
+                .replaceAll('ä', 'a~')
+                .replaceAll('ö', 'o~')
+                .replaceAll('ü', 'u~')
+                .replaceAll('ß', 'ss~');
+            return normalize(a.gameTitle).compareTo(normalize(b.gameTitle));
+          };
 
     displayedGames.sort(
       sortDirection == SortDirection.ascending
