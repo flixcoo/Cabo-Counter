@@ -25,7 +25,15 @@ class CustomFormRow extends StatefulWidget {
 }
 
 class _CustomFormRowState extends State<CustomFormRow> {
-  late Widget suffixWidget;
+  late final suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
+  late final padding = suffixWidget is CustomStepper
+      ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
+      : (suffixWidget is Icon ||
+              suffixWidget is CupertinoListTileChevron ||
+              suffixWidget is Row)
+          ? const EdgeInsets.fromLTRB(15, 10, 8, 10)
+          : const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +41,6 @@ class _CustomFormRowState extends State<CustomFormRow> {
 
   @override
   Widget build(BuildContext context) {
-    suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: widget.onPressed,
@@ -48,9 +55,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
             Text(widget.prefixText),
           ],
         ),
-        padding: suffixWidget is CustomStepper
-            ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
-            : const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: padding,
         child: suffixWidget,
       ),
     );
