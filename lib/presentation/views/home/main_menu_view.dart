@@ -102,7 +102,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                        iconSize: Constants.navBarIconSize,
+                        iconSize: Constants.kNavBarIconSize,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -149,7 +149,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     });
                   }),
                   icon: Icon(IconService.add),
-                  iconSize: Constants.navBarIconSize + 2,
+                  iconSize: Constants.kNavBarIconSize + 2,
                 ),
               ),
               child: CupertinoPageScaffold(

@@ -47,7 +47,7 @@ class _GraphViewState extends State<GraphView> {
           trailing: IconButton(
             onPressed: isGraphAvailable ? () => _shareImage() : null,
             icon: Icon(IconService.share),
-            iconSize: Constants.navBarIconSize,
+            iconSize: Constants.kNavBarIconSize,
           ),
           previousPageTitle: AppLocalizations.of(context).overview,
         ),

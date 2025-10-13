@@ -48,7 +48,7 @@ class SortingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     const buttonPadding = EdgeInsets.zero;
     final icon = Icon(IconService.sort);
-    const iconSize = Constants.navBarIconSize;
+    const iconSize = Constants.kNavBarIconSize;
 
     if (Platform.isIOS) {
       return PullDownButton(
