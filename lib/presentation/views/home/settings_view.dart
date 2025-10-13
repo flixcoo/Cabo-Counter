@@ -114,7 +114,7 @@ class _SettingsViewState extends State<SettingsView> {
                                       : AppLocalizations.of(context).unlimited),
                             ),
                             const SizedBox(width: 5),
-                            const CupertinoListTileChevron()
+                            IconService.chevron
                           ],
                         ),
                         onPressed: () async {
@@ -155,21 +155,19 @@ class _SettingsViewState extends State<SettingsView> {
                     margin: EdgeInsets.zero,
                     children: [
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).import_data,
-                        prefixIcon: IconService.import,
-                        onPressed: () async {
-                          final status =
-                              await DataTransferService.importJsonFile();
-                          showFeedbackDialog(status);
-                        },
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
+                          prefixText: AppLocalizations.of(context).import_data,
+                          prefixIcon: IconService.import,
+                          onPressed: () async {
+                            final status =
+                                await DataTransferService.importJsonFile();
+                            showFeedbackDialog(status);
+                          },
+                          suffixWidget: IconService.chevron),
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).export_data,
-                        prefixIcon: IconService.export,
-                        onPressed: () => DataTransferService.exportGameData(),
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
+                          prefixText: AppLocalizations.of(context).export_data,
+                          prefixIcon: IconService.export,
+                          onPressed: () => DataTransferService.exportGameData(),
+                          suffixWidget: IconService.chevron),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).delete_data,
                         prefixIcon: IconService.delete,
@@ -194,14 +192,14 @@ class _SettingsViewState extends State<SettingsView> {
                         prefixIcon: IconService.e_mail,
                         onPressed: () =>
                             launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
-                        suffixWidget: const CupertinoListTileChevron(),
+                        suffixWidget: IconService.chevron,
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).report_error,
                         prefixIcon: FontAwesomeIcons.github,
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.kGithubIssuesLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
+                        suffixWidget: IconService.chevron,
                       ),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).app_version,
