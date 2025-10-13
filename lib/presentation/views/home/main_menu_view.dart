@@ -9,6 +9,7 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_filter_p
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
@@ -17,7 +18,6 @@ import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_down_button/pull_down_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Home screen of the app that displays a list of game sessions.
@@ -102,7 +102,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                        iconSize: Constants.navBarIconSize,
+                        iconSize: Constants.kNavBarIconSize,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -118,58 +118,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                           });
                         },
                         icon: Icon(IconService.settings)),
-                    PullDownButton(
-                      itemBuilder: (context) => [
-                        PullDownMenuTitle(
-                            title: Text(AppLocalizations.of(context)
-                                .sort_and_filter_options)),
-                        PullDownMenuItem.selectable(
-                          onTap: () => _setSortOption(SortOption.date),
-                          selected: currentSortOption == SortOption.date,
-                          title: AppLocalizations.of(context).date,
-                          icon: IconService.sort_by_date,
-                        ),
-                        PullDownMenuItem.selectable(
-                          onTap: () => _setSortOption(SortOption.title),
-                          selected: currentSortOption == SortOption.title,
-                          title: AppLocalizations.of(context).game_title,
-                          icon: IconService.sort_by_name,
-                        ),
-                        const PullDownMenuDivider.large(),
-                        PullDownMenuItem.selectable(
-                          onTap: () =>
-                              _setSortDirection(SortDirection.descending),
-                          selected:
-                              currentSortDirection == SortDirection.descending,
-                          title: AppLocalizations.of(context).descending,
-                          icon: IconService.sort_desc,
-                        ),
-                        PullDownMenuItem.selectable(
-                          onTap: () =>
-                              _setSortDirection(SortDirection.ascending),
-                          selected:
-                              currentSortDirection == SortDirection.ascending,
-                          title: AppLocalizations.of(context).ascending,
-                          icon: IconService.sort_asc,
-                        ),
-                        const PullDownMenuDivider.large(),
-                        PullDownMenuItem.selectable(
-                          onTap: () => _toggleShowOnlyActiveGames(),
-                          selected: _showOnlyActiveGames,
-                          title: AppLocalizations.of(context)
-                              .only_active_game_title,
-                          subtitle: AppLocalizations.of(context)
-                              .only_active_games_description,
-                          icon: IconService.visibility_off,
-                        ),
-                      ],
-                      buttonBuilder: (context, showMenu) => IconButton(
-                        onPressed: showMenu,
-                        padding: EdgeInsets.zero,
-                        icon: Icon(IconService.sort),
-                        iconSize: Constants.navBarIconSize,
-                      ),
-                    ),
+                    SortingButton(
+                        currentSortOption: currentSortOption,
+                        currentSortDirection: currentSortDirection,
+                        showOnlyActiveGames: _showOnlyActiveGames,
+                        onSortOptionChanged: (newSortingOption) =>
+                            _setSortOption(newSortingOption),
+                        onSortDirectionChanged: (newSortingDirection) =>
+                            _setSortDirection(newSortingDirection),
+                        onShowOnlyActiveGamesChanged: () =>
+                            _toggleShowOnlyActiveGames())
                   ],
                 ),
                 middle: Text(AppLocalizations.of(context).games),
@@ -190,7 +148,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                     });
                   }),
                   icon: Icon(IconService.add),
-                  iconSize: Constants.navBarIconSize + 2,
+                  iconSize: Constants.kNavBarIconSize + 2,
                 ),
               ),
               child: CupertinoPageScaffold(
@@ -438,7 +396,16 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     final compare = sortOption == SortOption.date
         ? (a, b) => a.createdAt.compareTo(b.createdAt)
-        : (a, b) => a.gameTitle.compareTo(b.gameTitle);
+        : (a, b) {
+            // Normalize strings for consistent comparison, handling special characters
+            String normalize(String s) => s
+                .toLowerCase()
+                .replaceAll('ä', 'a~')
+                .replaceAll('ö', 'o~')
+                .replaceAll('ü', 'u~')
+                .replaceAll('ß', 'ss~');
+            return normalize(a.gameTitle).compareTo(normalize(b.gameTitle));
+          };
 
     displayedGames.sort(
       sortDirection == SortDirection.ascending

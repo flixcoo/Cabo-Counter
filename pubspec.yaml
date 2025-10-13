@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.2+930
+version: 1.0.2+952
 publish_to: none
 
 environment:
@@ -31,7 +31,12 @@ dependencies:
   package_info_plus: any
   path_provider: ^2.1.1
   provider: ^6.1.5+1
-  pull_down_button: ^0.10.2
+  # Temporary fix since the flutter fix is on stable channel
+  # https://github.com/notDmDrl/pull_down_button/issues/74#issuecomment-3387231862
+  pull_down_button:
+    git:
+      url: https://github.com/TimeFinderApp/pull_down_button
+      ref: d7c9ffbc5b1617b385635a0f99b31ae35d13740b
   rate_my_app: ^2.3.2
   share_plus: ^11.1.0
   shared_preferences: ^2.5.3

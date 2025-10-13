@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
 /// A utility class that holds constant values and configuration settings
@@ -58,5 +59,8 @@ class Constants {
   static const int kMinimumSkeletonScreenDuration = 500;
 
   /// Size of the icons used on the buttons in the nav bar.
-  static const double navBarIconSize = 28.0;
+  static const double kNavBarIconSize = 28.0;
+
+  /// Standard divider widget for material bottom sheets.
+  static const Widget bottomSheetDivider = Divider(indent: 10, endIndent: 10);
 }
