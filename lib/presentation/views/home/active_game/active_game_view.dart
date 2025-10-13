@@ -11,6 +11,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart
 import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
@@ -151,18 +152,28 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               return Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: CupertinoListTile(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 5),
                                     backgroundColorActivated:
                                         CustomTheme.backgroundColor,
                                     title: Text(
                                       '${AppLocalizations.of(context).round} ${index + 1}',
                                     ),
-                                    trailing: index + 1 !=
-                                                gameSession.roundNumber ||
-                                            gameSession.isGameFinished == true
-                                        ? (const Text('\u{2705}',
-                                            style: TextStyle(fontSize: 22)))
-                                        : const Text('\u{23F3}',
-                                            style: TextStyle(fontSize: 22)),
+                                    trailing: Row(
+                                      children: [
+                                        index + 1 != gameSession.roundNumber ||
+                                                gameSession.isGameFinished ==
+                                                    true
+                                            ? (const Text('\u{2705}',
+                                                style: TextStyle(fontSize: 22)))
+                                            : const Text('\u{23F3}',
+                                                style: TextStyle(fontSize: 22)),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        IconService.chevron
+                                      ],
+                                    ),
                                     onTap: () async {
                                       _openRoundView(context, index + 1);
                                     },
@@ -179,6 +190,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           Column(
                             children: [
                               CupertinoListTile(
+                                  trailing: IconService.chevron,
+                                  padding:
+                                      const EdgeInsets.only(left: 20, right: 5),
                                   title: Text(
                                     AppLocalizations.of(context)
                                         .scoring_history,
@@ -192,6 +206,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                                 gameSession: gameSession,
                                               )))),
                               CupertinoListTile(
+                                  trailing: IconService.chevron,
+                                  padding:
+                                      const EdgeInsets.only(left: 20, right: 5),
                                   title: Text(
                                     AppLocalizations.of(context).point_overview,
                                   ),
