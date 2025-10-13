@@ -25,9 +25,6 @@ class CustomFormRow extends StatefulWidget {
 }
 
 class _CustomFormRowState extends State<CustomFormRow> {
-  late final suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
-  late final padding = _calculatePadding(suffixWidget);
-
   @override
   void initState() {
     super.initState();
@@ -35,6 +32,9 @@ class _CustomFormRowState extends State<CustomFormRow> {
 
   @override
   Widget build(BuildContext context) {
+    final suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
+    final padding = _calculatePadding(suffixWidget);
+
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: widget.onPressed,
