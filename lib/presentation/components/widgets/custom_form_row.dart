@@ -26,13 +26,7 @@ class CustomFormRow extends StatefulWidget {
 
 class _CustomFormRowState extends State<CustomFormRow> {
   late final suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
-  late final padding = suffixWidget is CustomStepper
-      ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
-      : (suffixWidget is Icon ||
-              suffixWidget is CupertinoListTileChevron ||
-              suffixWidget is Row)
-          ? const EdgeInsets.fromLTRB(15, 10, 8, 10)
-          : const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
+  late final padding = _calculatePadding(suffixWidget);
 
   @override
   void initState() {
@@ -59,5 +53,18 @@ class _CustomFormRowState extends State<CustomFormRow> {
         child: suffixWidget,
       ),
     );
+  }
+
+  /// Calculates padding based on the type of the suffix widget.
+  EdgeInsets _calculatePadding(Widget suffixWidget) {
+    if (suffixWidget is CustomStepper) {
+      return const EdgeInsets.fromLTRB(15, 0, 0, 0);
+    } else if (suffixWidget is Icon ||
+        suffixWidget is CupertinoListTileChevron ||
+        suffixWidget is Row) {
+      return const EdgeInsets.fromLTRB(15, 10, 8, 10);
+    } else {
+      return const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
+    }
   }
 }
