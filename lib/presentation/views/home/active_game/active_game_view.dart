@@ -160,10 +160,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       '${AppLocalizations.of(context).round} ${index + 1}',
                                     ),
                                     trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         index + 1 != gameSession.roundNumber ||
-                                                gameSession.isGameFinished ==
-                                                    true
+                                                gameSession.isGameFinished
                                             ? (const Text('\u{2705}',
                                                 style: TextStyle(fontSize: 22)))
                                             : const Text('\u{23F3}',
