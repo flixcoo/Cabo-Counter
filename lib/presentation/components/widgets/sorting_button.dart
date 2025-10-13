@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cabo_counter/core/constants.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
@@ -65,6 +66,7 @@ class SortingButton extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
+                backgroundColor: CustomTheme.backgroundColor,
                 builder: (context) {
                   return _bottomSheet(context);
                 });
