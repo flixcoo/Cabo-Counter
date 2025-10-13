@@ -119,7 +119,6 @@ class _MainMenuViewState extends State<MainMenuView> {
                         },
                         icon: Icon(IconService.settings)),
                     SortingButton(
-                        context: context,
                         currentSortOption: currentSortOption,
                         currentSortDirection: currentSortDirection,
                         showOnlyActiveGames: _showOnlyActiveGames,

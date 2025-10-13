@@ -32,11 +32,9 @@ class SortingButton extends StatelessWidget {
   final ValueChanged<SortOption> onSortOptionChanged;
   final ValueChanged<SortDirection> onSortDirectionChanged;
   final VoidCallback onShowOnlyActiveGamesChanged;
-  final BuildContext context;
 
   const SortingButton(
       {super.key,
-      required this.context,
       required this.currentSortOption,
       required this.currentSortDirection,
       required this.showOnlyActiveGames,
