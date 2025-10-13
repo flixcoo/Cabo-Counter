@@ -349,7 +349,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       context: context,
       title: Text(AppLocalizations.of(context).end_game_title),
       message: Text(AppLocalizations.of(context).end_game_message),
-      actions: [endGameAction, cancelAction],
+      actions: [cancelAction, endGameAction],
     );
   }
 
