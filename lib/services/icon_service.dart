@@ -19,6 +19,14 @@ abstract class IconService {
   static IconData get chart =>
       Platform.isIOS ? CupertinoIcons.chart_bar_alt_fill : Icons.bar_chart;
 
+  static Widget get chevron => Platform.isIOS
+      ? const CupertinoListTileChevron()
+      : const Icon(
+          Icons.chevron_right_sharp,
+          size: 24,
+          color: Colors.grey,
+        );
+
   /// Icon for cabo penalty.
   static IconData get cabo_penalty =>
       Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.electric_bolt;
