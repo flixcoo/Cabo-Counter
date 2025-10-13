@@ -2479,8 +2479,8 @@ SOFTWARE.''',
     description: 'Flutter plugin for accessing an Android Lifecycle within other plugins.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/flutter_plugin_android_lifecycle',
     authors: [],
-    version: '2.0.30',
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    version: '2.0.31',
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -3016,7 +3016,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'JSON Schema implementation in Dart',
     homepage: 'https://github.com/workiva/json_schema',
     authors: [],
-    version: '5.2.1',
+    version: '5.2.2',
     license: '''Copyright 2013-2022 Workiva Inc.
 
 Licensed under the Boost Software License (the "License");
@@ -3845,8 +3845,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Android implementation of the path_provider plugin.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_android',
     authors: [],
-    version: '2.2.18',
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    version: '2.2.19',
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -5277,7 +5277,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Provides lightweight yet convenient bindings to SQLite by using dart:ffi',
     homepage: 'https://github.com/simolus3/sqlite3.dart/tree/main/sqlite3',
     authors: [],
-    version: '2.9.1',
+    version: '2.9.3',
     license: '''MIT License
 
 Copyright (c) 2020 Simon Binder
@@ -6604,7 +6604,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     homepage: 'https://win32.pub',
     repository: 'https://github.com/halildurmus/win32',
     authors: [],
-    version: '5.14.0',
+    version: '5.15.0',
     license: '''BSD 3-Clause License
 
 Copyright (c) 2024, Halil Durmus
