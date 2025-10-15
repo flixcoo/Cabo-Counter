@@ -5,7 +5,8 @@
 ![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
 ![iOS18](https://img.shields.io/badge/iOS-18.7.1-white?logo=apple)
 ![iOS26](https://img.shields.io/badge/iOS-26.0.1-white?logo=apple)
-![Android16](https://img.shields.io/badge/Android-16-3DDC84?logo=android)![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
+![Android16](https://img.shields.io/badge/Android-16-3DDC84?logo=android)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
 
 Cabo Counter is a Flutter-based mobile app for automated score tracking in the card game CABO. It helps players effortlessly manage scores and automatically calculate round results.
 
