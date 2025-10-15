@@ -249,6 +249,8 @@ class _SettingsViewState extends State<SettingsView> {
         actions: dialogActions);
   }
 
+  /// Displays a feedback dialog for import operations based on the [ImportStatus].
+  /// If the import was canceled, no dialog is shown.
   void showFeedbackDialog(ImportStatus status) {
     if (status == ImportStatus.canceled) return;
     final (title, message) = _getDialogContent(status);
@@ -257,6 +259,9 @@ class _SettingsViewState extends State<SettingsView> {
         context: context, title: Text(title), content: Text(message));
   }
 
+  /// Returns the dialog title and message based on the [ImportStatus].
+  /// [status] The status of the import operation.
+  /// Returns a tuple containing the title and message for the dialog.
   (String, String) _getDialogContent(ImportStatus status) {
     switch (status) {
       case ImportStatus.success:
