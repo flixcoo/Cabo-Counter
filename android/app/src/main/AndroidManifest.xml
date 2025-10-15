@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.felixkirchner.cabocounter">
     <application
         android:label="Cabo Counter"
         android:name="${applicationName}"
@@ -36,7 +37,6 @@
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
-    <uses-permission android:name="android.permission.VIBRATE" />
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
