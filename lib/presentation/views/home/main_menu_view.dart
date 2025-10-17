@@ -40,8 +40,9 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Map to hold the status of data migration and amount of migrated games
   late Map<String, dynamic> migrationStatus;
 
-  /// List of game sessions to be displayed based on sorting and filtering
-  List<GameSession> displayedGames = [];
+  /// List of game sessions to be displayed based on sorting and filtering.
+  /// Gets initialized with all games from the game manager
+  List<GameSession> displayedGames = gameManager.gameList;
 
   /// Current sorting option for the game list
   SortOption currentSortOption = ConfigService.getSortingOption();
@@ -86,6 +87,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
+    print('gameManager has ${displayedGames.length} games');
+    print('gameManager.gameList.isEmpty: ${displayedGames.isEmpty}');
     return ListenableBuilder(
         listenable: gameManager,
         builder: (context, _) {
