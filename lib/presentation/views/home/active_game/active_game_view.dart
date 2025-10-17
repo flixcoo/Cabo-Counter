@@ -258,8 +258,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
                                 onTap: () {
-                                  _showDeleteGameDialog().then((value) {
-                                    if (value) {
+                                  _showDeleteGameDialog()
+                                      .then((shouldDeleteGame) {
+                                    if (shouldDeleteGame) {
                                       _removeGameSession(gameSession);
                                     }
                                   });
@@ -448,11 +449,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
     if (gameManager.gameExistsInGameList(gameSession.gameId)) {
+      gameManager.deleteGameById(gameSession.gameId);
       Navigator.pop(context);
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        gameManager.deleteGameById(gameSession.gameId);
-      });
     } else {
       PopupService.showInfoPopup(
           context: context,
