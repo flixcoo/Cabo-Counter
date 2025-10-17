@@ -4559,7 +4559,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     description: 'JSON Pointer (RFC 6901). Reads/writes referred values in JSON documents.',
     homepage: 'https://github.com/f3ath/rfc-6901-dart',
     authors: [],
-    version: '0.2.0',
+    version: '0.2.1',
     license: '''MIT License
 
 Copyright (c) 2021 The Конь
