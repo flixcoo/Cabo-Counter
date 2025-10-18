@@ -36,8 +36,8 @@ The complete rules of the game are also available in the repository wiki at [Cab
 ### Prerequisites
 - Flutter 3.32.1+
 - Dart 3.8.1+
-- Xcode (for iOS builds)
-- A device or simulator running iOS 18.5+
+- Xcode (for iOS builds) / Android Studio (for Android builds)
+- A device or simulator running iOS 18.5+ / Android 16
 
 ### Installation
 
