@@ -267,7 +267,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'A daemon for running Dart builds.',
     repository: 'https://github.com/dart-lang/build/tree/master/build_daemon',
     authors: [],
-    version: '4.0.4',
+    version: '4.1.0',
     license: '''Copyright 2019, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
@@ -1691,7 +1691,7 @@ SOFTWARE.''',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.28.2',
+    version: '2.29.0',
     license: '''MIT License
 
 Copyright (c) 2021 Simon Binder
@@ -1723,7 +1723,7 @@ SOFTWARE.''',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.28.3',
+    version: '2.29.0',
     license: '''MIT License
 
 Copyright (c) 2021 Simon Binder
@@ -5340,7 +5340,7 @@ SOFTWARE.''',
     homepage: 'https://github.com/simolus3/drift/tree/develop/sqlparser',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '0.41.2',
+    version: '0.42.0',
     license: '''MIT License
 
 Copyright (c) 2019 Simon Binder
