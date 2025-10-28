@@ -87,8 +87,6 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
-    print('gameManager has ${displayedGames.length} games');
-    print('gameManager.gameList.isEmpty: ${displayedGames.isEmpty}');
     return ListenableBuilder(
         listenable: gameManager,
         builder: (context, _) {
