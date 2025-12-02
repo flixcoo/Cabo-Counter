@@ -231,6 +231,9 @@ class ConfigService {
     _showActiveGamesOnly = showActiveGamesOnly;
   }
 
+  /// Getter for the rotate shuffler flag.
+  static bool getRotateShuffler() => _rotateShuffler;
+
   /// Setter for the rotate shuffler flag.
   /// [rotateShuffler] is the new value to be set.
   static Future<void> setRotateShuffler(bool rotateShuffler) async {
@@ -238,9 +241,6 @@ class ConfigService {
     await prefs.setBool(_keyRotateShuffler, rotateShuffler);
     _rotateShuffler = rotateShuffler;
   }
-
-  /// Getter for the rotate shuffler flag.
-  static bool getRotateShuffler() => _rotateShuffler;
 
   /// Resets the user configuration to default values.
   static Future<void> resetUserConfig() async {
