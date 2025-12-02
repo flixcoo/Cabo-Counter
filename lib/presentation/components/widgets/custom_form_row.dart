@@ -31,7 +31,6 @@ class _CustomFormRowState extends State<CustomFormRow> {
   @override
   void initState() {
     super.initState();
-    print('Suffix widget is : ${widget.suffixWidget.runtimeType}');
   }
 
   @override
