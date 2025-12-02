@@ -6,7 +6,7 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
