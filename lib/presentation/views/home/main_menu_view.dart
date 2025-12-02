@@ -444,7 +444,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Shows the "What's New" dialog.
   void showWhatsNewDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
+      CupertinoPageRoute(
         builder: (context) => const WhatsNewDialog(),
         fullscreenDialog: true,
       ),
