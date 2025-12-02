@@ -348,7 +348,7 @@ class _RoundViewState extends State<RoundView> {
 
   /// Determines which player is responsible for shuffling the cards.
   /// In the first round, the first player shuffles. In subsequent rounds,
-  /// the player with the highest score  from the previous round (round looser)
+  /// the player with the highest score  from the previous round (round loser)
   /// shuffles.
   int _getShufflePlayerIndex() {
     // In the first round the first player shuffles the cards
