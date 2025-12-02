@@ -657,6 +657,18 @@ abstract class AppLocalizations {
   /// **'Standard-Modus'**
   String get standard_mode;
 
+  /// No description provided for @rotate_shuffler.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in rotieren'**
+  String get rotate_shuffler;
+
+  /// No description provided for @shuffler_rotation_info.
+  ///
+  /// In de, this message translates to:
+  /// **'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.'**
+  String get shuffler_rotation_info;
+
   /// No description provided for @reset_to_default.
   ///
   /// In de, this message translates to:

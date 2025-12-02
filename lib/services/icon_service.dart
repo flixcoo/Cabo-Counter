@@ -134,4 +134,8 @@ abstract class IconService {
   static IconData get visibility_off => Platform.isIOS
       ? CupertinoIcons.eye_slash_fill
       : Icons.visibility_off_rounded;
+
+  static IconData get shuffle_cards => Platform.isIOS
+      ? CupertinoIcons.rectangle_fill_on_rectangle_angled_fill
+      : Icons.casino;
 }

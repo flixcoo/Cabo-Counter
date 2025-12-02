@@ -322,6 +322,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standard_mode => 'Default Mode';
 
   @override
+  String get rotate_shuffler => 'Rotate Shuffler';
+
+  @override
+  String get shuffler_rotation_info =>
+      'By default, the person who lost the last round shuffles. Enable this option to rotate the role each round in game order.';
+
+  @override
   String get reset_to_default => 'Reset to Default';
 
   @override

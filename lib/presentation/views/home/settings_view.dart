@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -13,6 +15,7 @@ import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,6 +34,7 @@ class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
   GameMode defaultMode = ConfigService.getGameMode();
+  bool rotateShuffler = ConfigService.getRotateShuffler();
 
   @override
   void initState() {
@@ -62,8 +66,8 @@ class _SettingsViewState extends State<SettingsView> {
                 child: CupertinoFormSection.insetGrouped(
                     footer: Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          Text(AppLocalizations.of(context).config_change_info),
+                      child: Text(
+                          AppLocalizations.of(context).shuffler_rotation_info),
                     ),
                     backgroundColor: CustomTheme.backgroundColor,
                     margin: EdgeInsets.zero,
@@ -134,6 +138,37 @@ class _SettingsViewState extends State<SettingsView> {
                           ConfigService.setGameMode(defaultMode);
                         },
                       ),
+                      CustomFormRow(
+                        prefixText:
+                            AppLocalizations.of(context).rotate_shuffler,
+                        prefixIcon: IconService.shuffle_cards,
+                        suffixWidget: Material(
+                          color: Colors.transparent,
+                          child: Switch.adaptive(
+                              activeTrackColor: CustomTheme.primaryColor,
+                              inactiveThumbColor: Colors.white,
+                              value: rotateShuffler,
+                              onChanged: (switchValue) {
+                                setState(() {
+                                  ConfigService.setRotateShuffler(switchValue);
+                                  rotateShuffler = switchValue;
+                                });
+                              }),
+                        ),
+                        onPressed: () => showConfirmPopup(),
+                      ),
+                    ])),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                child: CupertinoFormSection.insetGrouped(
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          Text(AppLocalizations.of(context).config_change_info),
+                    ),
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
                       CustomFormRow(
                         prefixText:
                             AppLocalizations.of(context).reset_to_default,

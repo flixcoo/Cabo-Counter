@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.3+1015
+version: 1.0.3+1018
 publish_to: none
 
 environment:
@@ -14,6 +14,7 @@ dependencies:
   drift_flutter: ^0.2.4
   file_picker: ^10.1.2
   file_saver: ^0.2.6
+  fluentui_system_icons: ^1.1.273
   flutter:
     sdk: flutter
   flutter_keyboard_visibility: ^6.0.0
@@ -26,6 +27,7 @@ dependencies:
       ref: master
   font_awesome_flutter: ^10.8.0
   google_fonts: ^6.3.0
+  hugeicons: ^1.1.2
   intl: any
   json_schema: ^5.2.1
   package_info_plus: any

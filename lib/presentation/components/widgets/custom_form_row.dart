@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// A customizable form row widget with a prefix icon, text, and optional suffix widget.
 ///
@@ -28,6 +31,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
   @override
   void initState() {
     super.initState();
+    print('Suffix widget is : ${widget.suffixWidget.runtimeType}');
   }
 
   @override
@@ -63,6 +67,12 @@ class _CustomFormRowState extends State<CustomFormRow> {
         suffixWidget is CupertinoListTileChevron ||
         suffixWidget is Row) {
       return const EdgeInsets.fromLTRB(15, 10, 8, 10);
+    } else if (suffixWidget is Material) {
+      if (Platform.isIOS) {
+        return const EdgeInsets.fromLTRB(15, 0, 10, 0);
+      } else {
+        return const EdgeInsets.fromLTRB(15, 0, 8, 0);
+      }
     } else {
       return const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
     }
