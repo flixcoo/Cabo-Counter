@@ -374,7 +374,8 @@ class _RoundViewState extends State<RoundView> {
       return candidateIndices.first;
     } else {
       // Use a seeded random generator for consistent results.
-      final rnd = Random(widget.gameSession.createdAt.microsecondsSinceEpoch);
+      final rnd = Random(widget.gameSession.createdAt.microsecondsSinceEpoch +
+          widget.roundNumber);
       return candidateIndices[rnd.nextInt(candidateIndices.length)];
     }
   }
