@@ -86,7 +86,8 @@ class GameManager extends ChangeNotifier {
   void _vibrateIfPossible() async {
     try {
       if (await Vibrate.canVibrate) {
-        Vibrate.vibrate();
+        Vibrate.feedback(FeedbackType.success);
+        print('Vibration triggered');
       }
     } catch (e) {
       print('Vibration error: $e');
