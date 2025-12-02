@@ -83,7 +83,7 @@ class ConfigService {
   /// Default value of [_rotateShuffler]
   static const bool _defaultRotateShuffler = false;
 
-  /// Key for the stored sorting direction.
+  /// Key for the stored rotate shuffler flag.
   static const String _keyRotateShuffler = 'rotateShuffler';
 
   static Future<void> initConfig() async {
