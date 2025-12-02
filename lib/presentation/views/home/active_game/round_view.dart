@@ -68,7 +68,7 @@ class _RoundViewState extends State<RoundView> {
 
   @override
   void initState() {
-    shufflePlayerIndex = _getShufflePlayer();
+    shufflePlayerIndex = _getShufflePlayerIndex();
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
       // If the current round has already been played, the text fields
@@ -350,7 +350,7 @@ class _RoundViewState extends State<RoundView> {
   /// In the first round, the first player shuffles. In subsequent rounds,
   /// the player with the highest score  from the previous round (round looser)
   /// shuffles.
-  int _getShufflePlayer() {
+  int _getShufflePlayerIndex() {
     // In the first round the first player shuffles the card
     if (widget.roundNumber == 1) {
       return 0;
