@@ -247,8 +247,11 @@ class ConfigService {
     ConfigService._pointLimit = _defaultPointLimit;
     ConfigService._caboPenalty = _defaultCaboPenalty;
     ConfigService._gameMode = _defaultGameMode;
+    ConfigService._rotateShuffler = _defaultRotateShuffler;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, _defaultPointLimit);
     await prefs.setInt(_keyCaboPenalty, _defaultCaboPenalty);
+    await prefs.setInt(_keyGameMode, _defaultGameMode);
+    await prefs.setBool(_keyRotateShuffler, _defaultRotateShuffler);
   }
 }

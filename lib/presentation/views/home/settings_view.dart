@@ -338,6 +338,7 @@ class _SettingsViewState extends State<SettingsView> {
             _stepperKey1 = UniqueKey();
             _stepperKey2 = UniqueKey();
             defaultMode = ConfigService.getGameMode();
+            rotateShuffler = ConfigService.getRotateShuffler();
           });
         },
       ),
