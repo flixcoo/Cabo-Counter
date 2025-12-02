@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -26,6 +28,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class RoundView extends StatefulWidget {
   final GameSession gameSession;
   final int roundNumber;
+
   const RoundView(
       {super.key, required this.roundNumber, required this.gameSession});
 
@@ -57,10 +60,15 @@ class _RoundViewState extends State<RoundView> {
     (index) => FocusNode(),
   );
 
+  /// List of global keys for the score text fields.
   late List<GlobalKey> _textFieldKeys;
+
+  /// Index of the player who shuffles the cards for this round.
+  late int shufflePlayerIndex;
 
   @override
   void initState() {
+    shufflePlayerIndex = _getShufflePlayer();
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
       // If the current round has already been played, the text fields
@@ -183,6 +191,8 @@ class _RoundViewState extends State<RoundView> {
                         final name = rotatedPlayers[index];
                         bool shouldShowMedal =
                             index == 0 && widget.roundNumber > 1;
+                        bool isShufflePlayer =
+                            originalIndex == shufflePlayerIndex;
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -192,21 +202,35 @@ class _RoundViewState extends State<RoundView> {
                               backgroundColor: CustomTheme.playerTileColor,
                               title: Row(children: [
                                 Expanded(
-                                    child: Row(children: [
-                                  Text(
-                                    name,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  if (shouldShowMedal) ...[
-                                    const SizedBox(width: 10),
-                                    const Icon(FontAwesomeIcons.crown,
-                                        size: 15),
-                                  ],
-                                ]))
+                                    child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                      Text(
+                                        name,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      if (isShufflePlayer) ...[
+                                        const SizedBox(width: 8),
+                                        Text(
+                                            AppLocalizations.of(context)
+                                                .shuffle_player,
+                                            style: const TextStyle(
+                                                fontSize: 13,
+                                                color: CupertinoColors
+                                                    .systemGrey)),
+                                      ],
+                                      if (shouldShowMedal) ...[
+                                        const SizedBox(width: 10),
+                                        const Icon(FontAwesomeIcons.crown,
+                                            size: 15),
+                                      ],
+                                    ]))
                               ]),
                               subtitle: Text(
                                   '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
-                                  ' ${AppLocalizations.of(context).points}'),
+                                  ' ${AppLocalizations.of(context).points}',
+                                  style: TextStyle(color: CustomTheme.white)),
                               trailing: SizedBox(
                                 width: 100,
                                 key: _textFieldKeys[originalIndex],
@@ -320,6 +344,40 @@ class _RoundViewState extends State<RoundView> {
       return 0;
     }
     return winnerIndex;
+  }
+
+  /// Determines which player is responsible for shuffling the cards.
+  /// In the first round, the first player shuffles. In subsequent rounds,
+  /// the player with the highest score  from the previous round (round looser)
+  /// shuffles.
+  int _getShufflePlayer() {
+    // In the first round the first player shuffles the card
+    if (widget.roundNumber == 1) {
+      return 0;
+    }
+
+    final List<int> scores =
+        widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
+
+    print(scores);
+
+    final int maxScore =
+        scores.reduce((value, element) => value > element ? value : element);
+
+    // Collect all indices with the maxScore
+    final List<int> candidateIndices = [];
+    for (int i = 0; i < scores.length; i++) {
+      if (scores[i] == maxScore) candidateIndices.add(i);
+    }
+
+    // If only one player has the highest score, return that index.
+    // If multiple players share the highest score, select one randomly.
+    if (candidateIndices.length == 1) {
+      return candidateIndices.first;
+    } else {
+      final rnd = Random();
+      return candidateIndices[rnd.nextInt(candidateIndices.length)];
+    }
   }
 
   /// Rotates the players list based on the previous round's winner.

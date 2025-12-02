@@ -230,6 +230,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get who_has_kamikaze => 'Who has Kamikaze?';
 
   @override
+  String get shuffle_player => 'Shuffler';
+
+  @override
   String get done => 'Done';
 
   @override
@@ -240,11 +243,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
