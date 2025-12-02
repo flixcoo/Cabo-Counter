@@ -330,6 +330,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get standard_mode => 'Standard-Modus';
 
   @override
+  String get rotate_shuffler => 'Mischer:in rotieren';
+
+  @override
+  String get shuffler_rotation_info =>
+      'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.';
+
+  @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
 
   @override

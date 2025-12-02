@@ -154,6 +154,8 @@
   "cabo_penalty": "Cabo-Strafe",
   "point_limit": "Punkte-Limit",
   "standard_mode": "Standard-Modus",
+  "rotate_shuffler": "Mischer:in rotieren",
+  "shuffler_rotation_info": "Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.",
   "reset_to_default": "Auf Standard zurücksetzen",
   "reset_config_title": "Einstellungen zurücksetzen",
   "reset_config_message": "Möchtest du deine Einstellungen zurücksetzen?",

@@ -76,6 +76,16 @@ class ConfigService {
   /// Key for the stored show active games only flag.
   static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
 
+  /// Should the shuffle player rotate?
+  /// true = rotate shuffle player, false = last round loser shuffles
+  static bool _rotateShuffler = false;
+
+  /// Default value of [_rotateShuffler]
+  static const bool _defaultRotateShuffler = false;
+
+  /// Key for the stored rotate shuffler flag.
+  static const String _keyRotateShuffler = 'rotateShuffler';
+
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -91,6 +101,8 @@ class ConfigService {
         prefs.getBool(_keySortingDirection) ?? _defaultSortingDirection;
     _showActiveGamesOnly =
         prefs.getBool(_keyShowActiveGamesOnly) ?? _defaultShowActiveGamesOnly;
+    _rotateShuffler =
+        prefs.getBool(_keyRotateShuffler) ?? _defaultRotateShuffler;
 
     // Save the initial values to SharedPreferences
     prefs.setInt(_keyPointLimit, _pointLimit);
@@ -100,6 +112,7 @@ class ConfigService {
     prefs.setBool(_keySortingOption, _sortingOption);
     prefs.setBool(_keySortingDirection, _sortingDirection);
     prefs.setBool(_keyShowActiveGamesOnly, _showActiveGamesOnly);
+    prefs.setBool(_keyRotateShuffler, _rotateShuffler);
   }
 
   /// Retrieves the current game mode.
@@ -207,6 +220,7 @@ class ConfigService {
     _sortingDirection = direction;
   }
 
+  /// Getter for the show active games only flag.
   static bool getShowActiveGamesOnly() => _showActiveGamesOnly;
 
   /// Setter for the show active games only flag.
@@ -215,6 +229,17 @@ class ConfigService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyShowActiveGamesOnly, showActiveGamesOnly);
     _showActiveGamesOnly = showActiveGamesOnly;
+  }
+
+  /// Getter for the rotate shuffler flag.
+  static bool getRotateShuffler() => _rotateShuffler;
+
+  /// Setter for the rotate shuffler flag.
+  /// [rotateShuffler] is the new value to be set.
+  static Future<void> setRotateShuffler(bool rotateShuffler) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyRotateShuffler, rotateShuffler);
+    _rotateShuffler = rotateShuffler;
   }
 
   /// Resets the user configuration to default values.
