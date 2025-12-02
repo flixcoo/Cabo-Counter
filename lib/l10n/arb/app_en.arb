@@ -184,5 +184,8 @@
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
   "loading_games": "Loading Games ...",
-  "build": "Build No."
+  "build": "Build No.",
+
+  "whats_new": "What's new",
+  "continue_button": "Continue"
 }

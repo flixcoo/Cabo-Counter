@@ -11,13 +11,14 @@ import 'package:cabo_counter/presentation/components/placeholders/main_menu_skel
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
-import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
+import 'package:cabo_counter/presentation/views/home/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:once/once.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Home screen of the app that displays a list of game sessions.
@@ -56,6 +57,13 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   initState() {
     super.initState();
+
+    Once.runOnEveryNewVersion(
+      callback: () {
+        showWhatsNewDialog(context);
+      },
+    );
+
     db.gameSessionDao.getAllGameSessions().then((gameSessions) {
       for (final session in gameSessions) {
         gameManager.addGameSessionFromDataBase(session);
@@ -123,7 +131,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
                 middle: Text(AppLocalizations.of(context).games),
                 trailing: IconButton(
-                  onPressed: () => Navigator.push(
+                  onPressed: () => showWhatsNewDialog(context),
+                  /*Navigator.push(
                     context,
                     CupertinoPageRoute(
                       builder: (context) => CreateGameView(
@@ -131,7 +140,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         previousPageTitle: AppLocalizations.of(context).games,
                       ),
                     ),
-                  ),
+                  )*/
                   icon: Icon(IconService.add),
                   iconSize: Constants.kNavBarIconSize + 2,
                 ),
@@ -430,5 +439,15 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  /// Shows the "What's New" dialog.
+  void showWhatsNewDialog(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (context) => const WhatsNewDialog(),
+        fullscreenDialog: true,
+      ),
+    );
   }
 }

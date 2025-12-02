@@ -243,11 +243,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -420,4 +416,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get build => 'Build No.';
+
+  @override
+  String get whats_new => 'What\'s new';
+
+  @override
+  String get continue_button => 'Continue';
 }

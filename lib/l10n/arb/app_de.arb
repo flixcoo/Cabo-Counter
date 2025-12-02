@@ -14,7 +14,7 @@
   "gamemode": "Spielmodus",
   "ok": "OK",
   "player": "Spieler:in",
-    "players": "Spieler:innen",
+  "players": "Spieler:innen",
   "name": "Name",
   "date": "Datum",
   "back": "Zurück",
@@ -186,5 +186,8 @@
   "app_version": "App-Version",
   "privacy_policy": "Datenschutzerklärung",
   "loading_games": "Lade Spiele ...",
-  "build": "Build-Nr."
+  "build": "Build-Nr.",
+
+  "whats_new": "Was ist neu",
+  "continue_button": "Weiter"
 }
