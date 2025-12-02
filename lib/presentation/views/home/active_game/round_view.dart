@@ -5,6 +5,7 @@ import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
+import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -349,11 +350,18 @@ class _RoundViewState extends State<RoundView> {
   /// Determines which player is responsible for shuffling the cards.
   /// In the first round, the first player shuffles. In subsequent rounds,
   /// the player with the highest score from the previous round (round loser)
-  /// shuffles.
+  /// shuffles. If rotate shuffler is enabled in the configuration,
+  /// the shuffler rotates among players each round.
   int _getShufflePlayerIndex() {
     // In the first round the first player shuffles the cards
     if (widget.roundNumber == 1) {
       return 0;
+    }
+
+    // If the configuration is set to rotate the shuffler, calculate the
+    // shuffler index according to the current round number and amount of players
+    if (ConfigService.getRotateShuffler()) {
+      return (widget.roundNumber - 1) % widget.gameSession.players.length;
     }
 
     final List<int> scores =
