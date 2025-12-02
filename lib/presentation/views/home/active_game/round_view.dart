@@ -64,11 +64,11 @@ class _RoundViewState extends State<RoundView> {
   late List<GlobalKey> _textFieldKeys;
 
   /// Index of the player who shuffles the cards for this round.
-  late int shufflePlayerIndex;
+  late int _shufflePlayerIndex;
 
   @override
   void initState() {
-    shufflePlayerIndex = _getShufflePlayerIndex();
+    _shufflePlayerIndex = _getShufflePlayerIndex();
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
       // If the current round has already been played, the text fields
@@ -192,7 +192,7 @@ class _RoundViewState extends State<RoundView> {
                         bool shouldShowMedal =
                             index == 0 && widget.roundNumber > 1;
                         bool isShufflePlayer =
-                            originalIndex == shufflePlayerIndex;
+                            originalIndex == _shufflePlayerIndex;
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
