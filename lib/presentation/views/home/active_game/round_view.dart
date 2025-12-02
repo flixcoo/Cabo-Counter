@@ -359,8 +359,6 @@ class _RoundViewState extends State<RoundView> {
     final List<int> scores =
         widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
 
-    print(scores);
-
     final int maxScore =
         scores.reduce((value, element) => value > element ? value : element);
 
