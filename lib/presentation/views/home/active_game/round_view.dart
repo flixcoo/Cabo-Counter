@@ -351,7 +351,7 @@ class _RoundViewState extends State<RoundView> {
   /// the player with the highest score  from the previous round (round looser)
   /// shuffles.
   int _getShufflePlayerIndex() {
-    // In the first round the first player shuffles the card
+    // In the first round the first player shuffles the cards
     if (widget.roundNumber == 1) {
       return 0;
     }
