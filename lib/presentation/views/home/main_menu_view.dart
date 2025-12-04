@@ -12,6 +12,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_dialog_actio
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
@@ -131,8 +132,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
                 middle: Text(AppLocalizations.of(context).games),
                 trailing: IconButton(
-                  onPressed: () => showWhatsNewDialog(context),
-                  /*Navigator.push(
+                  onPressed: () => Navigator.push(
                     context,
                     CupertinoPageRoute(
                       builder: (context) => CreateGameView(
@@ -140,7 +140,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         previousPageTitle: AppLocalizations.of(context).games,
                       ),
                     ),
-                  )*/
+                  ),
                   icon: Icon(IconService.add),
                   iconSize: Constants.kNavBarIconSize + 2,
                 ),
