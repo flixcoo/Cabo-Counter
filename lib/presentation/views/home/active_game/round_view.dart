@@ -214,8 +214,7 @@ class _RoundViewState extends State<RoundView> {
                                       if (isShufflePlayer) ...[
                                         const SizedBox(width: 8),
                                         Text(
-                                            AppLocalizations.of(context)
-                                                .shuffle_player,
+                                            AppLocalizations.of(context).dealer,
                                             style: const TextStyle(
                                                 fontSize: 13,
                                                 color: CupertinoColors
