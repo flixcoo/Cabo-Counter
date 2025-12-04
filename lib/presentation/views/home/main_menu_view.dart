@@ -79,7 +79,7 @@ class _MainMenuViewState extends State<MainMenuView> {
           const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
       await Constants.rateMyApp.init();
 
-      if (Constants.rateMyApp.shouldOpenDialog || true) {
+      if (Constants.rateMyApp.shouldOpenDialog) {
         await Future.delayed(const Duration(
             milliseconds: Constants.kMinimumSkeletonScreenDuration));
         if (!mounted) return;
