@@ -10,9 +10,9 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_games_pl
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
-import 'package:cabo_counter/presentation/views/home/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';

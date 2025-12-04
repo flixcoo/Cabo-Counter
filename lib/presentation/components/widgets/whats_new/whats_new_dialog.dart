@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/home/whats_new/whats_new_item.dart';
+import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_item.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/material.dart';
