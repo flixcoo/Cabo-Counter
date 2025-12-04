@@ -59,13 +59,6 @@ class _MainMenuViewState extends State<MainMenuView> {
   initState() {
     super.initState();
 
-    Once.runOnEveryNewVersion(
-      key: 'whats_new_dialog',
-      callback: () {
-        showWhatsNewDialog(context);
-      },
-    );
-
     db.gameSessionDao.getAllGameSessions().then((gameSessions) {
       for (final session in gameSessions) {
         gameManager.addGameSessionFromDataBase(session);
@@ -86,12 +79,19 @@ class _MainMenuViewState extends State<MainMenuView> {
           const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
       await Constants.rateMyApp.init();
 
-      if (Constants.rateMyApp.shouldOpenDialog) {
+      if (Constants.rateMyApp.shouldOpenDialog || true) {
         await Future.delayed(const Duration(
             milliseconds: Constants.kMinimumSkeletonScreenDuration));
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
+
+      Once.runOnEveryNewVersion(
+        key: 'whats_new_dialog',
+        callback: () {
+          showWhatsNewDialog(context);
+        },
+      );
     });
   }
 
