@@ -1,10 +1,10 @@
 # CABO Counter
 
-![Version](https://img.shields.io/badge/App--Version-1.0.3-orange)
+![Version](https://img.shields.io/badge/App--Version-1.0.6-orange)
 ![Flutter](https://img.shields.io/badge/Flutter-3.35.6-027DFD?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
 ![iOS18](https://img.shields.io/badge/iOS-18.7.1-white?logo=apple)
-![iOS26](https://img.shields.io/badge/iOS-26.0.1-white?logo=apple)
+![iOS26](https://img.shields.io/badge/iOS-26.1-white?logo=apple)
 ![Android16](https://img.shields.io/badge/Android-16-3DDC84?logo=android)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
 
@@ -27,6 +27,7 @@ Cabo Counter is a Flutter-based mobile app for automated score tracking in the c
 - Customizable
   - Change the default settings for point limits and cabo penaltys
   - Choose a default game mode for every new created game
+  - Two dealer modes: Last rounds loser or rotating
 - Im- and exporting certain games or the whole app data
 
 The complete rules of the game are also available in the repository wiki at [Cabo Rules (English)](https://github.com/flixcoo/cabo-counter/wiki/CABO-Rules-(English))
@@ -34,8 +35,8 @@ The complete rules of the game are also available in the repository wiki at [Cab
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter 3.32.1+
-- Dart 3.8.1+
+- Flutter 3.35.6+
+- Dart 3.9.2+
 - Xcode (for iOS builds) / Android Studio (for Android builds)
 - A device or simulator running iOS 18.5+ / Android 16
 
