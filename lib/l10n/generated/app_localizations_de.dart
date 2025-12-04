@@ -247,11 +247,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -434,7 +430,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get wn_description_1 =>
-      'In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
+      'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
 
   @override
   String get wn_item_2 => 'Verbesserte Navigation';
