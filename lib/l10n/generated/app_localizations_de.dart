@@ -247,11 +247,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -330,10 +326,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get standard_mode => 'Standard-Modus';
 
   @override
-  String get rotate_shuffler => 'Mischer:in rotieren';
+  String get rotate_dealer => 'Mischer:in rotieren';
 
   @override
-  String get shuffler_rotation_info =>
+  String get rotate_dealer_info =>
       'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.';
 
   @override

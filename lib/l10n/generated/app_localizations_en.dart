@@ -243,11 +243,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -326,11 +322,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standard_mode => 'Default Mode';
 
   @override
-  String get rotate_shuffler => 'Rotate Shuffler';
+  String get rotate_dealer => 'Rotate Dealer';
 
   @override
-  String get shuffler_rotation_info =>
-      'By default, the person who lost the last round shuffles. Enable this option to rotate the role each round in game order.';
+  String get rotate_dealer_info =>
+      'By default, the person who lost the last round deales the cards. Enable this option to rotate the role each round in game order.';
 
   @override
   String get reset_to_default => 'Reset to Default';

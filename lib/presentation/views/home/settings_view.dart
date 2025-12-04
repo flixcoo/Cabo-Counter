@@ -64,8 +64,8 @@ class _SettingsViewState extends State<SettingsView> {
                 child: CupertinoFormSection.insetGrouped(
                     footer: Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: Text(
-                          AppLocalizations.of(context).shuffler_rotation_info),
+                      child:
+                          Text(AppLocalizations.of(context).rotate_dealer_info),
                     ),
                     backgroundColor: CustomTheme.backgroundColor,
                     margin: EdgeInsets.zero,
@@ -137,8 +137,7 @@ class _SettingsViewState extends State<SettingsView> {
                         },
                       ),
                       CustomFormRow(
-                        prefixText:
-                            AppLocalizations.of(context).rotate_shuffler,
+                        prefixText: AppLocalizations.of(context).rotate_dealer,
                         prefixIcon: IconService.shuffle_cards,
                         suffixWidget: Material(
                           color: Colors.transparent,
