@@ -1,4 +1,4 @@
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A service class for managing and persisting app configuration settings using `SharedPreferences`.
@@ -6,37 +6,113 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Provides methods to initialize, retrieve, update, and reset configuration values such as point limit,
 /// cabo penalty, and game mode. Ensures that user preferences are stored locally and persist across app restarts.
 class ConfigService {
-  // Keys for the stored values
-  static const String _keyPointLimit = 'pointLimit';
-  static const String _keyCaboPenalty = 'caboPenalty';
-  static const String _keyGameMode = 'gameMode';
-  static const String _keyMigrationDone = 'migrationDone';
-  // Actual values used in the app
+  /// Current point limit for every game.
   static int _pointLimit = 100;
-  static int _caboPenalty = 5;
-  static int _gameMode = -1;
-  static bool _migrationDone = false;
-  // Default values
+
+  /// Default value of [_pointLimit]
   static const int _defaultPointLimit = 100;
+
+  /// Key for the stored point limit value.
+  static const String _keyPointLimit = 'pointLimit';
+
+  /// Current cabo penalty for every game.
+  static int _caboPenalty = 5;
+
+  /// Key for the stored cabo penalty value.
+  static const String _keyCaboPenalty = 'caboPenalty';
+
+  /// Default value of [_caboPenalty]
   static const int _defaultCaboPenalty = 5;
-  static const int _defaultGameMode = -1;
+
+  /// Current game mode for every game.<br>
+  /// [-1] = no mode <br>
+  /// [0] = point limit <br>
+  /// [1] = unlimited
+  static int _gameMode = -1;
+
+  /// Default value of [_gameMode]
+  static const _defaultGameMode = -1;
+
+  /// Key for the stored game mode value.
+  static const String _keyGameMode = 'gameMode';
+
+  /// Migration done flag.
+  /// false = migration not done, true = migration done
+  static bool _migrationDone = false;
+
+  /// Default value of [_migrationDone]
   static const bool _defaultMigrationDone = false;
+
+  /// Key for the stored migration done flag.
+  static const String _keyMigrationDone = 'migrationDone';
+
+  /// Sorting option for the game list in the main menu.
+  /// true = sort by date, false = sort by title
+  static bool _sortingOption = true;
+
+  /// Default value of [_sortingOption]
+  static const bool _defaultSortingOption = true;
+
+  /// Key for the stored sorting option.
+  static const String _keySortingOption = 'sortingOption';
+
+  /// Sorting direction for the game list in the main menu.
+  /// true = descending, false = ascending
+  static bool _sortingDirection = true;
+
+  /// Default value of [_sortingDirection]
+  static const bool _defaultSortingDirection = true;
+
+  /// Key for the stored sorting direction.
+  static const String _keySortingDirection = 'sortingDirection';
+
+  /// Show active games only flag.
+  /// false = show all games, true = show only active games
+  static bool _showActiveGamesOnly = false;
+
+  /// Default value of [_showActiveGamesOnly]
+  static const bool _defaultShowActiveGamesOnly = false;
+
+  /// Key for the stored show active games only flag.
+  static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
+
+  /// Should the shuffle player rotate?
+  /// true = rotate shuffle player, false = last round loser shuffles
+  static bool _rotateShuffler = false;
+
+  /// Default value of [_rotateShuffler]
+  static const bool _defaultRotateShuffler = false;
+
+  /// Key for the stored rotate shuffler flag.
+  static const String _keyRotateShuffler = 'rotateShuffler';
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Initialize pointLimit, caboPenalty, and gameMode from SharedPreferences
-    // If they are not set, use the default values
+    // Initialize all config values from SharedPreferences
+    // If they are already set, use the stored values
+    // If not, use the default values
     _pointLimit = prefs.getInt(_keyPointLimit) ?? _defaultPointLimit;
     _caboPenalty = prefs.getInt(_keyCaboPenalty) ?? _defaultCaboPenalty;
     _gameMode = prefs.getInt(_keyGameMode) ?? _defaultGameMode;
     _migrationDone = prefs.getBool(_keyMigrationDone) ?? _defaultMigrationDone;
+    _sortingOption = prefs.getBool(_keySortingOption) ?? _defaultSortingOption;
+    _sortingDirection =
+        prefs.getBool(_keySortingDirection) ?? _defaultSortingDirection;
+    _showActiveGamesOnly =
+        prefs.getBool(_keyShowActiveGamesOnly) ?? _defaultShowActiveGamesOnly;
+    _rotateShuffler =
+        prefs.getBool(_keyRotateShuffler) ?? _defaultRotateShuffler;
 
     // Save the initial values to SharedPreferences
     prefs.setInt(_keyPointLimit, _pointLimit);
     prefs.setInt(_keyCaboPenalty, _caboPenalty);
     prefs.setInt(_keyGameMode, _gameMode);
     prefs.setBool(_keyMigrationDone, _migrationDone);
+    prefs.setBool(_keySortingOption, _sortingOption);
+    prefs.setBool(_keySortingDirection, _sortingDirection);
+    prefs.setBool(_keyShowActiveGamesOnly, _showActiveGamesOnly);
+    prefs.setBool(_keyRotateShuffler, _rotateShuffler);
   }
 
   /// Retrieves the current game mode.
@@ -114,13 +190,68 @@ class ConfigService {
     _migrationDone = done;
   }
 
-  /// Resets the configuration to default values.
-  static Future<void> resetConfig() async {
+  /// Getter for the sorting option.
+  static SortOption getSortingOption() {
+    return _sortingOption == true ? SortOption.date : SortOption.title;
+  }
+
+  /// Setter for the sorting option.
+  /// [option] is the new value to be set.
+  static Future<void> setSortingOption(SortOption sortOption) async {
+    final prefs = await SharedPreferences.getInstance();
+    final option = sortOption == SortOption.date;
+    await prefs.setBool(_keySortingOption, option);
+    _sortingOption = option;
+  }
+
+  /// Getter for the sorting direction.
+  static SortDirection getSortingDirection() {
+    return _sortingDirection == true
+        ? SortDirection.descending
+        : SortDirection.ascending;
+  }
+
+  /// Setter for the sorting direction.
+  /// [direction] is the new value to be set.
+  static Future<void> setSortingDirection(SortDirection sortDirection) async {
+    final prefs = await SharedPreferences.getInstance();
+    final direction = sortDirection == SortDirection.descending;
+    await prefs.setBool(_keySortingDirection, direction);
+    _sortingDirection = direction;
+  }
+
+  /// Getter for the show active games only flag.
+  static bool getShowActiveGamesOnly() => _showActiveGamesOnly;
+
+  /// Setter for the show active games only flag.
+  /// [showActiveGamesOnly] is the new value to be set.
+  static Future<void> setShowActiveGamesOnly(bool showActiveGamesOnly) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyShowActiveGamesOnly, showActiveGamesOnly);
+    _showActiveGamesOnly = showActiveGamesOnly;
+  }
+
+  /// Getter for the rotate shuffler flag.
+  static bool getRotateShuffler() => _rotateShuffler;
+
+  /// Setter for the rotate shuffler flag.
+  /// [rotateShuffler] is the new value to be set.
+  static Future<void> setRotateShuffler(bool rotateShuffler) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyRotateShuffler, rotateShuffler);
+    _rotateShuffler = rotateShuffler;
+  }
+
+  /// Resets the user configuration to default values.
+  static Future<void> resetUserConfig() async {
     ConfigService._pointLimit = _defaultPointLimit;
     ConfigService._caboPenalty = _defaultCaboPenalty;
     ConfigService._gameMode = _defaultGameMode;
+    ConfigService._rotateShuffler = _defaultRotateShuffler;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyPointLimit, _defaultPointLimit);
     await prefs.setInt(_keyCaboPenalty, _defaultCaboPenalty);
+    await prefs.setInt(_keyGameMode, _defaultGameMode);
+    await prefs.setBool(_keyRotateShuffler, _defaultRotateShuffler);
   }
 }

@@ -1,7 +1,13 @@
+import 'dart:ui' as dart_ui;
+
+import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 /// A widget that displays the cumulative scoring history of a game session as a line graph.
@@ -28,23 +34,32 @@ class _GraphViewState extends State<GraphView> {
     CustomTheme.graphColor5
   ];
 
+  /// Global key to access the state of the SfCartesianChart for image capturing.
+  final GlobalKey<SfCartesianChartState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    bool isGraphAvailable =
+        widget.gameSession.roundNumber > 1 || widget.gameSession.isGameFinished;
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(AppLocalizations.of(context).scoring_history),
+          trailing: IconButton(
+            onPressed: isGraphAvailable ? () => _shareImage() : null,
+            icon: Icon(IconService.share),
+            iconSize: Constants.kNavBarIconSize,
+          ),
           previousPageTitle: AppLocalizations.of(context).overview,
         ),
         child: SafeArea(
           child: Visibility(
-            visible: widget.gameSession.roundNumber > 1 ||
-                widget.gameSession.isGameFinished,
+            visible: isGraphAvailable,
             replacement: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Center(
-                  child: Icon(CupertinoIcons.chart_bar_alt_fill, size: 60),
+                Center(
+                  child: Icon(IconService.chart, size: 60),
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -58,9 +73,12 @@ class _GraphViewState extends State<GraphView> {
               ],
             ),
             child: SfCartesianChart(
+              key: _key,
+              backgroundColor: CustomTheme.backgroundColor,
               enableAxisAnimation: true,
               legend: const Legend(
-                  overflowMode: LegendItemOverflowMode.wrap,
+                  alignment: ChartAlignment.near,
+                  overflowMode: LegendItemOverflowMode.scroll,
                   isVisible: true,
                   position: LegendPosition.bottom),
               primaryXAxis: const NumericAxis(
@@ -135,5 +153,41 @@ class _GraphViewState extends State<GraphView> {
         color: lineColors[i],
       );
     });
+  }
+
+  /// Captures the current state of the graph as an image and shares it using the SharePlus package.
+  /// The image is saved as a PNG file and shared via available sharing options on the device.
+  /// The method uses a pixel ratio of 5.0 for high-resolution images.
+  Future<void> _shareImage() async {
+    // Get the RenderBox of the current view to determine its position on screen.
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+
+    // Capture the chart as an image with a pixel ratio of 5.0 for high quality.
+    final image = await _key.currentState?.toImage(pixelRatio: 5.0);
+    final byteData =
+        await image?.toByteData(format: dart_ui.ImageByteFormat.png);
+
+    // Exit if image capture failed.
+    if (byteData == null) return;
+
+    // Set the share position origin:
+    // - Use the view's position if available.
+    // - Fall back to a default position (top-left corner) if the view's position is unavailable.
+    Rect sharePositionOrigin = renderBox == null
+        ? const Rect.fromLTWH(0, 0, 100, 100)
+        : renderBox.localToGlobal(Offset.zero) & renderBox.size;
+
+    await SharePlus.instance.share(
+      ShareParams(
+        sharePositionOrigin: sharePositionOrigin,
+        files: [
+          XFile.fromData(
+            byteData.buffer.asUint8List(),
+            mimeType: 'image/png',
+            name: 'scoring_history.png',
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// A customizable form row widget with a prefix icon, text, and optional suffix widget.
 ///
@@ -25,7 +28,6 @@ class CustomFormRow extends StatefulWidget {
 }
 
 class _CustomFormRowState extends State<CustomFormRow> {
-  late Widget suffixWidget;
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,9 @@ class _CustomFormRowState extends State<CustomFormRow> {
 
   @override
   Widget build(BuildContext context) {
-    suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
+    final suffixWidget = widget.suffixWidget ?? const SizedBox.shrink();
+    final padding = _calculatePadding(suffixWidget);
+
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: widget.onPressed,
@@ -48,11 +52,28 @@ class _CustomFormRowState extends State<CustomFormRow> {
             Text(widget.prefixText),
           ],
         ),
-        padding: suffixWidget is CustomStepper
-            ? const EdgeInsets.fromLTRB(15, 0, 0, 0)
-            : const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: padding,
         child: suffixWidget,
       ),
     );
+  }
+
+  /// Calculates padding based on the type of the suffix widget.
+  EdgeInsets _calculatePadding(Widget suffixWidget) {
+    if (suffixWidget is CustomStepper) {
+      return const EdgeInsets.fromLTRB(15, 0, 0, 0);
+    } else if (suffixWidget is Icon ||
+        suffixWidget is CupertinoListTileChevron ||
+        suffixWidget is Row) {
+      return const EdgeInsets.fromLTRB(15, 10, 8, 10);
+    } else if (suffixWidget is Material) {
+      if (Platform.isIOS) {
+        return const EdgeInsets.fromLTRB(15, 0, 10, 0);
+      } else {
+        return const EdgeInsets.fromLTRB(15, 0, 8, 0);
+      }
+    } else {
+      return const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
+    }
   }
 }

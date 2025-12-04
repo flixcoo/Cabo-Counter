@@ -1,15 +1,18 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
-import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
@@ -149,18 +152,28 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               return Padding(
                                   padding: const EdgeInsets.all(1),
                                   child: CupertinoListTile(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 5),
                                     backgroundColorActivated:
                                         CustomTheme.backgroundColor,
                                     title: Text(
                                       '${AppLocalizations.of(context).round} ${index + 1}',
                                     ),
-                                    trailing: index + 1 !=
-                                                gameSession.roundNumber ||
-                                            gameSession.isGameFinished == true
-                                        ? (const Text('\u{2705}',
-                                            style: TextStyle(fontSize: 22)))
-                                        : const Text('\u{23F3}',
-                                            style: TextStyle(fontSize: 22)),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        index + 1 != gameSession.roundNumber ||
+                                                gameSession.isGameFinished
+                                            ? (const Text('\u{2705}',
+                                                style: TextStyle(fontSize: 22)))
+                                            : const Text('\u{23F3}',
+                                                style: TextStyle(fontSize: 22)),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        IconService.chevron
+                                      ],
+                                    ),
                                     onTap: () async {
                                       _openRoundView(context, index + 1);
                                     },
@@ -177,6 +190,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           Column(
                             children: [
                               CupertinoListTile(
+                                  trailing: IconService.chevron,
+                                  padding:
+                                      const EdgeInsets.only(left: 20, right: 5),
                                   title: Text(
                                     AppLocalizations.of(context)
                                         .scoring_history,
@@ -190,6 +206,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                                 gameSession: gameSession,
                                               )))),
                               CupertinoListTile(
+                                  trailing: IconService.chevron,
+                                  padding:
+                                      const EdgeInsets.only(left: 20, right: 5),
                                   title: Text(
                                     AppLocalizations.of(context).point_overview,
                                   ),
@@ -239,8 +258,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 backgroundColorActivated:
                                     CustomTheme.backgroundColor,
                                 onTap: () {
-                                  _showDeleteGameDialog().then((value) {
-                                    if (value) {
+                                  _showDeleteGameDialog()
+                                      .then((shouldDeleteGame) {
+                                    if (shouldDeleteGame) {
                                       _removeGameSession(gameSession);
                                     }
                                   });
@@ -258,14 +278,19 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => CreateGameView(
-                                              gameTitle: gameSession.gameTitle,
-                                              gameMode: widget.gameSession
-                                                          .isPointsLimitEnabled ==
-                                                      true
-                                                  ? GameMode.pointLimit
-                                                  : GameMode.unlimited,
-                                              players: gameSession
-                                                  .getPlayerNamesAsList())));
+                                                gameTitle:
+                                                    gameSession.gameTitle,
+                                                gameMode: widget.gameSession
+                                                            .isPointsLimitEnabled ==
+                                                        true
+                                                    ? GameMode.pointLimit
+                                                    : GameMode.unlimited,
+                                                players: gameSession
+                                                    .getPlayerNamesAsList(),
+                                                previousPageTitle:
+                                                    AppLocalizations.of(context)
+                                                        .overview,
+                                              )));
                                 },
                               ),
                               CupertinoListTile(
@@ -279,27 +304,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         .exportSingleGameSession(
                                             widget.gameSession);
                                     if (!success && context.mounted) {
-                                      showCupertinoDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            CupertinoAlertDialog(
+                                      PopupService.showInfoPopup(
+                                          context: context,
                                           title: Text(
                                               AppLocalizations.of(context)
                                                   .export_error_title),
                                           content: Text(
                                               AppLocalizations.of(context)
-                                                  .export_error_message),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .ok),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ),
-                                      );
+                                                  .export_error_message));
                                     }
                                   }),
                             ],
@@ -333,36 +345,29 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
   void _showEndGameDialog() {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).end_game_title),
-          content: Text(AppLocalizations.of(context).end_game_message),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text(
-                AppLocalizations.of(context).end_game,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  gameManager.endGame(gameSession.gameId);
-                  _playFinishAnimation(context);
-                });
-                Navigator.pop(context);
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
+    final endGameAction = CustomDialogAction<bool>(
+      isDestructiveAction: true,
+      actionText: AppLocalizations.of(context).end_game,
+      returnValue: true,
+      onAfterPop: () {
+        if (mounted) {
+          setState(() {
+            gameManager.endGame(gameSession.gameId);
+            _playFinishAnimation(context);
+          });
+        }
       },
+    );
+    final cancelAction = CustomDialogAction<bool>(
+      actionText: AppLocalizations.of(context).cancel,
+      returnValue: false,
+    );
+
+    PopupService.showSelectionPopup<bool>(
+      context: context,
+      title: Text(AppLocalizations.of(context).end_game_title),
+      message: Text(AppLocalizations.of(context).end_game_message),
+      actions: [cancelAction, endGameAction],
     );
   }
 
@@ -420,33 +425,22 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
-    return await showCupertinoDialog<bool>(
+    return await PopupService.showSelectionPopup<bool>(
           context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).delete_game_title),
-              content: Text(
-                AppLocalizations.of(context)
-                    .delete_game_message(gameSession.gameTitle),
-              ),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).cancel),
-                  onPressed: () => Navigator.pop(context, false),
-                ),
-                CupertinoDialogAction(
-                  child: Text(
-                    AppLocalizations.of(context).delete,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.red),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                ),
-              ],
-            );
-          },
+          title: Text(AppLocalizations.of(context).delete_game_title),
+          message: Text(AppLocalizations.of(context)
+              .delete_game_message(gameSession.gameTitle)),
+          actions: [
+            CustomDialogAction(
+              returnValue: false,
+              actionText: AppLocalizations.of(context).cancel,
+            ),
+            CustomDialogAction(
+              isDestructiveAction: true,
+              actionText: AppLocalizations.of(context).delete,
+              returnValue: true,
+            ),
+          ],
         ) ??
         false;
   }
@@ -455,26 +449,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
     if (gameManager.gameExistsInGameList(gameSession.gameId)) {
+      gameManager.deleteGameById(gameSession.gameId);
       Navigator.pop(context);
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        gameManager.deleteGameById(gameSession.gameId);
-      });
     } else {
-      showCupertinoDialog(
+      PopupService.showInfoPopup(
           context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).id_error_title),
-              content: Text(AppLocalizations.of(context).id_error_message),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            );
-          });
+          title: Text(AppLocalizations.of(context).id_error_title),
+          content: Text(AppLocalizations.of(context).id_error_message));
     }
   }
 
@@ -523,24 +504,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
 
     if (context.mounted) {
-      showCupertinoDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(AppLocalizations.of(context).end_of_game_title),
-              content: Text(AppLocalizations.of(context)
-                  .end_of_game_message(winnerAmount, winner, winnerPoints)),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () {
-                    confettiController.stop();
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          });
+      PopupService.showInfoPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).end_of_game_title),
+        content: Text(AppLocalizations.of(context)
+            .end_of_game_message(winnerAmount, winner, winnerPoints)),
+        onAfterPop: () => confettiController.stop(),
+      );
     }
   }
 

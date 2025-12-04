@@ -1,14 +1,19 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
-import 'package:cabo_counter/presentation/widgets/custom_form_row.dart';
-import 'package:cabo_counter/presentation/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_form_row.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,6 +32,8 @@ class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
   GameMode defaultMode = ConfigService.getGameMode();
+  bool rotateShuffler = ConfigService.getRotateShuffler();
+
   @override
   void initState() {
     super.initState();
@@ -53,14 +60,19 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
                 child: CupertinoFormSection.insetGrouped(
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          Text(AppLocalizations.of(context).rotate_dealer_info),
+                    ),
                     backgroundColor: CustomTheme.backgroundColor,
                     margin: EdgeInsets.zero,
                     children: [
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).cabo_penalty,
-                        prefixIcon: CupertinoIcons.bolt_fill,
+                        prefixIcon: IconService.cabo_penalty,
                         suffixWidget: CustomStepper(
                           key: _stepperKey1,
                           initialValue: ConfigService.getCaboPenalty(),
@@ -92,7 +104,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).standard_mode,
-                        prefixIcon: CupertinoIcons.square_stack,
+                        prefixIcon: IconService.mode,
                         suffixWidget: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -104,7 +116,7 @@ class _SettingsViewState extends State<SettingsView> {
                                       : AppLocalizations.of(context).unlimited),
                             ),
                             const SizedBox(width: 5),
-                            const CupertinoListTileChevron()
+                            IconService.chevron
                           ],
                         ),
                         onPressed: () async {
@@ -125,17 +137,39 @@ class _SettingsViewState extends State<SettingsView> {
                         },
                       ),
                       CustomFormRow(
+                        prefixText: AppLocalizations.of(context).rotate_dealer,
+                        prefixIcon: IconService.shuffle_cards,
+                        suffixWidget: Material(
+                          color: Colors.transparent,
+                          child: Switch.adaptive(
+                              activeTrackColor: CustomTheme.primaryColor,
+                              inactiveThumbColor: Colors.white,
+                              value: rotateShuffler,
+                              onChanged: (switchValue) {
+                                setState(() {
+                                  ConfigService.setRotateShuffler(switchValue);
+                                  rotateShuffler = switchValue;
+                                });
+                              }),
+                        ),
+                      ),
+                    ])),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                child: CupertinoFormSection.insetGrouped(
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          Text(AppLocalizations.of(context).config_change_info),
+                    ),
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
+                      CustomFormRow(
                         prefixText:
                             AppLocalizations.of(context).reset_to_default,
-                        prefixIcon: CupertinoIcons.arrow_counterclockwise,
-                        onPressed: () {
-                          ConfigService.resetConfig();
-                          setState(() {
-                            _stepperKey1 = UniqueKey();
-                            _stepperKey2 = UniqueKey();
-                            defaultMode = ConfigService.getGameMode();
-                          });
-                        },
+                        prefixIcon: IconService.reset,
+                        onPressed: () => showConfirmPopup(),
                       )
                     ])),
             Padding(
@@ -152,24 +186,22 @@ class _SettingsViewState extends State<SettingsView> {
                     margin: EdgeInsets.zero,
                     children: [
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).import_data,
-                        prefixIcon: CupertinoIcons.square_arrow_down,
-                        onPressed: () async {
-                          final status =
-                              await DataTransferService.importJsonFile();
-                          showFeedbackDialog(status);
-                        },
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
+                          prefixText: AppLocalizations.of(context).import_data,
+                          prefixIcon: IconService.import,
+                          onPressed: () async {
+                            final status =
+                                await DataTransferService.importJsonFile();
+                            showFeedbackDialog(status);
+                          },
+                          suffixWidget: IconService.chevron),
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).export_data,
-                        prefixIcon: CupertinoIcons.square_arrow_up,
-                        onPressed: () => DataTransferService.exportGameData(),
-                        suffixWidget: const CupertinoListTileChevron(),
-                      ),
+                          prefixText: AppLocalizations.of(context).export_data,
+                          prefixIcon: IconService.export,
+                          onPressed: () => DataTransferService.exportGameData(),
+                          suffixWidget: IconService.chevron),
                       CustomFormRow(
                         prefixText: AppLocalizations.of(context).delete_data,
-                        prefixIcon: CupertinoIcons.trash,
+                        prefixIcon: IconService.delete,
                         onPressed: () => _deleteAllGames(),
                       ),
                     ])),
@@ -187,22 +219,22 @@ class _SettingsViewState extends State<SettingsView> {
                     margin: EdgeInsets.zero,
                     children: [
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).wiki,
-                        prefixIcon: CupertinoIcons.book,
+                        prefixText: AppLocalizations.of(context).mail_developer,
+                        prefixIcon: IconService.e_mail,
                         onPressed: () =>
-                            launchUrl(Uri.parse(Constants.kGithubWikiLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
+                            launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
+                        suffixWidget: IconService.chevron,
                       ),
                       CustomFormRow(
-                        prefixText: AppLocalizations.of(context).error_found,
+                        prefixText: AppLocalizations.of(context).report_error,
                         prefixIcon: FontAwesomeIcons.github,
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.kGithubIssuesLink)),
-                        suffixWidget: const CupertinoListTileChevron(),
+                        suffixWidget: IconService.chevron,
                       ),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).app_version,
-                          prefixIcon: CupertinoIcons.tag,
+                          prefixIcon: IconService.version,
                           onPressed: null,
                           suffixWidget: Text(VersionService.getVersion(),
                               style: TextStyle(
@@ -210,7 +242,7 @@ class _SettingsViewState extends State<SettingsView> {
                               ))),
                       CustomFormRow(
                           prefixText: AppLocalizations.of(context).build,
-                          prefixIcon: CupertinoIcons.number,
+                          prefixIcon: IconService.number,
                           onPressed: null,
                           suffixWidget: Text(VersionService.getBuildNumber(),
                               style: TextStyle(
@@ -227,52 +259,40 @@ class _SettingsViewState extends State<SettingsView> {
   /// Shows a dialog to confirm the deletion of all game data.
   /// When confirmed, it deletes all game data from local storage.
   void _deleteAllGames() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(AppLocalizations.of(context).delete_data_title),
-          content: Text(AppLocalizations.of(context).delete_data_message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text(AppLocalizations.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              isDefaultAction: true,
-              child: Text(AppLocalizations.of(context).delete),
-              onPressed: () {
-                gameManager.deleteAllGames();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+    final dialogActions = [
+      CustomDialogAction(
+        isDefaultAction: true,
+        actionText: AppLocalizations.of(context).cancel,
+      ),
+      CustomDialogAction(
+        isDestructiveAction: true,
+        onAfterPop: () {
+          gameManager.deleteAllGames();
+        },
+        actionText: AppLocalizations.of(context).delete,
+      )
+    ];
+
+    PopupService.showSelectionPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).delete_data_title),
+        message: Text(AppLocalizations.of(context).delete_data_message),
+        actions: dialogActions);
   }
 
+  /// Displays a feedback dialog for import operations based on the [ImportStatus].
+  /// If the import was canceled, no dialog is shown.
   void showFeedbackDialog(ImportStatus status) {
     if (status == ImportStatus.canceled) return;
     final (title, message) = _getDialogContent(status);
 
-    showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+    PopupService.showInfoPopup(
+        context: context, title: Text(title), content: Text(message));
   }
 
+  /// Returns the dialog title and message based on the [ImportStatus].
+  /// [status] The status of the import operation.
+  /// Returns a tuple containing the title and message for the dialog.
   (String, String) _getDialogContent(ImportStatus status) {
     switch (status) {
       case ImportStatus.success:
@@ -299,5 +319,33 @@ class _SettingsViewState extends State<SettingsView> {
       case ImportStatus.canceled:
         return ('', '');
     }
+  }
+
+  /// Shows a popup for the user to confirm the reset of their settings
+  void showConfirmPopup() {
+    final dialogActions = [
+      CustomDialogAction(
+        actionText: AppLocalizations.of(context).cancel,
+      ),
+      CustomDialogAction(
+        isDestructiveAction: true,
+        isDefaultAction: true,
+        actionText: AppLocalizations.of(context).reset,
+        onAfterPop: () {
+          ConfigService.resetUserConfig();
+          setState(() {
+            _stepperKey1 = UniqueKey();
+            _stepperKey2 = UniqueKey();
+            defaultMode = ConfigService.getGameMode();
+            rotateShuffler = ConfigService.getRotateShuffler();
+          });
+        },
+      ),
+    ];
+    PopupService.showSelectionPopup(
+        context: context,
+        title: Text(AppLocalizations.of(context).reset_config_title),
+        message: Text(AppLocalizations.of(context).reset_config_message),
+        actions: dialogActions);
   }
 }

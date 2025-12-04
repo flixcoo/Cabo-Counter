@@ -54,6 +54,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get date => 'Datum';
+
+  @override
   String get back => 'Zurück';
 
   @override
@@ -75,11 +78,40 @@ class AppLocalizationsDe extends AppLocalizations {
   String get legal_notice => 'Impressum';
 
   @override
+  String get support_me => 'Unterstütze mich';
+
+  @override
   String get empty_text_1 => 'Ganz schön leer hier...';
 
   @override
   String get empty_text_2 =>
-      'Füge über den Button oben rechts eine neue Runde hinzu';
+      'Füge über den Button oben rechts eine neue Runde hinzu.';
+
+  @override
+  String get empty_filter_text =>
+      'Passe die Filteroptionen an um alle Spiele zu sehen.';
+
+  @override
+  String get empty_filter_button => 'Alle Spiele anzeigen';
+
+  @override
+  String get sort_and_filter_options => 'Sortier- & Filteroptionen';
+
+  @override
+  String get ascending => 'Aufsteigend';
+
+  @override
+  String get descending => 'Absteigend';
+
+  @override
+  String get only_active_games => 'Nur aktive Spiele werden angezeigt';
+
+  @override
+  String get only_active_game_title => 'Nur aktive Spiele';
+
+  @override
+  String get only_active_games_description =>
+      'Beendete Spiele werden ausgeblendet.';
 
   @override
   String get delete_game_title => 'Spiel löschen?';
@@ -125,7 +157,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get new_game => 'Neues Spiel';
 
   @override
-  String get game_title => 'Titel des Spiels';
+  String get game_title => 'Spieltitel';
 
   @override
   String get select_mode => 'Wähle einen Modus';
@@ -142,13 +174,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get max_players_message =>
       'Es können maximal 5 Spieler:innen hinzugefügt werden.';
-
-  @override
-  String get no_gameTitle_title => 'Kein Titel';
-
-  @override
-  String get no_gameTitle_message =>
-      'Es muss ein Titel für das Spiel eingegeben werden.';
 
   @override
   String get no_mode_title => 'Kein Modus';
@@ -192,6 +217,11 @@ class AppLocalizationsDe extends AppLocalizations {
       'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
+  String standard_game_title(Object date) {
+    return 'Spiel vom $date';
+  }
+
+  @override
   String get results => 'Ergebnisse';
 
   @override
@@ -202,6 +232,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get who_has_kamikaze => 'Wer hat Kamikaze?';
+
+  @override
+  String get dealer => 'Mischer:in';
 
   @override
   String get done => 'Fertig';
@@ -297,7 +330,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get standard_mode => 'Standard-Modus';
 
   @override
+  String get rotate_dealer => 'Mischer:in rotieren';
+
+  @override
+  String get rotate_dealer_info =>
+      'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.';
+
+  @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
+
+  @override
+  String get reset_config_title => 'Einstellungen zurücksetzen';
+
+  @override
+  String get reset_config_message =>
+      'Möchtest du deine Einstellungen zurücksetzen?';
+
+  @override
+  String get config_change_info =>
+      'Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.';
+
+  @override
+  String get reset => 'Zurücksetzen';
 
   @override
   String get game_data => 'Spieldaten';
@@ -355,13 +409,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_error_message => 'Datei konnte nicht exportiert werden';
 
   @override
-  String get error_found => 'Fehler gefunden?';
+  String get report_error => 'Fehler melden';
 
   @override
-  String get create_issue => 'Issue erstellen';
-
-  @override
-  String get wiki => 'Wiki';
+  String get mail_developer => 'E-Mail an Entwickler';
 
   @override
   String get app_version => 'App-Version';
@@ -374,4 +425,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get build => 'Build-Nr.';
+
+  @override
+  String get whats_new => 'Was ist neu';
+
+  @override
+  String get wn_item_1 => 'Mischer:in';
+
+  @override
+  String get wn_description_1 =>
+      'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
+
+  @override
+  String get wn_item_2 => 'Verbesserte Navigation';
+
+  @override
+  String get wn_description_2 =>
+      'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.';
 }

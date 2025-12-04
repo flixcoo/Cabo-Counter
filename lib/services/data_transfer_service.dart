@@ -1,20 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
 import 'package:json_schema/json_schema.dart';
-
-enum ImportStatus {
-  success,
-  canceled,
-  validationError,
-  formatError,
-  genericError
-}
 
 class DataTransferService {
   /// Writes the game session list to a JSON file and returns it as string.

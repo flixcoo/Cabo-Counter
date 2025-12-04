@@ -1,25 +1,21 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
-import 'package:cabo_counter/presentation/widgets/custom_button.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-
-enum CreateStatus {
-  noGameTitle,
-  noModeSelected,
-  minPlayers,
-  maxPlayers,
-  noPlayerName,
-}
 
 /// A view for creating a new game session in the Cabo Counter app.
 ///
@@ -31,13 +27,14 @@ class CreateGameView extends StatefulWidget {
   final GameMode gameMode;
   final String? gameTitle;
   final List<String>? players;
+  final String previousPageTitle;
 
-  const CreateGameView({
-    super.key,
-    this.gameTitle,
-    this.players,
-    required this.gameMode,
-  });
+  const CreateGameView(
+      {super.key,
+      this.gameTitle,
+      this.players,
+      required this.gameMode,
+      required this.previousPageTitle});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -95,7 +92,7 @@ class _CreateGameViewState extends State<CreateGameView> {
         child: CupertinoPageScaffold(
             resizeToAvoidBottomInset: false,
             navigationBar: CupertinoNavigationBar(
-              previousPageTitle: AppLocalizations.of(context).games,
+              previousPageTitle: widget.previousPageTitle,
               middle: Text(AppLocalizations.of(context).new_game),
             ),
             child: SafeArea(
@@ -115,10 +112,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                     padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                     child: CupertinoTextField(
                       decoration: const BoxDecoration(),
-                      maxLength: 20,
+                      maxLength: 24,
                       prefix: Text(AppLocalizations.of(context).name),
                       textAlign: TextAlign.right,
-                      placeholder: AppLocalizations.of(context).game_title,
+                      placeholder: getFallbackGameTitle(),
                       controller: _gameTitleTextController,
                       onSubmitted: (_) {
                         _playerNameFocusNodes.isNotEmpty
@@ -196,7 +193,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               CupertinoButton(
                                 padding: EdgeInsets.zero,
                                 child: Icon(
-                                  CupertinoIcons.minus_circle_fill,
+                                  IconService.remove_player,
                                   color: CustomTheme.red,
                                   size: 25,
                                 ),
@@ -241,8 +238,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: ReorderableDragStartListener(
                                     index: index,
-                                    child: const Icon(
-                                      CupertinoIcons.line_horizontal_3,
+                                    child: Icon(
+                                      IconService.drag,
                                       color: CupertinoColors.systemGrey,
                                     ),
                                   ),
@@ -263,7 +260,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               padding: EdgeInsets.zero,
                               onPressed: null,
                               child: Icon(
-                                CupertinoIcons.plus_circle_fill,
+                                IconService.add_player,
                                 color: CustomTheme.primaryColor,
                                 size: 25,
                               ),
@@ -358,11 +355,6 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// If any attribute is invalid, it shows a feedback dialog.
   /// If all attributes are valid, it calls the `_createGame` method.
   void _checkAllGameAttributes() {
-    if (_gameTitleTextController.text == '') {
-      _showFeedbackDialog(CreateStatus.noGameTitle);
-      return;
-    }
-
     if (gameMode == GameMode.none) {
       _showFeedbackDialog(CreateStatus.noModeSelected);
       return;
@@ -396,30 +388,13 @@ class _CreateGameViewState extends State<CreateGameView> {
   void _showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
-    showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(AppLocalizations.of(context).ok),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+    PopupService.showInfoPopup(
+        context: context, title: Text(title), content: Text(message));
   }
 
   /// Returns the title and message for the dialog based on the [CreateStatus].
   (String, String) _getDialogContent(CreateStatus status) {
     switch (status) {
-      case CreateStatus.noGameTitle:
-        return (
-          AppLocalizations.of(context).no_gameTitle_title,
-          AppLocalizations.of(context).no_gameTitle_message
-        );
       case CreateStatus.noModeSelected:
         return (
           AppLocalizations.of(context).no_mode_title,
@@ -469,12 +444,16 @@ class _CreateGameViewState extends State<CreateGameView> {
       ));
     }
 
-    bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+    final String gameTitle = _gameTitleTextController.text == ''
+        ? getFallbackGameTitle()
+        : _gameTitleTextController.text;
+
+    final bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
         gameId: gameId,
         createdAt: DateTime.now(),
-        gameTitle: _gameTitleTextController.text,
+        gameTitle: gameTitle,
         players: playerList,
         pointLimit: ConfigService.getPointLimit(),
         caboPenalty: ConfigService.getCaboPenalty(),
@@ -502,6 +481,24 @@ class _CreateGameViewState extends State<CreateGameView> {
       await Future.delayed(
           const Duration(milliseconds: Constants.kKeyboardDelay));
     }
+  }
+
+  /// Generates a fallback game title based on the current date and locale.
+  /// If the user does not provide a game title, this method will create one
+  /// using the current date formatted according to the user's locale.
+  String getFallbackGameTitle() {
+    final now = DateTime.now();
+    final String formattedDate;
+
+    Locale currentLocale = Localizations.localeOf(context);
+    switch (currentLocale.languageCode) {
+      case 'en':
+        formattedDate = DateFormat('MMMM d, y', 'en_US').format(now);
+      default:
+        formattedDate = DateFormat('dd.MM.yy').format(now);
+    }
+
+    return AppLocalizations.of(context).standard_game_title(formattedDate);
   }
 
   @override

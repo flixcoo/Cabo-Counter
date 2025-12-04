@@ -54,6 +54,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get date => 'Datum';
+
+  @override
   String get back => 'Back';
 
   @override
@@ -75,11 +78,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legal_notice => 'Legal Notice';
 
   @override
+  String get support_me => 'Support Me';
+
+  @override
   String get empty_text_1 => 'Pretty empty here...';
 
   @override
   String get empty_text_2 =>
       'Create a new game using the button in the top right.';
+
+  @override
+  String get empty_filter_text => 'Adjust the filter options to see all games.';
+
+  @override
+  String get empty_filter_button => 'Show all games';
+
+  @override
+  String get sort_and_filter_options => 'Sort & Filter Options';
+
+  @override
+  String get ascending => 'Ascending';
+
+  @override
+  String get descending => 'Descending';
+
+  @override
+  String get only_active_games => 'Only active games are shown';
+
+  @override
+  String get only_active_game_title => 'Only active games';
+
+  @override
+  String get only_active_games_description => 'Finished games will be hidden.';
 
   @override
   String get delete_game_title => 'Delete game?';
@@ -143,12 +173,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get max_players_message => 'You can add a maximum of 5 players.';
 
   @override
-  String get no_gameTitle_title => 'Missing Game Title';
-
-  @override
-  String get no_gameTitle_message => 'Please enter a title for your game.';
-
-  @override
   String get no_mode_title => 'Game Mode Required';
 
   @override
@@ -189,6 +213,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'The game continues until you decide to stop playing. The game can be ended manually at any time.';
 
   @override
+  String standard_game_title(Object date) {
+    return 'Game on $date';
+  }
+
+  @override
   String get results => 'Results';
 
   @override
@@ -199,6 +228,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get who_has_kamikaze => 'Who has Kamikaze?';
+
+  @override
+  String get dealer => 'Dealer';
 
   @override
   String get done => 'Done';
@@ -294,7 +326,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standard_mode => 'Default Mode';
 
   @override
+  String get rotate_dealer => 'Rotate Dealer';
+
+  @override
+  String get rotate_dealer_info =>
+      'By default, the person who lost the last round deales the cards. Enable this option to rotate the role each round in game order.';
+
+  @override
   String get reset_to_default => 'Reset to Default';
+
+  @override
+  String get reset_config_title => 'Reset Settings';
+
+  @override
+  String get reset_config_message => 'Do you want to reset your settings?';
+
+  @override
+  String get config_change_info =>
+      'Changed values only apply to newly created games. Existing games retain their original settings.';
+
+  @override
+  String get reset => 'Reset';
 
   @override
   String get game_data => 'Game Data';
@@ -352,13 +404,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_error_message => 'Could not export file';
 
   @override
-  String get error_found => 'Found a bug?';
+  String get report_error => 'Report a bug';
 
   @override
-  String get create_issue => 'Create Issue';
-
-  @override
-  String get wiki => 'Wiki';
+  String get mail_developer => 'E-Mail the Developer';
 
   @override
   String get app_version => 'App Version';
@@ -371,4 +420,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get build => 'Build No.';
+
+  @override
+  String get whats_new => 'What\'s New';
+
+  @override
+  String get wn_item_1 => 'Dealer';
+
+  @override
+  String get wn_description_1 =>
+      'The round overview shows who is dealing. In the settings, you can specify whether the previous loser deals by default or whether dealing rotates.';
+
+  @override
+  String get wn_item_2 => 'Improved navigation';
+
+  @override
+  String get wn_description_2 =>
+      'Chevrons have been added to make navigation clearer and more intuitive.';
 }

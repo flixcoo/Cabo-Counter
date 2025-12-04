@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @date.
+  ///
+  /// In de, this message translates to:
+  /// **'Datum'**
+  String get date;
+
   /// No description provided for @back.
   ///
   /// In de, this message translates to:
@@ -230,6 +236,12 @@ abstract class AppLocalizations {
   /// **'Impressum'**
   String get legal_notice;
 
+  /// No description provided for @support_me.
+  ///
+  /// In de, this message translates to:
+  /// **'Unterstütze mich'**
+  String get support_me;
+
   /// No description provided for @empty_text_1.
   ///
   /// In de, this message translates to:
@@ -239,8 +251,56 @@ abstract class AppLocalizations {
   /// No description provided for @empty_text_2.
   ///
   /// In de, this message translates to:
-  /// **'Füge über den Button oben rechts eine neue Runde hinzu'**
+  /// **'Füge über den Button oben rechts eine neue Runde hinzu.'**
   String get empty_text_2;
+
+  /// No description provided for @empty_filter_text.
+  ///
+  /// In de, this message translates to:
+  /// **'Passe die Filteroptionen an um alle Spiele zu sehen.'**
+  String get empty_filter_text;
+
+  /// No description provided for @empty_filter_button.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Spiele anzeigen'**
+  String get empty_filter_button;
+
+  /// No description provided for @sort_and_filter_options.
+  ///
+  /// In de, this message translates to:
+  /// **'Sortier- & Filteroptionen'**
+  String get sort_and_filter_options;
+
+  /// No description provided for @ascending.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufsteigend'**
+  String get ascending;
+
+  /// No description provided for @descending.
+  ///
+  /// In de, this message translates to:
+  /// **'Absteigend'**
+  String get descending;
+
+  /// No description provided for @only_active_games.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur aktive Spiele werden angezeigt'**
+  String get only_active_games;
+
+  /// No description provided for @only_active_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur aktive Spiele'**
+  String get only_active_game_title;
+
+  /// No description provided for @only_active_games_description.
+  ///
+  /// In de, this message translates to:
+  /// **'Beendete Spiele werden ausgeblendet.'**
+  String get only_active_games_description;
 
   /// No description provided for @delete_game_title.
   ///
@@ -323,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @game_title.
   ///
   /// In de, this message translates to:
-  /// **'Titel des Spiels'**
+  /// **'Spieltitel'**
   String get game_title;
 
   /// No description provided for @select_mode.
@@ -355,18 +415,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Es können maximal 5 Spieler:innen hinzugefügt werden.'**
   String get max_players_message;
-
-  /// No description provided for @no_gameTitle_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Kein Titel'**
-  String get no_gameTitle_title;
-
-  /// No description provided for @no_gameTitle_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es muss ein Titel für das Spiel eingegeben werden.'**
-  String get no_gameTitle_message;
 
   /// No description provided for @no_mode_title.
   ///
@@ -440,6 +488,12 @@ abstract class AppLocalizations {
   /// **'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.'**
   String get unlimited_description;
 
+  /// No description provided for @standard_game_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Spiel vom {date}'**
+  String standard_game_title(Object date);
+
   /// No description provided for @results.
   ///
   /// In de, this message translates to:
@@ -463,6 +517,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Wer hat Kamikaze?'**
   String get who_has_kamikaze;
+
+  /// No description provided for @dealer.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in'**
+  String get dealer;
 
   /// No description provided for @done.
   ///
@@ -601,11 +661,47 @@ abstract class AppLocalizations {
   /// **'Standard-Modus'**
   String get standard_mode;
 
+  /// No description provided for @rotate_dealer.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in rotieren'**
+  String get rotate_dealer;
+
+  /// No description provided for @rotate_dealer_info.
+  ///
+  /// In de, this message translates to:
+  /// **'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.'**
+  String get rotate_dealer_info;
+
   /// No description provided for @reset_to_default.
   ///
   /// In de, this message translates to:
   /// **'Auf Standard zurücksetzen'**
   String get reset_to_default;
+
+  /// No description provided for @reset_config_title.
+  ///
+  /// In de, this message translates to:
+  /// **'Einstellungen zurücksetzen'**
+  String get reset_config_title;
+
+  /// No description provided for @reset_config_message.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du deine Einstellungen zurücksetzen?'**
+  String get reset_config_message;
+
+  /// No description provided for @config_change_info.
+  ///
+  /// In de, this message translates to:
+  /// **'Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.'**
+  String get config_change_info;
+
+  /// No description provided for @reset.
+  ///
+  /// In de, this message translates to:
+  /// **'Zurücksetzen'**
+  String get reset;
 
   /// No description provided for @game_data.
   ///
@@ -709,23 +805,17 @@ abstract class AppLocalizations {
   /// **'Datei konnte nicht exportiert werden'**
   String get export_error_message;
 
-  /// No description provided for @error_found.
+  /// No description provided for @report_error.
   ///
   /// In de, this message translates to:
-  /// **'Fehler gefunden?'**
-  String get error_found;
+  /// **'Fehler melden'**
+  String get report_error;
 
-  /// No description provided for @create_issue.
+  /// No description provided for @mail_developer.
   ///
   /// In de, this message translates to:
-  /// **'Issue erstellen'**
-  String get create_issue;
-
-  /// No description provided for @wiki.
-  ///
-  /// In de, this message translates to:
-  /// **'Wiki'**
-  String get wiki;
+  /// **'E-Mail an Entwickler'**
+  String get mail_developer;
 
   /// No description provided for @app_version.
   ///
@@ -750,6 +840,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Build-Nr.'**
   String get build;
+
+  /// No description provided for @whats_new.
+  ///
+  /// In de, this message translates to:
+  /// **'Was ist neu'**
+  String get whats_new;
+
+  /// No description provided for @wn_item_1.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in'**
+  String get wn_item_1;
+
+  /// No description provided for @wn_description_1.
+  ///
+  /// In de, this message translates to:
+  /// **'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'**
+  String get wn_description_1;
+
+  /// No description provided for @wn_item_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Verbesserte Navigation'**
+  String get wn_item_2;
+
+  /// No description provided for @wn_description_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'**
+  String get wn_description_2;
 }
 
 class _AppLocalizationsDelegate
