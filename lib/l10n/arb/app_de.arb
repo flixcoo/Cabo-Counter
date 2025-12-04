@@ -175,7 +175,7 @@
   "build": "Build-Nr.",
   "whats_new": "Was ist neu",
   "wn_item_1": "Mischer:in",
-  "wn_description_1": "In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.",
+  "wn_description_1": "In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.",
   "wn_item_2": "Verbesserte Navigation",
   "wn_description_2": "Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen."
 }
