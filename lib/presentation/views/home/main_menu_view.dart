@@ -60,6 +60,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     super.initState();
 
     Once.runOnEveryNewVersion(
+      key: 'whats_new_dialog',
       callback: () {
         showWhatsNewDialog(context);
       },
