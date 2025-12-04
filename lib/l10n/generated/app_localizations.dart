@@ -63,7 +63,7 @@ import 'app_localizations_en.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
-    Locale('en'),
+    Locale('en')
   ];
 
   /// No description provided for @app_name.
@@ -518,11 +518,11 @@ abstract class AppLocalizations {
   /// **'Wer hat Kamikaze?'**
   String get who_has_kamikaze;
 
-  /// No description provided for @shuffle_player.
+  /// No description provided for @dealer.
   ///
   /// In de, this message translates to:
   /// **'Mischer:in'**
-  String get shuffle_player;
+  String get dealer;
 
   /// No description provided for @done.
   ///
@@ -547,11 +547,7 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{playerCount, plural, =1{{names} hat exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommt deshalb {bonusPoints} Punkte abgezogen!} other{{names} haben exakt das Punktelimit von {pointLimit} Punkten erreicht und bekommen deshalb jeweils {bonusPoints} Punkte abgezogen!}}'**
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  );
+      int playerCount, String names, int pointLimit, int bonusPoints);
 
   /// No description provided for @end_of_game_title.
   ///
@@ -840,6 +836,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Build-Nr.'**
   String get build;
+
+  /// No description provided for @whats_new.
+  ///
+  /// In de, this message translates to:
+  /// **'Was ist neu'**
+  String get whats_new;
+
+  /// No description provided for @wn_item_1.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in'**
+  String get wn_item_1;
+
+  /// No description provided for @wn_description_1.
+  ///
+  /// In de, this message translates to:
+  /// **'In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'**
+  String get wn_description_1;
+
+  /// No description provided for @wn_item_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Verbesserte Navigation'**
+  String get wn_item_2;
+
+  /// No description provided for @wn_description_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'**
+  String get wn_description_2;
 }
 
 class _AppLocalizationsDelegate
@@ -869,9 +895,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

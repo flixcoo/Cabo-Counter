@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.6+1025
+version: 1.0.6+1042
 publish_to: none
 
 environment:
@@ -24,10 +24,12 @@ dependencies:
     git:
       url: https://github.com/dev-mahmoud-elshenawy/flutter_vibrate-xcode16.3-fix
       ref: master
+  flutter_whatsnew: ^1.0.5+2
   font_awesome_flutter: ^10.8.0
   google_fonts: ^6.3.0
   intl: any
   json_schema: ^5.2.1
+  once: ^1.7.1
   package_info_plus: any
   path_provider: ^2.1.1
   provider: ^6.1.5+1

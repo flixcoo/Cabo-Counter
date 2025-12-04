@@ -1,6 +1,5 @@
 {
   "@@locale": "de",
-
   "app_name": "Cabo Counter",
   "round": "Runde",
   "rounds": "Runden",
@@ -14,20 +13,17 @@
   "gamemode": "Spielmodus",
   "ok": "OK",
   "player": "Spieler:in",
-    "players": "Spieler:innen",
+  "players": "Spieler:innen",
   "name": "Name",
   "date": "Datum",
   "back": "Zurück",
-
   "home": "Home",
-
   "about": "Über",
   "licenses": "Lizenzen",
   "license_details": "Lizenzdetails",
   "no_license_text": "Keine Lizenz verfügbar",
   "legal_notice": "Impressum",
   "support_me": "Unterstütze mich",
-
   "empty_text_1": "Ganz schön leer hier...",
   "empty_text_2": "Füge über den Button oben rechts eine neue Runde hinzu.",
   "empty_filter_text": "Passe die Filteroptionen an um alle Spiele zu sehen.",
@@ -56,7 +52,6 @@
   "contact_email": "E-Mail schreiben",
   "email_subject": "Feedback: Cabo Counter App",
   "email_body": "Ich habe folgendes Feedback...",
-
   "overview": "Übersicht",
   "new_game": "Neues Spiel",
   "game_title": "Spieltitel",
@@ -71,7 +66,6 @@
   "min_players_message": "Es müssen mindestens 2 Spieler:innen hinzugefügt werden",
   "no_name_title": "Kein Name",
   "no_name_message": "Jede:r Spieler:in muss einen Namen haben.",
-
   "select_game_mode": "Spielmodus auswählen",
   "no_mode_selected": "Wähle einen Spielmodus",
   "no_default_mode": "Kein Modus",
@@ -93,13 +87,11 @@
       }
     }
   },
-
-
   "results": "Ergebnisse",
   "who_said_cabo": "Wer hat CABO gesagt?",
   "kamikaze": "Kamikaze",
   "who_has_kamikaze": "Wer hat Kamikaze?",
-  "shuffle_player": "Mischer:in",
+  "dealer": "Mischer:in",
   "done": "Fertig",
   "next_round": "Nächste Runde",
   "bonus_points_title": "Bonus-Punkte!",
@@ -120,21 +112,20 @@
       }
     }
   },
-
   "end_of_game_title": "Spiel beendet",
   "end_of_game_message": "{playerCount, plural, =1{{names} hat das Spiel mit {points} Punkten gewonnen. Glückwunsch!} other{{names} haben das Spiel mit {points} Punkten gewonnen. Glückwunsch!}}",
   "@end_of_game_message": {
-      "placeholders": {
+    "placeholders": {
       "playerCount": {
-          "type": "int"
+        "type": "int"
       },
       "names": {
-          "type": "String"
+        "type": "String"
       },
       "points": {
-          "type": "int"
+        "type": "int"
       }
-      }
+    }
   },
   "end_game": "Spiel beenden",
   "delete_game": "Spiel löschen",
@@ -144,12 +135,10 @@
   "id_error_message": "Das Spiel hat bisher noch keine ID zugewiesen bekommen. Falls du das Spiel löschen möchtest, mache das bitte über das Hauptmenü. Alle neu erstellten Spiele haben eine ID.",
   "end_game_title": "Spiel beenden?",
   "end_game_message": "Möchtest du das Spiel beenden? Das Spiel wird als beendet markiert und kann nicht fortgeführt werden.",
-
   "statistics": "Statistiken",
   "point_overview": "Punktetabelle",
   "scoring_history": "Spielverlauf",
   "empty_graph_text": "Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.",
-
   "settings": "Einstellungen",
   "cabo_penalty": "Cabo-Strafe",
   "point_limit": "Punkte-Limit",
@@ -159,7 +148,7 @@
   "reset_to_default": "Auf Standard zurücksetzen",
   "reset_config_title": "Einstellungen zurücksetzen",
   "reset_config_message": "Möchtest du deine Einstellungen zurücksetzen?",
-  "config_change_info" : "Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.",
+  "config_change_info": "Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.",
   "reset": "Zurücksetzen",
   "game_data": "Spieldaten",
   "import_data": "Spieldaten importieren",
@@ -168,23 +157,25 @@
   "delete_data_title": "Spieldaten löschen?",
   "delete_data_message": "Bist du sicher, dass du alle Spieldaten löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
   "app": "App",
-
   "import_success_title": "Import erfolgreich",
-  "import_success_message":"Die Spieldaten wurden erfolgreich importiert.",
+  "import_success_message": "Die Spieldaten wurden erfolgreich importiert.",
   "import_validation_error_title": "Validierung fehlgeschlagen",
   "import_validation_error_message": "Es wurden keine Cabo-Counter Spieldaten gefunden. Bitte stellen Sie sicher, dass es sich um eine gültige Cabo-Counter Exportdatei handelt.",
   "import_format_error_title": "Falsches Format",
   "import_format_error_message": "Die Datei ist kein gültiges JSON-Format oder enthält ungültige Daten.",
   "import_generic_error_title": "Import fehlgeschlagen",
   "import_generic_error_message": "Der Import ist fehlgeschlagen.",
-
   "export_error_title": "Fehler",
   "export_error_message": "Datei konnte nicht exportiert werden",
-
   "report_error": "Fehler melden",
   "mail_developer": "E-Mail an Entwickler",
   "app_version": "App-Version",
   "privacy_policy": "Datenschutzerklärung",
   "loading_games": "Lade Spiele ...",
-  "build": "Build-Nr."
+  "build": "Build-Nr.",
+  "whats_new": "Was ist neu",
+  "wn_item_1": "Mischer:in",
+  "wn_description_1": "In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.",
+  "wn_item_2": "Verbesserte Navigation",
+  "wn_description_2": "Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen."
 }

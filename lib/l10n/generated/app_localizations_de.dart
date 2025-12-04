@@ -234,7 +234,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get who_has_kamikaze => 'Wer hat Kamikaze?';
 
   @override
-  String get shuffle_player => 'Mischer:in';
+  String get dealer => 'Mischer:in';
 
   @override
   String get done => 'Fertig';
@@ -247,11 +247,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String bonus_points_message(
-    int playerCount,
-    String names,
-    int pointLimit,
-    int bonusPoints,
-  ) {
+      int playerCount, String names, int pointLimit, int bonusPoints) {
     String _temp0 = intl.Intl.pluralLogic(
       playerCount,
       locale: localeName,
@@ -425,4 +421,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get build => 'Build-Nr.';
+
+  @override
+  String get whats_new => 'Was ist neu';
+
+  @override
+  String get wn_item_1 => 'Mischer:in';
+
+  @override
+  String get wn_description_1 =>
+      'In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
+
+  @override
+  String get wn_item_2 => 'Verbesserte Navigation';
+
+  @override
+  String get wn_description_2 =>
+      'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.';
 }
