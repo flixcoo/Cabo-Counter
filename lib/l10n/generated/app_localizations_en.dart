@@ -418,7 +418,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get build => 'Build No.';
 
   @override
-  String get whats_new => 'What\'s new';
+  String get whats_new => 'What\'s New';
 
   @override
   String get wn_item_1 => 'Dealer';
