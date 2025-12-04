@@ -34,28 +34,21 @@ class WhatsNewDialog extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            Text('Build ${VersionService.getBuildNumber()}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withAlpha(150),
-                  fontSize: 14,
-                )),
             const SizedBox(height: 40),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
                 children: [
                   WhatsNewItem(
-                      icon: IconService.shuffle_cards,
-                      title: 'Person zum Mischen',
-                      text:
-                          'In der Rundenübersicht wird angezeigt, wer mischt. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'),
+                    icon: IconService.shuffle_cards,
+                    title: AppLocalizations.of(context).wn_item_1,
+                    text: AppLocalizations.of(context).wn_description_1,
+                  ),
                   const SizedBox(height: 28),
-                  const WhatsNewItem(
+                  WhatsNewItem(
                       icon: Icons.navigation,
-                      title: 'Verbesserte Navigation',
-                      text:
-                          'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'),
+                      title: AppLocalizations.of(context).wn_item_2,
+                      text: AppLocalizations.of(context).wn_description_2),
                 ],
               ),
             ),
@@ -73,7 +66,7 @@ class WhatsNewDialog extends StatelessWidget {
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    AppLocalizations.of(context).continue_button,
+                    AppLocalizations.of(context).ok,
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
