@@ -5523,7 +5523,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
 
 Syncfusion<sup>&reg;</sup> Flutter Chart package is available under the Syncfusion Essential Studio<sup>&reg;</sup> program, and can be licensed either under the Syncfusion<sup>&reg;</sup> Community License Program or the Syncfusion<sup>&reg;</sup> commercial license.
 
-To be qualified for the Syncfusion<sup>&reg;</sup> Community License Program you must have a gross revenue of less than one (1) million U.S. dollars ($1,000,000.00 USD) per year and have less than five (5) developers in your organization, and agree to be bound by Syncfusion<sup>&reg;</sup> terms and conditions. 
+To be qualified for the Syncfusion<sup>&reg;</sup> Community License Program you must have a gross revenue of less than one (1) million U.S. dollars (\$1,000,000.00 USD) per year and have less than five (5) developers in your organization, and agree to be bound by Syncfusion<sup>&reg;</sup> terms and conditions. 
 
 Customers who do not qualify for the community license can contact sales@syncfusion.com for commercial licensing options.
 
@@ -5545,7 +5545,7 @@ https://www.syncfusion.com/content/downloads/syncfusion_license.pdf''',
 
 Syncfusion<sup>&reg;</sup> Flutter Core package is available under the Syncfusion Essential Studio<sup>&reg;</sup> program, and can be licensed either under the Syncfusion<sup>&reg;</sup> Community License Program or the Syncfusion<sup>&reg;</sup> commercial license.
 
-To be qualified for the Syncfusion<sup>&reg;</sup> Community License Program you must have a gross revenue of less than one (1) million U.S. dollars ($1,000,000.00 USD) per year and have less than five (5) developers in your organization, and agree to be bound by Syncfusion<sup>&reg;</sup> terms and conditions. 
+To be qualified for the Syncfusion<sup>&reg;</sup> Community License Program you must have a gross revenue of less than one (1) million U.S. dollars (\$1,000,000.00 USD) per year and have less than five (5) developers in your organization, and agree to be bound by Syncfusion<sup>&reg;</sup> terms and conditions. 
 
 Customers who do not qualify for the community license can contact sales@syncfusion.com for commercial licensing options.
 
