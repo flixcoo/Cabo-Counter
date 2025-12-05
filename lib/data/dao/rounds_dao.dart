@@ -4,7 +4,6 @@ import 'package:cabo_counter/data/db/tables/rounds_table.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:drift/drift.dart';
-import 'package:uuid/uuid.dart';
 
 part 'rounds_dao.g.dart';
 
@@ -115,16 +114,13 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// [players] is the list of players in the game session.
   Future<void> insertMultipleRounds(
       String gameId, List<Round> rounds, List<Player> players) async {
-    var uuid = const Uuid();
-
     await batch((batch) {
       final roundEntries = <RoundsTableCompanion>[];
       final roundScoreEntries = <RoundScoresTableCompanion>[];
 
       for (final round in rounds) {
-        final roundId = uuid.v4();
         roundEntries.add(RoundsTableCompanion.insert(
-          roundId: roundId,
+          roundId: round.roundId,
           gameId: gameId,
           roundNumber: round.roundNum,
           caboPlayerIndex: round.caboPlayerIndex,
@@ -133,7 +129,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
         for (int i = 0; i < players.length; i++) {
           roundScoreEntries.add(RoundScoresTableCompanion.insert(
-            roundId: roundId,
+            roundId: round.roundId,
             playerId: players[i].playerId,
             score: round.scores[i],
             scoreUpdate: round.scoreUpdates[i],
