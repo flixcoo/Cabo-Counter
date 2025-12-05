@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.felixkirchner.cabocounter">
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:label="Cabo Counter"
         android:name="${applicationName}"

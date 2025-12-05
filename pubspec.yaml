@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.3+1008
+version: 1.0.6+1051
 publish_to: none
 
 environment:
@@ -28,6 +28,7 @@ dependencies:
   google_fonts: ^6.3.0
   intl: any
   json_schema: ^5.2.1
+  once: ^1.7.1
   package_info_plus: any
   path_provider: ^2.1.1
   provider: ^6.1.5+1

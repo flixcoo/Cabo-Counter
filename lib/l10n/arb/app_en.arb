@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "app_name": "Cabo Counter",
   "round": "Round",
   "rounds": "Rounds",
@@ -18,16 +17,13 @@
   "name": "Name",
   "date": "Datum",
   "back": "Back",
-
   "home": "Home",
-
   "about": "About",
   "licenses": "Licenses",
   "license_details": "License Details",
   "no_license_text": "No license available",
   "legal_notice": "Legal Notice",
   "support_me": "Support Me",
-
   "empty_text_1": "Pretty empty here...",
   "empty_text_2": "Create a new game using the button in the top right.",
   "empty_filter_text": "Adjust the filter options to see all games.",
@@ -56,7 +52,6 @@
   "contact_email": "Contact via E-Mail",
   "email_subject": "Feedback: Cabo Counter App",
   "email_body": "I have the following feedback...",
-
   "overview": "Overview",
   "new_game": "New Game",
   "game_title": "Game Title",
@@ -71,7 +66,6 @@
   "min_players_message": "At least 2 players are required to start the game.",
   "no_name_title": "Missing Player Names",
   "no_name_message": "Each player must have a name.",
-
   "select_game_mode": "Select game mode",
   "no_mode_selected": "No mode selected",
   "no_default_mode": "No default mode",
@@ -97,6 +91,7 @@
   "who_said_cabo": "Who called Cabo?",
   "kamikaze": "Kamikaze",
   "who_has_kamikaze": "Who has Kamikaze?",
+  "dealer": "Dealer",
   "done": "Done",
   "next_round": "Next Round",
   "bonus_points_title": "Bonus-Points!",
@@ -117,7 +112,6 @@
       }
     }
   },
-
   "end_of_game_title": "End of Game",
   "end_of_game_message": "{playerCount, plural, =1{{names} won the game with {points} points. Congratulations!} other{{names} won the game with {points} points. Congratulations to everyone!}}",
   "@end_of_game_message": {
@@ -141,20 +135,20 @@
   "id_error_message": "The game has not yet been assigned an ID. If you want to delete the game, please do so via the main menu. All newly created games have an ID.",
   "end_game_title": "End the game?",
   "end_game_message": "Do you want to end the game? The game gets marked as finished and cannot be continued.",
-
   "statistics": "Statistics",
   "point_overview": "Point Overview",
   "scoring_history": "Scoring History",
   "empty_graph_text": "You must play at least one round for the game progress graph to be displayed.",
-
   "settings": "Settings",
   "cabo_penalty": "Cabo Penalty",
   "point_limit": "Point Limit",
   "standard_mode": "Default Mode",
+  "rotate_dealer": "Rotate Dealer",
+  "rotate_dealer_info": "By default, the person who lost the last round deales the cards. Enable this option to rotate the role each round in game order.",
   "reset_to_default": "Reset to Default",
   "reset_config_title": "Reset Settings",
   "reset_config_message": "Do you want to reset your settings?",
-  "config_change_info" : "Changed values only apply to newly created games. Existing games retain their original settings.",
+  "config_change_info": "Changed values only apply to newly created games. Existing games retain their original settings.",
   "reset": "Reset",
   "game_data": "Game Data",
   "import_data": "Import Data",
@@ -163,23 +157,25 @@
   "delete_data_title": "Delete game data?",
   "delete_data_message": "Are you sure you want to delete all game data? This action cannot be undone.",
   "app": "App",
-
   "import_success_title": "Import successful",
-  "import_success_message":"The game data has been successfully imported.",
+  "import_success_message": "The game data has been successfully imported.",
   "import_validation_error_title": "Validation failed",
   "import_validation_error_message": "No Cabo-Counter game data was found. Please make sure that this is a valid Cabo-Counter export file.",
   "import_format_error_title": "Wrong format",
   "import_format_error_message": "The file is not a valid JSON format or contains invalid data.",
   "import_generic_error_title": "Import failed",
   "import_generic_error_message": "The import has failed.",
-
   "export_error_title": "Export failed",
   "export_error_message": "Could not export file",
-
   "report_error": "Report a bug",
   "mail_developer": "E-Mail the Developer",
   "app_version": "App Version",
   "privacy_policy": "Privacy Policy",
   "loading_games": "Loading Games ...",
-  "build": "Build No."
+  "build": "Build No.",
+  "whats_new": "What's New",
+  "wn_item_1": "Dealer",
+  "wn_description_1": "The round overview shows who is dealing. In the settings, you can specify whether the previous loser deals by default or whether dealing rotates.",
+  "wn_item_2": "Improved navigation",
+  "wn_description_2": "Chevrons have been added to make navigation clearer and more intuitive."
 }

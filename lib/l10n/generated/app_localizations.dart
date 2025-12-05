@@ -518,6 +518,12 @@ abstract class AppLocalizations {
   /// **'Wer hat Kamikaze?'**
   String get who_has_kamikaze;
 
+  /// No description provided for @dealer.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in'**
+  String get dealer;
+
   /// No description provided for @done.
   ///
   /// In de, this message translates to:
@@ -650,6 +656,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Standard-Modus'**
   String get standard_mode;
+
+  /// No description provided for @rotate_dealer.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in rotieren'**
+  String get rotate_dealer;
+
+  /// No description provided for @rotate_dealer_info.
+  ///
+  /// In de, this message translates to:
+  /// **'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.'**
+  String get rotate_dealer_info;
 
   /// No description provided for @reset_to_default.
   ///
@@ -818,6 +836,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Build-Nr.'**
   String get build;
+
+  /// No description provided for @whats_new.
+  ///
+  /// In de, this message translates to:
+  /// **'Was ist neu'**
+  String get whats_new;
+
+  /// No description provided for @wn_item_1.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischer:in'**
+  String get wn_item_1;
+
+  /// No description provided for @wn_description_1.
+  ///
+  /// In de, this message translates to:
+  /// **'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'**
+  String get wn_description_1;
+
+  /// No description provided for @wn_item_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Verbesserte Navigation'**
+  String get wn_item_2;
+
+  /// No description provided for @wn_description_2.
+  ///
+  /// In de, this message translates to:
+  /// **'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'**
+  String get wn_description_2;
 }
 
 class _AppLocalizationsDelegate

@@ -8,7 +8,7 @@ import 'package:cabo_counter/presentation/components/widgets/custom_dialog_actio
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
-import 'package:cabo_counter/presentation/views/home/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';

@@ -230,6 +230,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get who_has_kamikaze => 'Who has Kamikaze?';
 
   @override
+  String get dealer => 'Dealer';
+
+  @override
   String get done => 'Done';
 
   @override
@@ -319,6 +322,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standard_mode => 'Default Mode';
 
   @override
+  String get rotate_dealer => 'Rotate Dealer';
+
+  @override
+  String get rotate_dealer_info =>
+      'By default, the person who lost the last round deales the cards. Enable this option to rotate the role each round in game order.';
+
+  @override
   String get reset_to_default => 'Reset to Default';
 
   @override
@@ -406,4 +416,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get build => 'Build No.';
+
+  @override
+  String get whats_new => 'What\'s New';
+
+  @override
+  String get wn_item_1 => 'Dealer';
+
+  @override
+  String get wn_description_1 =>
+      'The round overview shows who is dealing. In the settings, you can specify whether the previous loser deals by default or whether dealing rotates.';
+
+  @override
+  String get wn_item_2 => 'Improved navigation';
+
+  @override
+  String get wn_description_2 =>
+      'Chevrons have been added to make navigation clearer and more intuitive.';
 }

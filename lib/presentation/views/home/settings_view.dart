@@ -6,13 +6,14 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/mode_selection_view.dart';
+import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,6 +32,7 @@ class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey1 = UniqueKey();
   UniqueKey _stepperKey2 = UniqueKey();
   GameMode defaultMode = ConfigService.getGameMode();
+  bool rotateShuffler = ConfigService.getRotateShuffler();
 
   @override
   void initState() {
@@ -63,7 +65,7 @@ class _SettingsViewState extends State<SettingsView> {
                     footer: Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child:
-                          Text(AppLocalizations.of(context).config_change_info),
+                          Text(AppLocalizations.of(context).rotate_dealer_info),
                     ),
                     backgroundColor: CustomTheme.backgroundColor,
                     margin: EdgeInsets.zero,
@@ -134,6 +136,35 @@ class _SettingsViewState extends State<SettingsView> {
                           ConfigService.setGameMode(defaultMode);
                         },
                       ),
+                      CustomFormRow(
+                        prefixText: AppLocalizations.of(context).rotate_dealer,
+                        prefixIcon: IconService.shuffle_cards,
+                        suffixWidget: Material(
+                          color: Colors.transparent,
+                          child: Switch.adaptive(
+                              activeTrackColor: CustomTheme.primaryColor,
+                              inactiveThumbColor: Colors.white,
+                              value: rotateShuffler,
+                              onChanged: (switchValue) {
+                                setState(() {
+                                  ConfigService.setRotateShuffler(switchValue);
+                                  rotateShuffler = switchValue;
+                                });
+                              }),
+                        ),
+                      ),
+                    ])),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                child: CupertinoFormSection.insetGrouped(
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          Text(AppLocalizations.of(context).config_change_info),
+                    ),
+                    backgroundColor: CustomTheme.backgroundColor,
+                    margin: EdgeInsets.zero,
+                    children: [
                       CustomFormRow(
                         prefixText:
                             AppLocalizations.of(context).reset_to_default,
@@ -306,6 +337,7 @@ class _SettingsViewState extends State<SettingsView> {
             _stepperKey1 = UniqueKey();
             _stepperKey2 = UniqueKey();
             defaultMode = ConfigService.getGameMode();
+            rotateShuffler = ConfigService.getRotateShuffler();
           });
         },
       ),

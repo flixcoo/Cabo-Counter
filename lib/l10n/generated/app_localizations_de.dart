@@ -234,6 +234,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get who_has_kamikaze => 'Wer hat Kamikaze?';
 
   @override
+  String get dealer => 'Mischer:in';
+
+  @override
   String get done => 'Fertig';
 
   @override
@@ -321,6 +324,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get standard_mode => 'Standard-Modus';
+
+  @override
+  String get rotate_dealer => 'Mischer:in rotieren';
+
+  @override
+  String get rotate_dealer_info =>
+      'Standardmäßig mischt die Person, welche die letzte Runde verloren hat. Aktiviere diese Option um die Rolle jede Runde in Spielreihenfolge zu rotieren.';
 
   @override
   String get reset_to_default => 'Auf Standard zurücksetzen';
@@ -411,4 +421,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get build => 'Build-Nr.';
+
+  @override
+  String get whats_new => 'Was ist neu';
+
+  @override
+  String get wn_item_1 => 'Mischer:in';
+
+  @override
+  String get wn_description_1 =>
+      'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
+
+  @override
+  String get wn_item_2 => 'Verbesserte Navigation';
+
+  @override
+  String get wn_description_2 =>
+      'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.';
 }
