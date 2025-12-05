@@ -42,7 +42,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// This method fetches all entries from the `gameSessionTable`,
   /// along with associated players and rounds for each session from their respective DAOs.
   /// It constructs and returns a list of `GameSession` objects containing all relevant data.
-  /// Returns an empty list if no game sessions are found.
+  /// Returns 'null' if no game sessions are found.
   /// Returns a [List] of [GameSession] objects.
   Future<List<GameSession>?> getAllGameSessions() async {
     final query = select(gameSessionTable);
