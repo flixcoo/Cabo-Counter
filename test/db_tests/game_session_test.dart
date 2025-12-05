@@ -257,7 +257,7 @@ void main() {
       expect(sessions, isNotNull);
       expect(sessions!.length, 2);
 
-      database.gameSessionDao.deleteAllGames();
+      await database.gameSessionDao.deleteAllGames();
       final fetchedSessions =
           await database.gameSessionDao.getAllGameSessions();
 
