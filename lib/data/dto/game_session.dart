@@ -28,7 +28,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList;
 
   GameSession({
-    required this.gameId,
+    String? gameId,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -39,7 +39,8 @@ class GameSession extends ChangeNotifier {
     this.winner = '',
     this.roundNumber = 1,
     List<Round>? roundList,
-  }) : roundList = roundList ?? [];
+  })  : gameId = gameId ?? const Uuid().v4(),
+        roundList = roundList ?? [];
 
   @override
   toString() {
