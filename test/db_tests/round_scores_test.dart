@@ -82,7 +82,7 @@ void main() {
   });
 
   group('RoundScore-Tests', () {
-    test('Scores get fetched correclty', () async {
+    test('Scores get fetched correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
 
       final List<List<int>> scores = await Future.wait([
@@ -102,7 +102,7 @@ void main() {
       }
     });
 
-    test('Score Updates get fetched correclty', () async {
+    test('Score Updates get fetched correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
 
       final List<List<int>> scoreUpdates = await Future.wait([

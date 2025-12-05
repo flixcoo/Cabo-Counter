@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 
 /// This class represents a single round in the game.
 /// It is stored within the [GameSession] class.
-/// [roundNum] is the number of the round its reppresenting.
+/// [roundNum] is the number of the round its representing.
 /// [scores] is a list of the actual scores the players got.
 /// [scoreUpdates] is a list of how the players scores updated this round.
 /// [kamikazePlayerIndex] is the index of the player who got kamikaze. If no one got

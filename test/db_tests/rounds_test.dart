@@ -172,7 +172,7 @@ void main() {
       }
     });
 
-    test('Inserting and fetching a new round works correclty', () async {
+    test('Inserting and fetching a new round works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       await database.roundsDao
           .insertOneRound(gameSession.gameId, round4, gameSession.players);
@@ -231,7 +231,7 @@ void main() {
       }
     });
 
-    test('Inserting multiple rounds works correclty', () async {
+    test('Inserting multiple rounds works correctly', () async {
       await database.gameSessionDao.insertGameSession(emptyGameSession);
 
       final newRounds = [round1, round2, round3, round4, round5];
