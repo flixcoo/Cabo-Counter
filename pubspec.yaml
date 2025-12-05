@@ -10,7 +10,7 @@ dependencies:
   collection: ^1.18.0
   confetti: ^0.6.0
   cupertino_icons: ^1.0.8
-  drift: ^2.26.1
+  drift: ^2.27.0
   drift_flutter: ^0.2.4
   file_picker: ^10.1.2
   file_saver: ^0.2.6
