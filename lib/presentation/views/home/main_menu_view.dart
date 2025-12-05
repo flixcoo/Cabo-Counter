@@ -56,7 +56,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   initState() {
     super.initState();
-    db.gameSessionDao.getAllGameSessions().then((gameSessions) {
+    databaseInstance.gameSessionDao.getAllGameSessions().then((gameSessions) {
       for (final session in gameSessions) {
         gameManager.addGameSessionFromDataBase(session);
       }

@@ -193,10 +193,10 @@ class GameSession extends ChangeNotifier {
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
-      db.roundsDao.insertOneRound(gameId, newRound, players);
+      databaseInstance.roundsDao.insertOneRound(gameId, newRound, players);
     } else {
       roundList[roundNum - 1] = newRound;
-      db.roundsDao.replaceRound(gameId, newRound, players);
+      databaseInstance.roundsDao.replaceRound(gameId, newRound, players);
     }
 
     notifyListeners();
@@ -233,7 +233,7 @@ class GameSession extends ChangeNotifier {
         isGameFinished = false;
       }
     }
-    db.gameSessionDao.setGameFinishStatus(gameId, isGameFinished);
+    databaseInstance.gameSessionDao.setGameFinishStatus(gameId, isGameFinished);
     notifyListeners();
     return bonusPlayers;
   }
@@ -250,7 +250,7 @@ class GameSession extends ChangeNotifier {
         players[i].totalScore += roundList[j].scoreUpdates[i];
       }
     }
-    db.playerDao.updatePlayerScores(players);
+    databaseInstance.playerDao.updatePlayerScores(players);
     notifyListeners();
   }
 
@@ -294,14 +294,14 @@ class GameSession extends ChangeNotifier {
     } else {
       winner = lowestPlayers.first;
     }
-    db.gameSessionDao.setWinner(gameId, winner);
+    databaseInstance.gameSessionDao.setWinner(gameId, winner);
     notifyListeners();
   }
 
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
-    db.gameSessionDao.setRoundNumber(gameId, roundNumber);
+    databaseInstance.gameSessionDao.setRoundNumber(gameId, roundNumber);
 
     notifyListeners();
   }
