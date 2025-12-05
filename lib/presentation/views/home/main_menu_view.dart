@@ -57,8 +57,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   initState() {
     super.initState();
     databaseInstance.gameSessionDao.getAllGameSessions().then((gameSessions) {
-      for (final session in gameSessions) {
-        gameManager.addGameSessionFromDataBase(session);
+      if (gameSessions != null) {
+        for (final session in gameSessions) {
+          gameManager.addGameSessionFromDataBase(session);
+        }
       }
       return Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
