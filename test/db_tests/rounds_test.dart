@@ -22,7 +22,7 @@ void main() {
   late Round round5;
 
   // Helper function to compare lists
-  Function eq = const ListEquality().equals;
+  Function areListsEqual = const ListEquality().equals;
 
   setUp(() {
     database = AppDatabase(
@@ -139,9 +139,11 @@ void main() {
         expect(fetchedRounds[i].kamikazePlayerIndex,
             gameSession.roundList[i].kamikazePlayerIndex);
         expect(
-            eq(fetchedRounds[i].scores, gameSession.roundList[i].scores), true);
+            areListsEqual(
+                fetchedRounds[i].scores, gameSession.roundList[i].scores),
+            true);
         expect(
-            eq(fetchedRounds[i].scoreUpdates,
+            areListsEqual(fetchedRounds[i].scoreUpdates,
                 gameSession.roundList[i].scoreUpdates),
             true);
       }
@@ -166,8 +168,9 @@ void main() {
           expect(round.roundNum, expectedRound.roundNum);
           expect(round.caboPlayerIndex, expectedRound.caboPlayerIndex);
           expect(round.kamikazePlayerIndex, expectedRound.kamikazePlayerIndex);
-          expect(eq(round.scores, expectedRound.scores), true);
-          expect(eq(round.scoreUpdates, expectedRound.scoreUpdates), true);
+          expect(areListsEqual(round.scores, expectedRound.scores), true);
+          expect(areListsEqual(round.scoreUpdates, expectedRound.scoreUpdates),
+              true);
         }
       }
     });
@@ -188,8 +191,8 @@ void main() {
         expect(round.roundNum, round4.roundNum);
         expect(round.caboPlayerIndex, round4.caboPlayerIndex);
         expect(round.kamikazePlayerIndex, round4.kamikazePlayerIndex);
-        expect(eq(round.scores, round4.scores), true);
-        expect(eq(round.scoreUpdates, round4.scoreUpdates), true);
+        expect(areListsEqual(round.scores, round4.scores), true);
+        expect(areListsEqual(round.scoreUpdates, round4.scoreUpdates), true);
       }
     });
 
@@ -207,8 +210,8 @@ void main() {
         expect(round.roundNum, round3.roundNum);
         expect(round.caboPlayerIndex, round3.caboPlayerIndex);
         expect(round.kamikazePlayerIndex, round3.kamikazePlayerIndex);
-        expect(eq(round.scores, round3.scores), true);
-        expect(eq(round.scoreUpdates, round3.scoreUpdates), true);
+        expect(areListsEqual(round.scores, round3.scores), true);
+        expect(areListsEqual(round.scoreUpdates, round3.scoreUpdates), true);
       }
 
       await database.roundsDao.replaceRound(
@@ -226,8 +229,10 @@ void main() {
         expect(round.caboPlayerIndex, round3Replacement.caboPlayerIndex);
         expect(
             round.kamikazePlayerIndex, round3Replacement.kamikazePlayerIndex);
-        expect(eq(round.scores, round3Replacement.scores), true);
-        expect(eq(round.scoreUpdates, round3Replacement.scoreUpdates), true);
+        expect(areListsEqual(round.scores, round3Replacement.scores), true);
+        expect(
+            areListsEqual(round.scoreUpdates, round3Replacement.scoreUpdates),
+            true);
       }
     });
 
@@ -251,9 +256,12 @@ void main() {
         expect(fetchedRounds[i].caboPlayerIndex, newRounds[i].caboPlayerIndex);
         expect(fetchedRounds[i].kamikazePlayerIndex,
             newRounds[i].kamikazePlayerIndex);
-        expect(eq(fetchedRounds[i].scores, newRounds[i].scores), true);
         expect(
-            eq(fetchedRounds[i].scoreUpdates, newRounds[i].scoreUpdates), true);
+            areListsEqual(fetchedRounds[i].scores, newRounds[i].scores), true);
+        expect(
+            areListsEqual(
+                fetchedRounds[i].scoreUpdates, newRounds[i].scoreUpdates),
+            true);
       }
     });
 
