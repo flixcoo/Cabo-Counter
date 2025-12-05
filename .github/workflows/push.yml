@@ -108,8 +108,6 @@ jobs:
     
   test:
     runs-on: ubuntu-latest
-    needs: [lint, format]
-
     steps:
       - uses: actions/checkout@v4
       
