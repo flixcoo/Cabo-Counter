@@ -19,7 +19,7 @@ class GameManager extends ChangeNotifier {
     gameList.add(session);
     gameList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     notifyListeners();
-    db.gameSessionDao.insertGameSession(session);
+    databaseInstance.gameSessionDao.insertGameSession(session);
     return gameList.indexOf(session);
   }
 
@@ -50,13 +50,13 @@ class GameManager extends ChangeNotifier {
   /// If no session with the given ID exists, the method does nothing.
   void deleteGameById(String id) {
     gameList.removeWhere((session) => session.gameId == id);
-    db.gameSessionDao.deleteGameSession(id);
+    databaseInstance.gameSessionDao.deleteGameSession(id);
     notifyListeners();
   }
 
   void deleteAllGames() {
     gameList.clear();
-    db.gameSessionDao.deleteAllGames();
+    databaseInstance.gameSessionDao.deleteAllGames();
     notifyListeners();
   }
 
@@ -77,7 +77,7 @@ class GameManager extends ChangeNotifier {
     if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
 
     gameList[index].endGame();
-    db.gameSessionDao.endGame(gameId);
+    databaseInstance.gameSessionDao.endGame(gameId);
     notifyListeners();
   }
 

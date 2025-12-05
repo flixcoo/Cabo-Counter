@@ -29,8 +29,8 @@ class DataTransferService {
       await FileSaver.instance.saveAs(
         name: fileName,
         bytes: bytes,
-        ext: 'json',
         mimeType: MimeType.json,
+        fileExtension: 'json',
       );
       return true;
     } catch (e, stack) {
