@@ -126,7 +126,7 @@ void main() {
     test('Fetch rounds by gameId works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       final fetchedRounds =
-          await database.roundsDao.getRoundsByGameId('test_game_id');
+          await database.roundsDao.getRoundsByGameId(gameId: 'test_game_id');
 
       expect(fetchedRounds.length, gameSession.roundList.length);
 
@@ -155,8 +155,8 @@ void main() {
       late Round? round;
 
       for (int i = 1; i <= gameSession.roundList.length; i++) {
-        round = await database.roundsDao
-            .getRoundByGameIdAndRoundNumber(gameSession.gameId, i);
+        round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+            gameId: gameSession.gameId, roundNumber: i);
 
         if (round == null) {
           fail('Round $i should not be null');
@@ -177,11 +177,13 @@ void main() {
 
     test('Inserting and fetching a new round works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      await database.roundsDao
-          .insertOneRound(gameSession.gameId, round4, gameSession.players);
+      await database.roundsDao.insertOneRound(
+          gameId: gameSession.gameId,
+          round: round4,
+          players: gameSession.players);
 
-      final round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 4);
+      final round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 4);
 
       if (round == null) {
         fail('Inserted round should not be null');
@@ -199,8 +201,8 @@ void main() {
     test('Replacing a round works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
 
-      var round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 3);
+      var round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 3);
 
       if (round == null) {
         fail('Round 3 should not be null before replacement');
@@ -215,10 +217,12 @@ void main() {
       }
 
       await database.roundsDao.replaceRound(
-          gameSession.gameId, round3Replacement, gameSession.players);
+          gameId: gameSession.gameId,
+          round: round3Replacement,
+          players: gameSession.players);
 
-      round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 3);
+      round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 3);
 
       if (round == null) {
         fail('Round 3 should not be null after replacement');
@@ -242,10 +246,12 @@ void main() {
       final newRounds = [round1, round2, round3, round4, round5];
 
       await database.roundsDao.insertMultipleRounds(
-          emptyGameSession.gameId, newRounds, emptyGameSession.players);
+          gameId: emptyGameSession.gameId,
+          rounds: newRounds,
+          players: emptyGameSession.players);
 
-      final fetchedRounds =
-          await database.roundsDao.getRoundsByGameId(emptyGameSession.gameId);
+      final fetchedRounds = await database.roundsDao
+          .getRoundsByGameId(gameId: emptyGameSession.gameId);
 
       expect(fetchedRounds.length, newRounds.length);
 
@@ -268,8 +274,8 @@ void main() {
     test('Fetching a non-existent round returns null', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
 
-      final round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 99);
+      final round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 99);
 
       expect(round, isNull);
     });
@@ -277,17 +283,18 @@ void main() {
     test('Deleting a round works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
 
-      var round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 3);
+      var round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 3);
 
       if (round == null) {
         fail('Round should not be null before deletion');
       }
 
-      await database.roundsDao.deleteRound(gameSession.gameId, 3);
+      await database.roundsDao
+          .deleteRound(gameId: gameSession.gameId, roundNumber: 3);
 
-      round = await database.roundsDao
-          .getRoundByGameIdAndRoundNumber(gameSession.gameId, 3);
+      round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
+          gameId: gameSession.gameId, roundNumber: 3);
 
       expect(round, isNull);
     });

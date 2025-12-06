@@ -95,11 +95,11 @@ void main() {
     test('Insert players works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameWithoutPlayers);
       final insertedPlayers = [player4, player5, player6];
-      await database.playerDao
-          .insertPlayers(gameWithoutPlayers.gameId, insertedPlayers);
+      await database.playerDao.insertPlayers(
+          gameId: gameWithoutPlayers.gameId, players: insertedPlayers);
 
       final players = await database.playerDao
-          .getPlayersByGameId(gameWithoutPlayers.gameId);
+          .getPlayersByGameId(gameId: gameWithoutPlayers.gameId);
 
       expect(players.length, 3);
       final expectedPlayers = [player4, player5, player6];
@@ -115,8 +115,8 @@ void main() {
 
     test('Fetch all players of a game correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      final players =
-          await database.playerDao.getPlayersByGameId(gameSession.gameId);
+      final players = await database.playerDao
+          .getPlayersByGameId(gameId: gameSession.gameId);
 
       expect(players.length, 3);
       final expectedPlayers = [player1, player2, player3];

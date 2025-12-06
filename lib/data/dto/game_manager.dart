@@ -50,7 +50,7 @@ class GameManager extends ChangeNotifier {
   /// If no session with the given ID exists, the method does nothing.
   void deleteGameById(String id) {
     gameList.removeWhere((session) => session.gameId == id);
-    databaseInstance.gameSessionDao.deleteGameSession(id);
+    databaseInstance.gameSessionDao.deleteGameSession(gameId: id);
     notifyListeners();
   }
 
@@ -77,7 +77,7 @@ class GameManager extends ChangeNotifier {
     if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
 
     gameList[index].endGame();
-    databaseInstance.gameSessionDao.endGame(gameId);
+    databaseInstance.gameSessionDao.endGame(gameId: gameId);
     notifyListeners();
   }
 

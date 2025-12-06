@@ -85,11 +85,11 @@ void main() {
 
       final List<List<int>> scores = await Future.wait([
         database.roundScoresDao
-            .getScoresByRoundId(gameSession.roundList[0].roundId),
+            .getScoresByRoundId(roundId: gameSession.roundList[0].roundId),
         database.roundScoresDao
-            .getScoresByRoundId(gameSession.roundList[1].roundId),
+            .getScoresByRoundId(roundId: gameSession.roundList[1].roundId),
         database.roundScoresDao
-            .getScoresByRoundId(gameSession.roundList[2].roundId),
+            .getScoresByRoundId(roundId: gameSession.roundList[2].roundId),
       ]);
 
       for (int i = 0; i < scores.length; i++) {
@@ -104,12 +104,12 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameSession);
 
       final List<List<int>> scoreUpdates = await Future.wait([
-        database.roundScoresDao
-            .getScoreUpdatesByRoundId(gameSession.roundList[0].roundId),
-        database.roundScoresDao
-            .getScoreUpdatesByRoundId(gameSession.roundList[1].roundId),
-        database.roundScoresDao
-            .getScoreUpdatesByRoundId(gameSession.roundList[2].roundId),
+        database.roundScoresDao.getScoreUpdatesByRoundId(
+            roundId: gameSession.roundList[0].roundId),
+        database.roundScoresDao.getScoreUpdatesByRoundId(
+            roundId: gameSession.roundList[1].roundId),
+        database.roundScoresDao.getScoreUpdatesByRoundId(
+            roundId: gameSession.roundList[2].roundId),
       ]);
 
       for (int i = 0; i < scoreUpdates.length; i++) {
