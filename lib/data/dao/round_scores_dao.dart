@@ -13,7 +13,7 @@ class RoundScoresDao extends DatabaseAccessor<AppDatabase>
   /// Retrieves all scores for a specific round by its ID.
   /// This method returns a list of [RoundScore] objects sorted by player
   /// position in the corresponding gameSession
-  Future<List<RoundScore>> getRoundScoresByRoundId(
+  Future<List<RoundScore>> _getRoundScoresByRoundId(
       {required String roundId}) async {
     final query = select(roundScoresTable)
       ..where((tbl) => tbl.roundId.equals(roundId));
@@ -45,7 +45,7 @@ class RoundScoresDao extends DatabaseAccessor<AppDatabase>
   /// corresponding gameSession.
   Future<List<int>> getScoresByRoundId({required String roundId}) async {
     List<RoundScore> roundScores =
-        await getRoundScoresByRoundId(roundId: roundId);
+        await _getRoundScoresByRoundId(roundId: roundId);
 
     return roundScores.map((score) => score.score).toList();
   }
@@ -55,7 +55,7 @@ class RoundScoresDao extends DatabaseAccessor<AppDatabase>
   /// the corresponding gameSession.
   Future<List<int>> getScoreUpdatesByRoundId({required String roundId}) async {
     List<RoundScore> roundScores =
-        await getRoundScoresByRoundId(roundId: roundId);
+        await _getRoundScoresByRoundId(roundId: roundId);
 
     return roundScores.map((score) => score.scoreUpdate).toList();
   }
