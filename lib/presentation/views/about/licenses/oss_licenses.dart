@@ -5339,7 +5339,7 @@ SOFTWARE.''',
     homepage: 'https://github.com/simolus3/drift/tree/develop/sqlparser',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '0.42.0',
+    version: '0.42.1',
     license: '''MIT License
 
 Copyright (c) 2019 Simon Binder
