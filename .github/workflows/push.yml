@@ -24,7 +24,7 @@ jobs:
       run: flutter pub get
 
     - name: Generate oss_licenses.dart
-      run: flutter pub  run dart_pubspec_licenses:generate --output lib/presentation/views/about/licenses/oss_licenses.dart
+      run: flutter pub run dart_pubspec_licenses:generate --output lib/presentation/views/about/licenses/oss_licenses.dart
 
     - name: Check for changes
       id: check_changes
