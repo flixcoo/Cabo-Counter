@@ -15,7 +15,6 @@ import 'package:google_fonts/google_fonts.dart';
 ///   - [LicenseDetailView] for displaying license details.
 ///   - [ossLicenses] for the list of licenses.
 class LicenseView extends StatelessWidget {
-  final licenses = allDependencies;
   const LicenseView({super.key});
 
   @override
@@ -28,7 +27,7 @@ class LicenseView extends StatelessWidget {
       child: SafeArea(
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: licenses.length,
+          itemCount: allDependencies.length,
           itemBuilder: (_, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
@@ -44,9 +43,9 @@ class LicenseView extends StatelessWidget {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
-                          title: licenses[index].name,
-                          description: licenses[index].description,
-                          license: licenses[index].license ??
+                          title: allDependencies[index].name,
+                          description: allDependencies[index].description,
+                          license: allDependencies[index].license ??
                               AppLocalizations.of(context).no_license_text,
                         ),
                       ),
@@ -54,10 +53,10 @@ class LicenseView extends StatelessWidget {
                   },
                   trailing: const CupertinoListTileChevron(),
                   title: Text(
-                    licenses[index].name,
+                    allDependencies[index].name,
                     style: GoogleFonts.roboto(),
                   ),
-                  subtitle: Text(licenses[index].description),
+                  subtitle: Text(allDependencies[index].description),
                 ),
               ),
             );
