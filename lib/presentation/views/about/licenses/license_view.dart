@@ -27,7 +27,7 @@ class LicenseView extends StatelessWidget {
       child: SafeArea(
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: ossLicenses.length,
+          itemCount: allDependencies.length,
           itemBuilder: (_, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
@@ -43,9 +43,9 @@ class LicenseView extends StatelessWidget {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => LicenseDetailView(
-                          title: ossLicenses[index].name,
-                          description: ossLicenses[index].description,
-                          license: ossLicenses[index].license ??
+                          title: allDependencies[index].name,
+                          description: allDependencies[index].description,
+                          license: allDependencies[index].license ??
                               AppLocalizations.of(context).no_license_text,
                         ),
                       ),
@@ -53,10 +53,10 @@ class LicenseView extends StatelessWidget {
                   },
                   trailing: const CupertinoListTileChevron(),
                   title: Text(
-                    ossLicenses[index].name,
+                    allDependencies[index].name,
                     style: GoogleFonts.roboto(),
                   ),
-                  subtitle: Text(ossLicenses[index].description),
+                  subtitle: Text(allDependencies[index].description),
                 ),
               ),
             );
