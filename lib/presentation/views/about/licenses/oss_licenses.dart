@@ -265,13 +265,13 @@ class PackageRef {
   Package resolve() => allDependencies.firstWhere((d) => d.name == name);
 }
 
-/// _fe_analyzer_shared 91.0.0
+/// _fe_analyzer_shared 85.0.0
 const __fe_analyzer_shared = Package(
     name: '_fe_analyzer_shared',
     description: 'Logic that is shared between the front_end and analyzer packages.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/_fe_analyzer_shared',
     authors: [],
-    version: '91.0.0',
+    version: '85.0.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -306,13 +306,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// analyzer 8.4.1
+/// analyzer 7.7.1
 const _analyzer = Package(
     name: 'analyzer',
     description: 'This package provides a library that performs static analysis of Dart code.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/analyzer',
     authors: [],
-    version: '8.4.1',
+    version: '7.7.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -1611,13 +1611,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// dart_style 3.1.3
+/// dart_style 3.1.1
 const _dart_style = Package(
     name: 'dart_style',
     description: 'Opinionated, automatic Dart source code formatter. Provides an API and a CLI tool.',
     repository: 'https://github.com/dart-lang/dart_style',
     authors: [],
-    version: '3.1.3',
+    version: '3.1.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -2642,13 +2642,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// flutter 3.38.4
+/// flutter 3.35.6
 const _flutter = Package(
     name: 'flutter',
     description: 'A framework for writing Flutter applications',
     homepage: 'https://flutter.dev',
     authors: [],
-    version: '3.38.4',
+    version: '3.35.6',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: true,
@@ -2903,13 +2903,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.''',
   );
 
-/// flutter_lints 6.0.0
+/// flutter_lints 5.0.0
 const _flutter_lints = Package(
     name: 'flutter_lints',
     description: 'Recommended lints for Flutter apps, packages, and plugins to encourage good coding practices.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/flutter_lints',
     authors: [],
-    version: '6.0.0',
+    version: '5.0.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -3763,14 +3763,14 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// lints 6.0.0
+/// lints 5.1.1
 const _lints = Package(
     name: 'lints',
     description: """Official Dart lint rules. Defines the 'core' and 'recommended' set of lints suggested by the Dart team.
 """,
     repository: 'https://github.com/dart-lang/core/tree/main/pkgs/lints',
     authors: [],
-    version: '6.0.0',
+    version: '5.1.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -4143,13 +4143,13 @@ const _material_color_utilities = Package(
    limitations under the License.''',
   );
 
-/// meta 1.17.0
+/// meta 1.16.0
 const _meta = Package(
     name: 'meta',
     description: "Annotations used to express developer intentions that can't otherwise be deduced by statically analyzing source code.",
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/meta',
     authors: [],
-    version: '1.17.0',
+    version: '1.16.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -4481,13 +4481,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// pana 0.22.24
+/// pana 0.22.21
 const _pana = Package(
     name: 'pana',
     description: 'PAckage aNAlyzer - produce a report summarizing the health and quality of a Dart package.',
     repository: 'https://github.com/dart-lang/pana',
     authors: [],
-    version: '0.22.24',
+    version: '0.22.21',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -6644,14 +6644,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// sqlparser 0.42.0
+/// sqlparser 0.42.1
 const _sqlparser = Package(
     name: 'sqlparser',
     description: 'Parses sqlite statements and performs static analysis on them',
     homepage: 'https://github.com/simolus3/drift/tree/develop/sqlparser',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '0.42.0',
+    version: '0.42.1',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -6972,13 +6972,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// test 1.26.3
+/// test 1.26.2
 const _test = Package(
     name: 'test',
     description: 'A full featured library for writing and running Dart tests across platforms.',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test',
     authors: [],
-    version: '1.26.3',
+    version: '1.26.2',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -7013,13 +7013,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// test_api 0.7.7
+/// test_api 0.7.6
 const _test_api = Package(
     name: 'test_api',
     description: 'The user facing API for structuring Dart tests and checking expectations.',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test_api',
     authors: [],
-    version: '0.7.7',
+    version: '0.7.6',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -7054,13 +7054,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// test_core 0.6.12
+/// test_core 0.6.11
 const _test_core = Package(
     name: 'test_core',
     description: 'A basic library for writing tests and running them on the VM.',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test_core',
     authors: [],
-    version: '0.6.12',
+    version: '0.6.11',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -8215,12 +8215,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cabo_counter 1.0.7+1053
+/// cabo_counter 1.0.7+1055
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
-    version: '1.0.7+1053',
+    version: '1.0.7+1055',
     spdxIdentifiers: [],
     isMarkdown: false,
     isSdk: false,
