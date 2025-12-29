@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "de.felixkirchner.cabocounter"
+    namespace = "de.felixkirchner.cabo_counter"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "de.felixkirchner.cabocounter"
+        applicationId = "de.felixkirchner.cabo_counter"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
