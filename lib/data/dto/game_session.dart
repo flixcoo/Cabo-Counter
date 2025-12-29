@@ -1,4 +1,5 @@
 import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +29,7 @@ class GameSession extends ChangeNotifier {
   List<Round> roundList;
 
   GameSession({
-    required this.gameId,
+    String? gameId,
     required this.createdAt,
     required this.gameTitle,
     required this.players,
@@ -39,7 +40,8 @@ class GameSession extends ChangeNotifier {
     this.winner = '',
     this.roundNumber = 1,
     List<Round>? roundList,
-  }) : roundList = roundList ?? [];
+  })  : gameId = gameId ?? const Uuid().v4(),
+        roundList = roundList ?? [];
 
   @override
   toString() {
@@ -193,10 +195,12 @@ class GameSession extends ChangeNotifier {
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
-      db.roundsDao.insertOneRound(gameId, newRound, players);
+      databaseInstance.roundsDao
+          .insertOneRound(gameId: gameId, round: newRound, players: players);
     } else {
       roundList[roundNum - 1] = newRound;
-      db.roundsDao.replaceRound(gameId, newRound, players);
+      databaseInstance.roundsDao
+          .replaceRound(gameId: gameId, round: newRound, players: players);
     }
 
     notifyListeners();
@@ -233,7 +237,8 @@ class GameSession extends ChangeNotifier {
         isGameFinished = false;
       }
     }
-    db.gameSessionDao.setGameFinishStatus(gameId, isGameFinished);
+    databaseInstance.gameSessionDao
+        .setGameFinishStatus(gameId: gameId, isFinished: isGameFinished);
     notifyListeners();
     return bonusPlayers;
   }
@@ -250,7 +255,7 @@ class GameSession extends ChangeNotifier {
         players[i].totalScore += roundList[j].scoreUpdates[i];
       }
     }
-    db.playerDao.updatePlayerScores(players);
+    databaseInstance.playerDao.updatePlayerScores(players: players);
     notifyListeners();
   }
 
@@ -294,14 +299,16 @@ class GameSession extends ChangeNotifier {
     } else {
       winner = lowestPlayers.first;
     }
-    db.gameSessionDao.setWinner(gameId, winner);
+    databaseInstance.gameSessionDao.setWinner(gameId: gameId, winner: winner);
+    gameManager.vibrateIfPossible();
     notifyListeners();
   }
 
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
-    db.gameSessionDao.setRoundNumber(gameId, roundNumber);
+    databaseInstance.gameSessionDao
+        .setRoundNumber(gameId: gameId, roundNumber: roundNumber);
 
     notifyListeners();
   }

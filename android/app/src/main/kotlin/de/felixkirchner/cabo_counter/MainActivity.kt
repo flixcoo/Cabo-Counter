@@ -1,4 +1,4 @@
-package de.felixkirchner.cabocounter
+package de.felixkirchner.cabo_counter
 
 import io.flutter.embedding.android.FlutterActivity
 

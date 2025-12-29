@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 class Player {
   final String playerId;
   final String gameId;
@@ -6,11 +8,12 @@ class Player {
   int totalScore;
 
   Player(
-      {required this.playerId,
+      {String? playerId,
       required this.gameId,
       required this.name,
       required this.position,
-      this.totalScore = 0});
+      this.totalScore = 0})
+      : playerId = playerId ?? const Uuid().v4();
 
   @override
   String toString() {

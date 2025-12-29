@@ -4,7 +4,6 @@ import 'package:cabo_counter/data/db/tables/rounds_table.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:drift/drift.dart';
-import 'package:uuid/uuid.dart';
 
 part 'rounds_dao.g.dart';
 
@@ -13,7 +12,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   RoundsDao(super.db);
 
   /// Retrieves all rounds for a specific game session by its ID.
-  Future<List<Round>> getRoundsByGameId(String gameId) async {
+  Future<List<Round>> getRoundsByGameId({required String gameId}) async {
     final query = select(roundsTable)
       ..where((tbl) => tbl.gameId.equals(gameId));
 
@@ -21,9 +20,10 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
     final roundList = await Future.wait(
       roundResult.map((row) async {
-        final scores = await db.roundScoresDao.getScoresByRoundId(row.roundId);
-        final roundScores =
-            await db.roundScoresDao.getScoreUpdatesByRoundId(row.roundId);
+        final scores =
+            await db.roundScoresDao.getScoresByRoundId(roundId: row.roundId);
+        final roundScores = await db.roundScoresDao
+            .getScoreUpdatesByRoundId(roundId: row.roundId);
 
         return Round(
           roundId: row.roundId,
@@ -43,7 +43,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// Retrieves a specific round by its [gameId] and [roundNumber].
   /// Returns null if the round does not exist.
   Future<Round?> getRoundByGameIdAndRoundNumber(
-      String gameId, int roundNumber) async {
+      {required String gameId, required int roundNumber}) async {
     final query = select(roundsTable)
       ..where((tbl) =>
           tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber));
@@ -51,8 +51,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     if (roundResult == null) return null;
 
     final scoreResult = await Future.wait([
-      db.roundScoresDao.getScoresByRoundId(roundResult.roundId),
-      db.roundScoresDao.getScoreUpdatesByRoundId(roundResult.roundId),
+      db.roundScoresDao.getScoresByRoundId(roundId: roundResult.roundId),
+      db.roundScoresDao.getScoreUpdatesByRoundId(roundId: roundResult.roundId),
     ]);
 
     return Round(
@@ -73,7 +73,9 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// [round] is the round data to be inserted.
   /// [players] is the list of players in the game session.
   Future<void> insertOneRound(
-      String gameId, Round round, List<Player> players) async {
+      {required String gameId,
+      required Round round,
+      required List<Player> players}) async {
     final roundEntry = RoundsTableCompanion.insert(
       roundId: round.roundId,
       gameId: gameId,
@@ -101,10 +103,12 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// [round] is the round data to be inserted.
   /// [players] is the list of players in the game session.
   Future<void> replaceRound(
-      String gameId, Round round, List<Player> players) async {
-    await deleteRound(gameId, round.roundNum);
+      {required String gameId,
+      required Round round,
+      required List<Player> players}) async {
+    await deleteRound(gameId: gameId, roundNumber: round.roundNum);
 
-    await insertOneRound(gameId, round, players);
+    await insertOneRound(gameId: gameId, round: round, players: players);
   }
 
   /// Inserts multiple rounds into the database.
@@ -114,17 +118,16 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// [rounds] is the list of rounds to be inserted.
   /// [players] is the list of players in the game session.
   Future<void> insertMultipleRounds(
-      String gameId, List<Round> rounds, List<Player> players) async {
-    var uuid = const Uuid();
-
+      {required String gameId,
+      required List<Round> rounds,
+      required List<Player> players}) async {
     await batch((batch) {
       final roundEntries = <RoundsTableCompanion>[];
       final roundScoreEntries = <RoundScoresTableCompanion>[];
 
       for (final round in rounds) {
-        final roundId = uuid.v4();
         roundEntries.add(RoundsTableCompanion.insert(
-          roundId: roundId,
+          roundId: round.roundId,
           gameId: gameId,
           roundNumber: round.roundNum,
           caboPlayerIndex: round.caboPlayerIndex,
@@ -133,7 +136,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
         for (int i = 0; i < players.length; i++) {
           roundScoreEntries.add(RoundScoresTableCompanion.insert(
-            roundId: roundId,
+            roundId: round.roundId,
             playerId: players[i].playerId,
             score: round.scores[i],
             scoreUpdate: round.scoreUpdates[i],
@@ -151,7 +154,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// Also deletes all associated scores due to foreign key constraints.
   /// [gameId] is the ID of the game session this round belongs to.
   /// [roundNumber] is the number of the round to be deleted.
-  Future<bool> deleteRound(String gameId, int roundNumber) async {
+  Future<bool> deleteRound(
+      {required String gameId, required int roundNumber}) async {
     final query = select(roundsTable)
       ..where((tbl) =>
           tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber));

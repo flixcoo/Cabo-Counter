@@ -10,7 +10,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   PlayerDao(super.db);
 
   /// Retrieves all players from a game by gameId
-  Future<List<Player>> getPlayersByGameId(String gameId) async {
+  Future<List<Player>> getPlayersByGameId({required String gameId}) async {
     final query = select(playerTable)
       ..where((tbl) => tbl.gameId.equals(gameId));
     final playerResults = await query.get();
@@ -37,7 +37,8 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   }
 
   /// Inserts a new player into the database.
-  Future<void> insertPlayers(String gameId, List<Player> players) async {
+  Future<void> insertPlayers(
+      {required String gameId, required List<Player> players}) async {
     await batch((batch) {
       for (int i = 0; i < players.length; i++) {
         batch.insert(
@@ -55,7 +56,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   }
 
   /// Updates the total scores of multiple players in a batch operation.
-  Future<void> updatePlayerScores(List<Player> players) async {
+  Future<void> updatePlayerScores({required List<Player> players}) async {
     batch((batch) {
       for (int i = 0; i < players.length; i++) {
         final player = players[i];
