@@ -28,7 +28,7 @@ Cabo Counter is a Flutter-based mobile app for automated score tracking in the c
   - Change the default settings for point limits and cabo penaltys
   - Choose a default game mode for every new created game
   - Two dealer modes: Last rounds loser or rotating
-- Im- and exporting certain games or the whole app data
+- In- and exporting certain games or the whole app data
 
 The complete rules of the game are also available in the repository wiki at [Cabo Rules (English)](https://github.com/flixcoo/cabo-counter/wiki/CABO-Rules-(English))
 
