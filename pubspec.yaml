@@ -1,9 +1,9 @@
 name: cabo_counter
-version: 1.0.7+1058
+version: 1.0.7+1060
 publish_to: none
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.10.3
 description: Mobile app for the card game Cabo
 
 dependencies:
