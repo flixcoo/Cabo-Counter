@@ -9,9 +9,9 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_filter_p
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/game_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -58,31 +58,39 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   initState() {
     super.initState();
-    databaseInstance.gameSessionDao.getAllGameSessions().then((gameSessions) {
-      if (gameSessions != null) {
-        for (final session in gameSessions) {
-          gameManager.addGameSessionFromDataBase(session);
-        }
-      }
-      return Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
+    databaseInstance.gameSessionDao
+        .getAllGameSessions()
+        .then((gameSessions) {
+          if (gameSessions != null) {
+            for (final session in gameSessions) {
+              gameManager.addGameSessionFromDataBase(session);
+            }
+          }
+          return Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) {
+              setState(() {
+                _isLoading = false;
+              });
+            }
           });
-        }
-      });
-    }).catchError((error) {
-      print('[MainMenuView] $error');
-    });
+        })
+        .catchError((error) {
+          print('[MainMenuView] $error');
+        });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       precacheImage(
-          const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
+        const AssetImage('assets/cabo_counter-logo_rounded.png'),
+        context,
+      );
       await Constants.rateMyApp.init();
 
       if (Constants.rateMyApp.shouldOpenDialog) {
-        await Future.delayed(const Duration(
-            milliseconds: Constants.kMinimumSkeletonScreenDuration));
+        await Future.delayed(
+          const Duration(
+            milliseconds: Constants.kMinimumSkeletonScreenDuration,
+          ),
+        );
         if (!mounted) return;
         _handleFeedbackDialog(context);
       }
@@ -99,206 +107,229 @@ class _MainMenuViewState extends State<MainMenuView> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: gameManager,
-        builder: (context, _) {
-          return CupertinoPageScaffold(
-              resizeToAvoidBottomInset: false,
-              navigationBar: CupertinoNavigationBar(
-                leading: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 0,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        iconSize: Constants.kNavBarIconSize,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const SettingsView(),
-                            ),
-                          );
-                        },
-                        icon: Icon(IconService.settings)),
-                    SortingButton(
-                        currentSortOption: currentSortOption,
-                        currentSortDirection: currentSortDirection,
-                        showOnlyActiveGames: _showOnlyActiveGames,
-                        onSortOptionChanged: (newSortingOption) =>
-                            _setSortOption(newSortingOption),
-                        onSortDirectionChanged: (newSortingDirection) =>
-                            _setSortDirection(newSortingDirection),
-                        onShowOnlyActiveGamesChanged: () =>
-                            _toggleShowOnlyActiveGames())
-                  ],
-                ),
-                middle: Text(AppLocalizations.of(context).games),
-                trailing: IconButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => CreateGameView(
-                        gameMode: ConfigService.getGameMode(),
-                        previousPageTitle: AppLocalizations.of(context).games,
+      listenable: gameManager,
+      builder: (context, _) {
+        return CupertinoPageScaffold(
+          resizeToAvoidBottomInset: false,
+          navigationBar: CupertinoNavigationBar(
+            leading: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 0,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  iconSize: Constants.kNavBarIconSize,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => const SettingsView(),
                       ),
-                    ),
+                    );
+                  },
+                  icon: Icon(IconService.settings),
+                ),
+                SortingButton(
+                  currentSortOption: currentSortOption,
+                  currentSortDirection: currentSortDirection,
+                  showOnlyActiveGames: _showOnlyActiveGames,
+                  onSortOptionChanged: (newSortingOption) =>
+                      _setSortOption(newSortingOption),
+                  onSortDirectionChanged: (newSortingDirection) =>
+                      _setSortDirection(newSortingDirection),
+                  onShowOnlyActiveGamesChanged: () =>
+                      _toggleShowOnlyActiveGames(),
+                ),
+              ],
+            ),
+            middle: Text(AppLocalizations.of(context).games),
+            trailing: IconButton(
+              onPressed: () => Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => CreateGameView(
+                    gameMode: ConfigService.getGameMode(),
+                    previousPageTitle: AppLocalizations.of(context).games,
                   ),
-                  icon: Icon(IconService.add),
-                  iconSize: Constants.kNavBarIconSize + 2,
                 ),
               ),
-              child: CupertinoPageScaffold(
-                  child: SafeArea(
-                child: Visibility(
-                  visible: _isLoading,
+              icon: Icon(IconService.add),
+              iconSize: Constants.kNavBarIconSize + 2,
+            ),
+          ),
+          child: CupertinoPageScaffold(
+            child: SafeArea(
+              child: Visibility(
+                visible: _isLoading,
+                replacement: Visibility(
+                  visible: gameManager.gameList.isEmpty,
                   replacement: Visibility(
-                    visible: gameManager.gameList.isEmpty,
-                    replacement: Visibility(
-                        visible: displayedGames.isEmpty,
-                        replacement: Builder(builder: (context) {
-                          _sortGames(
-                              sortOption: currentSortOption,
-                              sortDirection: currentSortDirection);
-                          return ListView.separated(
-                            itemCount: displayedGames.length +
-                                (_showOnlyActiveGames ? 1 : 0),
-                            separatorBuilder: (context, index) {
-                              bool isLastGameIndex =
-                                  index == displayedGames.length - 1;
-                              return isLastGameIndex
-                                  ? const SizedBox.shrink()
-                                  : Divider(
-                                      height: 1,
-                                      thickness: 0.5,
-                                      color: CustomTheme.white.withAlpha(50),
-                                      indent: 50,
-                                      endIndent: 50,
-                                    );
-                            },
-                            itemBuilder: (context, index) {
-                              // Show info about active games filter at the end of the list
-                              if (_showOnlyActiveGames &&
-                                  index == displayedGames.length) {
-                                return Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        IconService.visibility_off,
+                    visible: displayedGames.isEmpty,
+                    replacement: Builder(
+                      builder: (context) {
+                        _sortGames(
+                          sortOption: currentSortOption,
+                          sortDirection: currentSortDirection,
+                        );
+                        return ListView.separated(
+                          itemCount:
+                              displayedGames.length +
+                              (_showOnlyActiveGames ? 1 : 0),
+                          separatorBuilder: (context, index) {
+                            bool isLastGameIndex =
+                                index == displayedGames.length - 1;
+                            return isLastGameIndex
+                                ? const SizedBox.shrink()
+                                : Divider(
+                                    height: 1,
+                                    thickness: 0.5,
+                                    color: CustomTheme.white.withAlpha(50),
+                                    indent: 50,
+                                    endIndent: 50,
+                                  );
+                          },
+                          itemBuilder: (context, index) {
+                            // Show info about active games filter at the end of the list
+                            if (_showOnlyActiveGames &&
+                                index == displayedGames.length) {
+                              return Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      IconService.visibility_off,
+                                      color: CustomTheme.white.withAlpha(150),
+                                      size: 16.0,
+                                    ),
+                                    const SizedBox(width: 6.0),
+                                    Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      ).only_active_games,
+                                      style: TextStyle(
                                         color: CustomTheme.white.withAlpha(150),
-                                        size: 16.0,
+                                        fontSize: 12.0,
                                       ),
-                                      const SizedBox(width: 6.0),
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .only_active_games,
-                                        style: TextStyle(
-                                          color:
-                                              CustomTheme.white.withAlpha(150),
-                                          fontSize: 12.0,
-                                        ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              final session = displayedGames[index];
+                              return ListenableBuilder(
+                                listenable: session,
+                                builder: (context, _) {
+                                  return Dismissible(
+                                    key: Key(session.gameId),
+                                    background: Container(
+                                      color: CustomTheme.red,
+                                      alignment: Alignment.centerRight,
+                                      padding: const EdgeInsets.only(
+                                        right: 20.0,
                                       ),
-                                    ],
-                                  ),
-                                );
-                              } else {
-                                final session = displayedGames[index];
-                                return ListenableBuilder(
-                                    listenable: session,
-                                    builder: (context, _) {
-                                      return Dismissible(
-                                        key: Key(session.gameId),
-                                        background: Container(
-                                          color: CustomTheme.red,
-                                          alignment: Alignment.centerRight,
-                                          padding: const EdgeInsets.only(
-                                              right: 20.0),
-                                          child: Icon(
-                                            IconService.delete,
-                                            color: CupertinoColors.white,
-                                          ),
-                                        ),
-                                        direction: DismissDirection.endToStart,
-                                        confirmDismiss: (direction) async {
-                                          return await _showDeleteGamePopup(
-                                              context, session.gameTitle);
-                                        },
-                                        onDismissed: (direction) {
-                                          setState(() {
-                                            gameManager
-                                                .deleteGameById(session.gameId);
-                                            _sortGames(
-                                                sortOption: currentSortOption,
-                                                sortDirection:
-                                                    currentSortDirection);
-                                          });
-                                        },
-                                        dismissThresholds: const {
-                                          DismissDirection.startToEnd: 0.6
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10.0),
-                                          child: CupertinoListTile(
-                                            backgroundColorActivated:
-                                                CustomTheme.backgroundColor,
-                                            title: Text(session.gameTitle),
-                                            subtitle: Visibility(
-                                                visible: session.isGameFinished,
-                                                replacement: Text(
-                                                  '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                                  style: const TextStyle(
-                                                      fontSize: 14.5),
-                                                ),
-                                                child: Text(
-                                                  '\u{1F947} ${session.winner}',
-                                                  style: const TextStyle(
-                                                      fontSize: 14.5),
-                                                )),
-                                            trailing: Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text('${session.roundNumber}'),
-                                                const SizedBox(width: 3),
-                                                Icon(IconService.rounds),
-                                                const SizedBox(width: 15),
-                                                Text(
-                                                    '${session.players.length}'),
-                                                const SizedBox(width: 3),
-                                                Icon(IconService.players),
-                                              ],
-                                            ),
-                                            onTap: () {
-                                              final session =
-                                                  displayedGames[index];
-                                              Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      ActiveGameView(
-                                                          gameSession: session),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
+                                      child: Icon(
+                                        IconService.delete,
+                                        color: CupertinoColors.white,
+                                      ),
+                                    ),
+                                    direction: DismissDirection.endToStart,
+                                    confirmDismiss: (direction) async {
+                                      return await _showDeleteGamePopup(
+                                        context,
+                                        session.gameTitle,
                                       );
-                                    });
-                              }
-                            },
-                          );
-                        }),
-                        child: EmptyFilterPlaceholder(
-                            toggleShowOnlyActiveGames:
-                                _toggleShowOnlyActiveGames)),
-                    child: const EmptyGamesPlaceholder(),
+                                    },
+                                    onDismissed: (direction) {
+                                      setState(() {
+                                        gameManager.deleteGameById(
+                                          session.gameId,
+                                        );
+                                        _sortGames(
+                                          sortOption: currentSortOption,
+                                          sortDirection: currentSortDirection,
+                                        );
+                                      });
+                                    },
+                                    dismissThresholds: const {
+                                      DismissDirection.startToEnd: 0.6,
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                        horizontal: 10,
+                                      ),
+                                      child: GameTile(session: session),
+                                    ),
+                                    /*Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                      ),
+                                      child: CupertinoListTile(
+                                        backgroundColorActivated:
+                                            CustomTheme.backgroundColor,
+                                        title: Text(session.gameTitle),
+                                        subtitle: Visibility(
+                                          visible: session.isGameFinished,
+                                          replacement: Text(
+                                            '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
+                                            style: const TextStyle(
+                                              fontSize: 14.5,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '\u{1F947} ${session.winner}',
+                                            style: const TextStyle(
+                                              fontSize: 14.5,
+                                            ),
+                                          ),
+                                        ),
+                                        trailing: Row(
+                                          children: [
+                                            const SizedBox(width: 5),
+                                            Text('${session.roundNumber}'),
+                                            const SizedBox(width: 3),
+                                            Icon(IconService.rounds),
+                                            const SizedBox(width: 15),
+                                            Text('${session.players.length}'),
+                                            const SizedBox(width: 3),
+                                            Icon(IconService.players),
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          final session = displayedGames[index];
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  ActiveGameView(
+                                                    gameSession: session,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),*/
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    child: EmptyFilterPlaceholder(
+                      toggleShowOnlyActiveGames: _toggleShowOnlyActiveGames,
+                    ),
                   ),
-                  child: const MainMenuSkeleton(),
+                  child: const EmptyGamesPlaceholder(),
                 ),
-              )));
-        });
+                child: const MainMenuSkeleton(),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   /// Translates the game mode boolean into the corresponding String.
@@ -320,7 +351,8 @@ class _MainMenuViewState extends State<MainMenuView> {
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: Constants.kEmail,
-      query: 'subject=$emailSubject'
+      query:
+          'subject=$emailSubject'
           '&body=$emailBody',
     );
 
@@ -360,8 +392,9 @@ class _MainMenuViewState extends State<MainMenuView> {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           title: Text(AppLocalizations.of(context).delete_game_title),
-          message:
-              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
+          message: Text(
+            AppLocalizations.of(context).delete_game_message(gameTitle),
+          ),
           actions: [
             CustomDialogAction(
               returnValue: false,
@@ -382,8 +415,10 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// Updates the configuration service with the new sorting preferences.
   /// [sortOption] The option to sort by (date or title).
   /// [sortDirection] The direction to sort (ascending or descending).
-  void _sortGames(
-      {required SortOption sortOption, required SortDirection sortDirection}) {
+  void _sortGames({
+    required SortOption sortOption,
+    required SortDirection sortDirection,
+  }) {
     displayedGames = _showOnlyActiveGames
         ? gameManager.gameList.where((game) => !game.isGameFinished).toList()
         : List.from(gameManager.gameList);
@@ -433,7 +468,9 @@ class _MainMenuViewState extends State<MainMenuView> {
     setState(() {
       _showOnlyActiveGames = !_showOnlyActiveGames;
       _sortGames(
-          sortOption: currentSortOption, sortDirection: currentSortDirection);
+        sortOption: currentSortOption,
+        sortDirection: currentSortDirection,
+      );
     });
     ConfigService.setShowActiveGamesOnly(_showOnlyActiveGames);
   }
@@ -449,6 +486,25 @@ class _MainMenuViewState extends State<MainMenuView> {
       CupertinoPageRoute(
         builder: (context) => const WhatsNewDialog(),
         fullscreenDialog: true,
+      ),
+    );
+  }
+
+  Widget MainMenuTile() {
+    return GestureDetector(
+      child: Row(
+        children: [
+          Row(
+            children: [
+              Container(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text('Title'), Text('Subtitle')],
+              ),
+            ],
+          ),
+          Row(children: [Text('Trailing')]),
+        ],
       ),
     );
   }

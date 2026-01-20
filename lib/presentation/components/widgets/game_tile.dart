@@ -1,0 +1,87 @@
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:flutter/cupertino.dart';
+
+class GameTile extends StatefulWidget {
+  const GameTile({super.key, required this.session});
+
+  final GameSession session;
+
+  @override
+  State<GameTile> createState() => _GameTileState();
+}
+
+class _GameTileState extends State<GameTile> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => ActiveGameView(gameSession: widget.session),
+          ),
+        );
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                alignment: AlignmentGeometry.center,
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: CustomTheme.primaryColor.withAlpha(100),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+
+                child: widget.session.isPointsLimitEnabled
+                    ? Text(
+                        widget.session.pointLimit.toString(),
+                        style: TextStyle(
+                          color: CustomTheme.primaryColor.withRed(40),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Icon(
+                        CupertinoIcons.arrow_2_circlepath,
+                        size: 32,
+                        color: CustomTheme.primaryColor.withRed(40),
+                      ),
+              ),
+              const SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(widget.session.gameTitle),
+                  Text(
+                    widget.session.isGameFinished
+                        ? '\u{1F947} ${widget.session.winner}'
+                        : 'In Progress',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: CupertinoColors.systemGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('${widget.session.players.length}'),
+              const SizedBox(width: 3),
+              Icon(IconService.players),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
