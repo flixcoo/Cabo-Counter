@@ -21,11 +21,7 @@ abstract class IconService {
 
   static Widget get chevron => Platform.isIOS
       ? const CupertinoListTileChevron()
-      : const Icon(
-          Icons.chevron_right_sharp,
-          size: 24,
-          color: Colors.grey,
-        );
+      : const Icon(Icons.chevron_right_sharp, size: 24, color: Colors.grey);
 
   /// Icon for cabo penalty.
   static IconData get cabo_penalty =>
@@ -47,6 +43,9 @@ abstract class IconService {
   static IconData get export => Platform.isIOS
       ? CupertinoIcons.square_arrow_up
       : Icons.file_upload_outlined;
+
+  static IconData get website =>
+      Platform.isIOS ? CupertinoIcons.globe : Icons.language;
 
   /// Icon for home.
   static IconData get home =>

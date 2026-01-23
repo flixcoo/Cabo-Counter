@@ -13,7 +13,7 @@ class Constants {
 
   /// Links to various social media profiles and resources related to the app.
   /// URL to my Instagram profile
-  static const String WEBSITE_LINK = 'https://instagram.felixkirchner.de';
+  static const String WEBSITE_LINK = 'https://felixkirchner.de';
 
   /// URL to my GitHub profile
   static const String GITHUB_LINK = 'https://github.felixkirchner.de';
@@ -27,7 +27,7 @@ class Constants {
 
   /// URL to the app's privacy policy page.
   static const String PRIVACY_POLICY_LINK =
-      'https://felixkirchner.de/projects/cabo-counter/privacy/';
+      'https://felixkirchner.de/projects/cabo-counter/privacy';
 
   /// URL to the app's imprint page, containing legal information.
   static const String LEGAL_LINK = 'https://felixkirchner.de/legal';

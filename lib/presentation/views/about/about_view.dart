@@ -88,7 +88,7 @@ class AboutView extends StatelessWidget {
                   IconButton(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
-                    icon: const Icon(FontAwesomeIcons.instagram),
+                    icon: Icon(IconService.website),
                   ),
                   IconButton(
                     onPressed: () => launchUrl(
@@ -99,7 +99,7 @@ class AboutView extends StatelessWidget {
                   IconButton(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_LINK)),
-                    icon: const Icon(FontAwesomeIcons.github),
+                    icon: const Icon(FontAwesomeIcons.github, size: 22),
                   ),
                 ],
               ),
