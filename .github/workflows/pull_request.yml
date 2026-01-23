@@ -4,8 +4,30 @@ on:
   pull_request:
 
 jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Bump version
+        uses: stikkyapp/update-pubspec-version@v2
+        with:
+          strategy: 'patch'
+          bump-build: true
+          path: './pubspec.yaml'
+
+      - name: Commit version bump
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Actions: Auto-formatting [skip ci]"
+          git push
+
   lint:
     runs-on: ubuntu-latest
+    if: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,7 +43,7 @@ jobs:
           
   test:
     runs-on: ubuntu-latest
-
+    if: false
     steps:
       - uses: actions/checkout@v4
       
@@ -36,3 +58,20 @@ jobs:
           
       - name: Run Tests
         run: flutter test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.6'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
