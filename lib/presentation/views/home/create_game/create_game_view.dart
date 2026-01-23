@@ -29,12 +29,13 @@ class CreateGameView extends StatefulWidget {
   final List<String>? players;
   final String previousPageTitle;
 
-  const CreateGameView(
-      {super.key,
-      this.gameTitle,
-      this.players,
-      required this.gameMode,
-      required this.previousPageTitle});
+  const CreateGameView({
+    super.key,
+    this.gameTitle,
+    this.players,
+    required this.gameMode,
+    required this.previousPageTitle,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -47,7 +48,7 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   /// List of text controllers for player names.
   final List<TextEditingController> _playerNameTextControllers = [
-    TextEditingController()
+    TextEditingController(),
   ];
 
   /// List of focus nodes for player name text fields.
@@ -82,259 +83,266 @@ class _CreateGameViewState extends State<CreateGameView> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (bool didPop, dynamic result) async {
-          if (!didPop) {
-            await _keyboardDelay();
-            if (context.mounted) Navigator.pop(context);
-          }
-        },
-        child: CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: CupertinoNavigationBar(
-              previousPageTitle: widget.previousPageTitle,
-              middle: Text(AppLocalizations.of(context).new_game),
-            ),
-            child: SafeArea(
-                child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Text(
-                      AppLocalizations.of(context).game,
-                      style: CustomTheme.rowTitle,
-                    ),
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (!didPop) {
+          await _keyboardDelay();
+          if (context.mounted) Navigator.pop(context);
+        }
+      },
+      child: CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle: widget.previousPageTitle,
+          middle: Text(AppLocalizations.of(context).new_game),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Text(
+                    AppLocalizations.of(context).game,
+                    style: CustomTheme.rowTitle,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                    child: CupertinoTextField(
-                      decoration: const BoxDecoration(),
-                      maxLength: 24,
-                      prefix: Text(AppLocalizations.of(context).name),
-                      textAlign: TextAlign.right,
-                      placeholder: getFallbackGameTitle(),
-                      controller: _gameTitleTextController,
-                      onSubmitted: (_) {
-                        _playerNameFocusNodes.isNotEmpty
-                            ? _playerNameFocusNodes[0].requestFocus()
-                            : FocusScope.of(context).unfocus();
-                      },
-                      textInputAction: _playerNameFocusNodes.isNotEmpty
-                          ? TextInputAction.next
-                          : TextInputAction.done,
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                  child: CupertinoTextField(
+                    decoration: const BoxDecoration(),
+                    maxLength: 24,
+                    prefix: Text(AppLocalizations.of(context).name),
+                    textAlign: TextAlign.right,
+                    placeholder: getFallbackGameTitle(),
+                    controller: _gameTitleTextController,
+                    onSubmitted: (_) {
+                      _playerNameFocusNodes.isNotEmpty
+                          ? _playerNameFocusNodes[0].requestFocus()
+                          : FocusScope.of(context).unfocus();
+                    },
+                    textInputAction: _playerNameFocusNodes.isNotEmpty
+                        ? TextInputAction.next
+                        : TextInputAction.done,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                    child: CupertinoTextField(
-                      decoration: const BoxDecoration(),
-                      readOnly: true,
-                      prefix: Text(AppLocalizations.of(context).mode),
-                      suffix: Row(
-                        children: [
-                          _getDisplayedGameMode(),
-                          const SizedBox(width: 3),
-                          const CupertinoListTileChevron(),
-                        ],
-                      ),
-                      onTap: () async {
-                        await _keyboardDelay();
-
-                        if (context.mounted) {
-                          final selectedMode = await Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => ModeSelectionMenu(
-                                pointLimit: ConfigService.getPointLimit(),
-                                showDeselection: false,
-                              ),
-                            ),
-                          );
-
-                          setState(() {
-                            gameMode = selectedMode ?? gameMode;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Text(
-                      AppLocalizations.of(context).players,
-                      style: CustomTheme.rowTitle,
-                    ),
-                  ),
-                  ReorderableListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.all(8),
-                      itemCount: _playerNameTextControllers.length,
-                      onReorder: (oldIndex, newIndex) {
-                        setState(() {
-                          if (oldIndex < _playerNameTextControllers.length &&
-                              newIndex <= _playerNameTextControllers.length) {
-                            if (newIndex > oldIndex) newIndex--;
-                            final item =
-                                _playerNameTextControllers.removeAt(oldIndex);
-                            _playerNameTextControllers.insert(newIndex, item);
-                          }
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          key: ValueKey(index),
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            children: [
-                              CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: Icon(
-                                  IconService.remove_player,
-                                  color: CustomTheme.red,
-                                  size: 25,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _playerNameTextControllers[index].dispose();
-                                    _playerNameTextControllers.removeAt(index);
-                                  });
-                                },
-                              ),
-                              Expanded(
-                                child: CupertinoTextField(
-                                  controller: _playerNameTextControllers[index],
-                                  focusNode: _playerNameFocusNodes[index],
-                                  maxLength: 12,
-                                  placeholder:
-                                      '${AppLocalizations.of(context).player} ${index + 1}',
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: const BoxDecoration(),
-                                  textInputAction: index + 1 <
-                                          _playerNameTextControllers.length
-                                      ? TextInputAction.next
-                                      : TextInputAction.done,
-                                  onSubmitted: (_) {
-                                    if (index + 1 <
-                                        _playerNameFocusNodes.length) {
-                                      _playerNameFocusNodes[index + 1]
-                                          .requestFocus();
-                                    } else {
-                                      FocusScope.of(context).unfocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                              AnimatedOpacity(
-                                opacity: _playerNameTextControllers.length > 1
-                                    ? 1.0
-                                    : 0.0,
-                                duration: const Duration(
-                                    milliseconds: Constants.kFadeInDuration),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: ReorderableDragStartListener(
-                                    index: index,
-                                    child: Icon(
-                                      IconService.drag,
-                                      color: CupertinoColors.systemGrey,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
-                    child: Stack(
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                  child: CupertinoTextField(
+                    decoration: const BoxDecoration(),
+                    readOnly: true,
+                    prefix: Text(AppLocalizations.of(context).mode),
+                    suffix: Row(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CupertinoButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: null,
-                              child: Icon(
-                                IconService.add_player,
-                                color: CustomTheme.primaryColor,
-                                size: 25,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: CupertinoButton(
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context).add_player,
-                                      style: TextStyle(
-                                          color: CustomTheme.primaryColor),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              if (_playerNameTextControllers.length <
-                                  maxPlayers) {
-                                setState(() {
-                                  _playerNameTextControllers
-                                      .add(TextEditingController());
-                                  _playerNameFocusNodes.add(FocusNode());
-                                });
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  _playerNameFocusNodes.last.requestFocus();
-                                });
-                              } else {
-                                _showFeedbackDialog(CreateStatus.maxPlayers);
-                              }
-                            },
-                          ),
-                        ),
+                        _getDisplayedGameMode(),
+                        const SizedBox(width: 3),
+                        const CupertinoListTileChevron(),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-                    child: Center(
-                      child: CustomButton(
-                        child: Text(
-                          AppLocalizations.of(context).create_game,
-                          style: TextStyle(
-                            color: CustomTheme.primaryColor,
+                    onTap: () async {
+                      await _keyboardDelay();
+
+                      if (context.mounted) {
+                        final selectedMode = await Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => ModeSelectionMenu(
+                              pointLimit: ConfigService.getPointLimit(),
+                              showDeselection: false,
+                            ),
                           ),
-                        ),
-                        onPressed: () async {
-                          await _keyboardDelay();
-                          _checkAllGameAttributes();
-                        },
+                        );
+
+                        setState(() {
+                          gameMode = selectedMode ?? gameMode;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Text(
+                    AppLocalizations.of(context).players,
+                    style: CustomTheme.rowTitle,
+                  ),
+                ),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: _playerNameTextControllers.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (oldIndex < _playerNameTextControllers.length &&
+                          newIndex <= _playerNameTextControllers.length) {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item = _playerNameTextControllers.removeAt(
+                          oldIndex,
+                        );
+                        _playerNameTextControllers.insert(newIndex, item);
+                      }
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      key: ValueKey(index),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: Icon(
+                              IconService.remove_player,
+                              color: CustomTheme.red,
+                              size: 25,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _playerNameTextControllers[index].dispose();
+                                _playerNameTextControllers.removeAt(index);
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: CupertinoTextField(
+                              controller: _playerNameTextControllers[index],
+                              focusNode: _playerNameFocusNodes[index],
+                              maxLength: 12,
+                              placeholder:
+                                  '${AppLocalizations.of(context).player} ${index + 1}',
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(),
+                              textInputAction:
+                                  index + 1 < _playerNameTextControllers.length
+                                  ? TextInputAction.next
+                                  : TextInputAction.done,
+                              onSubmitted: (_) {
+                                if (index + 1 < _playerNameFocusNodes.length) {
+                                  _playerNameFocusNodes[index + 1]
+                                      .requestFocus();
+                                } else {
+                                  FocusScope.of(context).unfocus();
+                                }
+                              },
+                            ),
+                          ),
+                          AnimatedOpacity(
+                            opacity: _playerNameTextControllers.length > 1
+                                ? 1.0
+                                : 0.0,
+                            duration: const Duration(
+                              milliseconds: Constants.FADE_IN_DURATION,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ReorderableDragStartListener(
+                                index: index,
+                                child: Icon(
+                                  IconService.drag,
+                                  color: CupertinoColors.systemGrey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
+                  child: Stack(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: null,
+                            child: Icon(
+                              IconService.add_player,
+                              color: CustomTheme.primaryColor,
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: CupertinoButton(
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context).add_player,
+                                    style: TextStyle(
+                                      color: CustomTheme.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            if (_playerNameTextControllers.length <
+                                maxPlayers) {
+                              setState(() {
+                                _playerNameTextControllers.add(
+                                  TextEditingController(),
+                                );
+                                _playerNameFocusNodes.add(FocusNode());
+                              });
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _playerNameFocusNodes.last.requestFocus();
+                              });
+                            } else {
+                              _showFeedbackDialog(CreateStatus.maxPlayers);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+                  child: Center(
+                    child: CustomButton(
+                      child: Text(
+                        AppLocalizations.of(context).create_game,
+                        style: TextStyle(color: CustomTheme.primaryColor),
+                      ),
+                      onPressed: () async {
+                        await _keyboardDelay();
+                        _checkAllGameAttributes();
+                      },
                     ),
                   ),
-                  KeyboardVisibilityBuilder(builder: (context, visible) {
+                ),
+                KeyboardVisibilityBuilder(
+                  builder: (context, visible) {
                     if (visible) {
                       return SizedBox(
-                        height: MediaQuery.of(context).viewInsets.bottom *
+                        height:
+                            MediaQuery.of(context).viewInsets.bottom *
                             keyboardHeightAdjustmentFactor,
                       );
                     } else {
                       return const SizedBox.shrink();
                     }
-                  })
-                ],
-              ),
-            ))));
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /// Returns a widget that displays the currently selected game mode in the View.
@@ -343,11 +351,14 @@ class _CreateGameViewState extends State<CreateGameView> {
       return Text(AppLocalizations.of(context).no_mode_selected);
     } else if (gameMode == GameMode.pointLimit) {
       return Text(
-          '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
-          style: TextStyle(color: CustomTheme.primaryColor));
+        '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
+        style: TextStyle(color: CustomTheme.primaryColor),
+      );
     } else {
-      return Text(AppLocalizations.of(context).unlimited,
-          style: TextStyle(color: CustomTheme.primaryColor));
+      return Text(
+        AppLocalizations.of(context).unlimited,
+        style: TextStyle(color: CustomTheme.primaryColor),
+      );
     }
   }
 
@@ -389,7 +400,10 @@ class _CreateGameViewState extends State<CreateGameView> {
     final (title, message) = _getDialogContent(status);
 
     PopupService.showInfoPopup(
-        context: context, title: Text(title), content: Text(message));
+      context: context,
+      title: Text(title),
+      content: Text(message),
+    );
   }
 
   /// Returns the title and message for the dialog based on the [CreateStatus].
@@ -398,23 +412,23 @@ class _CreateGameViewState extends State<CreateGameView> {
       case CreateStatus.noModeSelected:
         return (
           AppLocalizations.of(context).no_mode_title,
-          AppLocalizations.of(context).no_mode_message
+          AppLocalizations.of(context).no_mode_message,
         );
 
       case CreateStatus.minPlayers:
         return (
           AppLocalizations.of(context).min_players_title,
-          AppLocalizations.of(context).min_players_message
+          AppLocalizations.of(context).min_players_message,
         );
       case CreateStatus.maxPlayers:
         return (
           AppLocalizations.of(context).max_players_title,
-          AppLocalizations.of(context).max_players_message
+          AppLocalizations.of(context).max_players_message,
         );
       case CreateStatus.noPlayerName:
         return (
           AppLocalizations.of(context).no_name_title,
-          AppLocalizations.of(context).no_name_message
+          AppLocalizations.of(context).no_name_message,
         );
     }
   }
@@ -436,12 +450,14 @@ class _CreateGameViewState extends State<CreateGameView> {
     List<Player> playerList = [];
     for (int i = 0; i < playerNames.length; i++) {
       String playerId = uuid.v4();
-      playerList.add(Player(
-        playerId: playerId,
-        gameId: gameId,
-        name: playerNames[i],
-        position: i,
-      ));
+      playerList.add(
+        Player(
+          playerId: playerId,
+          gameId: gameId,
+          name: playerNames[i],
+          position: i,
+        ),
+      );
     }
 
     final String gameTitle = _gameTitleTextController.text == ''
@@ -451,14 +467,15 @@ class _CreateGameViewState extends State<CreateGameView> {
     final bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-        gameId: gameId,
-        createdAt: DateTime.now(),
-        gameTitle: gameTitle,
-        players: playerList,
-        pointLimit: ConfigService.getPointLimit(),
-        caboPenalty: ConfigService.getCaboPenalty(),
-        isPointsLimitEnabled: isPointsLimitEnabled,
-        isGameFinished: false);
+      gameId: gameId,
+      createdAt: DateTime.now(),
+      gameTitle: gameTitle,
+      players: playerList,
+      pointLimit: ConfigService.getPointLimit(),
+      caboPenalty: ConfigService.getCaboPenalty(),
+      isPointsLimitEnabled: isPointsLimitEnabled,
+      isGameFinished: false,
+    );
 
     gameManager.addGameSession(gameSession);
     final session = gameManager.getGameSessionById(gameId) ?? gameSession;
@@ -466,7 +483,8 @@ class _CreateGameViewState extends State<CreateGameView> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-          builder: (context) => ActiveGameView(gameSession: session)),
+        builder: (context) => ActiveGameView(gameSession: session),
+      ),
       (Route<dynamic> route) => route.isFirst,
     );
   }
@@ -479,7 +497,8 @@ class _CreateGameViewState extends State<CreateGameView> {
     } else {
       FocusScope.of(context).unfocus();
       await Future.delayed(
-          const Duration(milliseconds: Constants.kKeyboardDelay));
+        const Duration(milliseconds: Constants.KEYBOARD_DELAY),
+      );
     }
   }
 
