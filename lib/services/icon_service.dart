@@ -44,6 +44,7 @@ abstract class IconService {
       ? CupertinoIcons.square_arrow_up
       : Icons.file_upload_outlined;
 
+  /// Icon for website representation.
   static IconData get website =>
       Platform.isIOS ? CupertinoIcons.globe : Icons.language;
 
