@@ -16,12 +16,12 @@ class AboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(AppLocalizations.of(context).about),
-        ),
-        child: SafeArea(
-            child: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(AppLocalizations.of(context).about),
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -40,40 +40,44 @@ class AboutView extends StatelessWidget {
                 style: TextStyle(fontSize: 15, color: Colors.grey[300]),
               ),
               Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  child: SizedBox(
-                    height: 200,
-                    child: Image.asset('assets/cabo_counter-logo_rounded.png'),
-                  )),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
+                ),
+                child: SizedBox(
+                  height: 200,
+                  child: Image.asset('assets/cabo_counter-logo_rounded.png'),
+                ),
+              ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
                 child: Text(AppLocalizations.of(context).privacy_policy),
                 onPressed: () =>
-                    launchUrl(Uri.parse(Constants.kPrivacyPolicyLink)),
+                    launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
               ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
                 child: Text(AppLocalizations.of(context).support_me),
-                onPressed: () => launchUrl(Uri.parse(Constants.kDonateLink)),
+                onPressed: () => launchUrl(Uri.parse(Constants.DONATE_LINK)),
               ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
                 child: Text(AppLocalizations.of(context).legal_notice),
-                onPressed: () => launchUrl(Uri.parse(Constants.kLegalLink)),
+                onPressed: () => launchUrl(Uri.parse(Constants.LEGAL_LINK)),
               ),
               CupertinoButton(
-                  sizeStyle: CupertinoButtonSize.medium,
-                  padding: EdgeInsets.zero,
-                  child: Text(AppLocalizations.of(context).licenses),
-                  onPressed: () => Navigator.push(context,
-                      CupertinoPageRoute(builder: (_) => const LicenseView()))),
-              const SizedBox(
-                height: 10,
+                sizeStyle: CupertinoButtonSize.medium,
+                padding: EdgeInsets.zero,
+                child: Text(AppLocalizations.of(context).licenses),
+                onPressed: () => Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (_) => const LicenseView()),
+                ),
               ),
+              const SizedBox(height: 10),
               const Text(
                 '\u00A9 Felix Kirchner',
                 style: TextStyle(fontSize: 16),
@@ -82,21 +86,27 @@ class AboutView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: () =>
-                          launchUrl(Uri.parse(Constants.kInstagramLink)),
-                      icon: const Icon(FontAwesomeIcons.instagram)),
+                    onPressed: () =>
+                        launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
+                    icon: const Icon(FontAwesomeIcons.instagram),
+                  ),
                   IconButton(
-                      onPressed: () =>
-                          launchUrl(Uri.parse('mailto:${Constants.kEmail}')),
-                      icon: Icon(IconService.e_mail)),
+                    onPressed: () => launchUrl(
+                      Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
+                    ),
+                    icon: Icon(IconService.e_mail),
+                  ),
                   IconButton(
-                      onPressed: () =>
-                          launchUrl(Uri.parse(Constants.kGithubLink)),
-                      icon: const Icon(FontAwesomeIcons.github)),
+                    onPressed: () =>
+                        launchUrl(Uri.parse(Constants.GITHUB_LINK)),
+                    icon: const Icon(FontAwesomeIcons.github),
+                  ),
                 ],
               ),
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

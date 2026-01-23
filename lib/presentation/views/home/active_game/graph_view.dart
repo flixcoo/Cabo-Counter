@@ -31,7 +31,7 @@ class _GraphViewState extends State<GraphView> {
     CustomTheme.graphColor2,
     CustomTheme.graphColor3,
     CustomTheme.graphColor4,
-    CustomTheme.graphColor5
+    CustomTheme.graphColor5,
   ];
 
   /// Global key to access the state of the SfCartesianChart for image capturing.
@@ -42,68 +42,70 @@ class _GraphViewState extends State<GraphView> {
     bool isGraphAvailable =
         widget.gameSession.roundNumber > 1 || widget.gameSession.isGameFinished;
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(AppLocalizations.of(context).scoring_history),
-          trailing: IconButton(
-            onPressed: isGraphAvailable ? () => _shareImage() : null,
-            icon: Icon(IconService.share),
-            iconSize: Constants.kNavBarIconSize,
-          ),
-          previousPageTitle: AppLocalizations.of(context).overview,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(AppLocalizations.of(context).scoring_history),
+        trailing: IconButton(
+          onPressed: isGraphAvailable ? () => _shareImage() : null,
+          icon: Icon(IconService.share),
+          iconSize: Constants.NAVBAR_ICON_SIZE,
         ),
-        child: SafeArea(
-          child: Visibility(
-            visible: isGraphAvailable,
-            replacement: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Icon(IconService.chart, size: 60),
+        previousPageTitle: AppLocalizations.of(context).overview,
+      ),
+      child: SafeArea(
+        child: Visibility(
+          visible: isGraphAvailable,
+          replacement: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(child: Icon(IconService.chart, size: 60)),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  AppLocalizations.of(context).empty_graph_text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Text(
-                    AppLocalizations.of(context).empty_graph_text,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-            child: SfCartesianChart(
-              key: _key,
-              backgroundColor: CustomTheme.backgroundColor,
-              enableAxisAnimation: true,
-              legend: const Legend(
-                  alignment: ChartAlignment.near,
-                  overflowMode: LegendItemOverflowMode.scroll,
-                  isVisible: true,
-                  position: LegendPosition.bottom),
-              primaryXAxis: const NumericAxis(
-                labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                interval: 1,
-                decimalPlaces: 0,
               ),
-              primaryYAxis: NumericAxis(
-                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                labelAlignment: LabelAlignment.center,
-                labelPosition: ChartDataLabelPosition.inside,
-                interval: 1,
-                decimalPlaces: 0,
-                axisLabelFormatter: (AxisLabelRenderDetails details) {
-                  if (details.value == 0) {
-                    return ChartAxisLabel('', const TextStyle());
-                  }
-                  return ChartAxisLabel(
-                      '${details.value.toInt()}', const TextStyle());
-                },
-              ),
-              series: getCumulativeScores(),
-            ),
+            ],
           ),
-        ));
+          child: SfCartesianChart(
+            key: _key,
+            backgroundColor: CustomTheme.backgroundColor,
+            enableAxisAnimation: true,
+            legend: const Legend(
+              alignment: ChartAlignment.near,
+              overflowMode: LegendItemOverflowMode.scroll,
+              isVisible: true,
+              position: LegendPosition.bottom,
+            ),
+            primaryXAxis: const NumericAxis(
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              interval: 1,
+              decimalPlaces: 0,
+            ),
+            primaryYAxis: NumericAxis(
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              labelAlignment: LabelAlignment.center,
+              labelPosition: ChartDataLabelPosition.inside,
+              interval: 1,
+              decimalPlaces: 0,
+              axisLabelFormatter: (AxisLabelRenderDetails details) {
+                if (details.value == 0) {
+                  return ChartAxisLabel('', const TextStyle());
+                }
+                return ChartAxisLabel(
+                  '${details.value.toInt()}',
+                  const TextStyle(),
+                );
+              },
+            ),
+            series: getCumulativeScores(),
+          ),
+        ),
+      ),
+    );
   }
 
   /// Returns a list of LineSeries representing the cumulative scores of each player.
@@ -135,10 +137,10 @@ class _GraphViewState extends State<GraphView> {
           j,
           j == 0 || cumulativeScores[i][j - 1] == 0
               ? 0 // 0 points at the start of the game or when the value is 0 (don't subtract jitter step)
-
               // Adds a small jitter to the cumulative scores to prevent overlapping data points in the graph.
               // The jitter is centered around zero by subtracting playerCount ~/ 2 from the player index i.
-              : cumulativeScores[i][j - 1] + (i - playerCount ~/ 2) * jitterStep
+              : cumulativeScores[i][j - 1] +
+                    (i - playerCount ~/ 2) * jitterStep,
         ),
       );
 
@@ -164,8 +166,9 @@ class _GraphViewState extends State<GraphView> {
 
     // Capture the chart as an image with a pixel ratio of 5.0 for high quality.
     final image = await _key.currentState?.toImage(pixelRatio: 5.0);
-    final byteData =
-        await image?.toByteData(format: dart_ui.ImageByteFormat.png);
+    final byteData = await image?.toByteData(
+      format: dart_ui.ImageByteFormat.png,
+    );
 
     // Exit if image capture failed.
     if (byteData == null) return;
