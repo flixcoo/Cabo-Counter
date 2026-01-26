@@ -1,0 +1,64 @@
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:flutter/cupertino.dart';
+
+class CustomFormRow extends StatefulWidget {
+  const CustomFormRow({
+    super.key,
+    required this.prefixText,
+    required this.prefixIcon,
+    this.suffixWidget,
+    this.onPressed,
+    this.showChevron = true,
+    this.suffixPadding = 8.0,
+  });
+
+  final String prefixText;
+  final IconData prefixIcon;
+  final Widget? suffixWidget;
+  final void Function()? onPressed;
+  final bool showChevron;
+  final double suffixPadding;
+
+  @override
+  State<CustomFormRow> createState() => _CustomFormRowState();
+}
+
+class _CustomFormRowState extends State<CustomFormRow> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => widget.onPressed,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.95,
+        height: MediaQuery.of(context).size.height * 0.06,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 12.0, right: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(widget.prefixIcon, size: 20),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Text(widget.prefixText),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: widget.suffixPadding),
+                child: Row(
+                  children: [
+                    widget.suffixWidget ?? const SizedBox.shrink(),
+                    if (widget.showChevron) ...[
+                      const SizedBox(width: 10),
+                      IconService.chevron,
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
