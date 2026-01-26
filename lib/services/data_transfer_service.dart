@@ -12,8 +12,9 @@ import 'package:json_schema/json_schema.dart';
 class DataTransferService {
   /// Writes the game session list to a JSON file and returns it as string.
   static String _getGameDataAsJsonFile() {
-    final jsonFile =
-        gameManager.gameList.map((session) => session.toJson()).toList();
+    final jsonFile = gameManager.gameList
+        .map((session) => session.toJson())
+        .toList();
     return json.encode(jsonFile);
   }
 
@@ -56,7 +57,7 @@ class DataTransferService {
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<ImportStatus> importJsonFile() async {
-    final path = await FilePicker.platform.pickFiles(
+    final path = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
@@ -72,8 +73,10 @@ class DataTransferService {
       if (await validateJsonSchema(jsonString, true)) {
         final jsonData = json.decode(jsonString) as List<dynamic>;
         List<GameSession> importedList = jsonData
-            .map((jsonItem) =>
-                GameSession.fromJson(jsonItem as Map<String, dynamic>))
+            .map(
+              (jsonItem) =>
+                  GameSession.fromJson(jsonItem as Map<String, dynamic>),
+            )
             .toList();
 
         for (GameSession s in importedList) {
@@ -120,12 +123,15 @@ class DataTransferService {
   /// JSON schema. It takes a boolean [isGameList] to determine
   /// which schema to use (game list or single game).
   static Future<bool> validateJsonSchema(
-      String jsonString, bool isGameList) async {
+    String jsonString,
+    bool isGameList,
+  ) async {
     final String schemaString;
 
     if (isGameList) {
-      schemaString =
-          await rootBundle.loadString('assets/game_list-schema.json');
+      schemaString = await rootBundle.loadString(
+        'assets/game_list-schema.json',
+      );
     } else {
       schemaString = await rootBundle.loadString('assets/game-schema.json');
     }
