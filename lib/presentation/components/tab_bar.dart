@@ -24,7 +24,7 @@ class TabBar extends StatefulWidget {
 }
 
 class _TabBarState extends State<TabBar> {
-  int index = 0;
+  int tabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _TabBarState extends State<TabBar> {
     return Scaffold(
       backgroundColor: CustomTheme.backgroundColor,
       resizeToAvoidBottomInset: false,
-      body: index == 0 ? const MainMenuView() : const AboutView(),
+      body: tabIndex == 0 ? const MainMenuView() : const AboutView(),
       bottomNavigationBar: Theme(
         // TODO: Temporary fix to remove splash effect on bottom navigation bar
         data: Theme.of(context).copyWith(
@@ -46,10 +46,10 @@ class _TabBarState extends State<TabBar> {
           fixedColor: CustomTheme.white,
           backgroundColor: CustomTheme.navBarBackgroundColor,
           enableFeedback: false,
-          currentIndex: index,
+          currentIndex: tabIndex,
           onTap: (int newIndex) {
             setState(() {
-              index = newIndex;
+              tabIndex = newIndex;
             });
           },
           items: [
