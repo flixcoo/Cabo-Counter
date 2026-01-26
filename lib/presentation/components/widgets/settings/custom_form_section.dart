@@ -38,18 +38,10 @@ class CustomFormSection extends StatelessWidget {
                 for (int i = 0; i < rows.length; i++) ...[
                   rows[i],
                   if (i < rows.length - 1)
-                    /* Container(
-                      width: 350,
-                      height: 2.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.white.withAlpha(20),
-                      ),
-                    ),*/
                     Divider(
                       color: Colors.white.withAlpha(20),
                       height: 3,
-                      thickness: 3,
+                      thickness: 2,
                       endIndent: 20,
                       indent: 20,
                       radius: BorderRadius.circular(100),
