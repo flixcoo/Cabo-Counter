@@ -43,11 +43,11 @@ jobs:
         fetch-depth: 0
         persist-credentials: true
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v1.5.3
-      with: 
-        flutter-version: '3.38.6'
-        channel: "stable"
+    - name: Set Up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+        flutter-version-file: pubspec.yaml
 
     - name: Get dependencies
       run: flutter pub get
@@ -80,12 +80,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
           
       - name: Check Formatting
         run: flutter analyze
@@ -97,12 +97,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
           
       - name: Get & upgrade dependencies
         run: |
@@ -138,12 +138,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
 
       - name: Get dependencies
         run: flutter pub get
@@ -167,8 +167,8 @@ jobs:
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
 
       - name: Get dependencies
         run: flutter pub get

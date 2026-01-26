@@ -9,12 +9,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
           
       - name: Check Formatting
         run: flutter analyze
@@ -28,8 +28,8 @@ jobs:
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
 
       - name: Get dependencies
         run: flutter pub get
@@ -52,8 +52,8 @@ jobs:
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version-file: pubspec.yaml
 
       - name: Get dependencies
         run: flutter pub get
