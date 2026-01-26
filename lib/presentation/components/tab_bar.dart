@@ -42,8 +42,9 @@ class _TabBarState extends State<TabBar> {
         child: BottomNavigationBar(
           elevation: 5,
           selectedFontSize: 14,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedFontSize: 14,
-          fixedColor: CustomTheme.white,
+          fixedColor: CustomTheme.primaryColor,
           backgroundColor: CustomTheme.navBarBackgroundColor,
           enableFeedback: false,
           currentIndex: tabIndex,
@@ -54,7 +55,6 @@ class _TabBarState extends State<TabBar> {
           },
           items: [
             BottomNavigationBarItem(
-              backgroundColor: Colors.red,
               icon: Icon(IconService.home),
               label: loc.home,
             ),
