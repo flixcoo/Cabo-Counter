@@ -3,7 +3,7 @@ version: 1.0.8+1062
 publish_to: none
 
 environment:
-  sdk: ^3.38.6
+  sdk: ^3.10.7
 description: Mobile app for the card game Cabo
 
 dependencies:
