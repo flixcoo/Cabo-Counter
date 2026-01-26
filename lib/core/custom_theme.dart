@@ -19,6 +19,8 @@ class CustomTheme {
   /// Background color for main UI elements like cards or containers.
   static Color mainElementBackgroundColor = CupertinoColors.darkBackgroundGray;
 
+  static Color settingsTilecolor = const Color(0xFF1c1c1e);
+
   /// Background color for player tiles in lists.
   static Color playerTileColor = CupertinoColors.secondaryLabel;
 
