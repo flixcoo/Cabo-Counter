@@ -25,7 +25,7 @@ class CustomFormSection extends StatelessWidget {
               if (i < rows.length - 1)
                 Divider(
                   height: 1,
-                  thickness: 1.5,
+                  thickness: 2,
                   color: CustomTheme.white.withAlpha(30),
                   indent: 16,
                   endIndent: 16,

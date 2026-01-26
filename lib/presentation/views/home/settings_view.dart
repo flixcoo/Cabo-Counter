@@ -184,7 +184,7 @@ class _SettingsViewState extends State<SettingsView> {
                     prefixText: AppLocalizations.of(context).delete_data,
                     prefixIcon: IconService.delete,
                     showChevron: false,
-                    onPressed: () => {}, //_deleteAllGames(),
+                    onPressed: () => _deleteAllGames(),
                   ),
                 ],
               ),
