@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   drift: ^2.27.0
   drift_flutter: ^0.2.4
-  file_picker: ^10.1.2
+  file_picker: 10.3.7
   file_saver: ^0.3.1
   flutter:
     sdk: flutter
