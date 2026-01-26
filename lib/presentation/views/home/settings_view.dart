@@ -121,9 +121,8 @@ class _SettingsViewState extends State<SettingsView> {
                   CustomFormRow(
                     prefixText: AppLocalizations.of(context).rotate_dealer,
                     prefixIcon: IconService.shuffle_cards,
-                    showChevron: false,
                     suffixWidget: Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
+                      padding: const EdgeInsets.only(right: 8.0),
                       child: Material(
                         color: Colors.transparent,
                         child: Switch.adaptive(
@@ -139,6 +138,7 @@ class _SettingsViewState extends State<SettingsView> {
                         ),
                       ),
                     ),
+                    showChevron: false,
                   ),
                 ],
               ),
@@ -200,6 +200,8 @@ class _SettingsViewState extends State<SettingsView> {
                       VersionService.getVersion(),
                       style: TextStyle(color: CustomTheme.primaryColor),
                     ),
+                    suffixPadding: 12,
+                    showChevron: false,
                   ),
                   CustomFormRow(
                     prefixText: AppLocalizations.of(context).build,
@@ -209,6 +211,8 @@ class _SettingsViewState extends State<SettingsView> {
                       VersionService.getBuildNumber(),
                       style: TextStyle(color: CustomTheme.primaryColor),
                     ),
+                    suffixPadding: 12,
+                    showChevron: false,
                   ),
                 ],
               ),
