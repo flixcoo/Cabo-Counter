@@ -2,7 +2,8 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:vibration/vibration.dart';
+import 'package:vibration/vibration_presets.dart';
 
 class GameManager extends ChangeNotifier {
   List<GameSession> gameList = [];
@@ -70,8 +71,9 @@ class GameManager extends ChangeNotifier {
   /// Takes a String [gameId] as input. It finds the index of the game
   /// session with the matching ID marks it as finished,
   void endGame(String gameId) {
-    final int index =
-        gameList.indexWhere((session) => session.gameId.toString() == gameId);
+    final int index = gameList.indexWhere(
+      (session) => session.gameId.toString() == gameId,
+    );
 
     // Game session not found or not in unlimited mode
     if (index == -1 || gameList[index].isPointsLimitEnabled == true) return;
@@ -84,8 +86,12 @@ class GameManager extends ChangeNotifier {
   /// Vibrates the device if vibration is supported.
   void vibrateIfPossible() async {
     try {
-      if (await Vibrate.canVibrate) {
-        Vibrate.feedback(FeedbackType.success);
+      if (await Vibration.hasVibrator()) {
+        if (await Vibration.hasCustomVibrationsSupport()) {
+          await Vibration.vibrate(preset: VibrationPreset.doubleBuzz);
+        } else {
+          await Vibration.vibrate();
+        }
       }
     } catch (e) {
       print('Vibration error: $e');
