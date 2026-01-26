@@ -38,7 +38,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
             children: [
               Row(
                 children: [
-                  Icon(widget.prefixIcon, size: 20),
+                  Icon(widget.prefixIcon, size: 22),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                   Text(widget.prefixText),
                 ],

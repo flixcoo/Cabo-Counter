@@ -53,14 +53,8 @@ class _SettingsViewState extends State<SettingsView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).points,
-                  style: CustomTheme.rowTitle,
-                ),
-              ),
               CustomFormSection(
+                title: AppLocalizations.of(context).points,
                 infoText: AppLocalizations.of(context).rotate_dealer_info,
                 rows: [
                   CustomFormRow(
@@ -158,14 +152,8 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).game_data,
-                  style: CustomTheme.rowTitle,
-                ),
-              ),
               CustomFormSection(
+                title: AppLocalizations.of(context).game_data,
                 rows: [
                   CustomFormRow(
                     prefixText: AppLocalizations.of(context).export_data,
@@ -188,14 +176,8 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).app,
-                  style: CustomTheme.rowTitle,
-                ),
-              ),
               CustomFormSection(
+                title: AppLocalizations.of(context).app,
                 rows: [
                   CustomFormRow(
                     prefixText: AppLocalizations.of(context).mail_developer,
