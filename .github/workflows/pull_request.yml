@@ -64,7 +64,6 @@ jobs:
 
   generate_licenses:
     runs-on: ubuntu-latest
-    needs: bump_version
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
