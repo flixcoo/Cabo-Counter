@@ -4,8 +4,9 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_form_row.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_section.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_stepper.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
@@ -59,88 +60,77 @@ class _SettingsViewState extends State<SettingsView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                child: CupertinoFormSection.insetGrouped(
-                  footer: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      AppLocalizations.of(context).rotate_dealer_info,
-                    ),
-                  ),
-                  backgroundColor: CustomTheme.backgroundColor,
-                  margin: EdgeInsets.zero,
-                  children: [
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).cabo_penalty,
-                      prefixIcon: IconService.cabo_penalty,
-                      suffixWidget: CustomStepper(
-                        key: _stepperKey1,
-                        initialValue: ConfigService.getCaboPenalty(),
-                        minValue: 0,
-                        maxValue: 50,
-                        step: 1,
-                        onChanged: (newCaboPenalty) {
-                          setState(() {
-                            ConfigService.setCaboPenalty(newCaboPenalty);
-                          });
-                        },
-                      ),
-                    ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).point_limit,
-                      prefixIcon: FontAwesomeIcons.bullseye,
-                      suffixWidget: CustomStepper(
-                        key: _stepperKey2,
-                        initialValue: ConfigService.getPointLimit(),
-                        minValue: 30,
-                        maxValue: 1000,
-                        step: 10,
-                        onChanged: (newPointLimit) {
-                          setState(() {
-                            ConfigService.setPointLimit(newPointLimit);
-                          });
-                        },
-                      ),
-                    ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).standard_mode,
-                      prefixIcon: IconService.mode,
-                      suffixWidget: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            defaultMode == GameMode.none
-                                ? AppLocalizations.of(context).no_default_mode
-                                : (defaultMode == GameMode.pointLimit
-                                      ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                                      : AppLocalizations.of(context).unlimited),
-                          ),
-                          const SizedBox(width: 5),
-                          IconService.chevron,
-                        ],
-                      ),
-                      onPressed: () async {
-                        final selectedMode = await Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => ModeSelectionMenu(
-                              pointLimit: ConfigService.getPointLimit(),
-                              showDeselection: true,
-                            ),
-                          ),
-                        );
-
+              CustomFormSection(
+                infoText: AppLocalizations.of(context).rotate_dealer_info,
+                rows: [
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).cabo_penalty,
+                    prefixIcon: IconService.cabo_penalty,
+                    showChevron: false,
+                    suffixWidget: CustomStepper(
+                      key: _stepperKey1,
+                      initialValue: ConfigService.getCaboPenalty(),
+                      minValue: 0,
+                      maxValue: 50,
+                      step: 1,
+                      onChanged: (newCaboPenalty) {
                         setState(() {
-                          defaultMode = selectedMode ?? GameMode.none;
+                          ConfigService.setCaboPenalty(newCaboPenalty);
                         });
-                        ConfigService.setGameMode(defaultMode);
                       },
                     ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).rotate_dealer,
-                      prefixIcon: IconService.shuffle_cards,
-                      suffixWidget: Material(
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).point_limit,
+                    prefixIcon: FontAwesomeIcons.bullseye,
+                    showChevron: false,
+                    suffixWidget: CustomStepper(
+                      key: _stepperKey2,
+                      initialValue: ConfigService.getPointLimit(),
+                      minValue: 30,
+                      maxValue: 1000,
+                      step: 10,
+                      onChanged: (newPointLimit) {
+                        setState(() {
+                          ConfigService.setPointLimit(newPointLimit);
+                        });
+                      },
+                    ),
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).standard_mode,
+                    prefixIcon: IconService.mode,
+                    suffixWidget: Text(
+                      defaultMode == GameMode.none
+                          ? AppLocalizations.of(context).no_default_mode
+                          : (defaultMode == GameMode.pointLimit
+                                ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
+                                : AppLocalizations.of(context).unlimited),
+                      style: TextStyle(color: CustomTheme.primaryColor),
+                    ),
+                    onPressed: () async {
+                      final selectedMode = await Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ModeSelectionMenu(
+                            pointLimit: ConfigService.getPointLimit(),
+                            showDeselection: true,
+                          ),
+                        ),
+                      );
+                      setState(() {
+                        defaultMode = selectedMode ?? GameMode.none;
+                      });
+                      ConfigService.setGameMode(defaultMode);
+                    },
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).rotate_dealer,
+                    prefixIcon: IconService.shuffle_cards,
+                    showChevron: false,
+                    suffixWidget: Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: Material(
                         color: Colors.transparent,
                         child: Switch.adaptive(
                           activeTrackColor: CustomTheme.primaryColor,
@@ -155,28 +145,18 @@ class _SettingsViewState extends State<SettingsView> {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                child: CupertinoFormSection.insetGrouped(
-                  footer: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      AppLocalizations.of(context).config_change_info,
-                    ),
                   ),
-                  backgroundColor: CustomTheme.backgroundColor,
-                  margin: EdgeInsets.zero,
-                  children: [
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).reset_to_default,
-                      prefixIcon: IconService.reset,
-                      onPressed: () => showConfirmPopup(),
-                    ),
-                  ],
-                ),
+                ],
+              ),
+              CustomFormSection(
+                infoText: AppLocalizations.of(context).config_change_info,
+                rows: [
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).reset_to_default,
+                    prefixIcon: IconService.reset,
+                    onPressed: () => showConfirmPopup(),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -185,35 +165,28 @@ class _SettingsViewState extends State<SettingsView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                child: CupertinoFormSection.insetGrouped(
-                  backgroundColor: CustomTheme.backgroundColor,
-                  margin: EdgeInsets.zero,
-                  children: [
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).import_data,
-                      prefixIcon: IconService.import,
-                      onPressed: () async {
-                        final status =
-                            await DataTransferService.importJsonFile();
-                        showFeedbackDialog(status);
-                      },
-                      suffixWidget: IconService.chevron,
-                    ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).export_data,
-                      prefixIcon: IconService.export,
-                      onPressed: () => DataTransferService.exportGameData(),
-                      suffixWidget: IconService.chevron,
-                    ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).delete_data,
-                      prefixIcon: IconService.delete,
-                      onPressed: () => _deleteAllGames(),
-                    ),
-                  ],
-                ),
+              CustomFormSection(
+                rows: [
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).export_data,
+                    prefixIcon: IconService.export,
+                    onPressed: () => DataTransferService.exportGameData(),
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).import_data,
+                    prefixIcon: IconService.import,
+                    onPressed: () async {
+                      final status = await DataTransferService.importJsonFile();
+                      showFeedbackDialog(status);
+                    },
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).delete_data,
+                    prefixIcon: IconService.delete,
+                    showChevron: false,
+                    onPressed: () => {}, //_deleteAllGames(),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -222,47 +195,40 @@ class _SettingsViewState extends State<SettingsView> {
                   style: CustomTheme.rowTitle,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                child: CupertinoFormSection.insetGrouped(
-                  backgroundColor: CustomTheme.backgroundColor,
-                  margin: EdgeInsets.zero,
-                  children: [
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).mail_developer,
-                      prefixIcon: IconService.e_mail,
-                      onPressed: () => launchUrl(
-                        Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
-                      ),
-                      suffixWidget: IconService.chevron,
+              CustomFormSection(
+                rows: [
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).mail_developer,
+                    prefixIcon: IconService.e_mail,
+                    onPressed: () => launchUrl(
+                      Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
                     ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).report_error,
-                      prefixIcon: FontAwesomeIcons.github,
-                      onPressed: () =>
-                          launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
-                      suffixWidget: IconService.chevron,
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).report_error,
+                    prefixIcon: FontAwesomeIcons.github,
+                    onPressed: () =>
+                        launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).app_version,
+                    prefixIcon: IconService.version,
+                    onPressed: null,
+                    suffixWidget: Text(
+                      VersionService.getVersion(),
+                      style: TextStyle(color: CustomTheme.primaryColor),
                     ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).app_version,
-                      prefixIcon: IconService.version,
-                      onPressed: null,
-                      suffixWidget: Text(
-                        VersionService.getVersion(),
-                        style: TextStyle(color: CustomTheme.primaryColor),
-                      ),
+                  ),
+                  CustomFormRow(
+                    prefixText: AppLocalizations.of(context).build,
+                    prefixIcon: IconService.number,
+                    onPressed: null,
+                    suffixWidget: Text(
+                      VersionService.getBuildNumber(),
+                      style: TextStyle(color: CustomTheme.primaryColor),
                     ),
-                    CustomFormRow(
-                      prefixText: AppLocalizations.of(context).build,
-                      prefixIcon: IconService.number,
-                      onPressed: null,
-                      suffixWidget: Text(
-                        VersionService.getBuildNumber(),
-                        style: TextStyle(color: CustomTheme.primaryColor),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 50),
             ],
