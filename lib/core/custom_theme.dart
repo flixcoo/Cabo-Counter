@@ -14,6 +14,8 @@ class CustomTheme {
   /// Background color for the main app scaffold and views
   static Color backgroundColor = const Color(0xFF101010);
 
+  static Color navBarBackgroundColor = const Color(0xFF161616);
+
   /// Background color for main UI elements like cards or containers.
   static Color mainElementBackgroundColor = CupertinoColors.darkBackgroundGray;
 
@@ -49,9 +51,7 @@ class CustomTheme {
   );
 
   /// Default text style for mode descriptions.
-  static const TextStyle modeDescription = TextStyle(
-    fontSize: 16,
-  );
+  static const TextStyle modeDescription = TextStyle(fontSize: 16);
 
   /// Text style for titles of sections of [CupertinoListTile].
   static TextStyle rowTitle = TextStyle(
