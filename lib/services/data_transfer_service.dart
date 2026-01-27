@@ -57,7 +57,7 @@ class DataTransferService {
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
   static Future<ImportStatus> importJsonFile() async {
-    final path = await FilePicker.pickFiles(
+    final path = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
     );
