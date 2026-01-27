@@ -27,7 +27,9 @@ class _CustomFormRowState extends State<CustomFormRow> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.onPressed,
+      onTap: () {
+        widget.onPressed?.call();
+      },
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.06,
