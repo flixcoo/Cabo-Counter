@@ -34,7 +34,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.06,
         child: Padding(
-          padding: const EdgeInsets.only(left: 12.0, right: 0),
+          padding: EdgeInsets.only(left: 16.0, right: widget.suffixPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -45,17 +45,14 @@ class _CustomFormRowState extends State<CustomFormRow> {
                   Text(widget.prefixText),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(right: widget.suffixPadding),
-                child: Row(
-                  children: [
-                    widget.suffixWidget ?? const SizedBox.shrink(),
-                    if (widget.showChevron) ...[
-                      const SizedBox(width: 10),
-                      IconService.chevron,
-                    ],
+              Row(
+                children: [
+                  widget.suffixWidget ?? const SizedBox.shrink(),
+                  if (widget.showChevron) ...[
+                    const SizedBox(width: 10),
+                    IconService.chevron,
                   ],
-                ),
+                ],
               ),
             ],
           ),
