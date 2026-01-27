@@ -171,23 +171,10 @@ class _MainMenuViewState extends State<MainMenuView> {
                           sortOption: currentSortOption,
                           sortDirection: currentSortDirection,
                         );
-                        return ListView.separated(
+                        return ListView.builder(
                           itemCount:
                               displayedGames.length +
                               (_showOnlyActiveGames ? 1 : 0),
-                          separatorBuilder: (context, index) {
-                            bool isLastGameIndex =
-                                index == displayedGames.length - 1;
-                            return isLastGameIndex
-                                ? const SizedBox.shrink()
-                                : Divider(
-                                    height: 1,
-                                    thickness: 0.5,
-                                    color: CustomTheme.white.withAlpha(50),
-                                    indent: 50,
-                                    endIndent: 50,
-                                  );
-                          },
                           itemBuilder: (context, index) {
                             // Show info about active games filter at the end of the list
                             if (_showOnlyActiveGames &&
@@ -222,14 +209,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   return Dismissible(
                                     key: Key(session.gameId),
                                     background: Container(
-                                      color: CustomTheme.red,
                                       alignment: Alignment.centerRight,
                                       padding: const EdgeInsets.only(
                                         right: 20.0,
                                       ),
                                       child: Icon(
                                         IconService.delete,
-                                        color: CupertinoColors.white,
+                                        color: CustomTheme.red,
                                       ),
                                     ),
                                     direction: DismissDirection.endToStart,
