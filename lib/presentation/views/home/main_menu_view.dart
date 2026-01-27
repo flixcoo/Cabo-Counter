@@ -88,7 +88,7 @@ class _MainMenuViewState extends State<MainMenuView> {
       if (Constants.rateMyApp.shouldOpenDialog) {
         await Future.delayed(
           const Duration(
-            milliseconds: Constants.kMinimumSkeletonScreenDuration,
+            milliseconds: Constants.MINIMUM_SKELETON_SCREEN_DURATION,
           ),
         );
         if (!mounted) return;
@@ -118,7 +118,7 @@ class _MainMenuViewState extends State<MainMenuView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                  iconSize: Constants.kNavBarIconSize,
+                  iconSize: Constants.NAVBAR_ICON_SIZE,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -154,7 +154,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
               ),
               icon: Icon(IconService.add),
-              iconSize: Constants.kNavBarIconSize + 2,
+              iconSize: Constants.NAVBAR_ICON_SIZE + 2,
             ),
           ),
           child: CupertinoPageScaffold(
@@ -350,7 +350,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     final Uri emailUri = Uri(
       scheme: 'mailto',
-      path: Constants.kEmail,
+      path: Constants.CONTACT_EMAIL,
       query:
           'subject=$emailSubject'
           '&body=$emailBody',
@@ -361,7 +361,7 @@ class _MainMenuViewState extends State<MainMenuView> {
     BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
 
     // so that the bad rating dialog is not shown immediately
-    await Future.delayed(const Duration(milliseconds: Constants.kPopUpDelay));
+    await Future.delayed(const Duration(milliseconds: Constants.POP_UP_DELAY));
 
     switch (preRatingDecision) {
       case PreRatingDialogDecision.yes:

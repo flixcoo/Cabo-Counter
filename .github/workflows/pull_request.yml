@@ -9,27 +9,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version: 3.38.6
           
       - name: Check Formatting
         run: flutter analyze
           
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
+          channel: stable
+          flutter-version: 3.38.6
 
       - name: Get dependencies
         run: flutter pub get

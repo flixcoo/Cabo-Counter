@@ -34,46 +34,50 @@ class SortingButton extends StatelessWidget {
   final ValueChanged<SortDirection> onSortDirectionChanged;
   final VoidCallback onShowOnlyActiveGamesChanged;
 
-  const SortingButton(
-      {super.key,
-      required this.currentSortOption,
-      required this.currentSortDirection,
-      required this.showOnlyActiveGames,
-      required this.onSortOptionChanged,
-      required this.onSortDirectionChanged,
-      required this.onShowOnlyActiveGamesChanged});
+  const SortingButton({
+    super.key,
+    required this.currentSortOption,
+    required this.currentSortDirection,
+    required this.showOnlyActiveGames,
+    required this.onSortOptionChanged,
+    required this.onSortDirectionChanged,
+    required this.onShowOnlyActiveGamesChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     const buttonPadding = EdgeInsets.zero;
     final icon = Icon(IconService.sort);
-    const iconSize = Constants.kNavBarIconSize;
+    const iconSize = Constants.NAVBAR_ICON_SIZE;
 
     if (Platform.isIOS) {
       return PullDownButton(
         itemBuilder: _pullDownMenuItems,
         buttonBuilder: (context, showMenu) => IconButton(
-            onPressed: showMenu,
-            padding: buttonPadding,
-            icon: icon,
-            iconSize: iconSize),
+          onPressed: showMenu,
+          padding: buttonPadding,
+          icon: icon,
+          iconSize: iconSize,
+        ),
       );
     } else {
       return IconButton(
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                ),
-                backgroundColor: CustomTheme.backgroundColor,
-                builder: (context) {
-                  return _bottomSheet(context);
-                });
-          },
-          padding: buttonPadding,
-          icon: icon,
-          iconSize: iconSize);
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            backgroundColor: CustomTheme.backgroundColor,
+            builder: (context) {
+              return _bottomSheet(context);
+            },
+          );
+        },
+        padding: buttonPadding,
+        icon: icon,
+        iconSize: iconSize,
+      );
     }
   }
 
@@ -82,7 +86,8 @@ class SortingButton extends StatelessWidget {
   List<PullDownMenuEntry> _pullDownMenuItems(BuildContext context) {
     return [
       PullDownMenuTitle(
-          title: Text(AppLocalizations.of(context).sort_and_filter_options)),
+        title: Text(AppLocalizations.of(context).sort_and_filter_options),
+      ),
       PullDownMenuItem.selectable(
         onTap: () => onSortOptionChanged(SortOption.date),
         selected: currentSortOption == SortOption.date,
@@ -147,7 +152,7 @@ class SortingButton extends StatelessWidget {
               onSortOptionChanged(SortOption.title);
             },
           ),
-          Constants.bottomSheetDivider,
+          Constants.BOTTOM_SHEET_DIVIDER,
           ListTile(
             leading: Icon(IconService.sort_desc),
             title: Text(AppLocalizations.of(context).descending),
@@ -166,12 +171,13 @@ class SortingButton extends StatelessWidget {
               onSortDirectionChanged(SortDirection.ascending);
             },
           ),
-          Constants.bottomSheetDivider,
+          Constants.BOTTOM_SHEET_DIVIDER,
           ListTile(
             leading: Icon(IconService.visibility_off),
             title: Text(AppLocalizations.of(context).only_active_game_title),
             subtitle: Text(
-                AppLocalizations.of(context).only_active_games_description),
+              AppLocalizations.of(context).only_active_games_description,
+            ),
             selected: showOnlyActiveGames,
             onTap: () {
               Navigator.pop(context);

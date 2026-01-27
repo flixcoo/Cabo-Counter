@@ -1,7 +1,7 @@
 # CABO Counter
 
 ![Version](https://img.shields.io/badge/App--Version-1.0.6-orange)
-![Flutter](https://img.shields.io/badge/Flutter-3.35.6-027DFD?logo=flutter)
+![Flutter](https://img.shields.io/badge/Flutter-3.38.6-027DFD?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
 ![iOS18](https://img.shields.io/badge/iOS-18.7.1-white?logo=apple)
 ![iOS26](https://img.shields.io/badge/iOS-26.1-white?logo=apple)
@@ -35,7 +35,7 @@ The complete rules of the game are also available in the repository wiki at [Cab
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter 3.35.6+
+- Flutter 3.38.6+
 - Dart 3.9.2+
 - Xcode (for iOS builds) / Android Studio (for Android builds)
 - A device or simulator running iOS 18.5+ / Android 16

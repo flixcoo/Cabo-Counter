@@ -4,6 +4,7 @@ import 'package:cabo_counter/presentation/views/about/about_view.dart';
 import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// TabBar for navigating between the main menu and about section.
 ///
@@ -23,37 +24,47 @@ class TabBar extends StatefulWidget {
 }
 
 class _TabBarState extends State<TabBar> {
+  int tabIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
+    final loc = AppLocalizations.of(context);
+    return Scaffold(
+      backgroundColor: CustomTheme.backgroundColor,
       resizeToAvoidBottomInset: false,
-      tabBar: CupertinoTabBar(
-          backgroundColor: CustomTheme.mainElementBackgroundColor,
-          iconSize: 27,
-          height: 55,
-          items: <BottomNavigationBarItem>[
+      body: tabIndex == 0 ? const MainMenuView() : const AboutView(),
+      bottomNavigationBar: Theme(
+        // TODO: Temporary fix to remove splash effect on bottom navigation bar
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: BottomNavigationBar(
+          elevation: 5,
+          selectedFontSize: 14,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          unselectedFontSize: 14,
+          fixedColor: CustomTheme.primaryColor,
+          backgroundColor: CustomTheme.navBarBackgroundColor,
+          enableFeedback: false,
+          currentIndex: tabIndex,
+          onTap: (int newIndex) {
+            setState(() {
+              tabIndex = newIndex;
+            });
+          },
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(
-                IconService.home,
-              ),
-              label: AppLocalizations.of(context).home,
+              icon: Icon(IconService.home),
+              label: loc.home,
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                IconService.info,
-              ),
-              label: AppLocalizations.of(context).about,
+              icon: Icon(IconService.info),
+              label: loc.about,
             ),
-          ]),
-      tabBuilder: (BuildContext context, int index) {
-        return CupertinoTabView(builder: (BuildContext context) {
-          if (index == 0) {
-            return const MainMenuView();
-          } else {
-            return const AboutView();
-          }
-        });
-      },
+          ],
+        ),
+      ),
     );
   }
 }
