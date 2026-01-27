@@ -332,15 +332,6 @@ class _MainMenuViewState extends State<MainMenuView> {
     );
   }
 
-  /// Translates the game mode boolean into the corresponding String.
-  /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
-  String _translateGameMode(GameSession gameSession) {
-    if (gameSession.isPointsLimitEnabled) {
-      return '${gameSession.pointLimit} ${AppLocalizations.of(context).points}';
-    }
-    return AppLocalizations.of(context).unlimited;
-  }
-
   /// Handles the feedback dialog when the conditions for rating are met.
   /// It shows a dialog asking the user if they like the app,
   /// and based on their response, it either opens the rating dialog or an email client for feedback.
@@ -486,25 +477,6 @@ class _MainMenuViewState extends State<MainMenuView> {
       CupertinoPageRoute(
         builder: (context) => const WhatsNewDialog(),
         fullscreenDialog: true,
-      ),
-    );
-  }
-
-  Widget MainMenuTile() {
-    return GestureDetector(
-      child: Row(
-        children: [
-          Row(
-            children: [
-              Container(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text('Title'), Text('Subtitle')],
-              ),
-            ],
-          ),
-          Row(children: [Text('Trailing')]),
-        ],
       ),
     );
   }
