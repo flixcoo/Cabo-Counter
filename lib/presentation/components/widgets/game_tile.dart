@@ -25,62 +25,71 @@ class _GameTileState extends State<GameTile> {
           ),
         );
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                alignment: AlignmentGeometry.center,
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: CustomTheme.primaryColor.withAlpha(100),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-
-                child: widget.session.isPointsLimitEnabled
-                    ? Text(
-                        widget.session.pointLimit.toString(),
-                        style: TextStyle(
-                          color: CustomTheme.primaryColor.withRed(40),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : Icon(
-                        CupertinoIcons.arrow_2_circlepath,
-                        size: 32,
-                        color: CustomTheme.primaryColor.withRed(40),
-                      ),
-              ),
-              const SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(widget.session.gameTitle),
-                  Text(
-                    widget.session.isGameFinished
-                        ? '\u{1F947} ${widget.session.winner}'
-                        : 'In Progress',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: CupertinoColors.systemGrey,
-                    ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  alignment: AlignmentGeometry.center,
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: CustomTheme.primaryColor.withAlpha(100),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('${widget.session.players.length}'),
-              const SizedBox(width: 3),
-              Icon(IconService.players),
-            ],
-          ),
-        ],
+
+                  child: widget.session.isPointsLimitEnabled
+                      ? Text(
+                          widget.session.pointLimit.toString(),
+                          style: TextStyle(
+                            color: CustomTheme.primaryColor.withRed(40),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Icon(
+                          CupertinoIcons.arrow_2_circlepath,
+                          size: 32,
+                          color: CustomTheme.primaryColor.withRed(40),
+                        ),
+                ),
+                const SizedBox(width: 15),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.session.gameTitle,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      widget.session.isGameFinished
+                          ? '\u{1F947} ${widget.session.winner}'
+                          : 'In Progress',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  '${widget.session.players.length}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(width: 10),
+                Icon(IconService.players),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
