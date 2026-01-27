@@ -253,62 +253,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     dismissThresholds: const {
                                       DismissDirection.startToEnd: 0.6,
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 8,
-                                        horizontal: 10,
-                                      ),
-                                      child: GameTile(session: session),
-                                    ),
-                                    /*Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0,
-                                      ),
-                                      child: CupertinoListTile(
-                                        backgroundColorActivated:
-                                            CustomTheme.backgroundColor,
-                                        title: Text(session.gameTitle),
-                                        subtitle: Visibility(
-                                          visible: session.isGameFinished,
-                                          replacement: Text(
-                                            '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            '\u{1F947} ${session.winner}',
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                            ),
-                                          ),
-                                        ),
-                                        trailing: Row(
-                                          children: [
-                                            const SizedBox(width: 5),
-                                            Text('${session.roundNumber}'),
-                                            const SizedBox(width: 3),
-                                            Icon(IconService.rounds),
-                                            const SizedBox(width: 15),
-                                            Text('${session.players.length}'),
-                                            const SizedBox(width: 3),
-                                            Icon(IconService.players),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          final session = displayedGames[index];
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ActiveGameView(
-                                                    gameSession: session,
-                                                  ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),*/
+                                    child: GameTile(session: session),
                                   );
                                 },
                               );
