@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.0.9+1072
+version: 1.0.8+1075
 publish_to: none
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   drift: ^2.27.0
   drift_flutter: ^0.2.4
-  file_picker: ^10.3.9
+  file_picker: 10.1.2
   file_saver: ^0.3.1
   flutter:
     sdk: flutter
