@@ -18,6 +18,7 @@ class _GameTileState extends State<GameTile> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+      padding: const EdgeInsets.only(right: 4, left: 2),
       decoration: BoxDecoration(
         color: CustomTheme.mainElementBackgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -88,10 +89,10 @@ class _GameTileState extends State<GameTile> {
                 children: [
                   Text(
                     '${widget.session.players.length}',
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(width: 10),
-                  Icon(IconService.players),
+                  Icon(IconService.players, size: 28),
                 ],
               ),
             ],
