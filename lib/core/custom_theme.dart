@@ -14,11 +14,13 @@ class CustomTheme {
   /// Background color for the main app scaffold and views
   static const Color backgroundColor = Color(0xFF101010);
 
+  /// Background color for the navigation bar at the bottom of the app.
   static const Color navBarBackgroundColor = Color(0xFF161616);
 
   /// Background color for main UI elements like cards or containers.
   static const Color mainElementBackgroundColor = Color(0xFF171717);
 
+  /// Background color for settings tiles and list items.
   static const Color settingsTilecolor = Color(0xFF1C1C1E);
 
   /// Background color for player tiles in lists.

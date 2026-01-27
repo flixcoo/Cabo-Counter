@@ -89,7 +89,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         title: Text(AppLocalizations.of(context).name),
                         trailing: Text(
                           gameSession.gameTitle,
-                          style: TextStyle(color: CustomTheme.primaryColor),
+                          style: const TextStyle(
+                            color: CustomTheme.primaryColor,
+                          ),
                         ),
                       ),
                       CupertinoListTile(
@@ -98,7 +100,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           gameSession.isPointsLimitEnabled
                               ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
                               : AppLocalizations.of(context).unlimited,
-                          style: TextStyle(color: CustomTheme.primaryColor),
+                          style: const TextStyle(
+                            color: CustomTheme.primaryColor,
+                          ),
                         ),
                       ),
                       Padding(

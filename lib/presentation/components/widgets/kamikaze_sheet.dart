@@ -19,7 +19,9 @@ class KamikazeSheet extends StatelessWidget {
   /// Displays a bottom sheet for selecting a player with Kamikaze.
   /// The sheet adapts its UI based on the platform (iOS or Android).
   static Future<int?> show(
-      BuildContext context, GameSession gameSession) async {
+    BuildContext context,
+    GameSession gameSession,
+  ) async {
     if (Platform.isIOS) {
       return await showCupertinoModalPopup<int?>(
         context: context,
@@ -111,7 +113,7 @@ class KamikazeSheet extends StatelessWidget {
           ListTile(
             title: Text(
               AppLocalizations.of(context).cancel,
-              style: TextStyle(color: CustomTheme.red, fontSize: 18),
+              style: const TextStyle(color: CustomTheme.red, fontSize: 18),
               textAlign: TextAlign.center,
             ),
             onTap: () => Navigator.pop(context, null),

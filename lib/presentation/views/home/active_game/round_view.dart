@@ -245,7 +245,9 @@ class _RoundViewState extends State<RoundView> {
                               subtitle: Text(
                                 '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
                                 ' ${AppLocalizations.of(context).points}',
-                                style: TextStyle(color: CustomTheme.white),
+                                style: const TextStyle(
+                                  color: CustomTheme.white,
+                                ),
                               ),
                               trailing: SizedBox(
                                 width: 100,

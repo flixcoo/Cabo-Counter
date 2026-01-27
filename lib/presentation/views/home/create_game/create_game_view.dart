@@ -280,7 +280,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 child: Center(
                                   child: Text(
                                     AppLocalizations.of(context).add_player,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: CustomTheme.primaryColor,
                                     ),
                                   ),
@@ -315,7 +315,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                     child: CustomButton(
                       child: Text(
                         AppLocalizations.of(context).create_game,
-                        style: TextStyle(color: CustomTheme.primaryColor),
+                        style: const TextStyle(color: CustomTheme.primaryColor),
                       ),
                       onPressed: () async {
                         await _keyboardDelay();
@@ -352,12 +352,12 @@ class _CreateGameViewState extends State<CreateGameView> {
     } else if (gameMode == GameMode.pointLimit) {
       return Text(
         '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
-        style: TextStyle(color: CustomTheme.primaryColor),
+        style: const TextStyle(color: CustomTheme.primaryColor),
       );
     } else {
       return Text(
         AppLocalizations.of(context).unlimited,
-        style: TextStyle(color: CustomTheme.primaryColor),
+        style: const TextStyle(color: CustomTheme.primaryColor),
       );
     }
   }

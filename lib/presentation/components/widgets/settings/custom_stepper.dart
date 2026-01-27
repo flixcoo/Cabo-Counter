@@ -56,8 +56,10 @@ class _CustomStepperState extends State<CustomStepper> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Text('$_value',
-              style: TextStyle(fontSize: 18, color: CustomTheme.white)),
+          child: Text(
+            '$_value',
+            style: const TextStyle(fontSize: 18, color: CustomTheme.white),
+          ),
         ),
         CupertinoButton(
           padding: EdgeInsets.zero,

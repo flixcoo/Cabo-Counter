@@ -100,7 +100,7 @@ class _SettingsViewState extends State<SettingsView> {
                           : (defaultMode == GameMode.pointLimit
                                 ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
                                 : AppLocalizations.of(context).unlimited),
-                      style: TextStyle(color: CustomTheme.primaryColor),
+                      style: const TextStyle(color: CustomTheme.primaryColor),
                     ),
                     onPressed: () async {
                       final selectedMode = await Navigator.push(
@@ -198,7 +198,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: null,
                     suffixWidget: Text(
                       VersionService.getVersion(),
-                      style: TextStyle(color: CustomTheme.primaryColor),
+                      style: const TextStyle(color: CustomTheme.primaryColor),
                     ),
                     suffixPadding: 12,
                     showChevron: false,
@@ -209,7 +209,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: null,
                     suffixWidget: Text(
                       VersionService.getBuildNumber(),
-                      style: TextStyle(color: CustomTheme.primaryColor),
+                      style: const TextStyle(color: CustomTheme.primaryColor),
                     ),
                     suffixPadding: 12,
                     showChevron: false,
