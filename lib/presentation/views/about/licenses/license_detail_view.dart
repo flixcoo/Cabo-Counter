@@ -12,21 +12,21 @@ import 'package:flutter/cupertino.dart';
 /// - [license]: The full license text to display.
 class LicenseDetailView extends StatelessWidget {
   final String title, description, license;
-  const LicenseDetailView(
-      {super.key,
-      required this.title,
-      required this.description,
-      required this.license});
+  const LicenseDetailView({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.license,
+  });
 
   @override
   Widget build(BuildContext context) {
-    print(description);
+    final loc = AppLocalizations.of(context);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(
-          AppLocalizations.of(context).license_details,
-        ),
-        previousPageTitle: AppLocalizations.of(context).licenses,
+        middle: Text(loc.license_details),
+        previousPageTitle: loc.licenses,
       ),
       child: SafeArea(
         child: SingleChildScrollView(
@@ -34,8 +34,10 @@ class LicenseDetailView extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 12,
+                ),
                 child: FittedBox(
                   fit: BoxFit.fill,
                   child: Text(
@@ -53,23 +55,21 @@ class LicenseDetailView extends StatelessWidget {
                 child: Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                decoration: BoxDecoration(
-                    color: CustomTheme.buttonBackgroundColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  license,
-                  style: const TextStyle(fontSize: 15),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
                 ),
-              )
+                decoration: BoxDecoration(
+                  color: CustomTheme.buttonBackgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(license, style: const TextStyle(fontSize: 15)),
+              ),
             ],
           ),
         ),

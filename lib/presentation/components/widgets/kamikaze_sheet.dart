@@ -53,9 +53,11 @@ class KamikazeSheet extends StatelessWidget {
 
   /// Builds the iOS-style action sheet for selecting a player with Kamikaze.
   Widget _buildIosSheet(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return CupertinoActionSheet(
-      title: Text(AppLocalizations.of(context).kamikaze),
-      message: Text(AppLocalizations.of(context).who_has_kamikaze),
+      title: Text(loc.kamikaze),
+      message: Text(loc.who_has_kamikaze),
       actions: gameSession.players.asMap().entries.map((entry) {
         final index = entry.key;
         final player = entry.value;
@@ -70,26 +72,27 @@ class KamikazeSheet extends StatelessWidget {
       cancelButton: CupertinoActionSheetAction(
         onPressed: () => Navigator.pop(context, null),
         isDestructiveAction: true,
-        child: Text(AppLocalizations.of(context).cancel),
+        child: Text(loc.cancel),
       ),
     );
   }
 
   /// Builds the Android-style bottom sheet for selecting a player with Kamikaze.
   Widget _buildAndroidSheet(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            AppLocalizations.of(context).kamikaze,
+            loc.kamikaze,
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-              AppLocalizations.of(context).who_has_kamikaze,
+              loc.who_has_kamikaze,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -112,7 +115,7 @@ class KamikazeSheet extends StatelessWidget {
           }),
           ListTile(
             title: Text(
-              AppLocalizations.of(context).cancel,
+              loc.cancel,
               style: const TextStyle(color: CustomTheme.red, fontSize: 18),
               textAlign: TextAlign.center,
             ),

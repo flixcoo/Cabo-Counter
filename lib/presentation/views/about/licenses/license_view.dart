@@ -19,10 +19,12 @@ class LicenseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).licenses),
-        previousPageTitle: AppLocalizations.of(context).about,
+        middle: Text(loc.licenses),
+        previousPageTitle: loc.about,
       ),
       child: SafeArea(
         child: ListView.builder(
@@ -45,8 +47,9 @@ class LicenseView extends StatelessWidget {
                         builder: (_) => LicenseDetailView(
                           title: allDependencies[index].name,
                           description: allDependencies[index].description,
-                          license: allDependencies[index].license ??
-                              AppLocalizations.of(context).no_license_text,
+                          license:
+                              allDependencies[index].license ??
+                              loc.no_license_text,
                         ),
                       ),
                     );

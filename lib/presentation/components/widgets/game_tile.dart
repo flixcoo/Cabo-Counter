@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ class GameTile extends StatefulWidget {
 class _GameTileState extends State<GameTile> {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       padding: const EdgeInsets.only(right: 4, left: 2),
@@ -75,7 +78,7 @@ class _GameTileState extends State<GameTile> {
                       Text(
                         widget.session.isGameFinished
                             ? '\u{1F947} ${widget.session.winner}'
-                            : 'In Progress',
+                            : '${loc.round} ${widget.session.roundNumber}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: CupertinoColors.systemGrey,

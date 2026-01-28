@@ -42,10 +42,12 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).settings),
-        previousPageTitle: AppLocalizations.of(context).games,
+        middle: Text(loc.settings),
+        previousPageTitle: loc.games,
       ),
       child: SafeArea(
         child: SingleChildScrollView(
@@ -54,11 +56,11 @@ class _SettingsViewState extends State<SettingsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomFormSection(
-                title: AppLocalizations.of(context).points,
-                infoText: AppLocalizations.of(context).rotate_dealer_info,
+                title: loc.points,
+                infoText: loc.rotate_dealer_info,
                 rows: [
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).cabo_penalty,
+                    prefixText: loc.cabo_penalty,
                     prefixIcon: IconService.cabo_penalty,
                     showChevron: false,
                     suffixWidget: CustomStepper(
@@ -75,7 +77,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).point_limit,
+                    prefixText: loc.point_limit,
                     prefixIcon: FontAwesomeIcons.bullseye,
                     showChevron: false,
                     suffixWidget: CustomStepper(
@@ -92,14 +94,14 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).standard_mode,
+                    prefixText: loc.standard_mode,
                     prefixIcon: IconService.mode,
                     suffixWidget: Text(
                       defaultMode == GameMode.none
-                          ? AppLocalizations.of(context).no_default_mode
+                          ? loc.no_default_mode
                           : (defaultMode == GameMode.pointLimit
-                                ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                                : AppLocalizations.of(context).unlimited),
+                                ? '${ConfigService.getPointLimit()} ${loc.points}'
+                                : loc.unlimited),
                       style: const TextStyle(color: CustomTheme.primaryColor),
                     ),
                     onPressed: () async {
@@ -119,7 +121,7 @@ class _SettingsViewState extends State<SettingsView> {
                     },
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).rotate_dealer,
+                    prefixText: loc.rotate_dealer,
                     prefixIcon: IconService.shuffle_cards,
                     suffixWidget: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
@@ -143,25 +145,25 @@ class _SettingsViewState extends State<SettingsView> {
                 ],
               ),
               CustomFormSection(
-                infoText: AppLocalizations.of(context).config_change_info,
+                infoText: loc.config_change_info,
                 rows: [
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).reset_to_default,
+                    prefixText: loc.reset_to_default,
                     prefixIcon: IconService.reset,
                     onPressed: () => showConfirmPopup(),
                   ),
                 ],
               ),
               CustomFormSection(
-                title: AppLocalizations.of(context).game_data,
+                title: loc.game_data,
                 rows: [
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).export_data,
+                    prefixText: loc.export_data,
                     prefixIcon: IconService.export,
                     onPressed: () => DataTransferService.exportGameData(),
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).import_data,
+                    prefixText: loc.import_data,
                     prefixIcon: IconService.import,
                     onPressed: () async {
                       final status = await DataTransferService.importJsonFile();
@@ -169,7 +171,7 @@ class _SettingsViewState extends State<SettingsView> {
                     },
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).delete_data,
+                    prefixText: loc.delete_data,
                     prefixIcon: IconService.delete,
                     showChevron: false,
                     onPressed: () => _deleteAllGames(),
@@ -177,23 +179,23 @@ class _SettingsViewState extends State<SettingsView> {
                 ],
               ),
               CustomFormSection(
-                title: AppLocalizations.of(context).app,
+                title: loc.app,
                 rows: [
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).mail_developer,
+                    prefixText: loc.mail_developer,
                     prefixIcon: IconService.e_mail,
                     onPressed: () => launchUrl(
                       Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
                     ),
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).report_error,
+                    prefixText: loc.report_error,
                     prefixIcon: FontAwesomeIcons.github,
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).app_version,
+                    prefixText: loc.app_version,
                     prefixIcon: IconService.version,
                     onPressed: null,
                     suffixWidget: Text(
@@ -204,7 +206,7 @@ class _SettingsViewState extends State<SettingsView> {
                     showChevron: false,
                   ),
                   CustomFormRow(
-                    prefixText: AppLocalizations.of(context).build,
+                    prefixText: loc.build,
                     prefixIcon: IconService.number,
                     onPressed: null,
                     suffixWidget: Text(
@@ -227,24 +229,22 @@ class _SettingsViewState extends State<SettingsView> {
   /// Shows a dialog to confirm the deletion of all game data.
   /// When confirmed, it deletes all game data from local storage.
   void _deleteAllGames() {
+    final loc = AppLocalizations.of(context);
     final dialogActions = [
-      CustomDialogAction(
-        isDefaultAction: true,
-        actionText: AppLocalizations.of(context).cancel,
-      ),
+      CustomDialogAction(isDefaultAction: true, actionText: loc.cancel),
       CustomDialogAction(
         isDestructiveAction: true,
         onAfterPop: () {
           gameManager.deleteAllGames();
         },
-        actionText: AppLocalizations.of(context).delete,
+        actionText: loc.delete,
       ),
     ];
 
     PopupService.showSelectionPopup(
       context: context,
-      title: Text(AppLocalizations.of(context).delete_data_title),
-      message: Text(AppLocalizations.of(context).delete_data_message),
+      title: Text(loc.delete_data_title),
+      message: Text(loc.delete_data_message),
       actions: dialogActions,
     );
   }
@@ -266,27 +266,22 @@ class _SettingsViewState extends State<SettingsView> {
   /// [status] The status of the import operation.
   /// Returns a tuple containing the title and message for the dialog.
   (String, String) _getDialogContent(ImportStatus status) {
+    final loc = AppLocalizations.of(context);
     switch (status) {
       case ImportStatus.success:
-        return (
-          AppLocalizations.of(context).import_success_title,
-          AppLocalizations.of(context).import_success_message,
-        );
+        return (loc.import_success_title, loc.import_success_message);
       case ImportStatus.validationError:
         return (
-          AppLocalizations.of(context).import_validation_error_title,
-          AppLocalizations.of(context).import_validation_error_message,
+          loc.import_validation_error_title,
+          loc.import_validation_error_message,
         );
 
       case ImportStatus.formatError:
-        return (
-          AppLocalizations.of(context).import_format_error_title,
-          AppLocalizations.of(context).import_format_error_message,
-        );
+        return (loc.import_format_error_title, loc.import_format_error_message);
       case ImportStatus.genericError:
         return (
-          AppLocalizations.of(context).import_generic_error_title,
-          AppLocalizations.of(context).import_generic_error_message,
+          loc.import_generic_error_title,
+          loc.import_generic_error_message,
         );
       case ImportStatus.canceled:
         return ('', '');
@@ -295,12 +290,13 @@ class _SettingsViewState extends State<SettingsView> {
 
   /// Shows a popup for the user to confirm the reset of their settings
   void showConfirmPopup() {
+    final loc = AppLocalizations.of(context);
     final dialogActions = [
-      CustomDialogAction(actionText: AppLocalizations.of(context).cancel),
+      CustomDialogAction(actionText: loc.cancel),
       CustomDialogAction(
         isDestructiveAction: true,
         isDefaultAction: true,
-        actionText: AppLocalizations.of(context).reset,
+        actionText: loc.reset,
         onAfterPop: () {
           ConfigService.resetUserConfig();
           setState(() {
@@ -314,8 +310,8 @@ class _SettingsViewState extends State<SettingsView> {
     ];
     PopupService.showSelectionPopup(
       context: context,
-      title: Text(AppLocalizations.of(context).reset_config_title),
-      message: Text(AppLocalizations.of(context).reset_config_message),
+      title: Text(loc.reset_config_title),
+      message: Text(loc.reset_config_message),
       actions: dialogActions,
     );
   }

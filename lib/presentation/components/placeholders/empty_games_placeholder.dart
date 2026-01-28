@@ -10,21 +10,23 @@ class EmptyGamesPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 30),
         Center(
-            child: Icon(
-          IconService.no_games,
-          size: 60,
-          color: CustomTheme.primaryColor,
-        )),
+          child: Icon(
+            IconService.no_games,
+            size: 60,
+            color: CustomTheme.primaryColor,
+          ),
+        ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
           child: Text(
-            '${AppLocalizations.of(context).empty_text_1}\n${AppLocalizations.of(context).empty_text_2}',
+            '${loc.empty_text_1}\n${loc.empty_text_2}',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),

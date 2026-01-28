@@ -106,6 +106,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return ListenableBuilder(
       listenable: gameManager,
       builder: (context, _) {
@@ -142,14 +144,14 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
               ],
             ),
-            middle: Text(AppLocalizations.of(context).games),
+            middle: Text(loc.games),
             trailing: IconButton(
               onPressed: () => Navigator.push(
                 context,
                 CupertinoPageRoute(
                   builder: (context) => CreateGameView(
                     gameMode: ConfigService.getGameMode(),
-                    previousPageTitle: AppLocalizations.of(context).games,
+                    previousPageTitle: loc.games,
                   ),
                 ),
               ),
@@ -267,8 +269,9 @@ class _MainMenuViewState extends State<MainMenuView> {
   /// It shows a dialog asking the user if they like the app,
   /// and based on their response, it either opens the rating dialog or an email client for feedback.
   Future<void> _handleFeedbackDialog(BuildContext context) async {
-    final String emailSubject = AppLocalizations.of(context).email_subject;
-    final String emailBody = AppLocalizations.of(context).email_body;
+    final loc = AppLocalizations.of(context);
+    final emailSubject = loc.email_subject;
+    final emailBody = loc.email_body;
 
     final Uri emailUri = Uri(
       scheme: 'mailto',
@@ -311,22 +314,21 @@ class _MainMenuViewState extends State<MainMenuView> {
     BuildContext context,
     String gameTitle,
   ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message: Text(
-            AppLocalizations.of(context).delete_game_message(gameTitle),
-          ),
+          title: Text(loc.delete_game_title),
+          message: Text(loc.delete_game_message(gameTitle)),
           actions: [
             CustomDialogAction(
               returnValue: false,
               isDefaultAction: true,
-              actionText: AppLocalizations.of(context).cancel,
+              actionText: loc.cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
               returnValue: true,
-              actionText: AppLocalizations.of(context).delete,
+              actionText: loc.delete,
             ),
           ],
         ) ??

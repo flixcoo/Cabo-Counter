@@ -82,6 +82,8 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
@@ -94,7 +96,7 @@ class _CreateGameViewState extends State<CreateGameView> {
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: widget.previousPageTitle,
-          middle: Text(AppLocalizations.of(context).new_game),
+          middle: Text(loc.new_game),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -104,17 +106,14 @@ class _CreateGameViewState extends State<CreateGameView> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Text(
-                    AppLocalizations.of(context).game,
-                    style: CustomTheme.rowTitle,
-                  ),
+                  child: Text(loc.game, style: CustomTheme.rowTitle),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                   child: CupertinoTextField(
                     decoration: const BoxDecoration(),
                     maxLength: 24,
-                    prefix: Text(AppLocalizations.of(context).name),
+                    prefix: Text(loc.name),
                     textAlign: TextAlign.right,
                     placeholder: getFallbackGameTitle(),
                     controller: _gameTitleTextController,
@@ -133,7 +132,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   child: CupertinoTextField(
                     decoration: const BoxDecoration(),
                     readOnly: true,
-                    prefix: Text(AppLocalizations.of(context).mode),
+                    prefix: Text(loc.mode),
                     suffix: Row(
                       children: [
                         _getDisplayedGameMode(),
@@ -164,10 +163,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Text(
-                    AppLocalizations.of(context).players,
-                    style: CustomTheme.rowTitle,
-                  ),
+                  child: Text(loc.players, style: CustomTheme.rowTitle),
                 ),
                 ReorderableListView.builder(
                   shrinkWrap: true,
@@ -211,8 +207,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               controller: _playerNameTextControllers[index],
                               focusNode: _playerNameFocusNodes[index],
                               maxLength: 12,
-                              placeholder:
-                                  '${AppLocalizations.of(context).player} ${index + 1}',
+                              placeholder: '${loc.player} ${index + 1}',
                               padding: const EdgeInsets.all(12),
                               decoration: const BoxDecoration(),
                               textInputAction:
@@ -279,7 +274,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    AppLocalizations.of(context).add_player,
+                                    loc.add_player,
                                     style: const TextStyle(
                                       color: CustomTheme.primaryColor,
                                     ),
@@ -314,7 +309,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   child: Center(
                     child: CustomButton(
                       child: Text(
-                        AppLocalizations.of(context).create_game,
+                        loc.create_game,
                         style: const TextStyle(color: CustomTheme.primaryColor),
                       ),
                       onPressed: () async {
@@ -347,16 +342,18 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   /// Returns a widget that displays the currently selected game mode in the View.
   Text _getDisplayedGameMode() {
+    final loc = AppLocalizations.of(context);
+
     if (gameMode == GameMode.none) {
-      return Text(AppLocalizations.of(context).no_mode_selected);
+      return Text(loc.no_mode_selected);
     } else if (gameMode == GameMode.pointLimit) {
       return Text(
-        '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
+        '${ConfigService.getPointLimit()} ${loc.points}',
         style: const TextStyle(color: CustomTheme.primaryColor),
       );
     } else {
       return Text(
-        AppLocalizations.of(context).unlimited,
+        loc.unlimited,
         style: const TextStyle(color: CustomTheme.primaryColor),
       );
     }
@@ -408,28 +405,17 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   /// Returns the title and message for the dialog based on the [CreateStatus].
   (String, String) _getDialogContent(CreateStatus status) {
+    final loc = AppLocalizations.of(context);
     switch (status) {
       case CreateStatus.noModeSelected:
-        return (
-          AppLocalizations.of(context).no_mode_title,
-          AppLocalizations.of(context).no_mode_message,
-        );
+        return (loc.no_mode_title, loc.no_mode_message);
 
       case CreateStatus.minPlayers:
-        return (
-          AppLocalizations.of(context).min_players_title,
-          AppLocalizations.of(context).min_players_message,
-        );
+        return (loc.min_players_title, loc.min_players_message);
       case CreateStatus.maxPlayers:
-        return (
-          AppLocalizations.of(context).max_players_title,
-          AppLocalizations.of(context).max_players_message,
-        );
+        return (loc.max_players_title, loc.max_players_message);
       case CreateStatus.noPlayerName:
-        return (
-          AppLocalizations.of(context).no_name_title,
-          AppLocalizations.of(context).no_name_message,
-        );
+        return (loc.no_name_title, loc.no_name_message);
     }
   }
 
@@ -506,6 +492,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// If the user does not provide a game title, this method will create one
   /// using the current date formatted according to the user's locale.
   String getFallbackGameTitle() {
+    final loc = AppLocalizations.of(context);
     final now = DateTime.now();
     final String formattedDate;
 
@@ -517,7 +504,7 @@ class _CreateGameViewState extends State<CreateGameView> {
         formattedDate = DateFormat('dd.MM.yy').format(now);
     }
 
-    return AppLocalizations.of(context).standard_game_title(formattedDate);
+    return loc.standard_game_title(formattedDate);
   }
 
   @override

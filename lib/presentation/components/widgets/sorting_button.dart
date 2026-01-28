@@ -84,41 +84,40 @@ class SortingButton extends StatelessWidget {
   /// Builds the list of pull-down menu items for iOS platform.
   /// This method creates a list of selectable menu items for sorting and filtering options.
   List<PullDownMenuEntry> _pullDownMenuItems(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return [
-      PullDownMenuTitle(
-        title: Text(AppLocalizations.of(context).sort_and_filter_options),
-      ),
+      PullDownMenuTitle(title: Text(loc.sort_and_filter_options)),
       PullDownMenuItem.selectable(
         onTap: () => onSortOptionChanged(SortOption.date),
         selected: currentSortOption == SortOption.date,
-        title: AppLocalizations.of(context).date,
+        title: loc.date,
         icon: IconService.sort_by_date,
       ),
       PullDownMenuItem.selectable(
         onTap: () => onSortOptionChanged(SortOption.title),
         selected: currentSortOption == SortOption.title,
-        title: AppLocalizations.of(context).game_title,
+        title: loc.game_title,
         icon: IconService.sort_by_name,
       ),
       const PullDownMenuDivider.large(),
       PullDownMenuItem.selectable(
         onTap: () => onSortDirectionChanged(SortDirection.descending),
         selected: currentSortDirection == SortDirection.descending,
-        title: AppLocalizations.of(context).descending,
+        title: loc.descending,
         icon: IconService.sort_desc,
       ),
       PullDownMenuItem.selectable(
         onTap: () => onSortDirectionChanged(SortDirection.ascending),
         selected: currentSortDirection == SortDirection.ascending,
-        title: AppLocalizations.of(context).ascending,
+        title: loc.ascending,
         icon: IconService.sort_asc,
       ),
       const PullDownMenuDivider.large(),
       PullDownMenuItem.selectable(
         onTap: () => onShowOnlyActiveGamesChanged(),
         selected: showOnlyActiveGames,
-        title: AppLocalizations.of(context).only_active_game_title,
-        subtitle: AppLocalizations.of(context).only_active_games_description,
+        title: loc.only_active_game_title,
+        subtitle: loc.only_active_games_description,
         icon: IconService.visibility_off,
       ),
     ];
@@ -127,16 +126,15 @@ class SortingButton extends StatelessWidget {
   /// Builds the bottom sheet widget for non-iOS platforms.
   /// This method creates a bottom sheet containing sorting and filtering options.
   Widget _bottomSheet(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            title: Text(AppLocalizations.of(context).sort_and_filter_options),
-          ),
+          ListTile(title: Text(loc.sort_and_filter_options)),
           ListTile(
             leading: Icon(IconService.sort_by_date),
-            title: Text(AppLocalizations.of(context).date),
+            title: Text(loc.date),
             selected: currentSortOption == SortOption.date,
             onTap: () {
               Navigator.pop(context);
@@ -145,7 +143,7 @@ class SortingButton extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(IconService.sort_by_name),
-            title: Text(AppLocalizations.of(context).game_title),
+            title: Text(loc.game_title),
             selected: currentSortOption == SortOption.title,
             onTap: () {
               Navigator.pop(context);
@@ -155,7 +153,7 @@ class SortingButton extends StatelessWidget {
           Constants.BOTTOM_SHEET_DIVIDER,
           ListTile(
             leading: Icon(IconService.sort_desc),
-            title: Text(AppLocalizations.of(context).descending),
+            title: Text(loc.descending),
             selected: currentSortDirection == SortDirection.descending,
             onTap: () {
               Navigator.pop(context);
@@ -164,7 +162,7 @@ class SortingButton extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(IconService.sort_asc),
-            title: Text(AppLocalizations.of(context).ascending),
+            title: Text(loc.ascending),
             selected: currentSortDirection == SortDirection.ascending,
             onTap: () {
               Navigator.pop(context);
@@ -174,10 +172,8 @@ class SortingButton extends StatelessWidget {
           Constants.BOTTOM_SHEET_DIVIDER,
           ListTile(
             leading: Icon(IconService.visibility_off),
-            title: Text(AppLocalizations.of(context).only_active_game_title),
-            subtitle: Text(
-              AppLocalizations.of(context).only_active_games_description,
-            ),
+            title: Text(loc.only_active_game_title),
+            subtitle: Text(loc.only_active_games_description),
             selected: showOnlyActiveGames,
             onTap: () {
               Navigator.pop(context);

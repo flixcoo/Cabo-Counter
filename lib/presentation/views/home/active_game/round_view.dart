@@ -100,6 +100,7 @@ class _RoundViewState extends State<RoundView> {
   @override
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final rotatedPlayers = _getRotatedPlayers();
     final originalIndices = _getOriginalIndices();
@@ -113,9 +114,9 @@ class _RoundViewState extends State<RoundView> {
             //LocalStorageService.saveGameSessions(),
             Navigator.pop(context, -1),
           },
-          child: Text(AppLocalizations.of(context).cancel),
+          child: Text(loc.cancel),
         ),
-        middle: Text(AppLocalizations.of(context).results),
+        middle: Text(loc.results),
         trailing: Visibility(
           visible: widget.gameSession.isGameFinished,
           child: Icon(IconService.locked, size: 25),
@@ -132,12 +133,12 @@ class _RoundViewState extends State<RoundView> {
                   children: [
                     const SizedBox(height: 40),
                     Text(
-                      '${AppLocalizations.of(context).round} ${widget.roundNumber}',
+                      '${loc.round} ${widget.roundNumber}',
                       style: CustomTheme.roundTitle,
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      AppLocalizations.of(context).who_said_cabo,
+                      loc.who_said_cabo,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Padding(
@@ -223,7 +224,7 @@ class _RoundViewState extends State<RoundView> {
                                         if (isShufflePlayer) ...[
                                           const SizedBox(width: 8),
                                           Text(
-                                            AppLocalizations.of(context).dealer,
+                                            loc.dealer,
                                             style: const TextStyle(
                                               fontSize: 13,
                                               color: CupertinoColors.systemGrey,
@@ -244,7 +245,7 @@ class _RoundViewState extends State<RoundView> {
                               ),
                               subtitle: Text(
                                 '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
-                                ' ${AppLocalizations.of(context).points}',
+                                ' ${loc.points}',
                                 style: const TextStyle(
                                   color: CustomTheme.white,
                                 ),
@@ -296,7 +297,7 @@ class _RoundViewState extends State<RoundView> {
                             }
                           },
                           child: Text(
-                            AppLocalizations.of(context).kamikaze,
+                            loc.kamikaze,
                             style: TextStyle(color: CustomTheme.kamikazeColor),
                           ),
                         ),
@@ -323,7 +324,7 @@ class _RoundViewState extends State<RoundView> {
                                 _endOfRoundNavigation(context, false);
                               }
                             : null,
-                        child: Text(AppLocalizations.of(context).done),
+                        child: Text(loc.done),
                       ),
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
@@ -332,7 +333,7 @@ class _RoundViewState extends State<RoundView> {
                                   _endOfRoundNavigation(context, true);
                                 }
                               : null,
-                          child: Text(AppLocalizations.of(context).next_round),
+                          child: Text(loc.next_round),
                         ),
                     ],
                   ),
@@ -527,8 +528,9 @@ class _RoundViewState extends State<RoundView> {
     BuildContext context,
     List<int> bonusPlayers,
   ) async {
-    int pointLimit = widget.gameSession.pointLimit;
-    int bonusPoints = (pointLimit / 2).round();
+    final loc = AppLocalizations.of(context);
+    final pointLimit = widget.gameSession.pointLimit;
+    final bonusPoints = (pointLimit / 2).round();
 
     String resultText = _getBonusPopupMessageString(
       pointLimit,
@@ -538,7 +540,7 @@ class _RoundViewState extends State<RoundView> {
 
     await PopupService.showInfoPopup(
       context: context,
-      title: Text(AppLocalizations.of(context).bonus_points_title),
+      title: Text(loc.bonus_points_title),
       content: Text(resultText),
     );
   }
@@ -551,12 +553,13 @@ class _RoundViewState extends State<RoundView> {
     int bonusPoints,
     List<int> bonusPlayers,
   ) {
+    final loc = AppLocalizations.of(context);
     List<String> nameList = bonusPlayers
         .map((i) => widget.gameSession.players[i].name)
         .toList();
     String resultText = '';
     if (nameList.length == 1) {
-      resultText = AppLocalizations.of(context).bonus_points_message(
+      resultText = loc.bonus_points_message(
         nameList.length,
         nameList.first,
         pointLimit,
@@ -566,7 +569,7 @@ class _RoundViewState extends State<RoundView> {
       resultText = nameList.length == 2
           ? '${nameList[0]} & ${nameList[1]}'
           : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
-      resultText = AppLocalizations.of(context).bonus_points_message(
+      resultText = loc.bonus_points_message(
         nameList.length,
         resultText,
         pointLimit,
