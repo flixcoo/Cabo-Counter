@@ -110,7 +110,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ),
                       ActiveGameListSet(
                         title: loc.players,
-                        tilePadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                        tilePadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                         content: [
                           for (
                             int index = 0;
