@@ -269,8 +269,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ActiveGameListTile(
                             title: Text(loc.export_game),
                             onTap: () async {
-                              print('test');
-                              return;
                               final success =
                                   await DataTransferService.exportSingleGameSession(
                                     widget.gameSession,
