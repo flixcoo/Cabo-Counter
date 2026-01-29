@@ -1,6 +1,5 @@
-import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/mode_tile.dart';
 import 'package:flutter/cupertino.dart';
 
 /// A stateless widget that displays a menu for selecting the game mode.
@@ -29,7 +28,20 @@ class ModeSelectionMenu extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          Padding(
+          ModeTile(
+            title: '$pointLimit ${loc.points}',
+            description: loc.point_limit_description(pointLimit),
+          ),
+          ModeTile(
+            title: loc.unlimited,
+            description: loc.unlimited_description,
+          ),
+          if (showDeselection)
+            ModeTile(
+              title: loc.no_default_mode,
+              description: loc.no_default_description,
+            ),
+          /*Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
               title: Text(
@@ -76,7 +88,7 @@ class ModeSelectionMenu extends StatelessWidget {
                 },
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

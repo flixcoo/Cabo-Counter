@@ -33,7 +33,7 @@ class KamikazeSheet extends StatelessWidget {
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
-        backgroundColor: CustomTheme.mainElementBackgroundColor,
+        backgroundColor: CustomTheme.mainElementColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),

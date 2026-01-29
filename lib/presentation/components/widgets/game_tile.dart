@@ -23,7 +23,7 @@ class _GameTileState extends State<GameTile> {
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       padding: const EdgeInsets.only(right: 4, left: 2),
       decoration: BoxDecoration(
-        color: CustomTheme.mainElementBackgroundColor,
+        color: CustomTheme.mainElementColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: GestureDetector(

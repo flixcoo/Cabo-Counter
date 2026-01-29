@@ -21,16 +21,19 @@ class WhatsNewDialog extends StatelessWidget {
               loc.whats_new,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: CustomTheme.textColor,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 height: 1.3,
               ),
             ),
             Text(
-              'Version ${VersionService.getVersionNumber()}',
+              '${loc.version} ${VersionService.getVersionNumber()}',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(
+                color: CustomTheme.textColor,
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 40),
             Expanded(

@@ -18,7 +18,6 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
 ///
@@ -217,8 +216,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 style:
                                     gameSession.roundNumber > 1 &&
                                         !gameSession.isGameFinished
-                                    ? const TextStyle(color: Colors.white)
-                                    : const TextStyle(color: Colors.white30),
+                                    ? const TextStyle(
+                                        color: CustomTheme.textColor,
+                                      )
+                                    : TextStyle(
+                                        color: CustomTheme.textColor.withAlpha(
+                                          100,
+                                        ),
+                                      ),
                               ),
 
                               onTap: () {

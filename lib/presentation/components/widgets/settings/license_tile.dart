@@ -27,7 +27,7 @@ class _LicenseTileState extends State<LicenseTile> {
         padding: const EdgeInsets.fromLTRB(12, 12, 6, 12),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
         decoration: BoxDecoration(
-          color: CustomTheme.mainElementBackgroundColor,
+          color: CustomTheme.mainElementColor,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -46,7 +46,7 @@ class _LicenseTileState extends State<LicenseTile> {
                         widget.title,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: CustomTheme.textColor,
                           fontWeight: FontWeight.normal,
                           fontSize: 16,
                         ),

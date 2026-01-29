@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomTheme {
   /// Main Theme of the App
@@ -7,6 +8,12 @@ class CustomTheme {
 
   /// Red color, typically used for destructive actions or error states
   static const Color red = Color(0xFFDD0000);
+
+  /// Standard text color used throughout the app for readability
+  static const Color textColor = Color(0xFFFFFFFF);
+
+  /// Subtitle text color, used for secondary information
+  static const Color subtitleColor = Color(0xFF8E8E93);
 
   /// Primary color of the app, used for buttons, highlights, and interactive elements
   static const Color primaryColor = Color(0xFF34C759);
@@ -18,7 +25,7 @@ class CustomTheme {
   static const Color navBarBackgroundColor = Color(0xFF161616);
 
   /// Background color for main UI elements like cards or containers.
-  static const Color mainElementBackgroundColor = Color(0xFF171717);
+  static const Color mainElementColor = Color(0xFF171717);
 
   /// Background color for settings tiles and list items.
   static const Color settingsTilecolor = Color(0xFF1C1C1E);
@@ -55,7 +62,10 @@ class CustomTheme {
   );
 
   /// Default text style for mode descriptions.
-  static const TextStyle modeDescription = TextStyle(fontSize: 16);
+  static const TextStyle modeDescription = TextStyle(
+    fontSize: 16,
+    color: Colors.grey,
+  );
 
   /// Text style for titles of sections of [CupertinoListTile].
   static const TextStyle rowTitle = TextStyle(
