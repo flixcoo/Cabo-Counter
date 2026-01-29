@@ -2,21 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
-  /// Main Theme of the App
+  /* ===== Basic Colors ===== */
+
+  /// Primary color of the app, used for buttons, highlights, and interactive elements
+  static const Color primaryColor = Color(0xFF34C759);
+
   /// Primary white color mainly used for text
   static const Color white = Color(0xFFFFFFFF);
 
   /// Red color, typically used for destructive actions or error states
   static const Color red = Color(0xFFDD0000);
 
+  /* ===== Text Colors ===== */
+
   /// Standard text color used throughout the app for readability
   static const Color textColor = Color(0xFFFFFFFF);
+
+  /// Color for hint text, such as in input fields or placeholders
+  static Color hintTextColor = textColor.withAlpha(100);
 
   /// Subtitle text color, used for secondary information
   static const Color subtitleColor = Color(0xFF8E8E93);
 
-  /// Primary color of the app, used for buttons, highlights, and interactive elements
-  static const Color primaryColor = Color(0xFF34C759);
+  /* ===== UI Colors ===== */
 
   /// Background color for the main app scaffold and views
   static const Color backgroundColor = Color(0xFF101010);
@@ -53,7 +61,8 @@ class CustomTheme {
   /// Color used to indicate a gain of points in the UI.
   static const Color pointGainColor = Color(0xFFF44336);
 
-  // Text Styles
+  /* ===== Text Styles ===== */
+
   /// Text style for mode titles, typically used in headers or section titles.
   static const TextStyle modeTitle = TextStyle(
     color: primaryColor,
