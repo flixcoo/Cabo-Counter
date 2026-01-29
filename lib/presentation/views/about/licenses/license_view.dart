@@ -1,10 +1,8 @@
-import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/license_tile.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/license_detail_view.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/oss_licenses.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Displays a list of open source software licenses used in the app.
 ///
@@ -31,37 +29,22 @@ class LicenseView extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: allDependencies.length,
           itemBuilder: (_, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: CupertinoListTile(
-                  backgroundColor: CustomTheme.backgroundColor,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => LicenseDetailView(
-                          title: allDependencies[index].name,
-                          description: allDependencies[index].description,
-                          license:
-                              allDependencies[index].license ??
-                              loc.no_license_text,
-                        ),
-                      ),
-                    );
-                  },
-                  trailing: const CupertinoListTileChevron(),
-                  title: Text(
-                    allDependencies[index].name,
-                    style: GoogleFonts.roboto(),
+            return LicenseTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => LicenseDetailView(
+                      title: allDependencies[index].name,
+                      description: allDependencies[index].description,
+                      license:
+                          allDependencies[index].license ?? loc.no_license_text,
+                    ),
                   ),
-                  subtitle: Text(allDependencies[index].description),
-                ),
-              ),
+                );
+              },
+              title: allDependencies[index].name,
+              description: allDependencies[index].description,
             );
           },
         ),
