@@ -32,14 +32,16 @@ class _ActivegamelistsetState extends State<ActiveGameListSet> {
             padding: const EdgeInsets.only(left: 10),
             child: Text(widget.title, style: CustomTheme.rowTitle),
           ),
-          for (var tile in widget.content)
-            Padding(
-              padding:
-                  widget.tilePadding ??
-                  const EdgeInsets.fromLTRB(16, 12, 12, 12),
-              child: tile,
-            ),
-          const SizedBox(height: 5),
+          if (widget.content.isNotEmpty) ...[
+            for (var tile in widget.content)
+              Padding(
+                padding:
+                    widget.tilePadding ??
+                    const EdgeInsets.fromLTRB(16, 12, 12, 12),
+                child: tile,
+              ),
+            const SizedBox(height: 5),
+          ],
         ],
       ),
     );
