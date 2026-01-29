@@ -82,6 +82,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 10),
                       ActiveGameListSet(
                         title: loc.game,
                         content: [
