@@ -61,7 +61,7 @@ class _GameTileState extends State<GameTile> {
                             ),
                           )
                         : Icon(
-                            CupertinoIcons.arrow_2_circlepath,
+                            CupertinoIcons.infinite,
                             size: 32,
                             color: CustomTheme.primaryColor.withRed(40),
                           ),
