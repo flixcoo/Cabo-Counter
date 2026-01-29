@@ -4,6 +4,8 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
@@ -27,6 +29,7 @@ import 'package:flutter/material.dart';
 /// The widget listens to changes in the provided [GameSession] and updates the UI accordingly.
 class ActiveGameView extends StatefulWidget {
   final GameSession gameSession;
+
   const ActiveGameView({super.key, required this.gameSession});
 
   @override
@@ -80,87 +83,81 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(loc.game, style: CustomTheme.rowTitle),
-                      ),
-                      CupertinoListTile(
-                        title: Text(loc.name),
-                        trailing: Text(
-                          gameSession.gameTitle,
-                          style: const TextStyle(
-                            color: CustomTheme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      CupertinoListTile(
-                        title: Text(loc.mode),
-                        trailing: Text(
-                          gameSession.isPointsLimitEnabled
-                              ? '${ConfigService.getPointLimit()} ${loc.points}'
-                              : loc.unlimited,
-                          style: const TextStyle(
-                            color: CustomTheme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(loc.players, style: CustomTheme.rowTitle),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.players.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          int playerIndex = sortedPlayerIndices[index];
-                          return CupertinoListTile(
-                            padding: const EdgeInsets.fromLTRB(14, 5, 14, 0),
-                            title: Row(
-                              children: [
-                                _getPlacementTextWidget(index),
-                                const SizedBox(width: 5),
-                                Text(
-                                  gameSession.players[playerIndex].name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: Row(
-                              children: [
-                                const SizedBox(width: 5),
-                                Text(
-                                  '${gameSession.getPlayerScoresAsList()[playerIndex]} '
-                                  '${loc.points}',
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(loc.rounds, style: CustomTheme.rowTitle),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.roundNumber,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: CupertinoListTile(
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 5,
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          ActiveGameListTile(
+                            title: Text(loc.name),
+                            trailing: Text(
+                              gameSession.gameTitle,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
+                            ),
+                          ),
+                          ActiveGameListTile(
+                            title: Text(loc.mode),
+                            trailing: Text(
+                              gameSession.isPointsLimitEnabled
+                                  ? '${ConfigService.getPointLimit()} ${loc.points}'
+                                  : loc.unlimited,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ActiveGameListSet(
+                        title: loc.players,
+                        tilePadding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.players.length;
+                            index++
+                          ) ...[
+                            ActiveGameListTile(
+                              title: Row(
+                                children: [
+                                  _getPlacementTextWidget(index),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    gameSession
+                                        .players[sortedPlayerIndices[index]]
+                                        .name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: Row(
+                                children: [
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    '${gameSession.getPlayerScoresAsList()[sortedPlayerIndices[index]]} '
+                                    '${loc.points}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      ActiveGameListSet(
+                        title: loc.rounds,
+                        tilePadding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.roundNumber;
+                            index++
+                          )
+                            ActiveGameListTile(
+                              padding: const EdgeInsets.fromLTRB(20, 6, 8, 6),
                               title: Text('${loc.round} ${index + 1}'),
                               trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   index + 1 != gameSession.roundNumber ||
                                           gameSession.isGameFinished
@@ -180,24 +177,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 _openRoundView(context, index + 1);
                               },
                             ),
-                          );
-                        },
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          loc.statistics,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          CupertinoListTile(
+                      ActiveGameListSet(
+                        title: loc.statistics,
+                        tilePadding: const EdgeInsets.fromLTRB(16, 12, 6, 12),
+                        content: [
+                          ActiveGameListTile(
                             trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
                             title: Text(loc.scoring_history),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () => Navigator.push(
                               context,
                               CupertinoPageRoute(
@@ -206,12 +194,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                             ),
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
                             title: Text(loc.point_overview),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () => Navigator.push(
                               context,
                               CupertinoPageRoute(
@@ -222,15 +207,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(loc.game, style: CustomTheme.rowTitle),
-                      ),
-                      Column(
-                        children: [
-                          Visibility(
-                            visible: !gameSession.isPointsLimitEnabled,
-                            child: CupertinoListTile(
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          if (!gameSession.isPointsLimitEnabled)
+                            ActiveGameListTile(
                               title: Text(
                                 loc.end_game,
                                 style:
@@ -239,8 +220,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                     ? const TextStyle(color: Colors.white)
                                     : const TextStyle(color: Colors.white30),
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
+
                               onTap: () {
                                 if (gameSession.roundNumber > 1 &&
                                     !gameSession.isGameFinished) {
@@ -248,11 +228,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 }
                               },
                             ),
-                          ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             title: Text(loc.delete_game),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () {
                               _showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
@@ -261,14 +238,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               });
                             },
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             title: Text(
                               AppLocalizations.of(
                                 context,
                               ).new_game_same_settings,
                             ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -291,11 +266,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               );
                             },
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             title: Text(loc.export_game),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () async {
+                              print('test');
+                              return;
                               final success =
                                   await DataTransferService.exportSingleGameSession(
                                     widget.gameSession,
