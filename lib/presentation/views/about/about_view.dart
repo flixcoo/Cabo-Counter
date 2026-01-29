@@ -36,7 +36,7 @@ class AboutView extends StatelessWidget {
                 ),
               ),
               Text(
-                '${loc.app_version} ${VersionService.getVersionWithBuild()}',
+                '${loc.version} ${VersionService.getVersionWithBuild()}',
                 style: TextStyle(fontSize: 15, color: Colors.grey[300]),
               ),
               Padding(

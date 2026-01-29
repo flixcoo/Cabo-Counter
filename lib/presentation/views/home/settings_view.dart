@@ -195,9 +195,8 @@ class _SettingsViewState extends State<SettingsView> {
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),
                   CustomFormRow(
-                    prefixText: loc.app_version,
+                    prefixText: loc.version,
                     prefixIcon: IconService.version,
-                    onPressed: null,
                     suffixWidget: Text(
                       VersionService.getVersion(),
                       style: const TextStyle(color: CustomTheme.primaryColor),

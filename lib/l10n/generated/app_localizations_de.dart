@@ -415,7 +415,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mail_developer => 'E-Mail an Entwickler';
 
   @override
-  String get app_version => 'App-Version';
+  String get version => 'Version';
 
   @override
   String get privacy_policy => 'Datenschutzerklärung';

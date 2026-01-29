@@ -410,7 +410,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mail_developer => 'E-Mail the Developer';
 
   @override
-  String get app_version => 'App Version';
+  String get version => 'Version';
 
   @override
   String get privacy_policy => 'Privacy Policy';
