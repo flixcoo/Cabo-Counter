@@ -8,6 +8,7 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/opacity_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -94,13 +95,13 @@ class _CreateGameViewState extends State<CreateGameView> {
           if (context.mounted) Navigator.pop(context);
         }
       },
-      child: CupertinoPageScaffold(
+      child: Scaffold(
         resizeToAvoidBottomInset: false,
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: widget.previousPageTitle,
-          middle: Text(loc.new_game),
+        appBar: AppBar(
+          //previousPageTitle: widget.previousPageTitle,
+          title: Text(loc.new_game),
         ),
-        child: SafeArea(
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -112,31 +113,23 @@ class _CreateGameViewState extends State<CreateGameView> {
                   content: [
                     ActiveGameListTile(
                       title: Text(loc.name),
-                      trailing: Material(
-                        color: Colors.transparent,
-                        child: SizedBox(
-                          height: 30,
-                          width: 300,
-                          child: TextField(
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: CustomTheme.textColor,
-                            ),
-                            maxLength: 24,
-                            textAlign: TextAlign.right,
-                            controller: _gameTitleTextController,
-                            decoration: InputDecoration(
-                              counterText: '',
-                              hint: Text(
-                                textAlign: TextAlign.end,
-                                getFallbackGameTitle(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: CustomTheme.hintTextColor,
-                                ),
+                      trailing: SizedBox(
+                        height: 30,
+                        width: 300,
+                        child: TextField(
+                          maxLength: 24,
+                          textAlign: TextAlign.right,
+                          controller: _gameTitleTextController,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            hint: Text(
+                              textAlign: TextAlign.end,
+                              getFallbackGameTitle(),
+                              style: TextStyle(
+                                color: CustomTheme.hintTextColor,
                               ),
-                              border: InputBorder.none,
                             ),
+                            border: InputBorder.none,
                           ),
                         ),
                       ),
@@ -221,7 +214,6 @@ class _CreateGameViewState extends State<CreateGameView> {
                                     '${loc.player} ${index + 1}',
                                     style: TextStyle(
                                       color: CustomTheme.hintTextColor,
-                                      fontSize: 16,
                                     ),
                                   ),
                                   counterText: '',
@@ -269,59 +261,25 @@ class _CreateGameViewState extends State<CreateGameView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
-                  child: Stack(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: null,
-                            child: Icon(
-                              IconService.add_player,
-                              color: CustomTheme.primaryColor,
-                              size: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    loc.add_player,
-                                    style: const TextStyle(
-                                      color: CustomTheme.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          onPressed: () {
-                            if (_playerNameTextControllers.length <
-                                maxPlayers) {
-                              setState(() {
-                                _playerNameTextControllers.add(
-                                  TextEditingController(),
-                                );
-                                _playerNameFocusNodes.add(FocusNode());
-                              });
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _playerNameFocusNodes.last.requestFocus();
-                              });
-                            } else {
-                              _showFeedbackDialog(CreateStatus.maxPlayers);
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: OpacityButton.text(
+                      text: loc.add_player,
+                      onPressed: () {
+                        if (_playerNameTextControllers.length < maxPlayers) {
+                          setState(() {
+                            _playerNameTextControllers.add(
+                              TextEditingController(),
+                            );
+                            _playerNameFocusNodes.add(FocusNode());
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _playerNameFocusNodes.last.requestFocus();
+                          });
+                        } else {
+                          _showFeedbackDialog(CreateStatus.maxPlayers);
+                        }
+                      },
+                    ),
                   ),
                 ),
                 Padding(
@@ -363,7 +321,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Returns a widget that displays the currently selected game mode in the View.
   Text _getDisplayedGameMode() {
     final loc = AppLocalizations.of(context);
-    const textStyle = TextStyle(color: CustomTheme.textColor, fontSize: 16);
+    const textStyle = TextStyle(color: CustomTheme.textColor);
     final selectedTextStyle = textStyle.copyWith(
       color: CustomTheme.primaryColor,
     );

@@ -10,6 +10,7 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_games_pl
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/game_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/main_menu_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
@@ -111,41 +112,39 @@ class _MainMenuViewState extends State<MainMenuView> {
     return ListenableBuilder(
       listenable: gameManager,
       builder: (context, _) {
-        return CupertinoPageScaffold(
+        return Scaffold(
           resizeToAvoidBottomInset: false,
-          navigationBar: CupertinoNavigationBar(
-            leading: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 0,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  iconSize: Constants.NAVBAR_ICON_SIZE,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => const SettingsView(),
-                      ),
-                    );
-                  },
-                  icon: Icon(IconService.settings),
-                ),
-                SortingButton(
-                  currentSortOption: currentSortOption,
-                  currentSortDirection: currentSortDirection,
-                  showOnlyActiveGames: _showOnlyActiveGames,
-                  onSortOptionChanged: (newSortingOption) =>
-                      _setSortOption(newSortingOption),
-                  onSortDirectionChanged: (newSortingDirection) =>
-                      _setSortDirection(newSortingDirection),
-                  onShowOnlyActiveGamesChanged: () =>
-                      _toggleShowOnlyActiveGames(),
-                ),
-              ],
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(
+              iconSize: Constants.NAVBAR_ICON_SIZE,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const SettingsView(),
+                  ),
+                );
+              },
+              icon: Icon(IconService.settings),
             ),
-            middle: Text(loc.games),
-            trailing: IconButton(
+            title: Text(loc.games),
+            actions: [
+              SortingButton(
+                currentSortOption: currentSortOption,
+                currentSortDirection: currentSortDirection,
+                showOnlyActiveGames: _showOnlyActiveGames,
+                onSortOptionChanged: (newSortingOption) =>
+                    _setSortOption(newSortingOption),
+                onSortDirectionChanged: (newSortingDirection) =>
+                    _setSortDirection(newSortingDirection),
+                onShowOnlyActiveGamesChanged: () =>
+                    _toggleShowOnlyActiveGames(),
+              ),
+            ],
+          ),
+          body: Scaffold(
+            floatingActionButton: MainMenuButton(
               onPressed: () => Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -155,12 +154,9 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ),
                 ),
               ),
-              icon: Icon(IconService.add),
-              iconSize: Constants.NAVBAR_ICON_SIZE + 2,
+              icon: IconService.add,
             ),
-          ),
-          child: CupertinoPageScaffold(
-            child: SafeArea(
+            body: SafeArea(
               child: Visibility(
                 visible: _isLoading,
                 replacement: Visibility(

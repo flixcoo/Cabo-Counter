@@ -44,12 +44,12 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(loc.settings),
-        previousPageTitle: loc.games,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loc.settings),
+        //previousPageTitle: loc.games,
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

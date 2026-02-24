@@ -5,7 +5,6 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -43,17 +42,19 @@ class _GraphViewState extends State<GraphView> {
     final isGraphAvailable =
         widget.gameSession.roundNumber > 1 || widget.gameSession.isGameFinished;
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(loc.scoring_history),
-        trailing: IconButton(
-          onPressed: isGraphAvailable ? () => _shareImage() : null,
-          icon: Icon(IconService.share),
-          iconSize: Constants.NAVBAR_ICON_SIZE,
-        ),
-        previousPageTitle: loc.overview,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loc.scoring_history),
+        actions: [
+          IconButton(
+            onPressed: isGraphAvailable ? () => _shareImage() : null,
+            icon: Icon(IconService.share),
+            iconSize: Constants.NAVBAR_ICON_SIZE,
+          ),
+        ],
+        //previousPageTitle: loc.overview,
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: Visibility(
           visible: isGraphAvailable,
           replacement: Column(

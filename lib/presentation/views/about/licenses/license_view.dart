@@ -3,11 +3,11 @@ import 'package:cabo_counter/presentation/components/widgets/settings/license_ti
 import 'package:cabo_counter/presentation/views/about/licenses/license_detail_view.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/oss_licenses.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// Displays a list of open source software licenses used in the app.
 ///
 /// Users can tap on a license to view its details on a separate screen.
-/// This view uses a Cupertino design and supports localization.
 ///
 /// See also:
 ///   - [LicenseDetailView] for displaying license details.
@@ -19,13 +19,17 @@ class LicenseView extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(loc.licenses),
-        previousPageTitle: loc.about,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loc.licenses),
+        //previousPageTitle: loc.about,
       ),
-      child: SafeArea(
+      body: SafeArea(
+        bottom: false,
         child: ListView.builder(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom,
+          ),
           physics: const BouncingScrollPhysics(),
           itemCount: allDependencies.length,
           itemBuilder: (_, index) {

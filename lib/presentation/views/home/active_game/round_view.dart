@@ -5,10 +5,12 @@ import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
+import 'package:cabo_counter/presentation/components/widgets/opacity_button.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -105,24 +107,26 @@ class _RoundViewState extends State<RoundView> {
     final rotatedPlayers = _getRotatedPlayers();
     final originalIndices = _getOriginalIndices();
 
-    return CupertinoPageScaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
+      appBar: AppBar(
+        leading: TextButton(
+          //padding: EdgeInsets.zero,
           onPressed: () => {
             //LocalStorageService.saveGameSessions(),
             Navigator.pop(context, -1),
           },
-          child: Text(loc.cancel),
+          child: const Icon(CupertinoIcons.xmark, size: 25),
         ),
-        middle: Text(loc.results),
-        trailing: Visibility(
-          visible: widget.gameSession.isGameFinished,
-          child: Icon(IconService.locked, size: 25),
-        ),
+        title: Text(loc.results),
+        actions: [
+          Visibility(
+            visible: widget.gameSession.isGameFinished,
+            child: Icon(IconService.locked, size: 25),
+          ),
+        ],
       ),
-      child: Column(
+      body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -298,7 +302,9 @@ class _RoundViewState extends State<RoundView> {
                           },
                           child: Text(
                             loc.kamikaze,
-                            style: TextStyle(color: CustomTheme.kamikazeColor),
+                            style: const TextStyle(
+                              color: CustomTheme.kamikazeColor,
+                            ),
                           ),
                         ),
                       ),
@@ -318,22 +324,22 @@ class _RoundViewState extends State<RoundView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CupertinoButton(
+                      OpacityButton.text(
                         onPressed: _areRoundInputsValid()
                             ? () {
                                 _endOfRoundNavigation(context, false);
                               }
                             : null,
-                        child: Text(loc.done),
+                        text: loc.done,
                       ),
                       if (!widget.gameSession.isGameFinished)
-                        CupertinoButton(
+                        OpacityButton.text(
                           onPressed: _areRoundInputsValid()
                               ? () {
                                   _endOfRoundNavigation(context, true);
                                 }
                               : null,
-                          child: Text(loc.next_round),
+                          text: loc.next_round,
                         ),
                     ],
                   ),
