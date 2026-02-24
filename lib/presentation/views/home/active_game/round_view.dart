@@ -6,14 +6,13 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/opacity_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/round_tile.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// A view for displaying and managing a single round
 ///
@@ -199,92 +198,49 @@ class _RoundViewState extends State<RoundView> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: rotatedPlayers.length,
                       itemBuilder: (context, index) {
+                        // The index of the player in the original players list,
+                        // which is needed to access the correct score and to
+                        // update the correct text controller.
                         final originalIndex = originalIndices[index];
+
+                        // The name of the player to display, which is taken
+                        // from the rotated players list.
                         final name = rotatedPlayers[index];
-                        bool shouldShowMedal =
+
+                        // Whether to show the medal icon for this player.
+                        // The medal is shown for the first player in the list
+                        final shouldShowMedal =
                             index == 0 && widget.roundNumber > 1;
-                        bool isShufflePlayer =
+
+                        // Whether to show the shuffle player indicator for this player
+                        final isShufflePlayer =
                             originalIndex == _shufflePlayerIndex;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: CupertinoListTile(
-                              backgroundColor: CustomTheme.playerTileColor,
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          name,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (isShufflePlayer) ...[
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            loc.dealer,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: CupertinoColors.systemGrey,
-                                            ),
-                                          ),
-                                        ],
-                                        if (shouldShowMedal) ...[
-                                          const SizedBox(width: 10),
-                                          const Icon(
-                                            FontAwesomeIcons.crown,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              subtitle: Text(
-                                '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
-                                ' ${loc.points}',
-                                style: const TextStyle(
-                                  color: CustomTheme.white,
-                                ),
-                              ),
-                              trailing: SizedBox(
-                                width: 100,
-                                key: _textFieldKeys[originalIndex],
-                                child: CupertinoTextField(
-                                  maxLength: 3,
-                                  focusNode: _focusNodeList[originalIndex],
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                        signed: true,
-                                        decimal: false,
-                                      ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  textInputAction:
-                                      index ==
-                                          widget.gameSession.players.length - 1
-                                      ? TextInputAction.done
-                                      : TextInputAction.next,
-                                  controller:
-                                      _scoreControllerList[originalIndex],
-                                  placeholder: AppLocalizations.of(
-                                    context,
-                                  ).points,
-                                  textAlign: TextAlign.center,
-                                  onSubmitted: (_) =>
-                                      _focusNextTextfield(originalIndex),
-                                  onChanged: (_) => setState(() {}),
-                                ),
-                              ),
-                            ),
+
+                        // The text input action for the score text field.
+                        // It is "next" for all players except the last one,
+                        // which is "done".
+                        final textInputAction =
+                            index == widget.gameSession.players.length - 1
+                            ? TextInputAction.done
+                            : TextInputAction.next;
+
+                        // The score for this player in the current round.
+                        final score = widget.gameSession
+                            .getPlayerScoresAsList()[originalIndex];
+
+                        return Center(
+                          child: RoundTile(
+                            key: _textFieldKeys[originalIndex],
+                            playerName: name,
+                            points: score,
+                            shufflePlayer: isShufflePlayer,
+                            showMedal: shouldShowMedal,
+                            controller: _scoreControllerList[originalIndex],
+                            textInputAction: textInputAction,
+                            onSubmitted: (_) =>
+                                _focusNextTextfield(originalIndex),
+                            focusNode: _focusNodeList[originalIndex],
+                            onChanged: (_) => setState(() {}),
                           ),
                         );
                       },
@@ -470,7 +426,7 @@ class _RoundViewState extends State<RoundView> {
             scrollContext,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOut,
-            alignment: 0.55,
+            alignment: 0.45,
           );
         });
       }
