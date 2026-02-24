@@ -42,7 +42,6 @@ class _TabBarState extends State<TabBar> {
         child: BottomNavigationBar(
           elevation: 5,
           selectedFontSize: 14,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedFontSize: 14,
           fixedColor: CustomTheme.primaryColor,
           backgroundColor: CustomTheme.navBarBackgroundColor,

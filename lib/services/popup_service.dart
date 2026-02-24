@@ -19,6 +19,7 @@ class PopupService {
     required Widget content,
     VoidCallback? onAfterPop,
   }) async {
+    final loc = AppLocalizations.of(context);
     await showAdaptiveDialog(
       context: context,
       builder: (context) => AlertDialog.adaptive(
@@ -27,19 +28,19 @@ class PopupService {
         actions: [
           Platform.isIOS
               ? CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
+                  child: Text(loc.ok),
                   onPressed: () {
                     Navigator.of(context).pop();
                     if (onAfterPop != null) onAfterPop();
                   },
                 )
               : TextButton(
-                  child: Text(AppLocalizations.of(context).ok),
+                  child: Text(loc.ok),
                   onPressed: () {
                     Navigator.of(context).pop();
                     if (onAfterPop != null) onAfterPop();
                   },
-                )
+                ),
         ],
       ),
     );
@@ -76,27 +77,29 @@ class PopupService {
   /// PreRatingDialogDecision.no: User does not like the app.
   /// PreRatingDialogDecision.cancel: User cancels the dialog.
   static Future<PreRatingDialogDecision> showPreRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<PreRatingDialogDecision>(
           context: context,
           actions: [
             CustomDialogAction(
               returnValue: PreRatingDialogDecision.yes,
               isDefaultAction: true,
-              actionText: AppLocalizations.of(context).yes,
+              actionText: loc.yes,
             ),
             CustomDialogAction(
               returnValue: PreRatingDialogDecision.no,
-              actionText: AppLocalizations.of(context).no,
+              actionText: loc.no,
             ),
             CustomDialogAction(
               returnValue: PreRatingDialogDecision.cancel,
               isDestructiveAction: true,
-              actionText: AppLocalizations.of(context).cancel,
-            )
+              actionText: loc.cancel,
+            ),
           ],
-          title: Text(AppLocalizations.of(context).pre_rating_title),
-          message: Text(AppLocalizations.of(context).pre_rating_message),
+          title: Text(loc.pre_rating_title),
+          message: Text(loc.pre_rating_message),
         ) ??
         PreRatingDialogDecision.cancel;
   }
@@ -106,18 +109,20 @@ class PopupService {
   /// BadRatingDialogDecision.email: User wants to send an email for feedback.
   /// BadRatingDialogDecision.cancel: User cancels the dialog.
   static Future<BadRatingDialogDecision> showBadRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<BadRatingDialogDecision>(
           context: context,
-          title: Text(AppLocalizations.of(context).bad_rating_title),
-          message: Text(AppLocalizations.of(context).bad_rating_message),
+          title: Text(loc.bad_rating_title),
+          message: Text(loc.bad_rating_message),
           actions: [
             CustomDialogAction(
-              actionText: AppLocalizations.of(context).contact_email,
+              actionText: loc.contact_email,
               returnValue: BadRatingDialogDecision.email,
             ),
             CustomDialogAction(
-              actionText: AppLocalizations.of(context).cancel,
+              actionText: loc.cancel,
               returnValue: BadRatingDialogDecision.cancel,
             ),
           ],
@@ -129,21 +134,21 @@ class PopupService {
     required BuildContext context,
     required String gameTitle,
   }) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message:
-              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
+          title: Text(loc.delete_game_title),
+          message: Text(loc.delete_game_message(gameTitle)),
           actions: [
             CustomDialogAction(
               returnValue: false,
               isDefaultAction: true,
-              actionText: AppLocalizations.of(context).cancel,
+              actionText: loc.cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
               returnValue: true,
-              actionText: AppLocalizations.of(context).delete,
+              actionText: loc.delete,
             ),
           ],
         ) ??

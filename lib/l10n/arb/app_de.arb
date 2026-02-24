@@ -169,7 +169,7 @@
   "export_error_message": "Datei konnte nicht exportiert werden",
   "report_error": "Fehler melden",
   "mail_developer": "E-Mail an Entwickler",
-  "app_version": "App-Version",
+  "version": "Version",
   "privacy_policy": "Datenschutzerklärung",
   "loading_games": "Lade Spiele ...",
   "build": "Build-Nr.",

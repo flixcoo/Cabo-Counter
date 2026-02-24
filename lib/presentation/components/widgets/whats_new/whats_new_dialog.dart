@@ -10,6 +10,7 @@ class WhatsNewDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Dialog.fullscreen(
       backgroundColor: CustomTheme.backgroundColor,
       child: SafeArea(
@@ -17,20 +18,20 @@ class WhatsNewDialog extends StatelessWidget {
           children: [
             const SizedBox(height: 32),
             Text(
-              AppLocalizations.of(context).whats_new,
+              loc.whats_new,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: CustomTheme.textColor,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 height: 1.3,
               ),
             ),
             Text(
-              'Version ${VersionService.getVersionNumber()}',
+              '${loc.version} ${VersionService.getVersionNumber()}',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: CustomTheme.textColor,
                 fontSize: 16,
               ),
             ),
@@ -41,14 +42,15 @@ class WhatsNewDialog extends StatelessWidget {
                 children: [
                   WhatsNewItem(
                     icon: IconService.shuffle_cards,
-                    title: AppLocalizations.of(context).wn_item_1,
-                    text: AppLocalizations.of(context).wn_description_1,
+                    title: loc.wn_item_1,
+                    text: loc.wn_description_1,
                   ),
                   const SizedBox(height: 28),
                   WhatsNewItem(
-                      icon: Icons.navigation,
-                      title: AppLocalizations.of(context).wn_item_2,
-                      text: AppLocalizations.of(context).wn_description_2),
+                    icon: Icons.navigation,
+                    title: loc.wn_item_2,
+                    text: loc.wn_description_2,
+                  ),
                 ],
               ),
             ),
@@ -66,7 +68,7 @@ class WhatsNewDialog extends StatelessWidget {
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    AppLocalizations.of(context).ok,
+                    loc.ok,
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

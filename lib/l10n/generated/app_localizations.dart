@@ -817,11 +817,11 @@ abstract class AppLocalizations {
   /// **'E-Mail an Entwickler'**
   String get mail_developer;
 
-  /// No description provided for @app_version.
+  /// No description provided for @version.
   ///
   /// In de, this message translates to:
-  /// **'App-Version'**
-  String get app_version;
+  /// **'Version'**
+  String get version;
 
   /// No description provided for @privacy_policy.
   ///

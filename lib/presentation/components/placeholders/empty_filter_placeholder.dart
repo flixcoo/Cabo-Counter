@@ -7,11 +7,15 @@ import 'package:flutter/cupertino.dart';
 class EmptyFilterPlaceholder extends StatelessWidget {
   final void Function() toggleShowOnlyActiveGames;
 
-  const EmptyFilterPlaceholder(
-      {super.key, required this.toggleShowOnlyActiveGames});
+  const EmptyFilterPlaceholder({
+    super.key,
+    required this.toggleShowOnlyActiveGames,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -27,14 +31,15 @@ class EmptyFilterPlaceholder extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
           child: Text(
-            AppLocalizations.of(context).empty_filter_text,
+            loc.empty_filter_text,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
         ),
         CupertinoButton(
-            onPressed: () => toggleShowOnlyActiveGames(),
-            child: Text(AppLocalizations.of(context).empty_filter_button))
+          onPressed: () => toggleShowOnlyActiveGames(),
+          child: Text(loc.empty_filter_button),
+        ),
       ],
     );
   }

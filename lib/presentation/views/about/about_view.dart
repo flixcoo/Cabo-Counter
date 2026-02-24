@@ -15,11 +15,11 @@ class AboutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).about),
-      ),
+      navigationBar: CupertinoNavigationBar(middle: Text(loc.about)),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -28,7 +28,7 @@ class AboutView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
-                  AppLocalizations.of(context).app_name,
+                  loc.app_name,
                   style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class AboutView extends StatelessWidget {
                 ),
               ),
               Text(
-                '${AppLocalizations.of(context).app_version} ${VersionService.getVersionWithBuild()}',
+                '${loc.version} ${VersionService.getVersionWithBuild()}',
                 style: TextStyle(fontSize: 15, color: Colors.grey[300]),
               ),
               Padding(
@@ -52,26 +52,26 @@ class AboutView extends StatelessWidget {
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).privacy_policy),
+                child: Text(loc.privacy_policy),
                 onPressed: () =>
                     launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
               ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).support_me),
+                child: Text(loc.support_me),
                 onPressed: () => launchUrl(Uri.parse(Constants.DONATE_LINK)),
               ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).legal_notice),
+                child: Text(loc.legal_notice),
                 onPressed: () => launchUrl(Uri.parse(Constants.LEGAL_LINK)),
               ),
               CupertinoButton(
                 sizeStyle: CupertinoButtonSize.medium,
                 padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).licenses),
+                child: Text(loc.licenses),
                 onPressed: () => Navigator.push(
                   context,
                   CupertinoPageRoute(builder: (_) => const LicenseView()),

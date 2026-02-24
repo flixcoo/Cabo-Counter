@@ -19,7 +19,9 @@ class KamikazeSheet extends StatelessWidget {
   /// Displays a bottom sheet for selecting a player with Kamikaze.
   /// The sheet adapts its UI based on the platform (iOS or Android).
   static Future<int?> show(
-      BuildContext context, GameSession gameSession) async {
+    BuildContext context,
+    GameSession gameSession,
+  ) async {
     if (Platform.isIOS) {
       return await showCupertinoModalPopup<int?>(
         context: context,
@@ -31,7 +33,7 @@ class KamikazeSheet extends StatelessWidget {
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
-        backgroundColor: CustomTheme.mainElementBackgroundColor,
+        backgroundColor: CustomTheme.mainElementColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
@@ -51,9 +53,11 @@ class KamikazeSheet extends StatelessWidget {
 
   /// Builds the iOS-style action sheet for selecting a player with Kamikaze.
   Widget _buildIosSheet(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return CupertinoActionSheet(
-      title: Text(AppLocalizations.of(context).kamikaze),
-      message: Text(AppLocalizations.of(context).who_has_kamikaze),
+      title: Text(loc.kamikaze),
+      message: Text(loc.who_has_kamikaze),
       actions: gameSession.players.asMap().entries.map((entry) {
         final index = entry.key;
         final player = entry.value;
@@ -68,26 +72,27 @@ class KamikazeSheet extends StatelessWidget {
       cancelButton: CupertinoActionSheetAction(
         onPressed: () => Navigator.pop(context, null),
         isDestructiveAction: true,
-        child: Text(AppLocalizations.of(context).cancel),
+        child: Text(loc.cancel),
       ),
     );
   }
 
   /// Builds the Android-style bottom sheet for selecting a player with Kamikaze.
   Widget _buildAndroidSheet(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            AppLocalizations.of(context).kamikaze,
+            loc.kamikaze,
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-              AppLocalizations.of(context).who_has_kamikaze,
+              loc.who_has_kamikaze,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -110,8 +115,8 @@ class KamikazeSheet extends StatelessWidget {
           }),
           ListTile(
             title: Text(
-              AppLocalizations.of(context).cancel,
-              style: TextStyle(color: CustomTheme.red, fontSize: 18),
+              loc.cancel,
+              style: const TextStyle(color: CustomTheme.red, fontSize: 18),
               textAlign: TextAlign.center,
             ),
             onTap: () => Navigator.pop(context, null),

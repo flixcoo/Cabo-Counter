@@ -30,8 +30,11 @@ class RoundView extends StatefulWidget {
   final GameSession gameSession;
   final int roundNumber;
 
-  const RoundView(
-      {super.key, required this.roundNumber, required this.gameSession});
+  const RoundView({
+    super.key,
+    required this.roundNumber,
+    required this.gameSession,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -75,8 +78,10 @@ class _RoundViewState extends State<RoundView> {
       // If the current round has already been played, the text fields
       // are filled with the scores from this round
       for (int i = 0; i < _scoreControllerList.length; i++) {
-        _scoreControllerList[i].text =
-            gameSession.roundList[widget.roundNumber - 1].scores[i].toString();
+        _scoreControllerList[i].text = gameSession
+            .roundList[widget.roundNumber - 1]
+            .scores[i]
+            .toString();
       }
       _caboPlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
@@ -95,6 +100,7 @@ class _RoundViewState extends State<RoundView> {
   @override
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final rotatedPlayers = _getRotatedPlayers();
     final originalIndices = _getOriginalIndices();
@@ -102,21 +108,20 @@ class _RoundViewState extends State<RoundView> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => {
-              //LocalStorageService.saveGameSessions(),
-              Navigator.pop(context, -1)
-            },
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          middle: Text(AppLocalizations.of(context).results),
-          trailing: Visibility(
-              visible: widget.gameSession.isGameFinished,
-              child: Icon(
-                IconService.locked,
-                size: 25,
-              ))),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => {
+            //LocalStorageService.saveGameSessions(),
+            Navigator.pop(context, -1),
+          },
+          child: Text(loc.cancel),
+        ),
+        middle: Text(loc.results),
+        trailing: Visibility(
+          visible: widget.gameSession.isGameFinished,
+          child: Icon(IconService.locked, size: 25),
+        ),
+      ),
       child: Column(
         children: [
           Expanded(
@@ -128,53 +133,55 @@ class _RoundViewState extends State<RoundView> {
                   children: [
                     const SizedBox(height: 40),
                     Text(
-                        '${AppLocalizations.of(context).round} ${widget.roundNumber}',
-                        style: CustomTheme.roundTitle),
+                      '${loc.round} ${widget.roundNumber}',
+                      style: CustomTheme.roundTitle,
+                    ),
                     const SizedBox(height: 10),
                     Text(
-                      AppLocalizations.of(context).who_said_cabo,
+                      loc.who_said_cabo,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal:
-                            widget.gameSession.players.length > 3 ? 5 : 20,
+                        horizontal: widget.gameSession.players.length > 3
+                            ? 5
+                            : 20,
                         vertical: 10,
                       ),
                       child: SizedBox(
                         height: 60,
                         child: CupertinoSegmentedControl<int>(
-                          unselectedColor:
-                              CustomTheme.mainElementBackgroundColor,
+                          unselectedColor: CustomTheme.backgroundColor,
                           selectedColor: CustomTheme.primaryColor,
                           groupValue: _caboPlayerIndex,
-                          children: Map.fromEntries(widget.gameSession.players
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            final index = entry.key;
-                            final player = entry.value;
-                            return MapEntry(
-                              index,
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 8,
-                                ),
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    player.name,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                          children: Map.fromEntries(
+                            widget.gameSession.players.asMap().entries.map((
+                              entry,
+                            ) {
+                              final index = entry.key;
+                              final player = entry.value;
+                              return MapEntry(
+                                index,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 8,
+                                  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      player.name,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          })),
+                              );
+                            }),
+                          ),
                           onValueChanged: (value) {
                             setState(() {
                               _caboPlayerIndex = value;
@@ -196,41 +203,53 @@ class _RoundViewState extends State<RoundView> {
                             originalIndex == _shufflePlayerIndex;
                         return Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
+                            vertical: 10,
+                            horizontal: 20,
+                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: CupertinoListTile(
                               backgroundColor: CustomTheme.playerTileColor,
-                              title: Row(children: [
-                                Expanded(
+                              title: Row(
+                                children: [
+                                  Expanded(
                                     child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                      Text(
-                                        name,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      if (isShufflePlayer) ...[
-                                        const SizedBox(width: 8),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
                                         Text(
-                                            AppLocalizations.of(context).dealer,
+                                          name,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        if (isShufflePlayer) ...[
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            loc.dealer,
                                             style: const TextStyle(
-                                                fontSize: 13,
-                                                color: CupertinoColors
-                                                    .systemGrey)),
+                                              fontSize: 13,
+                                              color: CupertinoColors.systemGrey,
+                                            ),
+                                          ),
+                                        ],
+                                        if (shouldShowMedal) ...[
+                                          const SizedBox(width: 10),
+                                          const Icon(
+                                            FontAwesomeIcons.crown,
+                                            size: 15,
+                                          ),
+                                        ],
                                       ],
-                                      if (shouldShowMedal) ...[
-                                        const SizedBox(width: 10),
-                                        const Icon(FontAwesomeIcons.crown,
-                                            size: 15),
-                                      ],
-                                    ]))
-                              ]),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               subtitle: Text(
-                                  '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
-                                  ' ${AppLocalizations.of(context).points}',
-                                  style: TextStyle(color: CustomTheme.white)),
+                                '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
+                                ' ${loc.points}',
+                                style: const TextStyle(
+                                  color: CustomTheme.white,
+                                ),
+                              ),
                               trailing: SizedBox(
                                 width: 100,
                                 key: _textFieldKeys[originalIndex],
@@ -239,20 +258,22 @@ class _RoundViewState extends State<RoundView> {
                                   focusNode: _focusNodeList[originalIndex],
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
-                                    signed: true,
-                                    decimal: false,
-                                  ),
+                                        signed: true,
+                                        decimal: false,
+                                      ),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
-                                  textInputAction: index ==
+                                  textInputAction:
+                                      index ==
                                           widget.gameSession.players.length - 1
                                       ? TextInputAction.done
                                       : TextInputAction.next,
                                   controller:
                                       _scoreControllerList[originalIndex],
-                                  placeholder:
-                                      AppLocalizations.of(context).points,
+                                  placeholder: AppLocalizations.of(
+                                    context,
+                                  ).points,
                                   textAlign: TextAlign.center,
                                   onSubmitted: (_) =>
                                       _focusNextTextfield(originalIndex),
@@ -265,24 +286,23 @@ class _RoundViewState extends State<RoundView> {
                       },
                     ),
                     Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Center(
-                          heightFactor: 1,
-                          child: CustomButton(
-                            onPressed: () async {
-                              if (await _showKamikazeSheet(context)) {
-                                if (!context.mounted) return;
-                                _endOfRoundNavigation(context, true);
-                              }
-                            },
-                            child: Text(
-                              AppLocalizations.of(context).kamikaze,
-                              style: TextStyle(
-                                color: CustomTheme.kamikazeColor,
-                              ),
-                            ),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Center(
+                        heightFactor: 1,
+                        child: CustomButton(
+                          onPressed: () async {
+                            if (await _showKamikazeSheet(context)) {
+                              if (!context.mounted) return;
+                              _endOfRoundNavigation(context, true);
+                            }
+                          },
+                          child: Text(
+                            loc.kamikaze,
+                            style: TextStyle(color: CustomTheme.kamikazeColor),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -294,7 +314,7 @@ class _RoundViewState extends State<RoundView> {
                 return Container(
                   height: 80,
                   padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.mainElementBackgroundColor,
+                  color: CustomTheme.mainElementColor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -304,7 +324,7 @@ class _RoundViewState extends State<RoundView> {
                                 _endOfRoundNavigation(context, false);
                               }
                             : null,
-                        child: Text(AppLocalizations.of(context).done),
+                        child: Text(loc.done),
                       ),
                       if (!widget.gameSession.isGameFinished)
                         CupertinoButton(
@@ -313,7 +333,7 @@ class _RoundViewState extends State<RoundView> {
                                   _endOfRoundNavigation(context, true);
                                 }
                               : null,
-                          child: Text(AppLocalizations.of(context).next_round),
+                          child: Text(loc.next_round),
                         ),
                     ],
                   ),
@@ -366,8 +386,9 @@ class _RoundViewState extends State<RoundView> {
     final List<int> scores =
         widget.gameSession.roundList[widget.roundNumber - 2].scoreUpdates;
 
-    final int maxScore =
-        scores.reduce((value, element) => value > element ? value : element);
+    final int maxScore = scores.reduce(
+      (value, element) => value > element ? value : element,
+    );
 
     // Collect all indices with the maxScore
     final List<int> candidateIndices = [];
@@ -381,7 +402,8 @@ class _RoundViewState extends State<RoundView> {
       return candidateIndices.first;
     } else {
       // Use a seeded random generator for consistent results.
-      final seed = widget.gameSession.createdAt.microsecondsSinceEpoch +
+      final seed =
+          widget.gameSession.createdAt.microsecondsSinceEpoch +
           widget.roundNumber;
       final rnd = Random(seed);
       return candidateIndices[rnd.nextInt(candidateIndices.length)];
@@ -395,7 +417,7 @@ class _RoundViewState extends State<RoundView> {
     return [
       playerList[winnerIndex],
       ...playerList.sublist(winnerIndex + 1),
-      ...playerList.sublist(0, winnerIndex)
+      ...playerList.sublist(0, winnerIndex),
     ];
   }
 
@@ -404,9 +426,11 @@ class _RoundViewState extends State<RoundView> {
     final winnerIndex = _getPreviousRoundWinnerIndex();
     return [
       winnerIndex,
-      ...List.generate(widget.gameSession.players.length - winnerIndex - 1,
-          (i) => winnerIndex + i + 1),
-      ...List.generate(winnerIndex, (i) => i)
+      ...List.generate(
+        widget.gameSession.players.length - winnerIndex - 1,
+        (i) => winnerIndex + i + 1,
+      ),
+      ...List.generate(winnerIndex, (i) => i),
     ];
   }
 
@@ -429,8 +453,9 @@ class _RoundViewState extends State<RoundView> {
 
     if (currentPos < originalIndices.length - 1) {
       final nextIndex = originalIndices[currentPos + 1];
-      FocusScope.of(context)
-          .requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
+      FocusScope.of(
+        context,
+      ).requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
 
       final scrollContext = _textFieldKeys[nextIndex].currentContext;
       if (scrollContext != null) {
@@ -475,15 +500,20 @@ class _RoundViewState extends State<RoundView> {
   /// array for the game.
   List<int> _finishRound() {
     if (_kamikazePlayerIndex != null) {
-      widget.gameSession
-          .applyKamikaze(widget.roundNumber, _kamikazePlayerIndex!);
+      widget.gameSession.applyKamikaze(
+        widget.roundNumber,
+        _kamikazePlayerIndex!,
+      );
     } else {
       List<int> roundScores = [];
       for (TextEditingController c in _scoreControllerList) {
         if (c.text.isNotEmpty) roundScores.add(int.parse(c.text));
       }
       widget.gameSession.calculateScoredPoints(
-          widget.roundNumber, roundScores, _caboPlayerIndex);
+        widget.roundNumber,
+        roundScores,
+        _caboPlayerIndex,
+      );
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
     if (widget.roundNumber == widget.gameSession.roundNumber &&
@@ -495,35 +525,51 @@ class _RoundViewState extends State<RoundView> {
 
   /// Shows a popup dialog with the information which player received the bonus points.
   Future<void> _showBonusPopup(
-      BuildContext context, List<int> bonusPlayers) async {
-    int pointLimit = widget.gameSession.pointLimit;
-    int bonusPoints = (pointLimit / 2).round();
+    BuildContext context,
+    List<int> bonusPlayers,
+  ) async {
+    final loc = AppLocalizations.of(context);
+    final pointLimit = widget.gameSession.pointLimit;
+    final bonusPoints = (pointLimit / 2).round();
 
-    String resultText =
-        _getBonusPopupMessageString(pointLimit, bonusPoints, bonusPlayers);
+    String resultText = _getBonusPopupMessageString(
+      pointLimit,
+      bonusPoints,
+      bonusPlayers,
+    );
 
     await PopupService.showInfoPopup(
-        context: context,
-        title: Text(AppLocalizations.of(context).bonus_points_title),
-        content: Text(resultText));
+      context: context,
+      title: Text(loc.bonus_points_title),
+      content: Text(resultText),
+    );
   }
 
   /// Generates the message string for the bonus popup.
   /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
   /// and returns a formatted string.
   String _getBonusPopupMessageString(
-      int pointLimit, int bonusPoints, List<int> bonusPlayers) {
-    List<String> nameList =
-        bonusPlayers.map((i) => widget.gameSession.players[i].name).toList();
+    int pointLimit,
+    int bonusPoints,
+    List<int> bonusPlayers,
+  ) {
+    final loc = AppLocalizations.of(context);
+    List<String> nameList = bonusPlayers
+        .map((i) => widget.gameSession.players[i].name)
+        .toList();
     String resultText = '';
     if (nameList.length == 1) {
-      resultText = AppLocalizations.of(context).bonus_points_message(
-          nameList.length, nameList.first, pointLimit, bonusPoints);
+      resultText = loc.bonus_points_message(
+        nameList.length,
+        nameList.first,
+        pointLimit,
+        bonusPoints,
+      );
     } else {
       resultText = nameList.length == 2
           ? '${nameList[0]} & ${nameList[1]}'
           : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
-      resultText = AppLocalizations.of(context).bonus_points_message(
+      resultText = loc.bonus_points_message(
         nameList.length,
         resultText,
         pointLimit,
@@ -539,7 +585,9 @@ class _RoundViewState extends State<RoundView> {
   /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
   /// if it should navigate to the next round or not.
   Future<void> _endOfRoundNavigation(
-      BuildContext context, bool navigateToNextRound) async {
+    BuildContext context,
+    bool navigateToNextRound,
+  ) async {
     List<int> bonusPlayersIndices = _finishRound();
     if (bonusPlayersIndices.isNotEmpty) {
       await _showBonusPopup(context, bonusPlayersIndices);

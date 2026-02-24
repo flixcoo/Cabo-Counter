@@ -9,9 +9,9 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_filter_p
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/main_menu_skeleton.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/game_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -106,6 +106,8 @@ class _MainMenuViewState extends State<MainMenuView> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return ListenableBuilder(
       listenable: gameManager,
       builder: (context, _) {
@@ -142,14 +144,14 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
               ],
             ),
-            middle: Text(AppLocalizations.of(context).games),
+            middle: Text(loc.games),
             trailing: IconButton(
               onPressed: () => Navigator.push(
                 context,
                 CupertinoPageRoute(
                   builder: (context) => CreateGameView(
                     gameMode: ConfigService.getGameMode(),
-                    previousPageTitle: AppLocalizations.of(context).games,
+                    previousPageTitle: loc.games,
                   ),
                 ),
               ),
@@ -171,23 +173,10 @@ class _MainMenuViewState extends State<MainMenuView> {
                           sortOption: currentSortOption,
                           sortDirection: currentSortDirection,
                         );
-                        return ListView.separated(
+                        return ListView.builder(
                           itemCount:
                               displayedGames.length +
                               (_showOnlyActiveGames ? 1 : 0),
-                          separatorBuilder: (context, index) {
-                            bool isLastGameIndex =
-                                index == displayedGames.length - 1;
-                            return isLastGameIndex
-                                ? const SizedBox.shrink()
-                                : Divider(
-                                    height: 1,
-                                    thickness: 0.5,
-                                    color: CustomTheme.white.withAlpha(50),
-                                    indent: 50,
-                                    endIndent: 50,
-                                  );
-                          },
                           itemBuilder: (context, index) {
                             // Show info about active games filter at the end of the list
                             if (_showOnlyActiveGames &&
@@ -222,14 +211,13 @@ class _MainMenuViewState extends State<MainMenuView> {
                                   return Dismissible(
                                     key: Key(session.gameId),
                                     background: Container(
-                                      color: CustomTheme.red,
                                       alignment: Alignment.centerRight,
                                       padding: const EdgeInsets.only(
                                         right: 20.0,
                                       ),
                                       child: Icon(
                                         IconService.delete,
-                                        color: CupertinoColors.white,
+                                        color: CustomTheme.red,
                                       ),
                                     ),
                                     direction: DismissDirection.endToStart,
@@ -253,55 +241,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                                     dismissThresholds: const {
                                       DismissDirection.startToEnd: 0.6,
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0,
-                                      ),
-                                      child: CupertinoListTile(
-                                        backgroundColorActivated:
-                                            CustomTheme.backgroundColor,
-                                        title: Text(session.gameTitle),
-                                        subtitle: Visibility(
-                                          visible: session.isGameFinished,
-                                          replacement: Text(
-                                            '${AppLocalizations.of(context).mode}: ${_translateGameMode(session)}',
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            '\u{1F947} ${session.winner}',
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                            ),
-                                          ),
-                                        ),
-                                        trailing: Row(
-                                          children: [
-                                            const SizedBox(width: 5),
-                                            Text('${session.roundNumber}'),
-                                            const SizedBox(width: 3),
-                                            Icon(IconService.rounds),
-                                            const SizedBox(width: 15),
-                                            Text('${session.players.length}'),
-                                            const SizedBox(width: 3),
-                                            Icon(IconService.players),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          final session = displayedGames[index];
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ActiveGameView(
-                                                    gameSession: session,
-                                                  ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                    child: GameTile(session: session),
                                   );
                                 },
                               );
@@ -325,21 +265,13 @@ class _MainMenuViewState extends State<MainMenuView> {
     );
   }
 
-  /// Translates the game mode boolean into the corresponding String.
-  /// If [pointLimit] is true, it returns '101 Punkte', otherwise it returns 'Unbegrenzt'.
-  String _translateGameMode(GameSession gameSession) {
-    if (gameSession.isPointsLimitEnabled) {
-      return '${gameSession.pointLimit} ${AppLocalizations.of(context).points}';
-    }
-    return AppLocalizations.of(context).unlimited;
-  }
-
   /// Handles the feedback dialog when the conditions for rating are met.
   /// It shows a dialog asking the user if they like the app,
   /// and based on their response, it either opens the rating dialog or an email client for feedback.
   Future<void> _handleFeedbackDialog(BuildContext context) async {
-    final String emailSubject = AppLocalizations.of(context).email_subject;
-    final String emailBody = AppLocalizations.of(context).email_body;
+    final loc = AppLocalizations.of(context);
+    final emailSubject = loc.email_subject;
+    final emailBody = loc.email_body;
 
     final Uri emailUri = Uri(
       scheme: 'mailto',
@@ -382,22 +314,21 @@ class _MainMenuViewState extends State<MainMenuView> {
     BuildContext context,
     String gameTitle,
   ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message: Text(
-            AppLocalizations.of(context).delete_game_message(gameTitle),
-          ),
+          title: Text(loc.delete_game_title),
+          message: Text(loc.delete_game_message(gameTitle)),
           actions: [
             CustomDialogAction(
               returnValue: false,
               isDefaultAction: true,
-              actionText: AppLocalizations.of(context).cancel,
+              actionText: loc.cancel,
             ),
             CustomDialogAction(
               isDestructiveAction: true,
               returnValue: true,
-              actionText: AppLocalizations.of(context).delete,
+              actionText: loc.delete,
             ),
           ],
         ) ??

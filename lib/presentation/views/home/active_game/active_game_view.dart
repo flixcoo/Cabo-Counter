@@ -4,6 +4,8 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
@@ -16,7 +18,6 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
 ///
@@ -27,6 +28,7 @@ import 'package:flutter/material.dart';
 /// The widget listens to changes in the provided [GameSession] and updates the UI accordingly.
 class ActiveGameView extends StatefulWidget {
   final GameSession gameSession;
+
   const ActiveGameView({super.key, required this.gameSession});
 
   @override
@@ -58,6 +60,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Stack(
       children: [
         ListenableBuilder(
@@ -70,102 +74,90 @@ class _ActiveGameViewState extends State<ActiveGameView> {
             );
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
-                previousPageTitle: AppLocalizations.of(context).games,
-                middle: Text(AppLocalizations.of(context).overview),
+                previousPageTitle: loc.games,
+                middle: Text(loc.overview),
               ),
               child: SafeArea(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).game,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).name),
-                        trailing: Text(
-                          gameSession.gameTitle,
-                          style: TextStyle(color: CustomTheme.primaryColor),
-                        ),
-                      ),
-                      CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).mode),
-                        trailing: Text(
-                          gameSession.isPointsLimitEnabled
-                              ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                              : AppLocalizations.of(context).unlimited,
-                          style: TextStyle(color: CustomTheme.primaryColor),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).players,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.players.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          int playerIndex = sortedPlayerIndices[index];
-                          return CupertinoListTile(
-                            padding: const EdgeInsets.fromLTRB(14, 5, 14, 0),
-                            title: Row(
-                              children: [
-                                _getPlacementTextWidget(index),
-                                const SizedBox(width: 5),
-                                Text(
-                                  gameSession.players[playerIndex].name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: Row(
-                              children: [
-                                const SizedBox(width: 5),
-                                Text(
-                                  '${gameSession.getPlayerScoresAsList()[playerIndex]} '
-                                  '${AppLocalizations.of(context).points}',
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).rounds,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.roundNumber,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: CupertinoListTile(
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 5,
+                      const SizedBox(height: 10),
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          ActiveGameListTile(
+                            title: Text(loc.name),
+                            trailing: Text(
+                              gameSession.gameTitle,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              title: Text(
-                                '${AppLocalizations.of(context).round} ${index + 1}',
+                            ),
+                          ),
+                          ActiveGameListTile(
+                            title: Text(loc.mode),
+                            trailing: Text(
+                              gameSession.isPointsLimitEnabled
+                                  ? '${ConfigService.getPointLimit()} ${loc.points}'
+                                  : loc.unlimited,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ActiveGameListSet(
+                        title: loc.players,
+                        tilePadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.players.length;
+                            index++
+                          ) ...[
+                            ActiveGameListTile(
+                              title: Row(
+                                children: [
+                                  _getPlacementTextWidget(index),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    gameSession
+                                        .players[sortedPlayerIndices[index]]
+                                        .name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    '${gameSession.getPlayerScoresAsList()[sortedPlayerIndices[index]]} '
+                                    '${loc.points}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      ActiveGameListSet(
+                        title: loc.rounds,
+                        tilePadding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.roundNumber;
+                            index++
+                          )
+                            ActiveGameListTile(
+                              padding: const EdgeInsets.fromLTRB(20, 6, 8, 6),
+                              title: Text('${loc.round} ${index + 1}'),
+                              trailing: Row(
                                 children: [
                                   index + 1 != gameSession.roundNumber ||
                                           gameSession.isGameFinished
@@ -185,26 +177,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 _openRoundView(context, index + 1);
                               },
                             ),
-                          );
-                        },
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).statistics,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          CupertinoListTile(
+                      ActiveGameListSet(
+                        title: loc.statistics,
+                        tilePadding: const EdgeInsets.fromLTRB(16, 12, 6, 12),
+                        content: [
+                          ActiveGameListTile(
                             trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
-                            title: Text(
-                              AppLocalizations.of(context).scoring_history,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                            title: Text(loc.scoring_history),
                             onTap: () => Navigator.push(
                               context,
                               CupertinoPageRoute(
@@ -213,14 +194,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                             ),
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
-                            title: Text(
-                              AppLocalizations.of(context).point_overview,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                            title: Text(loc.point_overview),
                             onTap: () => Navigator.push(
                               context,
                               CupertinoPageRoute(
@@ -231,28 +207,26 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).game,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Visibility(
-                            visible: !gameSession.isPointsLimitEnabled,
-                            child: CupertinoListTile(
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          if (!gameSession.isPointsLimitEnabled)
+                            ActiveGameListTile(
                               title: Text(
-                                AppLocalizations.of(context).end_game,
+                                loc.end_game,
                                 style:
                                     gameSession.roundNumber > 1 &&
                                         !gameSession.isGameFinished
-                                    ? const TextStyle(color: Colors.white)
-                                    : const TextStyle(color: Colors.white30),
+                                    ? const TextStyle(
+                                        color: CustomTheme.textColor,
+                                      )
+                                    : TextStyle(
+                                        color: CustomTheme.textColor.withAlpha(
+                                          100,
+                                        ),
+                                      ),
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
+
                               onTap: () {
                                 if (gameSession.roundNumber > 1 &&
                                     !gameSession.isGameFinished) {
@@ -260,13 +234,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 }
                               },
                             ),
-                          ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context).delete_game,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                          ActiveGameListTile(
+                            title: Text(loc.delete_game),
                             onTap: () {
                               _showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
@@ -275,14 +244,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               });
                             },
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
                             title: Text(
                               AppLocalizations.of(
                                 context,
                               ).new_game_same_settings,
                             ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -305,12 +272,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               );
                             },
                           ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context).export_game,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                          ActiveGameListTile(
+                            title: Text(loc.export_game),
                             onTap: () async {
                               final success =
                                   await DataTransferService.exportSingleGameSession(
@@ -366,9 +329,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
   void _showEndGameDialog() {
+    final loc = AppLocalizations.of(context);
+
     final endGameAction = CustomDialogAction<bool>(
       isDestructiveAction: true,
-      actionText: AppLocalizations.of(context).end_game,
+      actionText: loc.end_game,
       returnValue: true,
       onAfterPop: () {
         if (mounted) {
@@ -380,14 +345,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       },
     );
     final cancelAction = CustomDialogAction<bool>(
-      actionText: AppLocalizations.of(context).cancel,
+      actionText: loc.cancel,
       returnValue: false,
     );
 
     PopupService.showSelectionPopup<bool>(
       context: context,
-      title: Text(AppLocalizations.of(context).end_game_title),
-      message: Text(AppLocalizations.of(context).end_game_message),
+      title: Text(loc.end_game_title),
+      message: Text(loc.end_game_message),
       actions: [cancelAction, endGameAction],
     );
   }
@@ -437,37 +402,31 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     int placement = denseRanks[index];
     switch (placement) {
       case 1:
-        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 20)); // 🥇
       case 2:
-        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 20)); // 🥈
       case 3:
-        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 20)); // 🥉
       default:
         return Text(
           ' $placement.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold, height: 1.6),
         );
     }
   }
 
   /// Shows a dialog to confirm deleting the game session.
   Future<bool> _showDeleteGameDialog() async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message: Text(
-            AppLocalizations.of(
-              context,
-            ).delete_game_message(gameSession.gameTitle),
-          ),
+          title: Text(loc.delete_game_title),
+          message: Text(loc.delete_game_message(gameSession.gameTitle)),
           actions: [
-            CustomDialogAction(
-              returnValue: false,
-              actionText: AppLocalizations.of(context).cancel,
-            ),
+            CustomDialogAction(returnValue: false, actionText: loc.cancel),
             CustomDialogAction(
               isDestructiveAction: true,
-              actionText: AppLocalizations.of(context).delete,
+              actionText: loc.delete,
               returnValue: true,
             ),
           ],
@@ -478,14 +437,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
+    final loc = AppLocalizations.of(context);
     if (gameManager.gameExistsInGameList(gameSession.gameId)) {
       gameManager.deleteGameById(gameSession.gameId);
       Navigator.pop(context);
     } else {
       PopupService.showInfoPopup(
         context: context,
-        title: Text(AppLocalizations.of(context).id_error_title),
-        content: Text(AppLocalizations.of(context).id_error_message),
+        title: Text(loc.id_error_title),
+        content: Text(loc.id_error_message),
       );
     }
   }
@@ -524,6 +484,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Plays the confetti animation and shows a dialog with the winner's information.
   Future<void> _playFinishAnimation(BuildContext context) async {
+    final loc = AppLocalizations.of(context);
     String winner = widget.gameSession.winner;
 
     int winnerPoints = widget.gameSession.getPlayerScoresAsList().min;
@@ -536,11 +497,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (context.mounted) {
       PopupService.showInfoPopup(
         context: context,
-        title: Text(AppLocalizations.of(context).end_of_game_title),
+        title: Text(loc.end_of_game_title),
         content: Text(
-          AppLocalizations.of(
-            context,
-          ).end_of_game_message(winnerAmount, winner, winnerPoints),
+          loc.end_of_game_message(winnerAmount, winner, winnerPoints),
         ),
         onAfterPop: () => confettiController.stop(),
       );

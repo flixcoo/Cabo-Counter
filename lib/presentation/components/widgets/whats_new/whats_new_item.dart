@@ -18,11 +18,7 @@ class WhatsNewItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          color: CustomTheme.primaryColor,
-          size: 32,
-        ),
+        Icon(icon, color: CustomTheme.primaryColor, size: 32),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -31,7 +27,7 @@ class WhatsNewItem extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: CustomTheme.textColor,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -40,7 +36,7 @@ class WhatsNewItem extends StatelessWidget {
               Text(
                 text,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: CustomTheme.textColor,
                   fontSize: 14,
                 ),
               ),
