@@ -17,10 +17,10 @@ class ActiveGameListSet extends StatefulWidget {
   final List<ActiveGameListTile> content;
 
   @override
-  State<ActiveGameListSet> createState() => _ActivegamelistsetState();
+  State<ActiveGameListSet> createState() => _ActiveGamelistSetState();
 }
 
-class _ActivegamelistsetState extends State<ActiveGameListSet> {
+class _ActiveGamelistSetState extends State<ActiveGameListSet> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
