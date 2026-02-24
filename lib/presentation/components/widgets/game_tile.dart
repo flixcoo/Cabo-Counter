@@ -21,11 +21,6 @@ class _GameTileState extends State<GameTile> {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-      padding: const EdgeInsets.only(right: 4, left: 2),
-      decoration: BoxDecoration(
-        color: CustomTheme.mainElementColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -35,74 +30,80 @@ class _GameTileState extends State<GameTile> {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: CustomTheme.primaryColor.withAlpha(100),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: widget.session.isPointsLimitEnabled
-                        ? Text(
-                            widget.session.pointLimit.toString(),
-                            style: TextStyle(
+        child: Container(
+          padding: const EdgeInsets.only(right: 4, left: 2),
+          decoration: BoxDecoration(
+            color: CustomTheme.mainElementColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: CustomTheme.primaryColor.withAlpha(100),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: widget.session.isPointsLimitEnabled
+                          ? Text(
+                              widget.session.pointLimit.toString(),
+                              style: TextStyle(
+                                color: CustomTheme.primaryColor.withRed(40),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Icon(
+                              CupertinoIcons.infinite,
+                              size: 32,
                               color: CustomTheme.primaryColor.withRed(40),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
                             ),
-                          )
-                        : Icon(
-                            CupertinoIcons.infinite,
-                            size: 32,
-                            color: CustomTheme.primaryColor.withRed(40),
-                          ),
-                  ),
-                  const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.session.gameTitle,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        widget.session.isGameFinished
-                            ? '\u{1F947} ${widget.session.winner}'
-                            : '${loc.round} ${widget.session.roundNumber}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: CupertinoColors.systemGrey,
+                    ),
+                    const SizedBox(width: 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.session.gameTitle,
+                          style: const TextStyle(fontSize: 16),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    '${widget.session.players.length}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(width: 10),
-                  Icon(
-                    IconService.players,
-                    size: 28,
-                    color: CustomTheme.primaryColor,
-                  ),
-                ],
-              ),
-            ],
+                        Text(
+                          widget.session.isGameFinished
+                              ? '\u{1F947} ${widget.session.winner}'
+                              : '${loc.round} ${widget.session.roundNumber}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${widget.session.players.length}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(width: 10),
+                    Icon(
+                      IconService.players,
+                      size: 28,
+                      color: CustomTheme.primaryColor,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
