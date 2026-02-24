@@ -7,21 +7,21 @@ import 'package:flutter/material.dart';
 
 /// TabBar for navigating between the main menu and about section.
 ///
-/// [TabBar] is a [StatefulWidget] that provides a tabbed interface for navigating
+/// [CustomNavigationBar] is a [StatefulWidget] that provides a tabbed interface for navigating
 /// between the main menu and the about section of the app. It uses a
 /// - Home (MainMenuView)
 /// - About (AboutView)
 ///
 /// The tab labels are provided via localization.
-class TabBar extends StatefulWidget {
-  const TabBar({super.key});
+class CustomNavigationBar extends StatefulWidget {
+  const CustomNavigationBar({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _TabBarState createState() => _TabBarState();
+  _CustomNavigationBarState createState() => _CustomNavigationBarState();
 }
 
-class _TabBarState extends State<TabBar> {
+class _CustomNavigationBarState extends State<CustomNavigationBar> {
   int tabIndex = 0;
 
   @override

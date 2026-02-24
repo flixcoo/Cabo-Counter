@@ -1,10 +1,10 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/tab_bar.dart';
+import 'package:cabo_counter/presentation/components/custom_navigation_bar.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
-import 'package:flutter/material.dart' hide TabBar;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -113,7 +113,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Cabo Counter',
-      home: const TabBar(),
+      home: const CustomNavigationBar(),
     );
   }
 }
