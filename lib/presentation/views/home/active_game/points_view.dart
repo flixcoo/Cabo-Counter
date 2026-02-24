@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 ///
 /// The [PointsView] widget shows a table with all rounds and player scores,
 /// including score updates and highlights for players who said "Cabo".
-/// It uses a Cupertino-style layout and adapts to the number of players.
 ///
 /// Requires a [GameSession] to provide player and round data.
 class PointsView extends StatefulWidget {
