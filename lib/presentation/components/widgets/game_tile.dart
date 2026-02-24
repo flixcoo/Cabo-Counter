@@ -81,7 +81,7 @@ class _GameTileState extends State<GameTile> {
                               : '${loc.round} ${widget.session.roundNumber}',
                           style: const TextStyle(
                             fontSize: 14,
-                            color: CupertinoColors.systemGrey,
+                            color: CustomTheme.subtitleColor,
                           ),
                         ),
                       ],
