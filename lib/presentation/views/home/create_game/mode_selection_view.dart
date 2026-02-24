@@ -47,6 +47,9 @@ class ModeSelectionMenu extends StatelessWidget {
             ModeTile(
               title: loc.no_default_mode,
               description: loc.no_default_description,
+              onTap: () {
+                Navigator.pop(context, GameMode.none);
+              },
             ),
         ],
       ),
