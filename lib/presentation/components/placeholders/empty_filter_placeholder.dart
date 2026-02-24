@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/opacity_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
