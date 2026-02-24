@@ -8,12 +8,20 @@ import 'package:flutter/material.dart';
 /// This service uses Cupertino icons for iOS and Material icons for other platforms.
 /// The icons are accessed via static getters.
 abstract class IconService {
+  /// Icon for a plus sign.
+  static IconData get add => Platform.isIOS ? CupertinoIcons.add : Icons.add;
+
   /// Icon for adding a player.
   static IconData get add_player =>
       Platform.isIOS ? CupertinoIcons.plus_circle_fill : Icons.add_circle;
 
-  /// Icon for a plus sign.
-  static IconData get add => Platform.isIOS ? CupertinoIcons.add : Icons.add;
+  /// Icon for cabo penalty.
+  static IconData get cabo_penalty =>
+      Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.electric_bolt;
+
+  static Widget get cancel => Platform.isIOS
+      ? const Icon(CupertinoIcons.xmark)
+      : const Icon(Icons.clear);
 
   /// Icon for chart representation.
   static IconData get chart =>
@@ -22,10 +30,6 @@ abstract class IconService {
   static Widget get chevron => Platform.isIOS
       ? const CupertinoListTileChevron()
       : const Icon(Icons.chevron_right_sharp, size: 24, color: Colors.grey);
-
-  /// Icon for cabo penalty.
-  static IconData get cabo_penalty =>
-      Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.electric_bolt;
 
   /// Icon for deleting.
   static IconData get delete =>
@@ -43,10 +47,6 @@ abstract class IconService {
   static IconData get export => Platform.isIOS
       ? CupertinoIcons.square_arrow_up
       : Icons.file_upload_outlined;
-
-  /// Icon for website representation.
-  static IconData get website =>
-      Platform.isIOS ? CupertinoIcons.globe : Icons.language;
 
   /// Icon for home.
   static IconData get home =>
@@ -143,4 +143,8 @@ abstract class IconService {
   static IconData get shuffle_cards => Platform.isIOS
       ? CupertinoIcons.rectangle_fill_on_rectangle_angled_fill
       : Icons.casino;
+
+  /// Icon for website representation.
+  static IconData get website =>
+      Platform.isIOS ? CupertinoIcons.globe : Icons.language;
 }
