@@ -95,7 +95,11 @@ class _GameTileState extends State<GameTile> {
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(width: 10),
-                  Icon(IconService.players, size: 28),
+                  Icon(
+                    IconService.players,
+                    size: 28,
+                    color: CustomTheme.primaryColor,
+                  ),
                 ],
               ),
             ],
