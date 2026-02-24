@@ -125,19 +125,16 @@ class _SettingsViewState extends State<SettingsView> {
                     prefixIcon: IconService.shuffle_cards,
                     suffixWidget: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Switch.adaptive(
-                          activeTrackColor: CustomTheme.primaryColor,
-                          inactiveThumbColor: Colors.white,
-                          value: rotateShuffler,
-                          onChanged: (switchValue) {
-                            setState(() {
-                              ConfigService.setRotateShuffler(switchValue);
-                              rotateShuffler = switchValue;
-                            });
-                          },
-                        ),
+                      child: Switch.adaptive(
+                        activeTrackColor: CustomTheme.primaryColor,
+                        inactiveThumbColor: Colors.white,
+                        value: rotateShuffler,
+                        onChanged: (switchValue) {
+                          setState(() {
+                            ConfigService.setRotateShuffler(switchValue);
+                            rotateShuffler = switchValue;
+                          });
+                        },
                       ),
                     ),
                     showChevron: false,

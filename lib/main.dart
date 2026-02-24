@@ -75,6 +75,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return supportedLocales.first;
       },
       theme: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
           seedColor: CustomTheme.primaryColor,
           brightness: Brightness.dark,

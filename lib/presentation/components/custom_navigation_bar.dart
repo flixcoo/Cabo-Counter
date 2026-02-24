@@ -31,13 +31,13 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
       backgroundColor: CustomTheme.backgroundColor,
       resizeToAvoidBottomInset: false,
       body: tabIndex == 0 ? const MainMenuView() : const AboutView(),
-      bottomNavigationBar: Theme(
+      bottomNavigationBar: /*Theme(
         // TODO: Temporary fix to remove splash effect on bottom navigation bar
         data: Theme.of(context).copyWith(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        child: BottomNavigationBar(
+        child:*/ BottomNavigationBar(
           elevation: 5,
           selectedFontSize: 14,
           unselectedFontSize: 14,
@@ -60,7 +60,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               label: loc.about,
             ),
           ],
-        ),
+/*        ),*/
       ),
     );
   }
