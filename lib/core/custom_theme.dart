@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
@@ -73,7 +72,7 @@ class CustomTheme {
   /// Default text style for mode descriptions.
   static const TextStyle modeDescription = TextStyle(color: Colors.grey);
 
-  /// Text style for titles of sections of [CupertinoListTile].
+  /// Text style for titles of sections.
   static const TextStyle rowTitle = TextStyle(
     fontSize: 20,
     color: primaryColor,

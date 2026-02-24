@@ -241,7 +241,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 index: index,
                                 child: Icon(
                                   IconService.drag,
-                                  color: CupertinoColors.systemGrey,
+                                  color: CustomTheme.subtitleColor,
                                 ),
                               ),
                             ),
