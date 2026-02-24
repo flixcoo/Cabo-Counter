@@ -177,26 +177,34 @@ class _MainMenuViewState extends State<MainMenuView> {
                             // Show info about active games filter at the end of the list
                             if (_showOnlyActiveGames &&
                                 index == displayedGames.length) {
-                              return Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      IconService.visibility_off,
-                                      color: CustomTheme.white.withAlpha(150),
-                                      size: 16.0,
-                                    ),
-                                    const SizedBox(width: 6.0),
-                                    Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      ).only_active_games,
-                                      style: TextStyle(
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 4,
+                                  bottom: 30,
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        IconService.visibility_off,
                                         color: CustomTheme.white.withAlpha(150),
-                                        fontSize: 12.0,
+                                        size: 16.0,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        loc.only_active_games,
+                                        style: TextStyle(
+                                          color: CustomTheme.white.withAlpha(
+                                            150,
+                                          ),
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             } else {
