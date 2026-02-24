@@ -11,6 +11,7 @@ import 'package:cabo_counter/presentation/components/placeholders/main_menu_skel
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/game_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/main_menu_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/opacity_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
@@ -116,8 +117,8 @@ class _MainMenuViewState extends State<MainMenuView> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             centerTitle: true,
-            leading: IconButton(
-              iconSize: Constants.NAVBAR_ICON_SIZE,
+            leading: OpacityButton.icon(
+              size: Constants.NAVBAR_ICON_SIZE,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -126,7 +127,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ),
                 );
               },
-              icon: Icon(IconService.settings),
+              icon: IconService.settings,
             ),
             title: Text(loc.games),
             actions: [

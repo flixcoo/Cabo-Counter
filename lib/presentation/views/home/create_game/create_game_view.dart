@@ -188,13 +188,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
-                          IconButton(
-                            splashRadius: 1,
-                            icon: Icon(
-                              IconService.remove_player,
-                              color: CustomTheme.red,
-                              size: 25,
-                            ),
+                          OpacityButton.icon(
+                            icon: IconService.remove_player,
+                            size: 25,
+                            color: CustomTheme.red,
                             onPressed: () {
                               setState(() {
                                 _playerNameTextControllers[index].dispose();
@@ -203,37 +200,32 @@ class _CreateGameViewState extends State<CreateGameView> {
                             },
                           ),
                           Expanded(
-                            child: Material(
-                              color: Colors.transparent,
-                              child: TextField(
-                                controller: _playerNameTextControllers[index],
-                                focusNode: _playerNameFocusNodes[index],
-                                maxLength: 12,
-                                decoration: InputDecoration(
-                                  hint: Text(
-                                    '${loc.player} ${index + 1}',
-                                    style: TextStyle(
-                                      color: CustomTheme.hintTextColor,
-                                    ),
+                            child: TextField(
+                              controller: _playerNameTextControllers[index],
+                              focusNode: _playerNameFocusNodes[index],
+                              maxLength: 12,
+                              decoration: InputDecoration(
+                                hint: Text(
+                                  '${loc.player} ${index + 1}',
+                                  style: TextStyle(
+                                    color: CustomTheme.hintTextColor,
                                   ),
-                                  counterText: '',
-                                  border: InputBorder.none,
                                 ),
-                                textInputAction:
-                                    index + 1 <
-                                        _playerNameTextControllers.length
-                                    ? TextInputAction.next
-                                    : TextInputAction.done,
-                                onSubmitted: (_) {
-                                  if (index + 1 <
-                                      _playerNameFocusNodes.length) {
-                                    _playerNameFocusNodes[index + 1]
-                                        .requestFocus();
-                                  } else {
-                                    FocusScope.of(context).unfocus();
-                                  }
-                                },
+                                counterText: '',
+                                border: InputBorder.none,
                               ),
+                              textInputAction:
+                                  index + 1 < _playerNameTextControllers.length
+                                  ? TextInputAction.next
+                                  : TextInputAction.done,
+                              onSubmitted: (_) {
+                                if (index + 1 < _playerNameFocusNodes.length) {
+                                  _playerNameFocusNodes[index + 1]
+                                      .requestFocus();
+                                } else {
+                                  FocusScope.of(context).unfocus();
+                                }
+                              },
                             ),
                           ),
                           AnimatedOpacity(
