@@ -82,7 +82,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                 bottom: false,
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom,
+                    bottom: MediaQuery.paddingOf(context).bottom,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

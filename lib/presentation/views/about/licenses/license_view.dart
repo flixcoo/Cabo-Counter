@@ -28,7 +28,7 @@ class LicenseView extends StatelessWidget {
         bottom: false,
         child: ListView.builder(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery.paddingOf(context).bottom,
           ),
           physics: const BouncingScrollPhysics(),
           itemCount: allDependencies.length,

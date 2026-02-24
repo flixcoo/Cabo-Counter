@@ -29,6 +29,7 @@ class _PointsViewState extends State<PointsView> {
         //previousPageTitle: loc.overview,
       ),
       body: SafeArea(
+        bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             const double caboFieldWidthFactor = 0.2;
@@ -93,6 +94,9 @@ class _PointsViewState extends State<PointsView> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom,
+                    ),
                     scrollDirection: Axis.vertical,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(

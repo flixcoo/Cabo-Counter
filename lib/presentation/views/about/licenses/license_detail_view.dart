@@ -26,7 +26,7 @@ class LicenseDetailView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(loc.license_details)),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
