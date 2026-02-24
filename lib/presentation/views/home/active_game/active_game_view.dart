@@ -402,15 +402,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     int placement = denseRanks[index];
     switch (placement) {
       case 1:
-        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 20)); // 🥇
       case 2:
-        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 20)); // 🥈
       case 3:
-        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 20)); // 🥉
       default:
         return Text(
           ' $placement.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold, height: 1.6),
         );
     }
   }
