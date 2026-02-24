@@ -16,7 +16,7 @@ class CustomTheme {
   /* ===== Text Colors ===== */
 
   /// Standard text color used throughout the app for readability
-  static const Color textColor = Color(0xFFFFFFFF);
+  static const Color textColor = white;
 
   /// Color for hint text, such as in input fields or placeholders
   static Color hintTextColor = textColor.withAlpha(100);
@@ -45,7 +45,7 @@ class CustomTheme {
   static const Color buttonBackgroundColor = Color(0xFF202020);
 
   /// Color used to highlight the kamikaze button and players
-  static Color kamikazeColor = CupertinoColors.systemYellow;
+  static const Color kamikazeColor = Color(0xFFFFD738);
 
   // Line Colors for GraphView
   static const Color graphColor1 = Color(0xFFF44336);
@@ -71,10 +71,7 @@ class CustomTheme {
   );
 
   /// Default text style for mode descriptions.
-  static const TextStyle modeDescription = TextStyle(
-    fontSize: 16,
-    color: Colors.grey,
-  );
+  static const TextStyle modeDescription = TextStyle(color: Colors.grey);
 
   /// Text style for titles of sections of [CupertinoListTile].
   static const TextStyle rowTitle = TextStyle(
