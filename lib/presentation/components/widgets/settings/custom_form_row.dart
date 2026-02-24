@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -40,7 +41,11 @@ class _CustomFormRowState extends State<CustomFormRow> {
             children: [
               Row(
                 children: [
-                  Icon(widget.prefixIcon, size: 22),
+                  Icon(
+                    widget.prefixIcon,
+                    size: 22,
+                    color: CustomTheme.primaryColor,
+                  ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                   Text(widget.prefixText),
                 ],
