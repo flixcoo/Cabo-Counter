@@ -8,6 +8,7 @@ class ActiveGameListTile extends StatefulWidget {
     this.trailing,
     this.padding,
     this.onTap,
+    this.showDisabledState = false,
   });
 
   final Widget title;
@@ -15,34 +16,44 @@ class ActiveGameListTile extends StatefulWidget {
   final Widget? trailing;
 
   final EdgeInsets? padding;
+
   final VoidCallback? onTap;
+
+  final bool showDisabledState;
 
   @override
   State<ActiveGameListTile> createState() => _ActiveGameListTileState();
 }
 
 class _ActiveGameListTileState extends State<ActiveGameListTile> {
-  bool _isPressed = false;
+  bool isPressed = false;
+  bool isDisabled = false;
 
-  void _resetPressedState() {
-    Future.delayed(const Duration(milliseconds: 250), () {
-      if (mounted) {
-        setState(() => _isPressed = false);
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    isDisabled = widget.onTap == null;
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) {
-        if (widget.onTap != null) setState(() => _isPressed = true);
+      onTapDown: isDisabled
+          ? null
+          : (_) {
+              setState(() => isPressed = true);
+            },
+      onTapUp: (_) async {
+        await Future.delayed(const Duration(milliseconds: 250));
+        setState(() => isPressed = false);
       },
-      onTapUp: (_) => _resetPressedState(),
-      onTapCancel: () => _resetPressedState(),
       onTap: widget.onTap,
       child: AnimatedOpacity(
-        opacity: _isPressed ? 0.4 : 1.0,
+        opacity: isPressed
+            ? 0.6
+            : (widget.showDisabledState && isDisabled)
+            ? 0.3
+            : 1.0,
         duration: const Duration(milliseconds: 300),
         child: Container(
           color: CustomTheme.backgroundColor,

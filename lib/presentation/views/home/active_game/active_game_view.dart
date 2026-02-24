@@ -217,27 +217,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         content: [
                           if (!gameSession.isPointsLimitEnabled)
                             ActiveGameListTile(
-                              title: Text(
-                                loc.end_game,
-                                style:
-                                    gameSession.roundNumber > 1 &&
-                                        !gameSession.isGameFinished
-                                    ? const TextStyle(
-                                        color: CustomTheme.textColor,
-                                      )
-                                    : TextStyle(
-                                        color: CustomTheme.textColor.withAlpha(
-                                          100,
-                                        ),
-                                      ),
-                              ),
-
-                              onTap: () {
-                                if (gameSession.roundNumber > 1 &&
-                                    !gameSession.isGameFinished) {
-                                  _showEndGameDialog();
-                                }
-                              },
+                              title: Text(loc.end_game),
+                              showDisabledState: true,
+                              onTap:
+                                  (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished)
+                                  ? () => _showEndGameDialog()
+                                  : null,
                             ),
                           ActiveGameListTile(
                             title: Text(loc.delete_game),

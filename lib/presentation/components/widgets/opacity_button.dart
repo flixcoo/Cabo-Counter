@@ -122,12 +122,12 @@ class _OpacityButtonState extends State<OpacityButton> {
       opacity: isDisabled ? 0.3 : 1.0,
       child: GestureDetector(
         onTapDown: !isDisabled
-            ? (_) async {
-                setState(() => _isPressed = true);
-                await Future.delayed(const Duration(milliseconds: 100));
-                setState(() => _isPressed = false);
-              }
+            ? (_) => setState(() => _isPressed = true)
             : null,
+        onTapUp: (_) async => {
+          await Future.delayed(const Duration(milliseconds: 100)),
+          setState(() => _isPressed = false),
+        },
         onTap: widget.onPressed,
         child: Stack(
           children: [
