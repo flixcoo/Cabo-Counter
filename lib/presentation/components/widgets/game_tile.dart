@@ -43,7 +43,7 @@ class _GameTileState extends State<GameTile> {
               Row(
                 children: [
                   Container(
-                    alignment: AlignmentGeometry.center,
+                    alignment: Alignment.center,
                     width: 45,
                     height: 45,
                     decoration: BoxDecoration(
