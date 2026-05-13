@@ -237,11 +237,7 @@ class _RoundViewState extends State<RoundView> {
                                 child: CupertinoTextField(
                                   maxLength: 3,
                                   focusNode: _focusNodeList[originalIndex],
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                    signed: true,
-                                    decimal: false,
-                                  ),
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
