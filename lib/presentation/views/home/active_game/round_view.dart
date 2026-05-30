@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:io';
 
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
@@ -237,7 +238,12 @@ class _RoundViewState extends State<RoundView> {
                                 child: CupertinoTextField(
                                   maxLength: 3,
                                   focusNode: _focusNodeList[originalIndex],
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: Platform.isIOS
+                                      ? TextInputType.number
+                                      : const TextInputType.numberWithOptions(
+                                          signed: true,
+                                          decimal: false,
+                                        ),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
