@@ -115,6 +115,7 @@ local.properties
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 **/xcuserdata/
+*.resolved
 
 # Windows
 **/windows/flutter/ephemeral/
