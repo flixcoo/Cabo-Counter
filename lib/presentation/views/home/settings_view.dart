@@ -14,7 +14,6 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Settings and information page for the app.
@@ -89,7 +88,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     CustomFormRow(
                       prefixText: AppLocalizations.of(context).point_limit,
-                      prefixIcon: FontAwesomeIcons.bullseye,
+                      prefixIcon: IconService.point_limit,
                       suffixWidget: CustomStepper(
                         key: _stepperKey2,
                         initialValue: ConfigService.getPointLimit(),
@@ -238,7 +237,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     CustomFormRow(
                       prefixText: AppLocalizations.of(context).report_error,
-                      prefixIcon: FontAwesomeIcons.github,
+                      prefixIcon: IconService.report_error,
                       onPressed: () =>
                           launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                       suffixWidget: IconService.chevron,

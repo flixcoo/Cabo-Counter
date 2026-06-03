@@ -139,4 +139,18 @@ abstract class IconService {
   static IconData get shuffle_cards => Platform.isIOS
       ? CupertinoIcons.rectangle_fill_on_rectangle_angled_fill
       : Icons.casino;
+
+  /// Icon for the point limit setting
+  static const IconData point_limit = IconData(
+    0xf140,
+    fontFamily: 'FontAwesomeSolid',
+    fontPackage: 'font_awesome_flutter',
+  );
+
+  /// Icon for reporting an error
+  static const IconData report_error = IconData(
+    0xf09b,
+    fontFamily: 'FontAwesomeBrands',
+    fontPackage: 'font_awesome_flutter',
+  );
 }
