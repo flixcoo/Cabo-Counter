@@ -19,10 +19,6 @@ abstract class IconService {
   static IconData get cabo_penalty =>
       Platform.isIOS ? CupertinoIcons.bolt_fill : Icons.electric_bolt;
 
-  static Widget get cancel => Platform.isIOS
-      ? const Icon(CupertinoIcons.xmark)
-      : const Icon(Icons.clear);
-
   /// Icon for chart representation.
   static IconData get chart =>
       Platform.isIOS ? CupertinoIcons.chart_bar_alt_fill : Icons.bar_chart;
