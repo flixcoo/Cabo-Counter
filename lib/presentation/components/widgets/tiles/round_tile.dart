@@ -86,7 +86,7 @@ class _RoundTileState extends State<RoundTile> {
                     ],
                     if (widget.showMedal) ...const [
                       SizedBox(width: 10),
-                      Icon(
+                      FaIcon(
                         FontAwesomeIcons.crown,
                         size: 15,
                         color: CustomTheme.primaryColor,
