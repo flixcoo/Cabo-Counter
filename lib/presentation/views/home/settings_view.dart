@@ -44,9 +44,7 @@ class _SettingsViewState extends State<SettingsView> {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.settings),
-      ),
+      appBar: AppBar(title: Text(loc.settings)),
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
@@ -80,7 +78,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.point_limit,
-                    prefixIcon: IconService.point_limit,
+                    prefixIcon: IconService.bullseye,
                     showChevron: false,
                     suffixWidget: CustomStepper(
                       key: _stepperKey2,
@@ -189,7 +187,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.report_error,
-                    prefixIcon: IconService.report_error,
+                    prefixIcon: IconService.brand_github,
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),

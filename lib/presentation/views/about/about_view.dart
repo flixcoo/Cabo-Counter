@@ -98,7 +98,7 @@ class AboutView extends StatelessWidget {
                   OpacityButton.icon(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_LINK)),
-                    icon: IconService.report_error,
+                    icon: IconService.brand_github,
                   ),
                 ],
               ),
