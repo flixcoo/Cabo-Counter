@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_stepper.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

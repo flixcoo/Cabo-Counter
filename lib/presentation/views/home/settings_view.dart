@@ -77,7 +77,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.point_limit,
-                    prefixIcon: FontAwesomeIcons.bullseye,
+                    prefixIcon: IconService.point_limit,
                     showChevron: false,
                     suffixWidget: CustomStepper(
                       key: _stepperKey2,
@@ -189,7 +189,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.report_error,
-                    prefixIcon: FontAwesomeIcons.github,
+                    prefixIcon: IconService.report_error,
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),

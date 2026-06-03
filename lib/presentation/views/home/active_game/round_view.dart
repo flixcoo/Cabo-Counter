@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:cabo_counter/core/custom_theme.dart';
@@ -234,7 +233,7 @@ class _RoundViewState extends State<RoundView> {
                                         ],
                                         if (shouldShowMedal) ...[
                                           const SizedBox(width: 10),
-                                          const Icon(
+                                          const FaIcon(
                                             FontAwesomeIcons.crown,
                                             size: 15,
                                           ),
