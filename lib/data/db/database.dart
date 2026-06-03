@@ -13,8 +13,9 @@ import 'package:path_provider/path_provider.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
-    tables: [GameSessionTable, PlayerTable, RoundScoresTable, RoundsTable],
-    daos: [GameSessionDao, PlayerDao, RoundsDao, RoundScoresDao])
+  tables: [GameSessionTable, PlayerTable, RoundScoresTable, RoundsTable],
+  daos: [GameSessionDao, PlayerDao, RoundsDao, RoundScoresDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
@@ -23,9 +24,11 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(beforeOpen: (details) async {
-      await customStatement('PRAGMA foreign_keys = ON');
-    });
+    return MigrationStrategy(
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON');
+      },
+    );
   }
 
   static QueryExecutor _openConnection() {

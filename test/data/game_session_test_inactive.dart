@@ -8,37 +8,41 @@ void main() {
   late GameSession session;
   final testPlayers = [
     Player(
-        name: 'Alice',
-        totalScore: 0,
-        playerId: '0',
-        gameId: 'abc',
-        position: 0),
+      name: 'Alice',
+      totalScore: 0,
+      playerId: '0',
+      gameId: 'abc',
+      position: 0,
+    ),
     Player(
-        name: 'Bobby',
-        totalScore: 0,
-        playerId: '1',
-        gameId: 'abc',
-        position: 1),
+      name: 'Bobby',
+      totalScore: 0,
+      playerId: '1',
+      gameId: 'abc',
+      position: 1,
+    ),
     Player(
-        name: 'Charlie',
-        totalScore: 0,
-        playerId: '2',
-        gameId: 'abc',
-        position: 2)
+      name: 'Charlie',
+      totalScore: 0,
+      playerId: '2',
+      gameId: 'abc',
+      position: 2,
+    ),
   ];
   final testDate = DateTime(2023, 1, 1);
   const testTitle = 'Test Game';
 
   setUp(() {
     session = GameSession(
-        gameId: '1',
-        createdAt: testDate,
-        gameTitle: testTitle,
-        players: testPlayers,
-        pointLimit: 100,
-        caboPenalty: 5,
-        isPointsLimitEnabled: true,
-        isGameFinished: false);
+      gameId: '1',
+      createdAt: testDate,
+      gameTitle: testTitle,
+      players: testPlayers,
+      pointLimit: 100,
+      caboPenalty: 5,
+      isPointsLimitEnabled: true,
+      isGameFinished: false,
+    );
   });
 
   group('Initialization & JSON', () {
@@ -66,20 +70,21 @@ void main() {
 
     test('null values in JSON', () {
       expect(
-          () => GameSession.fromJson({
-                'createdAt': testDate.toIso8601String(),
-                'gameTitle': null, // Invalid
-                'players': session.players.map((p) => p.toJson()).toList(),
-                'pointLimit': 100,
-                'caboPenalty': 50,
-                'isPointsLimitEnabled': true,
-                'isGameFinished': false,
-                'winner': '',
-                'roundNumber': 1,
-                'playerScores': [0, 0, 0],
-                'roundList': [],
-              }),
-          throwsA(isA<TypeError>()));
+        () => GameSession.fromJson({
+          'createdAt': testDate.toIso8601String(),
+          'gameTitle': null, // Invalid
+          'players': session.players.map((p) => p.toJson()).toList(),
+          'pointLimit': 100,
+          'caboPenalty': 50,
+          'isPointsLimitEnabled': true,
+          'isGameFinished': false,
+          'winner': '',
+          'roundNumber': 1,
+          'playerScores': [0, 0, 0],
+          'roundList': [],
+        }),
+        throwsA(isA<TypeError>()),
+      );
     });
   });
 

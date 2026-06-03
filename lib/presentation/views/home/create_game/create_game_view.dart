@@ -177,7 +177,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8),
                   itemCount: _playerNameTextControllers.length,
-                  onReorder: (oldIndex, newIndex) {
+                  onReorderItem: (oldIndex, newIndex) {
                     setState(() {
                       if (oldIndex < _playerNameTextControllers.length &&
                           newIndex <= _playerNameTextControllers.length) {

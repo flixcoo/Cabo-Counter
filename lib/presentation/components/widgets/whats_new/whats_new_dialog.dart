@@ -47,10 +47,9 @@ class WhatsNewDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   WhatsNewItem(
-                    icon: Icons.navigation,
-                    title: loc.wn_item_2,
-                    text: loc.wn_description_2,
-                  ),
+                      icon: Icons.navigation,
+                      title: AppLocalizations.of(context).wn_item_2,
+                      text: AppLocalizations.of(context).wn_description_2),
                 ],
               ),
             ),
