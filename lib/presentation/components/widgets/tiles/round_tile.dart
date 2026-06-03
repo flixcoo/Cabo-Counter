@@ -118,7 +118,7 @@ class _RoundTileState extends State<RoundTile> {
                   isDense: true,
                   fillColor: Colors.red,
                   border: InputBorder.none,
-                  hintText: 'Punkte',
+                  hintText: loc.points,
                   hintStyle: TextStyle(color: CustomTheme.hintTextColor),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(
