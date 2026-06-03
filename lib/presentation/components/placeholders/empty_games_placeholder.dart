@@ -1,10 +1,10 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
+import 'package:cabo_counter/presentation/views/home/home_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
-/// A placeholder for the [MainMenuView] when the app contains no games
+/// A placeholder for the [HomeView] when the app contains no games
 class EmptyGamesPlaceholder extends StatelessWidget {
   const EmptyGamesPlaceholder({super.key});
 

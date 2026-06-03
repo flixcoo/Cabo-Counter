@@ -26,18 +26,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Home screen of the app that displays a list of game sessions.
 ///
-/// The [MainMenuView] is the main entry point for the app's home screen.
+/// The [HomeView] is the main entry point for the app's home screen.
 /// It displays a list of existing game sessions, allows users to create new games,
 /// access settings, and handles user feedback dialogs for app rating and support.
-class MainMenuView extends StatefulWidget {
-  const MainMenuView({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _MainMenuViewState createState() => _MainMenuViewState();
+  _HomeViewState createState() => _HomeViewState();
 }
 
-class _MainMenuViewState extends State<MainMenuView> {
+class _HomeViewState extends State<HomeView> {
   /// Indicates whether the view is currently loading data from the database
   bool _isLoading = true;
 
