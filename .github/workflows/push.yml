@@ -29,6 +29,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
+          git pull
           git commit -m "Actions: Updating version [skip ci]"
           git push origin HEAD:${{ github.ref_name }}
 
@@ -105,6 +106,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull
           git add .
           git commit -m "Actions: Sorting .arb-Files [skip ci]"
           git push
@@ -162,6 +164,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull
           git add .
           git commit -m "Actions: Auto-formatting [skip ci]"
           git push
