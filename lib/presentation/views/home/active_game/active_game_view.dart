@@ -18,6 +18,7 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
 ///
@@ -72,13 +73,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
               gameSession.getPlayerScoresAsList(),
               sortedPlayerIndices,
             );
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                previousPageTitle: loc.games,
-                middle: Text(loc.overview),
+            return Scaffold(
+              appBar: AppBar(
+                //previousPageTitle: loc.games,
+                title: Text(loc.overview),
               ),
-              child: SafeArea(
+              body: SafeArea(
+                bottom: false,
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -212,27 +217,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         content: [
                           if (!gameSession.isPointsLimitEnabled)
                             ActiveGameListTile(
-                              title: Text(
-                                loc.end_game,
-                                style:
-                                    gameSession.roundNumber > 1 &&
-                                        !gameSession.isGameFinished
-                                    ? const TextStyle(
-                                        color: CustomTheme.textColor,
-                                      )
-                                    : TextStyle(
-                                        color: CustomTheme.textColor.withAlpha(
-                                          100,
-                                        ),
-                                      ),
-                              ),
-
-                              onTap: () {
-                                if (gameSession.roundNumber > 1 &&
-                                    !gameSession.isGameFinished) {
-                                  _showEndGameDialog();
-                                }
-                              },
+                              title: Text(loc.end_game),
+                              showDisabledState: true,
+                              onTap:
+                                  (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished)
+                                  ? () => _showEndGameDialog()
+                                  : null,
                             ),
                           ActiveGameListTile(
                             title: Text(loc.delete_game),

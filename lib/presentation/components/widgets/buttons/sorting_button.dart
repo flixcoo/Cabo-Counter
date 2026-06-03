@@ -4,6 +4,7 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -47,21 +48,21 @@ class SortingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const buttonPadding = EdgeInsets.zero;
-    final icon = Icon(IconService.sort);
+    final icon = IconService.sort;
     const iconSize = Constants.NAVBAR_ICON_SIZE;
 
     if (Platform.isIOS) {
       return PullDownButton(
         itemBuilder: _pullDownMenuItems,
-        buttonBuilder: (context, showMenu) => IconButton(
+        buttonBuilder: (context, showMenu) => OpacityButton.icon(
           onPressed: showMenu,
           padding: buttonPadding,
           icon: icon,
-          iconSize: iconSize,
+          size: iconSize,
         ),
       );
     } else {
-      return IconButton(
+      return OpacityButton.icon(
         onPressed: () {
           showModalBottomSheet(
             context: context,
@@ -76,7 +77,7 @@ class SortingButton extends StatelessWidget {
         },
         padding: buttonPadding,
         icon: icon,
-        iconSize: iconSize,
+        size: iconSize,
       );
     }
   }

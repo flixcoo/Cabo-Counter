@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -36,9 +37,9 @@ class EmptyFilterPlaceholder extends StatelessWidget {
             style: const TextStyle(fontSize: 16),
           ),
         ),
-        CupertinoButton(
+        OpacityButton.text(
           onPressed: () => toggleShowOnlyActiveGames(),
-          child: Text(loc.empty_filter_button),
+          text: loc.empty_filter_button,
         ),
       ],
     );

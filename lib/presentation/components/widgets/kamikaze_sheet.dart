@@ -65,7 +65,7 @@ class KamikazeSheet extends StatelessWidget {
           onPressed: () => Navigator.pop(context, index),
           child: Text(
             player.name,
-            style: TextStyle(color: CustomTheme.kamikazeColor),
+            style: const TextStyle(color: CustomTheme.kamikazeColor),
           ),
         );
       }).toList(),
@@ -104,7 +104,7 @@ class KamikazeSheet extends StatelessWidget {
             return ListTile(
               title: Text(
                 player.name,
-                style: TextStyle(
+                style: const TextStyle(
                   color: CustomTheme.kamikazeColor,
                   fontSize: 18,
                 ),

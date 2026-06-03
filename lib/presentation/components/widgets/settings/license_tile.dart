@@ -35,8 +35,12 @@ class _LicenseTileState extends State<LicenseTile> {
           children: [
             Row(
               children: [
-                Icon(IconService.license, size: 28),
-                const SizedBox(width: 10),
+                Icon(
+                  IconService.license,
+                  size: 28,
+                  color: CustomTheme.primaryColor,
+                ),
+                const SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

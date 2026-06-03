@@ -1,11 +1,12 @@
 import 'package:cabo_counter/core/constants.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/license_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A view that displays information about the app, including its name, version,
@@ -17,10 +18,10 @@ class AboutView extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
-    return CupertinoPageScaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(middle: Text(loc.about)),
-      child: SafeArea(
+      appBar: AppBar(title: Text(loc.about)),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,29 +50,25 @@ class AboutView extends StatelessWidget {
                   child: Image.asset('assets/cabo_counter-logo_rounded.png'),
                 ),
               ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(loc.privacy_policy),
+              OpacityButton.text(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                text: loc.privacy_policy,
                 onPressed: () =>
                     launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
               ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(loc.support_me),
+              OpacityButton.text(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                text: loc.support_me,
                 onPressed: () => launchUrl(Uri.parse(Constants.DONATE_LINK)),
               ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(loc.legal_notice),
+              OpacityButton.text(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                text: loc.legal_notice,
                 onPressed: () => launchUrl(Uri.parse(Constants.LEGAL_LINK)),
               ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(loc.licenses),
+              OpacityButton.text(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                text: loc.licenses,
                 onPressed: () => Navigator.push(
                   context,
                   CupertinoPageRoute(builder: (_) => const LicenseView()),
@@ -85,21 +82,23 @@ class AboutView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
+                  OpacityButton.icon(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
-                    icon: Icon(IconService.website),
+                    icon: IconService.website,
+                    color: CustomTheme.primaryColor,
                   ),
-                  IconButton(
+                  OpacityButton.icon(
                     onPressed: () => launchUrl(
                       Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
                     ),
-                    icon: Icon(IconService.e_mail),
+                    icon: IconService.e_mail,
+                    color: CustomTheme.primaryColor,
                   ),
-                  IconButton(
+                  OpacityButton.icon(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_LINK)),
-                    icon: const FaIcon(FontAwesomeIcons.github, size: 22),
+                    icon: IconService.brand_github,
                   ),
                 ],
               ),

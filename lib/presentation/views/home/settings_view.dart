@@ -43,13 +43,14 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(loc.settings),
-        previousPageTitle: loc.games,
-      ),
-      child: SafeArea(
+    return Scaffold(
+      appBar: AppBar(title: Text(loc.settings)),
+      body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +78,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.point_limit,
-                    prefixIcon: IconService.point_limit,
+                    prefixIcon: IconService.bullseye,
                     showChevron: false,
                     suffixWidget: CustomStepper(
                       key: _stepperKey2,
@@ -124,19 +125,16 @@ class _SettingsViewState extends State<SettingsView> {
                     prefixIcon: IconService.shuffle_cards,
                     suffixWidget: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Switch.adaptive(
-                          activeTrackColor: CustomTheme.primaryColor,
-                          inactiveThumbColor: Colors.white,
-                          value: rotateShuffler,
-                          onChanged: (switchValue) {
-                            setState(() {
-                              ConfigService.setRotateShuffler(switchValue);
-                              rotateShuffler = switchValue;
-                            });
-                          },
-                        ),
+                      child: Switch.adaptive(
+                        activeTrackColor: CustomTheme.primaryColor,
+                        inactiveThumbColor: Colors.white,
+                        value: rotateShuffler,
+                        onChanged: (switchValue) {
+                          setState(() {
+                            ConfigService.setRotateShuffler(switchValue);
+                            rotateShuffler = switchValue;
+                          });
+                        },
                       ),
                     ),
                     showChevron: false,
@@ -189,7 +187,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.report_error,
-                    prefixIcon: IconService.report_error,
+                    prefixIcon: IconService.brand_github,
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),

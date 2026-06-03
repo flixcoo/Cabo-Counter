@@ -18,7 +18,7 @@ class ModeTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: const BoxDecoration(
           color: CustomTheme.mainElementColor,

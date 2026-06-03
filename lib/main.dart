@@ -1,10 +1,10 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/tab_bar.dart';
+import 'package:cabo_counter/presentation/components/custom_navigation_bar.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: const [
         Locale('en'), // English
@@ -74,18 +74,49 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         }
         return supportedLocales.first;
       },
-      theme: const CupertinoThemeData(
-        applyThemeToAll: true,
+      theme: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: CustomTheme.primaryColor,
+          brightness: Brightness.dark,
+          primary: CustomTheme.primaryColor,
+          onPrimary: CustomTheme.textColor,
+          surface: CustomTheme.backgroundColor,
+          onSurface: CustomTheme.textColor,
+        ),
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            iconColor: WidgetStatePropertyAll(CustomTheme.primaryColor),
+          ),
+        ),
+        textButtonTheme: const TextButtonThemeData(
+          style: ButtonStyle(
+            textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 17)),
+            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 12)),
+          ),
+        ),
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 17)),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: CustomTheme.backgroundColor,
+          foregroundColor: CustomTheme.textColor,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            color: CustomTheme.textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         brightness: Brightness.dark,
         primaryColor: CustomTheme.primaryColor,
         scaffoldBackgroundColor: CustomTheme.backgroundColor,
-        textTheme: CupertinoTextThemeData(
-          primaryColor: CustomTheme.primaryColor,
-        ),
       ),
       debugShowCheckedModeBanner: false,
       title: 'Cabo Counter',
-      home: const TabBar(),
+      home: const CustomNavigationBar(),
     );
   }
 }

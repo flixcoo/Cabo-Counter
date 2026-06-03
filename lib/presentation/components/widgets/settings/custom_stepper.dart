@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart'; // Für iOS-Style
 
@@ -49,10 +50,10 @@ class _CustomStepperState extends State<CustomStepper> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        CupertinoButton(
-          padding: EdgeInsets.zero,
+        OpacityButton.icon(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           onPressed: _decrement,
-          child: Icon(IconService.minus),
+          icon: IconService.minus,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -61,10 +62,10 @@ class _CustomStepperState extends State<CustomStepper> {
             style: const TextStyle(fontSize: 18, color: CustomTheme.white),
           ),
         ),
-        CupertinoButton(
-          padding: EdgeInsets.zero,
+        OpacityButton.icon(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           onPressed: _increment,
-          child: Icon(IconService.add),
+          icon: IconService.add,
         ),
       ],
     );

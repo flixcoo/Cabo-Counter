@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 ///
 /// The [PointsView] widget shows a table with all rounds and player scores,
 /// including score updates and highlights for players who said "Cabo".
-/// It uses a Cupertino-style layout and adapts to the number of players.
 ///
 /// Requires a [GameSession] to provide player and round data.
 class PointsView extends StatefulWidget {
@@ -24,12 +23,13 @@ class _PointsViewState extends State<PointsView> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(loc.point_overview),
-        previousPageTitle: loc.overview,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loc.point_overview),
+        //previousPageTitle: loc.overview,
       ),
-      child: SafeArea(
+      body: SafeArea(
+        bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             const double caboFieldWidthFactor = 0.2;
@@ -94,6 +94,9 @@ class _PointsViewState extends State<PointsView> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom,
+                    ),
                     scrollDirection: Axis.vertical,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
