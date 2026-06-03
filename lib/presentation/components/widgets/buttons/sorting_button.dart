@@ -47,7 +47,7 @@ class SortingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const buttonPadding = EdgeInsets.zero;
+    const buttonPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 8);
     final icon = IconService.sort;
     const iconSize = Constants.NAVBAR_ICON_SIZE;
 
