@@ -38,11 +38,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  /// Indicates whether the view is currently loading data from the database
   bool _isLoading = true;
-
-  /// Map to hold the status of data migration and amount of migrated games
-  late Map<String, dynamic> migrationStatus;
 
   /// List of game sessions to be displayed based on sorting and filtering.
   /// Gets initialized with all games from the game manager
