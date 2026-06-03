@@ -30,13 +30,9 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
   bool isDisabled = false;
 
   @override
-  void initState() {
-    super.initState();
-    isDisabled = widget.onTap == null;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    isDisabled = widget.onTap == null;
+
     return GestureDetector(
       onTapDown: isDisabled
           ? null
