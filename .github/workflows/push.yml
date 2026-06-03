@@ -89,7 +89,7 @@ jobs:
         run: flutter pub get
 
       - name: Sort ARB files
-        run: flutter pub run intl_utils:sort
+        run: dart run arb_utils sort lib/l10n/arb/app_*.arb
 
       - name: Check for changes
         id: check_changes
