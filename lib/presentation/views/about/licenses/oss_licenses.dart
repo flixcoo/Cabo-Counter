@@ -39400,12 +39400,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cabo_counter 1.0.11+1084
+/// cabo_counter 1.0.12+1085
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
-    version: '1.0.11+1084',
+    version: '1.0.12+1085',
     spdxIdentifiers: [],
     isMarkdown: false,
     isSdk: false,
