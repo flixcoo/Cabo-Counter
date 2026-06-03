@@ -44,10 +44,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
       child: CupertinoFormRow(
         prefix: Row(
           children: [
-            Icon(
-              widget.prefixIcon,
-              color: CustomTheme.primaryColor,
-            ),
+            Icon(widget.prefixIcon, color: CustomTheme.primaryColor),
             const SizedBox(width: 10),
             Text(widget.prefixText),
           ],

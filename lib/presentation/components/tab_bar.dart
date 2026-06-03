@@ -28,31 +28,30 @@ class _TabBarState extends State<TabBar> {
     return CupertinoTabScaffold(
       resizeToAvoidBottomInset: false,
       tabBar: CupertinoTabBar(
-          backgroundColor: CustomTheme.mainElementBackgroundColor,
-          iconSize: 27,
-          height: 55,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                IconService.home,
-              ),
-              label: AppLocalizations.of(context).home,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                IconService.info,
-              ),
-              label: AppLocalizations.of(context).about,
-            ),
-          ]),
+        backgroundColor: CustomTheme.mainElementBackgroundColor,
+        iconSize: 27,
+        height: 55,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(IconService.home),
+            label: AppLocalizations.of(context).home,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(IconService.info),
+            label: AppLocalizations.of(context).about,
+          ),
+        ],
+      ),
       tabBuilder: (BuildContext context, int index) {
-        return CupertinoTabView(builder: (BuildContext context) {
-          if (index == 0) {
-            return const MainMenuView();
-          } else {
-            return const AboutView();
-          }
-        });
+        return CupertinoTabView(
+          builder: (BuildContext context) {
+            if (index == 0) {
+              return const MainMenuView();
+            } else {
+              return const AboutView();
+            }
+          },
+        );
       },
     );
   }

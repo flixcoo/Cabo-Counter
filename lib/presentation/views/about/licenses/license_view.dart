@@ -45,7 +45,8 @@ class LicenseView extends StatelessWidget {
                         builder: (_) => LicenseDetailView(
                           title: allDependencies[index].name,
                           description: allDependencies[index].description,
-                          license: allDependencies[index].license ??
+                          license:
+                              allDependencies[index].license ??
                               AppLocalizations.of(context).no_license_text,
                         ),
                       ),

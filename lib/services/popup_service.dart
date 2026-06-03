@@ -39,7 +39,7 @@ class PopupService {
                     Navigator.of(context).pop();
                     if (onAfterPop != null) onAfterPop();
                   },
-                )
+                ),
         ],
       ),
     );
@@ -76,7 +76,8 @@ class PopupService {
   /// PreRatingDialogDecision.no: User does not like the app.
   /// PreRatingDialogDecision.cancel: User cancels the dialog.
   static Future<PreRatingDialogDecision> showPreRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     return await PopupService.showSelectionPopup<PreRatingDialogDecision>(
           context: context,
           actions: [
@@ -93,7 +94,7 @@ class PopupService {
               returnValue: PreRatingDialogDecision.cancel,
               isDestructiveAction: true,
               actionText: AppLocalizations.of(context).cancel,
-            )
+            ),
           ],
           title: Text(AppLocalizations.of(context).pre_rating_title),
           message: Text(AppLocalizations.of(context).pre_rating_message),
@@ -106,7 +107,8 @@ class PopupService {
   /// BadRatingDialogDecision.email: User wants to send an email for feedback.
   /// BadRatingDialogDecision.cancel: User cancels the dialog.
   static Future<BadRatingDialogDecision> showBadRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     return await PopupService.showSelectionPopup<BadRatingDialogDecision>(
           context: context,
           title: Text(AppLocalizations.of(context).bad_rating_title),
@@ -132,8 +134,9 @@ class PopupService {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           title: Text(AppLocalizations.of(context).delete_game_title),
-          message:
-              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
+          message: Text(
+            AppLocalizations.of(context).delete_game_message(gameTitle),
+          ),
           actions: [
             CustomDialogAction(
               returnValue: false,

@@ -99,7 +99,8 @@ void main() {
 
   group('toString()', () {
     test('toString() returns correct string representation', () {
-      final expectedString = 'Round $testRoundNum, '
+      final expectedString =
+          'Round $testRoundNum, '
           'caboPlayerIndex: $testCaboPlayerIndex, '
           'kamikazePlayerIndex: $testKamikazePlayerIndex, '
           'scores: $testScores, '
@@ -119,7 +120,8 @@ void main() {
         scoreUpdates: testScoreUpdates,
       );
 
-      final expectedString = 'Round $testRoundNum, '
+      final expectedString =
+          'Round $testRoundNum, '
           'caboPlayerIndex: $testCaboPlayerIndex, '
           'kamikazePlayerIndex: null, '
           'scores: $testScores, '

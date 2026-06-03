@@ -11,8 +11,10 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Ensure the app runs in portrait mode only
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   // Initialize services
   await ConfigService.initConfig();
   await VersionService.init();
@@ -50,7 +52,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       precacheImage(
-          const AssetImage('assets/cabo_counter-logo_rounded.png'), context);
+        const AssetImage('assets/cabo_counter-logo_rounded.png'),
+        context,
+      );
     }
   }
 

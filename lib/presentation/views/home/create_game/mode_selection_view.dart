@@ -12,27 +12,34 @@ import 'package:flutter/cupertino.dart';
 class ModeSelectionMenu extends StatelessWidget {
   final int pointLimit;
   final bool showDeselection;
-  const ModeSelectionMenu(
-      {super.key, required this.pointLimit, required this.showDeselection});
+  const ModeSelectionMenu({
+    super.key,
+    required this.pointLimit,
+    required this.showDeselection,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(AppLocalizations.of(context).gamemode),
-        previousPageTitle:
-            !showDeselection ? AppLocalizations.of(context).new_game : '',
+        previousPageTitle: !showDeselection
+            ? AppLocalizations.of(context).new_game
+            : '',
       ),
       child: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
-              title: Text('$pointLimit ${AppLocalizations.of(context).points}',
-                  style: CustomTheme.modeTitle),
+              title: Text(
+                '$pointLimit ${AppLocalizations.of(context).points}',
+                style: CustomTheme.modeTitle,
+              ),
               subtitle: Text(
-                AppLocalizations.of(context)
-                    .point_limit_description(pointLimit),
+                AppLocalizations.of(
+                  context,
+                ).point_limit_description(pointLimit),
                 style: CustomTheme.modeDescription,
                 maxLines: 3,
               ),
@@ -44,8 +51,10 @@ class ModeSelectionMenu extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
             child: CupertinoListTile(
-              title: Text(AppLocalizations.of(context).unlimited,
-                  style: CustomTheme.modeTitle),
+              title: Text(
+                AppLocalizations.of(context).unlimited,
+                style: CustomTheme.modeTitle,
+              ),
               subtitle: Text(
                 AppLocalizations.of(context).unlimited_description,
                 style: CustomTheme.modeDescription,
@@ -57,22 +66,25 @@ class ModeSelectionMenu extends StatelessWidget {
             ),
           ),
           Visibility(
-              visible: showDeselection,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: CupertinoListTile(
-                  title: Text(AppLocalizations.of(context).no_default_mode,
-                      style: CustomTheme.modeTitle),
-                  subtitle: Text(
-                    AppLocalizations.of(context).no_default_description,
-                    style: CustomTheme.modeDescription,
-                    maxLines: 3,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context, GameMode.none);
-                  },
+            visible: showDeselection,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+              child: CupertinoListTile(
+                title: Text(
+                  AppLocalizations.of(context).no_default_mode,
+                  style: CustomTheme.modeTitle,
                 ),
-              )),
+                subtitle: Text(
+                  AppLocalizations.of(context).no_default_description,
+                  style: CustomTheme.modeDescription,
+                  maxLines: 3,
+                ),
+                onTap: () {
+                  Navigator.pop(context, GameMode.none);
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

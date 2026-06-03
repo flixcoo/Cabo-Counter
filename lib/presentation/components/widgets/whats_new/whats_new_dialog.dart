@@ -29,10 +29,7 @@ class WhatsNewDialog extends StatelessWidget {
             Text(
               'Version ${VersionService.getVersionNumber()}',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
             const SizedBox(height: 40),
             Expanded(
@@ -46,9 +43,10 @@ class WhatsNewDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   WhatsNewItem(
-                      icon: Icons.navigation,
-                      title: AppLocalizations.of(context).wn_item_2,
-                      text: AppLocalizations.of(context).wn_description_2),
+                    icon: Icons.navigation,
+                    title: AppLocalizations.of(context).wn_item_2,
+                    text: AppLocalizations.of(context).wn_description_2,
+                  ),
                 ],
               ),
             ),

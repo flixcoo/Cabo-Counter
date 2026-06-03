@@ -40,8 +40,8 @@ class GameSession extends ChangeNotifier {
     this.winner = '',
     this.roundNumber = 1,
     List<Round>? roundList,
-  })  : gameId = gameId ?? const Uuid().v4(),
-        roundList = roundList ?? [];
+  }) : gameId = gameId ?? const Uuid().v4(),
+       roundList = roundList ?? [];
 
   @override
   toString() {
@@ -52,34 +52,36 @@ class GameSession extends ChangeNotifier {
 
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
-        'id': gameId,
-        'createdAt': createdAt.toIso8601String(),
-        'gameTitle': gameTitle,
-        'players': players.map((p) => p.toJson()).toList(),
-        'pointLimit': pointLimit,
-        'caboPenalty': caboPenalty,
-        'isPointsLimitEnabled': isPointsLimitEnabled,
-        'isGameFinished': isGameFinished,
-        'winner': winner,
-        'roundNumber': roundNumber,
-        'roundList': roundList.map((e) => e.toJson()).toList()
-      };
+    'id': gameId,
+    'createdAt': createdAt.toIso8601String(),
+    'gameTitle': gameTitle,
+    'players': players.map((p) => p.toJson()).toList(),
+    'pointLimit': pointLimit,
+    'caboPenalty': caboPenalty,
+    'isPointsLimitEnabled': isPointsLimitEnabled,
+    'isGameFinished': isGameFinished,
+    'winner': winner,
+    'roundNumber': roundNumber,
+    'roundList': roundList.map((e) => e.toJson()).toList(),
+  };
 
   /// Creates a GameSession object from a JSON map.
   GameSession.fromJson(Map<String, dynamic> json)
-      : gameId = json['id'] ?? const Uuid().v4(),
-        createdAt = DateTime.parse(json['createdAt']),
-        gameTitle = json['gameTitle'],
-        players =
-            (json['players'] as List).map((e) => Player.fromJson(e)).toList(),
-        pointLimit = json['pointLimit'],
-        caboPenalty = json['caboPenalty'],
-        isPointsLimitEnabled = json['isPointsLimitEnabled'],
-        isGameFinished = json['isGameFinished'],
-        winner = json['winner'],
-        roundNumber = json['roundNumber'],
-        roundList =
-            (json['roundList'] as List).map((e) => Round.fromJson(e)).toList();
+    : gameId = json['id'] ?? const Uuid().v4(),
+      createdAt = DateTime.parse(json['createdAt']),
+      gameTitle = json['gameTitle'],
+      players = (json['players'] as List)
+          .map((e) => Player.fromJson(e))
+          .toList(),
+      pointLimit = json['pointLimit'],
+      caboPenalty = json['caboPenalty'],
+      isPointsLimitEnabled = json['isPointsLimitEnabled'],
+      isGameFinished = json['isGameFinished'],
+      winner = json['winner'],
+      roundNumber = json['roundNumber'],
+      roundList = (json['roundList'] as List)
+          .map((e) => Round.fromJson(e))
+          .toList();
 
   /// Assigns 50 points to all players except the kamikaze player.
   /// [kamikazePlayerIndex] is the index of the kamikaze player.
@@ -92,7 +94,12 @@ class GameSession extends ChangeNotifier {
       }
     }
     addRoundScoresToList(
-        roundNum, roundScores, scoreUpdates, 0, kamikazePlayerIndex);
+      roundNum,
+      roundScores,
+      scoreUpdates,
+      0,
+      kamikazePlayerIndex,
+    );
   }
 
   /// Checks the scores of the current round and assigns points to the players.
@@ -108,7 +115,10 @@ class GameSession extends ChangeNotifier {
   ///  Every player with the lowest score gets 0 points.
   ///  Every other player gets their round score.
   void calculateScoredPoints(
-      int roundNum, List<int> roundScores, int caboPlayerIndex) {
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+  ) {
     /// List of the index of the player(s) with the lowest score
     List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
 
@@ -118,8 +128,13 @@ class GameSession extends ChangeNotifier {
       _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
     } else {
       // A player other than the one who said CABO has the fewest points.
-      _assignPoints(roundNum, roundScores, caboPlayerIndex, lowestScoreIndex,
-          caboPlayerIndex);
+      _assignPoints(
+        roundNum,
+        roundScores,
+        caboPlayerIndex,
+        lowestScoreIndex,
+        caboPlayerIndex,
+      );
     }
   }
 
@@ -147,18 +162,31 @@ class GameSession extends ChangeNotifier {
   }
 
   @visibleForTesting
-  void testingAssignPoints(int roundNum, List<int> roundScores,
-          int caboPlayerIndex, List<int> winnerIndex, [int? loserIndex]) =>
-      _assignPoints(
-          roundNum, roundScores, caboPlayerIndex, winnerIndex, loserIndex);
+  void testingAssignPoints(
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+    List<int> winnerIndex, [
+    int? loserIndex,
+  ]) => _assignPoints(
+    roundNum,
+    roundScores,
+    caboPlayerIndex,
+    winnerIndex,
+    loserIndex,
+  );
 
   /// Assigns points to the players based on the scores of the current round.
   /// [roundNum] is the number of the current round.
   /// [roundScores] is the raw list of the scores of all players in the current round.
   /// [winnerIndex] is the index of the player who receives 5 extra points
-  void _assignPoints(int roundNum, List<int> roundScores, int caboPlayerIndex,
-      List<int> winnerIndex,
-      [int? loserIndex]) {
+  void _assignPoints(
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+    List<int> winnerIndex, [
+    int? loserIndex,
+  ]) {
     /// List of the updates for every player score
     List<int> scoreUpdates = [...roundScores];
 
@@ -195,12 +223,18 @@ class GameSession extends ChangeNotifier {
     );
     if (roundNum > roundList.length) {
       roundList.add(newRound);
-      databaseInstance.roundsDao
-          .insertOneRound(gameId: gameId, round: newRound, players: players);
+      databaseInstance.roundsDao.insertOneRound(
+        gameId: gameId,
+        round: newRound,
+        players: players,
+      );
     } else {
       roundList[roundNum - 1] = newRound;
-      databaseInstance.roundsDao
-          .replaceRound(gameId: gameId, round: newRound, players: players);
+      databaseInstance.roundsDao.replaceRound(
+        gameId: gameId,
+        round: newRound,
+        players: players,
+      );
     }
 
     notifyListeners();
@@ -237,8 +271,10 @@ class GameSession extends ChangeNotifier {
         isGameFinished = false;
       }
     }
-    databaseInstance.gameSessionDao
-        .setGameFinishStatus(gameId: gameId, isFinished: isGameFinished);
+    databaseInstance.gameSessionDao.setGameFinishStatus(
+      gameId: gameId,
+      isFinished: isGameFinished,
+    );
     notifyListeners();
     return bonusPlayers;
   }
@@ -307,8 +343,10 @@ class GameSession extends ChangeNotifier {
   /// Increases the round number by 1.
   void increaseRound() {
     roundNumber++;
-    databaseInstance.gameSessionDao
-        .setRoundNumber(gameId: gameId, roundNumber: roundNumber);
+    databaseInstance.gameSessionDao.setRoundNumber(
+      gameId: gameId,
+      roundNumber: roundNumber,
+    );
 
     notifyListeners();
   }

@@ -49,9 +49,7 @@ class CustomTheme {
   );
 
   /// Default text style for mode descriptions.
-  static const TextStyle modeDescription = TextStyle(
-    fontSize: 16,
-  );
+  static const TextStyle modeDescription = TextStyle(fontSize: 16);
 
   /// Text style for titles of sections of [CupertinoListTile].
   static TextStyle rowTitle = TextStyle(

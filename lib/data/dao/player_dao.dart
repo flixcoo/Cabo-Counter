@@ -23,8 +23,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
         position: row.position,
         totalScore: row.totalScore,
       );
-    }).toList()
-      ..sort((a, b) => a.position.compareTo(b.position));
+    }).toList()..sort((a, b) => a.position.compareTo(b.position));
   }
 
   /// Retrieves a players position by its id
@@ -37,8 +36,10 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   }
 
   /// Inserts a new player into the database.
-  Future<void> insertPlayers(
-      {required String gameId, required List<Player> players}) async {
+  Future<void> insertPlayers({
+    required String gameId,
+    required List<Player> players,
+  }) async {
     await batch((batch) {
       for (int i = 0; i < players.length; i++) {
         batch.insert(
@@ -63,9 +64,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
         final updatedScore = players[i].totalScore;
         batch.update(
           playerTable,
-          PlayerTableCompanion(
-            totalScore: Value(updatedScore),
-          ),
+          PlayerTableCompanion(totalScore: Value(updatedScore)),
           where: (tbl) => tbl.playerId.equals(player.playerId),
         );
       }
