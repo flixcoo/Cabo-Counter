@@ -91,7 +91,11 @@ jobs:
         run: flutter pub get
 
       - name: Sort ARB files
-        run: dart run arb_utils sort lib/l10n/arb/app_*.arb
+        run: |
+          for file in lib/l10n/arb/app_*.arb; do
+            echo "Sorting $file"
+            dart run arb_utils sort "$file"
+          done
 
       - name: Check for changes
         id: check_changes
