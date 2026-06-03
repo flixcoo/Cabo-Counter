@@ -104,7 +104,10 @@ jobs:
         if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Actions: Sorting .arb-Files [skip ci]"
+          git push
 
   lint:
     runs-on: ubuntu-latest
