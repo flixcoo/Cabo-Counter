@@ -89,4 +89,10 @@ class _MainMenuButtonState extends State<MainMenuButton>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 }
