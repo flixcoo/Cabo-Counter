@@ -15,10 +15,9 @@ class OpacityButton extends StatefulWidget {
     required this.onPressed,
     this.darkenAmount,
     this.padding,
-    required bool isText,
-    required bool isIcon,
-  }) : _isText = isText,
-       _isIcon = isIcon;
+    required this._isText,
+    required this._isIcon,
+  });
 
   /// Creates an [OpacityButton] with text.
   factory OpacityButton.text({
