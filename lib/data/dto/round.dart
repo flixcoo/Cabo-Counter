@@ -35,22 +35,22 @@ class Round {
 
   /// Converts the Round object to a JSON map.
   Map<String, dynamic> toJson() => {
-        'roundId': roundId,
-        'gameId': gameId,
-        'roundNum': roundNum,
-        'caboPlayerIndex': caboPlayerIndex,
-        'kamikazePlayerIndex': kamikazePlayerIndex,
-        'scores': scores,
-        'scoreUpdates': scoreUpdates,
-      };
+    'roundId': roundId,
+    'gameId': gameId,
+    'roundNum': roundNum,
+    'caboPlayerIndex': caboPlayerIndex,
+    'kamikazePlayerIndex': kamikazePlayerIndex,
+    'scores': scores,
+    'scoreUpdates': scoreUpdates,
+  };
 
   /// Creates a Round object from a JSON map.
   Round.fromJson(Map<String, dynamic> json)
-      : roundId = json['roundId'],
-        gameId = json['gameId'],
-        roundNum = json['roundNum'],
-        caboPlayerIndex = json['caboPlayerIndex'],
-        kamikazePlayerIndex = json['kamikazePlayerIndex'],
-        scores = List<int>.from(json['scores']),
-        scoreUpdates = List<int>.from(json['scoreUpdates']);
+    : roundId = json['roundId'],
+      gameId = json['gameId'],
+      roundNum = json['roundNum'],
+      caboPlayerIndex = json['caboPlayerIndex'],
+      kamikazePlayerIndex = json['kamikazePlayerIndex'],
+      scores = List<int>.from(json['scores']),
+      scoreUpdates = List<int>.from(json['scoreUpdates']);
 }

@@ -117,25 +117,27 @@ void main() {
       scoreUpdates: [0, 7, 5],
     );
     gameSession = GameSession(
-        gameId: 'test_game_id',
-        createdAt: DateTime.now(),
-        isGameFinished: false,
-        gameTitle: 'test game session',
-        pointLimit: 100,
-        caboPenalty: 5,
-        isPointsLimitEnabled: true,
-        players: [player1, player2, player3],
-        roundList: [round1, round2, round3]);
+      gameId: 'test_game_id',
+      createdAt: DateTime.now(),
+      isGameFinished: false,
+      gameTitle: 'test game session',
+      pointLimit: 100,
+      caboPenalty: 5,
+      isPointsLimitEnabled: true,
+      players: [player1, player2, player3],
+      roundList: [round1, round2, round3],
+    );
     gameSession2 = GameSession(
-        gameId: 'test_game_id2',
-        createdAt: DateTime.now(),
-        isGameFinished: false,
-        gameTitle: 'test game session 2',
-        pointLimit: 100,
-        caboPenalty: 5,
-        isPointsLimitEnabled: true,
-        players: [player4, player5, player6],
-        roundList: [round4, round5, round6]);
+      gameId: 'test_game_id2',
+      createdAt: DateTime.now(),
+      isGameFinished: false,
+      gameTitle: 'test game session 2',
+      pointLimit: 100,
+      caboPenalty: 5,
+      isPointsLimitEnabled: true,
+      players: [player4, player5, player6],
+      roundList: [round4, round5, round6],
+    );
   });
   tearDown(() async {
     await database.close();
@@ -144,8 +146,9 @@ void main() {
   group('GameSession-Tests', () {
     test('Inserting and fetching a game session works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      final fetchedSessions = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      final fetchedSessions = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       if (fetchedSessions == null) {
         fail('Fetched game session is null');
@@ -154,8 +157,10 @@ void main() {
         expect(fetchedSessions.gameTitle, gameSession.gameTitle);
         expect(fetchedSessions.pointLimit, gameSession.pointLimit);
         expect(fetchedSessions.caboPenalty, gameSession.caboPenalty);
-        expect(fetchedSessions.isPointsLimitEnabled,
-            gameSession.isPointsLimitEnabled);
+        expect(
+          fetchedSessions.isPointsLimitEnabled,
+          gameSession.isPointsLimitEnabled,
+        );
         expect(fetchedSessions.isGameFinished, gameSession.isGameFinished);
         expect(fetchedSessions.winner, gameSession.winner);
         expect(fetchedSessions.roundNumber, gameSession.roundNumber);
@@ -164,88 +169,120 @@ void main() {
       }
     });
 
-    test('Inserting and fetching multiple game sessions works correctly',
-        () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao.insertGameSession(gameSession2);
-      final fetchedSessions =
-          await database.gameSessionDao.getAllGameSessions();
+    test(
+      'Inserting and fetching multiple game sessions works correctly',
+      () async {
+        await database.gameSessionDao.insertGameSession(gameSession);
+        await database.gameSessionDao.insertGameSession(gameSession2);
+        final fetchedSessions = await database.gameSessionDao
+            .getAllGameSessions();
 
-      final expected = {
-        gameSession.gameId: gameSession,
-        gameSession2.gameId: gameSession2,
-      };
+        final expected = {
+          gameSession.gameId: gameSession,
+          gameSession2.gameId: gameSession2,
+        };
 
-      if (fetchedSessions == null) {
-        fail('Fetched game sessions is null');
-      } else {
-        expect(fetchedSessions.length, expected.length);
+        if (fetchedSessions == null) {
+          fail('Fetched game sessions is null');
+        } else {
+          expect(fetchedSessions.length, expected.length);
 
-        for (var session in fetchedSessions) {
-          final expectedSession = expected[session.gameId];
-          if (expectedSession == null) {
-            fail('Unexpected game session ID: ${session.gameId}');
-          } else {
-            expect(session.gameId, expectedSession.gameId);
-            expect(
-              session.createdAt
-                  .difference(expectedSession.createdAt)
-                  .inMilliseconds
-                  .abs(),
-              lessThan(1000),
-            );
-            expect(session.gameTitle, expectedSession.gameTitle);
-            expect(session.pointLimit, expectedSession.pointLimit);
-            expect(session.caboPenalty, expectedSession.caboPenalty);
-            expect(session.isPointsLimitEnabled,
-                expectedSession.isPointsLimitEnabled);
-            expect(session.isGameFinished, expectedSession.isGameFinished);
-            expect(session.winner, expectedSession.winner);
-            expect(session.roundNumber, expectedSession.roundNumber);
-            expect(session.players.length, expectedSession.players.length);
-            for (int i = 0; i < session.players.length; i++) {
-              expect(session.players[i].playerId,
-                  expectedSession.players[i].playerId);
+          for (var session in fetchedSessions) {
+            final expectedSession = expected[session.gameId];
+            if (expectedSession == null) {
+              fail('Unexpected game session ID: ${session.gameId}');
+            } else {
+              expect(session.gameId, expectedSession.gameId);
               expect(
-                  session.players[i].gameId, expectedSession.players[i].gameId);
-              expect(session.players[i].name, expectedSession.players[i].name);
-              expect(session.players[i].position,
-                  expectedSession.players[i].position);
-              expect(session.players[i].totalScore,
-                  expectedSession.players[i].totalScore);
-            }
+                session.createdAt
+                    .difference(expectedSession.createdAt)
+                    .inMilliseconds
+                    .abs(),
+                lessThan(1000),
+              );
+              expect(session.gameTitle, expectedSession.gameTitle);
+              expect(session.pointLimit, expectedSession.pointLimit);
+              expect(session.caboPenalty, expectedSession.caboPenalty);
+              expect(
+                session.isPointsLimitEnabled,
+                expectedSession.isPointsLimitEnabled,
+              );
+              expect(session.isGameFinished, expectedSession.isGameFinished);
+              expect(session.winner, expectedSession.winner);
+              expect(session.roundNumber, expectedSession.roundNumber);
+              expect(session.players.length, expectedSession.players.length);
+              for (int i = 0; i < session.players.length; i++) {
+                expect(
+                  session.players[i].playerId,
+                  expectedSession.players[i].playerId,
+                );
+                expect(
+                  session.players[i].gameId,
+                  expectedSession.players[i].gameId,
+                );
+                expect(
+                  session.players[i].name,
+                  expectedSession.players[i].name,
+                );
+                expect(
+                  session.players[i].position,
+                  expectedSession.players[i].position,
+                );
+                expect(
+                  session.players[i].totalScore,
+                  expectedSession.players[i].totalScore,
+                );
+              }
 
-            expect(session.roundList.length, expectedSession.roundList.length);
-            for (int i = 0; i < session.roundList.length; i++) {
-              expect(session.roundList[i].gameId,
-                  expectedSession.roundList[i].gameId);
-              expect(session.roundList[i].roundNum,
-                  expectedSession.roundList[i].roundNum);
-              expect(session.roundList[i].caboPlayerIndex,
-                  expectedSession.roundList[i].caboPlayerIndex);
-              expect(session.roundList[i].kamikazePlayerIndex,
-                  expectedSession.roundList[i].kamikazePlayerIndex);
-              expect(session.roundList[i].scores,
-                  expectedSession.roundList[i].scores);
-              expect(session.roundList[i].scoreUpdates,
-                  expectedSession.roundList[i].scoreUpdates);
+              expect(
+                session.roundList.length,
+                expectedSession.roundList.length,
+              );
+              for (int i = 0; i < session.roundList.length; i++) {
+                expect(
+                  session.roundList[i].gameId,
+                  expectedSession.roundList[i].gameId,
+                );
+                expect(
+                  session.roundList[i].roundNum,
+                  expectedSession.roundList[i].roundNum,
+                );
+                expect(
+                  session.roundList[i].caboPlayerIndex,
+                  expectedSession.roundList[i].caboPlayerIndex,
+                );
+                expect(
+                  session.roundList[i].kamikazePlayerIndex,
+                  expectedSession.roundList[i].kamikazePlayerIndex,
+                );
+                expect(
+                  session.roundList[i].scores,
+                  expectedSession.roundList[i].scores,
+                );
+                expect(
+                  session.roundList[i].scoreUpdates,
+                  expectedSession.roundList[i].scoreUpdates,
+                );
+              }
             }
           }
         }
-      }
-    });
+      },
+    );
 
     test('Deleting a game session works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      var session = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      var session = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       expect(session, isNotNull);
 
-      await database.gameSessionDao
-          .deleteGameSession(gameId: gameSession.gameId);
-      final fetchedSessions =
-          await database.gameSessionDao.getAllGameSessions();
+      await database.gameSessionDao.deleteGameSession(
+        gameId: gameSession.gameId,
+      );
+      final fetchedSessions = await database.gameSessionDao
+          .getAllGameSessions();
 
       expect(fetchedSessions, isNull);
     });
@@ -259,62 +296,80 @@ void main() {
       expect(sessions!.length, 2);
 
       await database.gameSessionDao.deleteAllGames();
-      final fetchedSessions =
-          await database.gameSessionDao.getAllGameSessions();
+      final fetchedSessions = await database.gameSessionDao
+          .getAllGameSessions();
 
       expect(fetchedSessions, isNull);
     });
 
     test('Updating game finish status works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao
-          .setGameFinishStatus(gameId: gameSession.gameId, isFinished: true);
-      var updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setGameFinishStatus(
+        gameId: gameSession.gameId,
+        isFinished: true,
+      );
+      var updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       expect(updatedSession, isNotNull);
       expect(updatedSession!.isGameFinished, isTrue);
 
-      await database.gameSessionDao
-          .setGameFinishStatus(gameId: gameSession.gameId, isFinished: false);
-      updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setGameFinishStatus(
+        gameId: gameSession.gameId,
+        isFinished: false,
+      );
+      updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
       expect(updatedSession, isNotNull);
       expect(updatedSession!.isGameFinished, isFalse);
     });
 
     test('Updating round number works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao
-          .setRoundNumber(gameId: gameSession.gameId, roundNumber: 4);
-      var updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setRoundNumber(
+        gameId: gameSession.gameId,
+        roundNumber: 4,
+      );
+      var updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       expect(updatedSession, isNotNull);
       expect(updatedSession!.roundNumber, 4);
 
-      await database.gameSessionDao
-          .setRoundNumber(gameId: gameSession.gameId, roundNumber: 2);
-      updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setRoundNumber(
+        gameId: gameSession.gameId,
+        roundNumber: 2,
+      );
+      updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
       expect(updatedSession, isNotNull);
       expect(updatedSession!.roundNumber, 2);
     });
 
     test('Updating winner works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao
-          .setWinner(gameId: gameSession.gameId, winner: 'Player 1');
-      var updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setWinner(
+        gameId: gameSession.gameId,
+        winner: 'Player 1',
+      );
+      var updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       expect(updatedSession, isNotNull);
       expect(updatedSession!.winner, 'Player 1');
 
-      await database.gameSessionDao
-          .setWinner(gameId: gameSession.gameId, winner: 'Player 2, Player 3');
-      updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      await database.gameSessionDao.setWinner(
+        gameId: gameSession.gameId,
+        winner: 'Player 2, Player 3',
+      );
+      updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
       expect(updatedSession, isNotNull);
       expect(updatedSession!.winner, 'Player 2, Player 3');
     });
@@ -323,8 +378,9 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameSession);
       int initialRoundNumber = gameSession.roundNumber;
       await database.gameSessionDao.endGame(gameId: gameSession.gameId);
-      var updatedSession = await database.gameSessionDao
-          .getGameSession(gameId: gameSession.gameId);
+      var updatedSession = await database.gameSessionDao.getGameSession(
+        gameId: gameSession.gameId,
+      );
 
       expect(updatedSession, isNotNull);
       expect(updatedSession!.isGameFinished, isTrue);

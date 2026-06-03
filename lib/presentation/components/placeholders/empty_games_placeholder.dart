@@ -15,11 +15,12 @@ class EmptyGamesPlaceholder extends StatelessWidget {
       children: [
         const SizedBox(height: 30),
         Center(
-            child: Icon(
-          IconService.no_games,
-          size: 60,
-          color: CustomTheme.primaryColor,
-        )),
+          child: Icon(
+            IconService.no_games,
+            size: 60,
+            color: CustomTheme.primaryColor,
+          ),
+        ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),

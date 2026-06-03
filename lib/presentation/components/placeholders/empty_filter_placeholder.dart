@@ -7,8 +7,10 @@ import 'package:flutter/cupertino.dart';
 class EmptyFilterPlaceholder extends StatelessWidget {
   final void Function() toggleShowOnlyActiveGames;
 
-  const EmptyFilterPlaceholder(
-      {super.key, required this.toggleShowOnlyActiveGames});
+  const EmptyFilterPlaceholder({
+    super.key,
+    required this.toggleShowOnlyActiveGames,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,9 @@ class EmptyFilterPlaceholder extends StatelessWidget {
           ),
         ),
         CupertinoButton(
-            onPressed: () => toggleShowOnlyActiveGames(),
-            child: Text(AppLocalizations.of(context).empty_filter_button))
+          onPressed: () => toggleShowOnlyActiveGames(),
+          child: Text(AppLocalizations.of(context).empty_filter_button),
+        ),
       ],
     );
   }
