@@ -147,4 +147,18 @@ abstract class IconService {
   /// Icon for website representation.
   static IconData get website =>
       Platform.isIOS ? CupertinoIcons.globe : Icons.language;
+
+  /// Icon for the point limit setting
+  static const IconData point_limit = IconData(
+    0xf140,
+    fontFamily: 'FontAwesomeSolid',
+    fontPackage: 'font_awesome_flutter',
+  );
+
+  /// Icon for reporting an error
+  static const IconData report_error = IconData(
+    0xf09b,
+    fontFamily: 'FontAwesomeBrands',
+    fontPackage: 'font_awesome_flutter',
+  );
 }

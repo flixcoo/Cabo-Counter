@@ -3,8 +3,11 @@ import 'package:drift/drift.dart';
 
 class RoundsTable extends Table {
   late final roundId = text()();
-  late final gameId = text()
-      .references(GameSessionTable, #gameId, onDelete: KeyAction.cascade)();
+  late final gameId = text().references(
+    GameSessionTable,
+    #gameId,
+    onDelete: KeyAction.cascade,
+  )();
   late final roundNumber = integer()();
   late final caboPlayerIndex = integer()();
   late final kamikazePlayerIndex = integer().nullable()();

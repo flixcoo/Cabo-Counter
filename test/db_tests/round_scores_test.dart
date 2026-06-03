@@ -65,15 +65,16 @@ void main() {
       scoreUpdates: [50, 50, 0],
     );
     gameSession = GameSession(
-        gameId: 'test_game_id',
-        createdAt: DateTime.now(),
-        isGameFinished: false,
-        gameTitle: 'test game session',
-        pointLimit: 100,
-        caboPenalty: 5,
-        isPointsLimitEnabled: true,
-        players: [player1, player2, player3],
-        roundList: [round1, round2, round3]);
+      gameId: 'test_game_id',
+      createdAt: DateTime.now(),
+      isGameFinished: false,
+      gameTitle: 'test game session',
+      pointLimit: 100,
+      caboPenalty: 5,
+      isPointsLimitEnabled: true,
+      players: [player1, player2, player3],
+      roundList: [round1, round2, round3],
+    );
   });
   tearDown(() async {
     await database.close();
@@ -84,12 +85,15 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameSession);
 
       final List<List<int>> scores = await Future.wait([
-        database.roundScoresDao
-            .getScoresByRoundId(roundId: gameSession.roundList[0].roundId),
-        database.roundScoresDao
-            .getScoresByRoundId(roundId: gameSession.roundList[1].roundId),
-        database.roundScoresDao
-            .getScoresByRoundId(roundId: gameSession.roundList[2].roundId),
+        database.roundScoresDao.getScoresByRoundId(
+          roundId: gameSession.roundList[0].roundId,
+        ),
+        database.roundScoresDao.getScoresByRoundId(
+          roundId: gameSession.roundList[1].roundId,
+        ),
+        database.roundScoresDao.getScoresByRoundId(
+          roundId: gameSession.roundList[2].roundId,
+        ),
       ]);
 
       for (int i = 0; i < scores.length; i++) {
@@ -105,11 +109,14 @@ void main() {
 
       final List<List<int>> scoreUpdates = await Future.wait([
         database.roundScoresDao.getScoreUpdatesByRoundId(
-            roundId: gameSession.roundList[0].roundId),
+          roundId: gameSession.roundList[0].roundId,
+        ),
         database.roundScoresDao.getScoreUpdatesByRoundId(
-            roundId: gameSession.roundList[1].roundId),
+          roundId: gameSession.roundList[1].roundId,
+        ),
         database.roundScoresDao.getScoreUpdatesByRoundId(
-            roundId: gameSession.roundList[2].roundId),
+          roundId: gameSession.roundList[2].roundId,
+        ),
       ]);
 
       for (int i = 0; i < scoreUpdates.length; i++) {

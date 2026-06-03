@@ -4,9 +4,10 @@ class RoundScore {
   final int score;
   final int scoreUpdate;
 
-  RoundScore(
-      {required this.roundId,
-      required this.playerId,
-      required this.score,
-      required this.scoreUpdate});
+  RoundScore({
+    required this.roundId,
+    required this.playerId,
+    required this.score,
+    required this.scoreUpdate,
+  });
 }

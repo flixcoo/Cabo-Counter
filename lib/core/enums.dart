@@ -23,23 +23,14 @@ enum BadRatingDialogDecision { email, cancel }
 /// - [none]: No game mode selected
 /// - [pointLimit]: Point limit mode
 /// - [unlimited]: Unlimited mode
-enum GameMode {
-  none,
-  pointLimit,
-  unlimited,
-}
+enum GameMode { none, pointLimit, unlimited }
 
 /// Status codes for creating a new game session.
 /// - [noModeSelected]: No game mode selected
 /// - [minPlayers]: Not enough players
 /// - [maxPlayers]: Too many players
 /// - [noPlayerName]: A player has no name
-enum CreateStatus {
-  noModeSelected,
-  minPlayers,
-  maxPlayers,
-  noPlayerName,
-}
+enum CreateStatus { noModeSelected, minPlayers, maxPlayers, noPlayerName }
 
 /// Status codes for importing game data from a JSON file.
 /// - [success]: Import successful
@@ -52,5 +43,5 @@ enum ImportStatus {
   canceled,
   validationError,
   formatError,
-  genericError
+  genericError,
 }

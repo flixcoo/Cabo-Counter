@@ -99,9 +99,7 @@ class AboutView extends StatelessWidget {
                   OpacityButton.icon(
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_LINK)),
-                    icon: FontAwesomeIcons.github,
-                    size: 22,
-                    color: CustomTheme.primaryColor,
+                    icon: const FaIcon(FontAwesomeIcons.github, size: 22),
                   ),
                 ],
               ),

@@ -7,13 +7,13 @@ class Player {
   final int position;
   int totalScore;
 
-  Player(
-      {String? playerId,
-      required this.gameId,
-      required this.name,
-      required this.position,
-      this.totalScore = 0})
-      : playerId = playerId ?? const Uuid().v4();
+  Player({
+    String? playerId,
+    required this.gameId,
+    required this.name,
+    required this.position,
+    this.totalScore = 0,
+  }) : playerId = playerId ?? const Uuid().v4();
 
   @override
   String toString() {
@@ -21,17 +21,17 @@ class Player {
   }
 
   Map<String, dynamic> toJson() => {
-        'playerId': playerId,
-        'gameId': gameId,
-        'name': name,
-        'position': position,
-        'totalScore': totalScore
-      };
+    'playerId': playerId,
+    'gameId': gameId,
+    'name': name,
+    'position': position,
+    'totalScore': totalScore,
+  };
 
   Player.fromJson(Map<String, dynamic> json)
-      : playerId = json['playerId'],
-        gameId = json['gameId'],
-        name = json['name'],
-        position = json['position'],
-        totalScore = json['totalScore'];
+    : playerId = json['playerId'],
+      gameId = json['gameId'],
+      name = json['name'],
+      position = json['position'],
+      totalScore = json['totalScore'];
 }

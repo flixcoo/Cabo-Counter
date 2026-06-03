@@ -96,10 +96,13 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameWithoutPlayers);
       final insertedPlayers = [player4, player5, player6];
       await database.playerDao.insertPlayers(
-          gameId: gameWithoutPlayers.gameId, players: insertedPlayers);
+        gameId: gameWithoutPlayers.gameId,
+        players: insertedPlayers,
+      );
 
-      final players = await database.playerDao
-          .getPlayersByGameId(gameId: gameWithoutPlayers.gameId);
+      final players = await database.playerDao.getPlayersByGameId(
+        gameId: gameWithoutPlayers.gameId,
+      );
 
       expect(players.length, 3);
       final expectedPlayers = [player4, player5, player6];
@@ -115,8 +118,9 @@ void main() {
 
     test('Fetch all players of a game correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      final players = await database.playerDao
-          .getPlayersByGameId(gameId: gameSession.gameId);
+      final players = await database.playerDao.getPlayersByGameId(
+        gameId: gameSession.gameId,
+      );
 
       expect(players.length, 3);
       final expectedPlayers = [player1, player2, player3];
@@ -132,18 +136,21 @@ void main() {
 
     test('Fetch player position by playerId correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      var position =
-          await database.playerDao.getPositionByPlayerId(player1.playerId);
+      var position = await database.playerDao.getPositionByPlayerId(
+        player1.playerId,
+      );
 
       expect(position, player1.position);
 
-      position =
-          await database.playerDao.getPositionByPlayerId(player2.playerId);
+      position = await database.playerDao.getPositionByPlayerId(
+        player2.playerId,
+      );
 
       expect(position, player2.position);
 
-      position =
-          await database.playerDao.getPositionByPlayerId(player3.playerId);
+      position = await database.playerDao.getPositionByPlayerId(
+        player3.playerId,
+      );
 
       expect(position, player3.position);
     });
