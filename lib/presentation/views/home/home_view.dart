@@ -107,7 +107,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         );
         if (!mounted) return;
-        _handleFeedbackDialog(context);
+        handleFeedbackDialog(context);
       }
 
       // Whats new dialog
@@ -152,10 +152,10 @@ class _HomeViewState extends State<HomeView> {
             currentSortDirection: currentSortDirection,
             showOnlyActiveGames: showOnlyActiveGames,
             onSortOptionChanged: (newSortingOption) =>
-                _setSortOption(newSortingOption),
+                setSortOption(newSortingOption),
             onSortDirectionChanged: (newSortingDirection) =>
-                _setSortDirection(newSortingDirection),
-            onShowOnlyActiveGamesChanged: () => _toggleShowOnlyActiveGames(),
+                setSortDirection(newSortingDirection),
+            onShowOnlyActiveGamesChanged: () => toggleShowOnlyActiveGames(),
           ),
         ],
       ),
@@ -225,7 +225,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           direction: DismissDirection.endToStart,
                           confirmDismiss: (direction) async {
-                            return await _showDeleteGamePopup(
+                            return await showDeleteGamePopup(
                               context,
                               session.gameTitle,
                             );
@@ -247,7 +247,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             child: EmptyFilterPlaceholder(
-              toggleShowOnlyActiveGames: _toggleShowOnlyActiveGames,
+              toggleShowOnlyActiveGames: toggleShowOnlyActiveGames,
             ),
           ),
           child: const EmptyGamesPlaceholder(),
@@ -292,7 +292,7 @@ class _HomeViewState extends State<HomeView> {
   /// Handles the feedback dialog when the conditions for rating are met.
   /// It shows a dialog asking the user if they like the app,
   /// and based on their response, it either opens the rating dialog or an email client for feedback.
-  Future<void> _handleFeedbackDialog(BuildContext context) async {
+  Future<void> handleFeedbackDialog(BuildContext context) async {
     final loc = AppLocalizations.of(context);
     final emailSubject = loc.email_subject;
     final emailBody = loc.email_body;
@@ -334,7 +334,7 @@ class _HomeViewState extends State<HomeView> {
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
-  static Future<bool> _showDeleteGamePopup(
+  static Future<bool> showDeleteGamePopup(
     BuildContext context,
     String gameTitle,
   ) async {
@@ -393,7 +393,7 @@ class _HomeViewState extends State<HomeView> {
 
   /// Sets the current sort direction and updates the game list accordingly.
   /// [direction] The new sort direction to be set.
-  void _setSortDirection(SortDirection direction) {
+  void setSortDirection(SortDirection direction) {
     setState(() {
       currentSortDirection = direction;
       sortGames(sortOption: currentSortOption, sortDirection: direction);
@@ -403,7 +403,7 @@ class _HomeViewState extends State<HomeView> {
 
   /// Sets the current sort option and updates the game list accordingly.
   /// [option] The new sort option to be set.
-  void _setSortOption(SortOption option) {
+  void setSortOption(SortOption option) {
     setState(() {
       currentSortOption = option;
       sortGames(sortOption: option, sortDirection: currentSortDirection);
@@ -412,7 +412,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   /// Toggles the filter to show only active (unfinished) games in the list.
-  void _toggleShowOnlyActiveGames() {
+  void toggleShowOnlyActiveGames() {
     setState(() {
       showOnlyActiveGames = !showOnlyActiveGames;
       sortGames(
@@ -423,11 +423,6 @@ class _HomeViewState extends State<HomeView> {
     ConfigService.setShowActiveGamesOnly(showOnlyActiveGames);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   /// Shows the "What's New" dialog.
   void showWhatsNewDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
@@ -436,5 +431,10 @@ class _HomeViewState extends State<HomeView> {
         fullscreenDialog: true,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

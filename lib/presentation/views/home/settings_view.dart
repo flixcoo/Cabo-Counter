@@ -253,7 +253,7 @@ class _SettingsViewState extends State<SettingsView> {
   /// If the import was canceled, no dialog is shown.
   void showFeedbackDialog(ImportStatus status) {
     if (status == ImportStatus.canceled) return;
-    final (title, message) = _getDialogContent(status);
+    final (title, message) = getDialogContent(status);
 
     PopupService.showInfoPopup(
       context: context,
@@ -265,7 +265,7 @@ class _SettingsViewState extends State<SettingsView> {
   /// Returns the dialog title and message based on the [ImportStatus].
   /// [status] The status of the import operation.
   /// Returns a tuple containing the title and message for the dialog.
-  (String, String) _getDialogContent(ImportStatus status) {
+  (String, String) getDialogContent(ImportStatus status) {
     final loc = AppLocalizations.of(context);
     switch (status) {
       case ImportStatus.success:
