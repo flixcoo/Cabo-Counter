@@ -22,7 +22,9 @@ import 'package:url_launcher/url_launcher.dart';
 /// [SettingsView] is a settings page for the app, allowing users to configure game options,
 /// manage game data (import, export, delete), and view app information.
 class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
+  const SettingsView({super.key, required this.onSessionsUpdated});
+
+  final VoidCallback onSessionsUpdated;
 
   @override
   State<SettingsView> createState() => _SettingsViewState();
@@ -165,6 +167,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: () async {
                       final status = await DataTransferService.importJsonFile();
                       showFeedbackDialog(status);
+                      widget.onSessionsUpdated.call();
                     },
                   ),
                   CustomFormRow(
@@ -232,6 +235,7 @@ class _SettingsViewState extends State<SettingsView> {
         isDestructiveAction: true,
         onAfterPop: () {
           gameManager.deleteAllGames();
+          widget.onSessionsUpdated.call();
         },
         actionText: loc.delete,
       ),

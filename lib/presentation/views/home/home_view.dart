@@ -89,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
   initState() {
     super.initState();
 
-    loadSessins();
+    loadSessions();
 
     // Caching app image
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -137,7 +137,10 @@ class _HomeViewState extends State<HomeView> {
           onPressed: () {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => const SettingsView()),
+              CupertinoPageRoute(
+                builder: (context) =>
+                    SettingsView(onSessionsUpdated: loadSessions),
+              ),
             );
           },
           icon: IconService.settings,
@@ -253,7 +256,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void loadSessins() {
+  void loadSessions() {
     isLoading = true;
 
     Future.wait([
