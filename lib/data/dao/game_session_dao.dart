@@ -50,12 +50,10 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// It constructs and returns a list of `GameSession` objects containing all relevant data.
   /// Returns 'null' if no game sessions are found.
   /// Returns a [List] of [GameSession] objects.
-  Future<List<GameSession>?> getAllGameSessions() async {
+  Future<List<GameSession>> getAllGameSessions() async {
     final query = select(gameSessionTable);
     final gameSessionResults = await query.get();
-    if (gameSessionResults.isEmpty) {
-      return null;
-    }
+    if (gameSessionResults.isEmpty) return [];
 
     List<GameSession> gameSessions = await Future.wait(
       gameSessionResults.map((row) async {

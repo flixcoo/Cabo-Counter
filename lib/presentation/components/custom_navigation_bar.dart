@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/views/about/about_view.dart';
-import 'package:cabo_counter/presentation/views/home/main_menu_view.dart';
+import 'package:cabo_counter/presentation/views/home/home_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +30,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     return Scaffold(
       backgroundColor: CustomTheme.backgroundColor,
       resizeToAvoidBottomInset: false,
-      body: tabIndex == 0 ? const MainMenuView() : const AboutView(),
+      body: tabIndex == 0 ? const HomeView() : const AboutView(),
       bottomNavigationBar: /*Theme(
         // TODO: Temporary fix to remove splash effect on bottom navigation bar
         data: Theme.of(context).copyWith(
@@ -38,29 +38,29 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           highlightColor: Colors.transparent,
         ),
         child:*/ BottomNavigationBar(
-          elevation: 5,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
-          fixedColor: CustomTheme.primaryColor,
-          backgroundColor: CustomTheme.navBarBackgroundColor,
-          enableFeedback: false,
-          currentIndex: tabIndex,
-          onTap: (int newIndex) {
-            setState(() {
-              tabIndex = newIndex;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(IconService.home),
-              label: loc.home,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(IconService.info),
-              label: loc.about,
-            ),
-          ],
-/*        ),*/
+        elevation: 5,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        fixedColor: CustomTheme.primaryColor,
+        backgroundColor: CustomTheme.navBarBackgroundColor,
+        enableFeedback: false,
+        currentIndex: tabIndex,
+        onTap: (int newIndex) {
+          setState(() {
+            tabIndex = newIndex;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(IconService.home),
+            label: loc.home,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(IconService.info),
+            label: loc.about,
+          ),
+        ],
+        /*        ),*/
       ),
     );
   }

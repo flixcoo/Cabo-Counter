@@ -182,88 +182,78 @@ void main() {
           gameSession2.gameId: gameSession2,
         };
 
-        if (fetchedSessions == null) {
-          fail('Fetched game sessions is null');
-        } else {
-          expect(fetchedSessions.length, expected.length);
+        expect(fetchedSessions.length, expected.length);
 
-          for (var session in fetchedSessions) {
-            final expectedSession = expected[session.gameId];
-            if (expectedSession == null) {
-              fail('Unexpected game session ID: ${session.gameId}');
-            } else {
-              expect(session.gameId, expectedSession.gameId);
+        for (var session in fetchedSessions) {
+          final expectedSession = expected[session.gameId];
+          if (expectedSession == null) {
+            fail('Unexpected game session ID: ${session.gameId}');
+          } else {
+            expect(session.gameId, expectedSession.gameId);
+            expect(
+              session.createdAt
+                  .difference(expectedSession.createdAt)
+                  .inMilliseconds
+                  .abs(),
+              lessThan(1000),
+            );
+            expect(session.gameTitle, expectedSession.gameTitle);
+            expect(session.pointLimit, expectedSession.pointLimit);
+            expect(session.caboPenalty, expectedSession.caboPenalty);
+            expect(
+              session.isPointsLimitEnabled,
+              expectedSession.isPointsLimitEnabled,
+            );
+            expect(session.isGameFinished, expectedSession.isGameFinished);
+            expect(session.winner, expectedSession.winner);
+            expect(session.roundNumber, expectedSession.roundNumber);
+            expect(session.players.length, expectedSession.players.length);
+            for (int i = 0; i < session.players.length; i++) {
               expect(
-                session.createdAt
-                    .difference(expectedSession.createdAt)
-                    .inMilliseconds
-                    .abs(),
-                lessThan(1000),
+                session.players[i].playerId,
+                expectedSession.players[i].playerId,
               );
-              expect(session.gameTitle, expectedSession.gameTitle);
-              expect(session.pointLimit, expectedSession.pointLimit);
-              expect(session.caboPenalty, expectedSession.caboPenalty);
               expect(
-                session.isPointsLimitEnabled,
-                expectedSession.isPointsLimitEnabled,
+                session.players[i].gameId,
+                expectedSession.players[i].gameId,
               );
-              expect(session.isGameFinished, expectedSession.isGameFinished);
-              expect(session.winner, expectedSession.winner);
-              expect(session.roundNumber, expectedSession.roundNumber);
-              expect(session.players.length, expectedSession.players.length);
-              for (int i = 0; i < session.players.length; i++) {
-                expect(
-                  session.players[i].playerId,
-                  expectedSession.players[i].playerId,
-                );
-                expect(
-                  session.players[i].gameId,
-                  expectedSession.players[i].gameId,
-                );
-                expect(
-                  session.players[i].name,
-                  expectedSession.players[i].name,
-                );
-                expect(
-                  session.players[i].position,
-                  expectedSession.players[i].position,
-                );
-                expect(
-                  session.players[i].totalScore,
-                  expectedSession.players[i].totalScore,
-                );
-              }
+              expect(session.players[i].name, expectedSession.players[i].name);
+              expect(
+                session.players[i].position,
+                expectedSession.players[i].position,
+              );
+              expect(
+                session.players[i].totalScore,
+                expectedSession.players[i].totalScore,
+              );
+            }
 
+            expect(session.roundList.length, expectedSession.roundList.length);
+            for (int i = 0; i < session.roundList.length; i++) {
               expect(
-                session.roundList.length,
-                expectedSession.roundList.length,
+                session.roundList[i].gameId,
+                expectedSession.roundList[i].gameId,
               );
-              for (int i = 0; i < session.roundList.length; i++) {
-                expect(
-                  session.roundList[i].gameId,
-                  expectedSession.roundList[i].gameId,
-                );
-                expect(
-                  session.roundList[i].roundNum,
-                  expectedSession.roundList[i].roundNum,
-                );
-                expect(
-                  session.roundList[i].caboPlayerIndex,
-                  expectedSession.roundList[i].caboPlayerIndex,
-                );
-                expect(
-                  session.roundList[i].kamikazePlayerIndex,
-                  expectedSession.roundList[i].kamikazePlayerIndex,
-                );
-                expect(
-                  session.roundList[i].scores,
-                  expectedSession.roundList[i].scores,
-                );
-                expect(
-                  session.roundList[i].scoreUpdates,
-                  expectedSession.roundList[i].scoreUpdates,
-                );
-              }
+              expect(
+                session.roundList[i].roundNum,
+                expectedSession.roundList[i].roundNum,
+              );
+              expect(
+                session.roundList[i].caboPlayerIndex,
+                expectedSession.roundList[i].caboPlayerIndex,
+              );
+              expect(
+                session.roundList[i].kamikazePlayerIndex,
+                expectedSession.roundList[i].kamikazePlayerIndex,
+              );
+              expect(
+                session.roundList[i].scores,
+                expectedSession.roundList[i].scores,
+              );
+              expect(
+                session.roundList[i].scoreUpdates,
+                expectedSession.roundList[i].scoreUpdates,
+              );
             }
           }
         }
@@ -284,7 +274,7 @@ void main() {
       final fetchedSessions = await database.gameSessionDao
           .getAllGameSessions();
 
-      expect(fetchedSessions, isNull);
+      expect(fetchedSessions, isEmpty);
     });
 
     test('Deleting multiple game sessions works correctly', () async {
@@ -292,14 +282,14 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameSession2);
       var sessions = await database.gameSessionDao.getAllGameSessions();
 
-      expect(sessions, isNotNull);
-      expect(sessions!.length, 2);
+      expect(sessions, isNotEmpty);
+      expect(sessions.length, 2);
 
       await database.gameSessionDao.deleteAllGames();
       final fetchedSessions = await database.gameSessionDao
           .getAllGameSessions();
 
-      expect(fetchedSessions, isNull);
+      expect(fetchedSessions, isEmpty);
     });
 
     test('Updating game finish status works correctly', () async {
