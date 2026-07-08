@@ -1,5 +1,5 @@
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/data/dto/round.dart';
 import 'package:flutter/cupertino.dart';
@@ -336,7 +336,7 @@ class GameSession extends ChangeNotifier {
       winner = lowestPlayers.first;
     }
     databaseInstance.gameSessionDao.setWinner(gameId: gameId, winner: winner);
-    gameManager.vibrateIfPossible();
+    vibrateIfPossible();
     notifyListeners();
   }
 

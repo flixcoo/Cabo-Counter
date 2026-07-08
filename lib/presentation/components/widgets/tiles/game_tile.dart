@@ -1,14 +1,14 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class GameTile extends StatefulWidget {
-  const GameTile({super.key, required this.session});
+  const GameTile({super.key, required this.session, required this.onTap});
 
   final GameSession session;
+  final void Function()? onTap;
 
   @override
   State<GameTile> createState() => _GameTileState();
@@ -22,14 +22,7 @@ class _GameTileState extends State<GameTile> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => ActiveGameView(gameSession: widget.session),
-            ),
-          );
-        },
+        onTap: widget.onTap,
         child: Container(
           padding: const EdgeInsets.only(right: 4, left: 2),
           decoration: BoxDecoration(

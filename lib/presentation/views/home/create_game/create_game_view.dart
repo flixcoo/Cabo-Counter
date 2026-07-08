@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -18,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// A view for creating a new game session in the Cabo Counter app.
@@ -27,18 +28,18 @@ import 'package:uuid/uuid.dart';
 /// starting a new game. It provides feedback dialogs for missing or invalid
 /// input and navigates to the active game view upon successful creation.
 class CreateGameView extends StatefulWidget {
-  final GameMode gameMode;
-  final String? gameTitle;
-  final List<String>? players;
-  final String previousPageTitle;
-
   const CreateGameView({
     super.key,
     this.gameTitle,
     this.players,
     required this.gameMode,
-    required this.previousPageTitle,
+    required this.onSessionsUpdated,
   });
+
+  final GameMode gameMode;
+  final String? gameTitle;
+  final List<String>? players;
+  final VoidCallback onSessionsUpdated;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -91,8 +92,11 @@ class _CreateGameViewState extends State<CreateGameView> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) {
-          await _keyboardDelay();
-          if (context.mounted) Navigator.pop(context);
+          await keyboardDelay();
+          if (context.mounted) {
+            widget.onSessionsUpdated();
+            Navigator.pop(context);
+          }
         }
       },
       child: Scaffold(
@@ -144,7 +148,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                         ],
                       ),
                       onTap: () async {
-                        await _keyboardDelay();
+                        await keyboardDelay();
                         if (context.mounted) {
                           final selectedMode = await Navigator.push(
                             context,
@@ -283,7 +287,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                         style: const TextStyle(color: CustomTheme.primaryColor),
                       ),
                       onPressed: () async {
-                        await _keyboardDelay();
+                        await keyboardDelay();
                         _checkAllGameAttributes();
                       },
                     ),
@@ -434,13 +438,17 @@ class _CreateGameViewState extends State<CreateGameView> {
       isGameFinished: false,
     );
 
-    gameManager.addGameSession(gameSession);
-    final session = gameManager.getGameSessionById(gameId) ?? gameSession;
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    db.gameSessionDao.insertGameSession(gameSession);
+    widget.onSessionsUpdated();
 
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-        builder: (context) => ActiveGameView(gameSession: session),
+        builder: (context) => ActiveGameView(
+          gameSession: gameSession,
+          onSessionsUpdated: widget.onSessionsUpdated,
+        ),
       ),
       (Route<dynamic> route) => route.isFirst,
     );
@@ -448,7 +456,7 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   /// If the keyboard is visible, this method will unfocus the current text field
   /// to prevent the keyboard from interfering with the navigation bar.
-  Future<void> _keyboardDelay() async {
+  Future<void> keyboardDelay() async {
     if (!KeyboardVisibilityController().isVisible) {
       return;
     } else {

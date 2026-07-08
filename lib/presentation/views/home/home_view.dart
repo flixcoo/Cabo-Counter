@@ -15,6 +15,7 @@ import 'package:cabo_counter/presentation/components/widgets/buttons/sorting_but
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/game_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -165,7 +166,7 @@ class _HomeViewState extends State<HomeView> {
           CupertinoPageRoute(
             builder: (context) => CreateGameView(
               gameMode: ConfigService.getGameMode(),
-              previousPageTitle: loc.games,
+              onSessionsUpdated: loadSessions,
             ),
           ),
         ),
@@ -238,7 +239,20 @@ class _HomeViewState extends State<HomeView> {
                           dismissThresholds: const {
                             DismissDirection.startToEnd: 0.6,
                           },
-                          child: GameTile(session: session),
+                          child: GameTile(
+                            session: session,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => ActiveGameView(
+                                    gameSession: session,
+                                    onSessionsUpdated: loadSessions,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         );
                       },
                     );

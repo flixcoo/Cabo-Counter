@@ -2,19 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:json_schema/json_schema.dart';
+import 'package:provider/provider.dart';
 
 class DataTransferService {
   /// Writes the game session list to a JSON file and returns it as string.
-  static String _getGameDataAsJsonFile() {
-    final jsonFile = gameManager.gameList
-        .map((session) => session.toJson())
-        .toList();
+  static Future<String> _getGameDataAsJsonFile(BuildContext context) async {
+    final db = Provider.of<AppDatabase>(context);
+    final sessions = await db.gameSessionDao.getAllGameSessions();
+
+    final jsonFile = sessions.map((session) => session.toJson()).toList();
     return json.encode(jsonFile);
   }
 
@@ -42,8 +45,8 @@ class DataTransferService {
   }
 
   /// Opens the file picker to export all game sessions as a JSON file.
-  static Future<bool> exportGameData() async {
-    String jsonString = _getGameDataAsJsonFile();
+  static Future<bool> exportGameData(BuildContext context) async {
+    String jsonString = await _getGameDataAsJsonFile(context);
     String fileName = 'cabo_counter-game_data';
     return _exportJsonData(jsonString, fileName);
   }
@@ -56,7 +59,8 @@ class DataTransferService {
   }
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
-  static Future<ImportStatus> importJsonFile() async {
+  static Future<ImportStatus> importJsonFile(BuildContext context) async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
     final path = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['json'],
@@ -79,13 +83,15 @@ class DataTransferService {
             )
             .toList();
 
-        for (GameSession s in importedList) {
-          _importSession(s);
+        for (GameSession session in importedList) {
+          await db.gameSessionDao.insertGameSession(session);
         }
       } else if (await validateJsonSchema(jsonString, false)) {
         // Checks if the JSON String is in the single game format
         final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-        _importSession(GameSession.fromJson(jsonData));
+        await db.gameSessionDao.insertGameSession(
+          GameSession.fromJson(jsonData),
+        );
       } else {
         return ImportStatus.validationError;
       }
@@ -100,14 +106,6 @@ class DataTransferService {
       print(stack);
       return ImportStatus.genericError;
     }
-  }
-
-  /// Imports a single game session into the gameList.
-  static Future<void> _importSession(GameSession session) async {
-    if (gameManager.gameExistsInGameList(session.gameId)) {
-      gameManager.deleteGameById(session.gameId);
-    }
-    gameManager.addGameSession(session);
   }
 
   /// Helper method to read file content from either bytes or path

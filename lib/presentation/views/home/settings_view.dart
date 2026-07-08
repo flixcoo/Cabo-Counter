@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
@@ -15,6 +15,7 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Settings and information page for the app.
@@ -159,13 +160,16 @@ class _SettingsViewState extends State<SettingsView> {
                   CustomFormRow(
                     prefixText: loc.export_data,
                     prefixIcon: IconService.export,
-                    onPressed: () => DataTransferService.exportGameData(),
+                    onPressed: () =>
+                        DataTransferService.exportGameData(context),
                   ),
                   CustomFormRow(
                     prefixText: loc.import_data,
                     prefixIcon: IconService.import,
                     onPressed: () async {
-                      final status = await DataTransferService.importJsonFile();
+                      final status = await DataTransferService.importJsonFile(
+                        context,
+                      );
                       showFeedbackDialog(status);
                       widget.onSessionsUpdated.call();
                     },
@@ -229,12 +233,13 @@ class _SettingsViewState extends State<SettingsView> {
   /// When confirmed, it deletes all game data from local storage.
   void _deleteAllGames() {
     final loc = AppLocalizations.of(context);
+    final db = Provider.of<AppDatabase>(context, listen: false);
     final dialogActions = [
       CustomDialogAction(isDefaultAction: true, actionText: loc.cancel),
       CustomDialogAction(
         isDestructiveAction: true,
-        onAfterPop: () {
-          gameManager.deleteAllGames();
+        onAfterPop: () async {
+          await db.gameSessionDao.deleteAllGames();
           widget.onSessionsUpdated.call();
         },
         actionText: loc.delete,

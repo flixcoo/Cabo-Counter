@@ -120,14 +120,13 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     return gameSession;
   }
 
-  /// Deletes a game session and its associated data from the database.
-  /// This method removes the game session with the given [gameId] from the [gameSessionTable].
-  /// It also deletes all related players and rounds because of foreign key constraints.
-  /// [gameId] The ID of the game session to delete.
-  Future<void> deleteGameSession({required String gameId}) async {
-    await (delete(
+  /// Deletes the game session with the given [gameId].
+  /// Returns `true` if the deletion was successful, `false` otherwise.
+  Future<bool> deleteGameSession({required String gameId}) async {
+    final rowsAffected = await (delete(
       gameSessionTable,
     )..where((tbl) => tbl.gameId.equals(gameId))).go();
+    return rowsAffected > 0;
   }
 
   /// Deletes all game sessions from the database.

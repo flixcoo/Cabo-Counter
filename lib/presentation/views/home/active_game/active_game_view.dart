@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
@@ -19,6 +19,7 @@ import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
 ///
@@ -28,9 +29,13 @@ import 'package:flutter/material.dart';
 ///
 /// The widget listens to changes in the provided [GameSession] and updates the UI accordingly.
 class ActiveGameView extends StatefulWidget {
+  const ActiveGameView({
+    super.key,
+    required this.gameSession,
+    required this.onSessionsUpdated,
+  });
   final GameSession gameSession;
-
-  const ActiveGameView({super.key, required this.gameSession});
+  final VoidCallback onSessionsUpdated;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -255,9 +260,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         ? GameMode.pointLimit
                                         : GameMode.unlimited,
                                     players: gameSession.getPlayerNamesAsList(),
-                                    previousPageTitle: AppLocalizations.of(
-                                      context,
-                                    ).overview,
+                                    onSessionsUpdated: widget.onSessionsUpdated,
                                   ),
                                 ),
                               );
@@ -329,8 +332,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       onAfterPop: () {
         if (mounted) {
           setState(() {
-            gameManager.endGame(gameSession.gameId);
-            _playFinishAnimation(context);
+            endGame();
+            playFinishAnimation(context);
           });
         }
       },
@@ -346,6 +349,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       message: Text(loc.end_game_message),
       actions: [cancelAction, endGameAction],
     );
+  }
+
+  /// Ends a game session if its in unlimited mode.
+  /// Takes a String [gameId] as input. It finds the index of the game
+  /// session with the matching ID marks it as finished,
+  void endGame() {
+    if (gameSession.isPointsLimitEnabled == true) return;
+    gameSession.endGame();
+
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    db.gameSessionDao.endGame(gameId: gameSession.gameId);
   }
 
   /// Returns a list of player indices sorted by their scores in
@@ -428,11 +442,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
   Future<void> _removeGameSession(GameSession gameSession) async {
-    final loc = AppLocalizations.of(context);
-    if (gameManager.gameExistsInGameList(gameSession.gameId)) {
-      gameManager.deleteGameById(gameSession.gameId);
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    final deleted = await db.gameSessionDao.deleteGameSession(
+      gameId: gameSession.gameId,
+    );
+    if (!mounted) return;
+    if (deleted) {
       Navigator.pop(context);
     } else {
+      final loc = AppLocalizations.of(context);
       PopupService.showInfoPopup(
         context: context,
         title: Text(loc.id_error_title),
@@ -457,7 +475,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (round == kRoundCancelled) return;
 
     if (widget.gameSession.isGameFinished && context.mounted) {
-      _playFinishAnimation(context);
+      playFinishAnimation(context);
     }
 
     // If the previous round was not the last one
@@ -474,7 +492,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   }
 
   /// Plays the confetti animation and shows a dialog with the winner's information.
-  Future<void> _playFinishAnimation(BuildContext context) async {
+  Future<void> playFinishAnimation(BuildContext context) async {
     final loc = AppLocalizations.of(context);
     String winner = widget.gameSession.winner;
 
