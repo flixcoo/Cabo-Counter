@@ -140,26 +140,11 @@ jobs:
           fi
 
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: [ generate_licenses, sort_arb_files ]
-    if: always()
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set Up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Check Formatting
-        run: flutter analyze
 
   format:
     name: "Format code"
     runs-on: ubuntu-latest
-    needs: [localizations]
+    needs: localizations
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -212,7 +197,6 @@ jobs:
         run: flutter analyze lib test
 
   test:
-    needs: generate_licenses
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
