@@ -52,6 +52,7 @@ dev_dependencies:
     sdk: flutter
   test: ^1.25.15
   sort_pubspec_dependencies: 0.0.2
+  remove_unused_localizations: ^1.1.2
 
 flutter:
   generate: true
