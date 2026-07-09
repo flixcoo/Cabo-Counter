@@ -5,6 +5,7 @@ on:
     branches:
       - "develop"
       - "main"
+      - "setup/261-update-project-artefacts"
 
 permissions:
   contents: write
