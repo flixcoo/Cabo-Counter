@@ -253,9 +253,9 @@ const devDependencies = <Package>[
   _drift_dev,
   _flutter_lints,
   _flutter_test,
-  _test,
+  _remove_unused_localizations,
   _sort_pubspec_dependencies,
-  _remove_unused_localizations
+  _test
 ];
 
 /// Package license definition.
@@ -40189,17 +40189,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cabo_counter 1.0.9+1092
+/// cabo_counter 1.0.7+1093
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
-    version: '1.0.9+1092',
+    version: '1.0.7+1093',
     spdxIdentifiers: ['LGPL-3.0'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('collection'), PackageRef('confetti'), PackageRef('cupertino_icons'), PackageRef('drift'), PackageRef('drift_flutter'), PackageRef('file_picker'), PackageRef('file_saver'), PackageRef('flutter'), PackageRef('flutter_keyboard_visibility'), PackageRef('flutter_localizations'), PackageRef('font_awesome_flutter'), PackageRef('google_fonts'), PackageRef('intl'), PackageRef('json_schema'), PackageRef('once'), PackageRef('package_info_plus'), PackageRef('path_provider'), PackageRef('provider'), PackageRef('pull_down_button'), PackageRef('rate_my_app'), PackageRef('share_plus'), PackageRef('shared_preferences'), PackageRef('shimmer'), PackageRef('syncfusion_flutter_charts'), PackageRef('url_launcher'), PackageRef('uuid'), PackageRef('vibration')],
-    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('test'), PackageRef('sort_pubspec_dependencies'), PackageRef('remove_unused_localizations')],
+    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('remove_unused_localizations'), PackageRef('sort_pubspec_dependencies'), PackageRef('test')],
     license: '''GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
