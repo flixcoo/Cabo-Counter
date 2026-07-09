@@ -141,6 +141,7 @@ const allDependencies = <Package>[
   _rate_my_app,
   _recase,
   _record_use,
+  _remove_unused_localizations,
   _retry,
   _rfc_6901,
   _safe_url_check,
@@ -253,7 +254,8 @@ const devDependencies = <Package>[
   _flutter_lints,
   _flutter_test,
   _test,
-  _sort_pubspec_dependencies
+  _sort_pubspec_dependencies,
+  _remove_unused_localizations
 ];
 
 /// Package license definition.
@@ -6654,6 +6656,42 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
+  );
+
+/// remove_unused_localizations 1.1.2
+const _remove_unused_localizations = Package(
+    name: 'remove_unused_localizations',
+    description: 'A Dart package to clean unused localization keys from .arb files.',
+    homepage: 'https://github.com/OsamaAssaf/remove_unused_localizations',
+    repository: 'https://github.com/OsamaAssaf/remove_unused_localizations',
+    authors: [],
+    version: '1.1.2',
+    spdxIdentifiers: ['MIT'],
+    isMarkdown: false,
+    isSdk: false,
+    dependencies: [PackageRef('yaml')],
+    devDependencies: [PackageRef('test'), PackageRef('lints')],
+    license: '''MIT License
+
+Copyright (c) 2025 Osama Assaf
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.''',
   );
 
 /// retry 3.1.2
@@ -40151,17 +40189,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cabo_counter 1.0.8+1091
+/// cabo_counter 1.0.9+1092
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
-    version: '1.0.8+1091',
+    version: '1.0.9+1092',
     spdxIdentifiers: ['LGPL-3.0'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('collection'), PackageRef('confetti'), PackageRef('cupertino_icons'), PackageRef('drift'), PackageRef('drift_flutter'), PackageRef('file_picker'), PackageRef('file_saver'), PackageRef('flutter'), PackageRef('flutter_keyboard_visibility'), PackageRef('flutter_localizations'), PackageRef('font_awesome_flutter'), PackageRef('google_fonts'), PackageRef('intl'), PackageRef('json_schema'), PackageRef('once'), PackageRef('package_info_plus'), PackageRef('path_provider'), PackageRef('provider'), PackageRef('pull_down_button'), PackageRef('rate_my_app'), PackageRef('share_plus'), PackageRef('shared_preferences'), PackageRef('shimmer'), PackageRef('syncfusion_flutter_charts'), PackageRef('url_launcher'), PackageRef('uuid'), PackageRef('vibration')],
-    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('test'), PackageRef('sort_pubspec_dependencies')],
+    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('test'), PackageRef('sort_pubspec_dependencies'), PackageRef('remove_unused_localizations')],
     license: '''GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
