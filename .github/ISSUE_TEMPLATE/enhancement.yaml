@@ -1,0 +1,36 @@
+name: Enhancement
+description: Suggest an improvement to current functionality
+labels: 'task : enhancement'
+title: <enter short title here>"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Current Behavior
+      description: Describe how the functionality currently works
+      placeholder: |
+        - Currently, Button X does the following ...
+        - The problem is that ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Improvement
+      description: Describe how the problem or limitation can be improved
+      placeholder: |
+        - Modify Button X so that ...
+        - Extend Function X so that ...
+        - Adjust the design so that ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Related Issues
+      description: Links to related or blocking issues
+      placeholder: |
+        - Follows up on Issue #35
+        - Replaces Issue #12
+        - Requires implementation of #43

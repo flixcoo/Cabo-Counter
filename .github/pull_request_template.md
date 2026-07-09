@@ -1,23 +1,32 @@
-# [PR Title]
-
 **Related Issue(s):**  
-Closes `<issue-no>`
+<!--  Issues which should be closed with this pull request -->
+Closes #`<issue-no>`
 
 ## Description  
-*A clear and concise overview of the changes made. Explain the "why" behind the PR, not just the "what".*  
+<!-- An overview of the changes made. Briefly outline how the code has changed. -->
+This PR implements X by doing Y. The main change is in Z, which now handles ... instead of ...
 
-## Changes Made  
-- [ ] Added new feature X  
-- [ ] Fixed bug in component Y  
-- [ ] Refactored module Z for better performance  
-- [ ] Updated dependencies
+## Changes  
+<!-- List all the changes made in this pull request in detail. -->
+- Added new feature X
+- Fixed a bug in component X
+- Refactored module X for better performance
+- Updated dependencies
       
-## Screenshots/GIFs (if applicable)  
+## UI-Changes (if applicable)  
 *Before:*  
 ![Before changes](url)  
 
 *After:*  
 ![After changes](url)  
 
-## Additional Notes  
-*Any extra context, limitations, or decisions that reviewers should know about?*  
+## PR-Checklist
+<!-- Make sure all items are completed before submitting the pull request for review. -->
+- [ ] I have localized all strings (de/en)
+- [ ] I have added tests for new database/DAO functions
+
+## Additional Notes
+<!-- Is there any additional context, limitations, or information that reviewers should be aware of? -->
+- Known limitations
+- Open TODOs
+- Notes for reviewers
