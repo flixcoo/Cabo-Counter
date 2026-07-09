@@ -194,12 +194,6 @@ abstract class AppLocalizations {
   /// **'Datum'**
   String get date;
 
-  /// No description provided for @back.
-  ///
-  /// In de, this message translates to:
-  /// **'Zurück'**
-  String get back;
-
   /// No description provided for @home.
   ///
   /// In de, this message translates to:
@@ -386,12 +380,6 @@ abstract class AppLocalizations {
   /// **'Spieltitel'**
   String get game_title;
 
-  /// No description provided for @select_mode.
-  ///
-  /// In de, this message translates to:
-  /// **'Wähle einen Modus'**
-  String get select_mode;
-
   /// No description provided for @add_player.
   ///
   /// In de, this message translates to:
@@ -451,12 +439,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Jede:r Spieler:in muss einen Namen haben.'**
   String get no_name_message;
-
-  /// No description provided for @select_game_mode.
-  ///
-  /// In de, this message translates to:
-  /// **'Spielmodus auswählen'**
-  String get select_game_mode;
 
   /// No description provided for @no_mode_selected.
   ///
@@ -828,12 +810,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Datenschutzerklärung'**
   String get privacy_policy;
-
-  /// No description provided for @loading_games.
-  ///
-  /// In de, this message translates to:
-  /// **'Lade Spiele ...'**
-  String get loading_games;
 
   /// No description provided for @build.
   ///

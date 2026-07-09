@@ -1,7 +1,4 @@
 analyzer:
-  exclude: lib/presentation/views/about/licenses/oss_licenses.dart
-
-analyzer:
   exclude:
     - lib/presentation/views/about/licenses/oss_licenses.dart
 

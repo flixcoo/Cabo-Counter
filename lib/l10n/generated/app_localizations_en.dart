@@ -57,9 +57,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date => 'Datum';
 
   @override
-  String get back => 'Back';
-
-  @override
   String get home => 'Home';
 
   @override
@@ -158,9 +155,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game_title => 'Game Title';
 
   @override
-  String get select_mode => 'Select a mode';
-
-  @override
   String get add_player => 'Add Player';
 
   @override
@@ -190,9 +184,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get no_name_message => 'Each player must have a name.';
-
-  @override
-  String get select_game_mode => 'Select game mode';
 
   @override
   String get no_mode_selected => 'No mode selected';
@@ -414,9 +405,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacy_policy => 'Privacy Policy';
-
-  @override
-  String get loading_games => 'Loading Games ...';
 
   @override
   String get build => 'Build No.';
