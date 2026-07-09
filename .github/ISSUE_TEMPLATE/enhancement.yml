@@ -1,7 +1,7 @@
 name: Enhancement
 description: Suggest an improvement to current functionality
 labels: 'task : enhancement'
-title: <enter short title here>"
+title: "<enter short title here>"
 body:
   - type: textarea
     id: description
