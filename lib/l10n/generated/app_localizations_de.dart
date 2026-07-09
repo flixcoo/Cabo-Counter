@@ -27,9 +27,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ascending => 'Aufsteigend';
 
   @override
-  String get back => 'Zurück';
-
-  @override
   String get bad_rating_message =>
       'Schreib mir gerne direkt eine E-Mail, damit wir dein Problem lösen können!';
 
@@ -241,9 +238,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get licenses => 'Lizenzen';
 
   @override
-  String get loading_games => 'Lade Spiele ...';
-
-  @override
   String get mail_developer => 'E-Mail an Entwickler';
 
   @override
@@ -383,12 +377,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get scoring_history => 'Spielverlauf';
-
-  @override
-  String get select_game_mode => 'Spielmodus auswählen';
-
-  @override
-  String get select_mode => 'Wähle einen Modus';
 
   @override
   String get settings => 'Einstellungen';
