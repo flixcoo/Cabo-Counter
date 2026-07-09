@@ -5,7 +5,7 @@ on:
     branches:
       - "develop"
       - "main"
-      - "setup/261-updated-project-artefacts"
+      - "setup/261-update-project-artefacts"
 
 jobs:
   bump_version:
