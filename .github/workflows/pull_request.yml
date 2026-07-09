@@ -38,7 +38,7 @@ jobs:
         run: flutter test
 
   untranslated_localizations:
-    name: 'Check for untranslated localizations'
+    name: "Check for untranslated localizations"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

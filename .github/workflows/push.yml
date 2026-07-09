@@ -198,6 +198,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    name: "Testing code"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -214,6 +215,7 @@ jobs:
         run: flutter test
 
   build:
+    name: "Building for Android"
     runs-on: ubuntu-latest
     needs: test
     steps:
