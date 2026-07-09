@@ -27,9 +27,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ascending => 'Ascending';
 
   @override
-  String get back => 'Back';
-
-  @override
   String get bad_rating_message =>
       'Feel free to send me an email directly so we can solve your problem!';
 
@@ -240,9 +237,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get licenses => 'Licenses';
 
   @override
-  String get loading_games => 'Loading Games ...';
-
-  @override
   String get mail_developer => 'E-Mail the Developer';
 
   @override
@@ -378,12 +372,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scoring_history => 'Scoring History';
-
-  @override
-  String get select_game_mode => 'Select game mode';
-
-  @override
-  String get select_mode => 'Select a mode';
 
   @override
   String get settings => 'Settings';

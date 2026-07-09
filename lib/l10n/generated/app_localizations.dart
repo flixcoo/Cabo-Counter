@@ -134,12 +134,6 @@ abstract class AppLocalizations {
   /// **'Aufsteigend'**
   String get ascending;
 
-  /// No description provided for @back.
-  ///
-  /// In de, this message translates to:
-  /// **'Zurück'**
-  String get back;
-
   /// No description provided for @bad_rating_message.
   ///
   /// In de, this message translates to:
@@ -493,12 +487,6 @@ abstract class AppLocalizations {
   /// **'Lizenzen'**
   String get licenses;
 
-  /// No description provided for @loading_games.
-  ///
-  /// In de, this message translates to:
-  /// **'Lade Spiele ...'**
-  String get loading_games;
-
   /// No description provided for @mail_developer.
   ///
   /// In de, this message translates to:
@@ -762,18 +750,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Spielverlauf'**
   String get scoring_history;
-
-  /// No description provided for @select_game_mode.
-  ///
-  /// In de, this message translates to:
-  /// **'Spielmodus auswählen'**
-  String get select_game_mode;
-
-  /// No description provided for @select_mode.
-  ///
-  /// In de, this message translates to:
-  /// **'Wähle einen Modus'**
-  String get select_mode;
 
   /// No description provided for @settings.
   ///
