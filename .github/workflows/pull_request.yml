@@ -53,7 +53,7 @@ jobs:
         run: |
           flutter gen-l10n --no-use-deferred-loading
           
-          UNTRANSLATED_FILE=lib/l10n/untranslated_messages.json
+          UNTRANSLATED_FILE=lib/l10n/arb/untranslated_messages.json
           if [ ! -f "$UNTRANSLATED_FILE" ]; then
             echo "Expected $UNTRANSLATED_FILE to be generated, but it does not exist."
             exit 1
