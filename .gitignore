@@ -3,6 +3,7 @@
 
 # Miscellaneous
 *.resolved
+.kotlin
 *.class
 *.lock
 *.log
