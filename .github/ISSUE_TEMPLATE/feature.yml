@@ -1,0 +1,36 @@
+name: Feature
+description: Suggest an idea for this project
+labels: 'task : feature'
+title: "<enter short title here>"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Detailed explanation of the proposed feature
+      placeholder: |
+        - What is the purpose of the feature?
+        - What problem does the feature solve?
+        - Who benefits from it? 
+        - Why is it important?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe how the feature should work
+      placeholder: |
+        - New widget that looks like this ...
+        - New view with the following content
+        - New functionality for component XY
+
+  - type: textarea
+    attributes:
+      label: Related Issues
+      description: Links to related or blocking issues
+      placeholder: |
+        - Follows up on Issue #35
+        - Replaces Issue #12
+        - Requires implementation of #43
