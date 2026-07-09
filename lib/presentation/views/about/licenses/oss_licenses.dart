@@ -162,6 +162,7 @@ const allDependencies = <Package>[
   _shimmer,
   _simple_sparse_list,
   _sky_engine,
+  _sort_pubspec_dependencies,
   _source_gen,
   _source_map_stack_trace,
   _source_maps,
@@ -251,7 +252,8 @@ const devDependencies = <Package>[
   _drift_dev,
   _flutter_lints,
   _flutter_test,
-  _test
+  _test,
+  _sort_pubspec_dependencies
 ];
 
 /// Package license definition.
@@ -305,13 +307,13 @@ class PackageRef {
   Package resolve() => allDependencies.firstWhere((d) => d.name == name);
 }
 
-/// _fe_analyzer_shared 96.0.0
+/// _fe_analyzer_shared 97.0.0
 const __fe_analyzer_shared = Package(
     name: '_fe_analyzer_shared',
     description: 'Logic that is shared between the front_end and analyzer packages.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/_fe_analyzer_shared',
     authors: [],
-    version: '96.0.0',
+    version: '97.0.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -346,13 +348,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// analyzer 10.2.0
+/// analyzer 11.0.0
 const _analyzer = Package(
     name: 'analyzer',
     description: 'This package provides a library that performs static analysis of Dart code.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/analyzer',
     authors: [],
-    version: '10.2.0',
+    version: '11.0.0',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -572,13 +574,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// build 4.0.6
+/// build 4.0.7
 const _build = Package(
     name: 'build',
     description: 'A package for authoring build_runner compatible code generators.',
     repository: 'https://github.com/dart-lang/build/tree/master/build',
     authors: [],
-    version: '4.0.6',
+    version: '4.0.7',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -613,13 +615,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// build_config 1.3.0
+/// build_config 1.3.1
 const _build_config = Package(
     name: 'build_config',
     description: 'Format definition and support for parsing `build.yaml` configuration.',
     repository: 'https://github.com/dart-lang/build/tree/master/build_config',
     authors: [],
-    version: '1.3.0',
+    version: '1.3.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -654,13 +656,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// build_daemon 4.1.1
+/// build_daemon 4.1.2
 const _build_daemon = Package(
     name: 'build_daemon',
     description: 'A daemon for running Dart builds.',
     repository: 'https://github.com/dart-lang/build/tree/master/build_daemon',
     authors: [],
-    version: '4.1.1',
+    version: '4.1.2',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -695,13 +697,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// build_runner 2.15.0
+/// build_runner 2.15.1
 const _build_runner = Package(
     name: 'build_runner',
     description: 'A build system for Dart code generation and modular compilation.',
     repository: 'https://github.com/dart-lang/build/tree/master/build_runner',
     authors: [],
-    version: '2.15.0',
+    version: '2.15.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -1653,13 +1655,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// coverage 1.15.0
+/// coverage 1.15.1
 const _coverage = Package(
     name: 'coverage',
     description: 'Coverage data manipulation and formatting',
     repository: 'https://github.com/dart-lang/tools/tree/main/pkgs/coverage',
     authors: [],
-    version: '1.15.0',
+    version: '1.15.1',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -1694,13 +1696,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// cross_file 0.3.5+2
+/// cross_file 0.3.5+4
 const _cross_file = Package(
     name: 'cross_file',
     description: 'An abstraction to allow working with files across multiple platforms.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/cross_file',
     authors: [],
-    version: '0.3.5+2',
+    version: '0.3.5+4',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -2003,13 +2005,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// dbus 0.7.13
+/// dbus 0.7.14
 const _dbus = Package(
     name: 'dbus',
     description: 'A native Dart implementation of the D-Bus message bus client. This package allows Dart applications to directly access services on the Linux desktop.',
     homepage: 'https://github.com/canonical/dbus.dart',
     authors: [],
-    version: '0.7.13',
+    version: '0.7.14',
     spdxIdentifiers: ['MPL-2.0'],
     isMarkdown: false,
     isSdk: false,
@@ -2607,7 +2609,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// dio 5.9.2
+/// dio 5.10.0
 const _dio = Package(
     name: 'dio',
     description: '''A powerful HTTP networking package,
@@ -2618,7 +2620,7 @@ Custom adapters, Transformers, etc.
     homepage: 'https://github.com/cfug/dio',
     repository: 'https://github.com/cfug/dio/blob/main/dio',
     authors: [],
-    version: '5.9.2',
+    version: '5.10.0',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -2648,14 +2650,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// dio_web_adapter 2.1.2
+/// dio_web_adapter 2.2.0
 const _dio_web_adapter = Package(
     name: 'dio_web_adapter',
     description: 'An adapter that supports Dio on Web.',
     homepage: 'https://github.com/cfug/dio',
     repository: 'https://github.com/cfug/dio/blob/main/plugins/web_adapter',
     authors: [],
-    version: '2.1.2',
+    version: '2.2.0',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -2685,14 +2687,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// drift 2.33.0
+/// drift 2.34.1
 const _drift = Package(
     name: 'drift',
     description: 'Drift is a reactive library to store relational data in Dart and Flutter applications.',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.33.0',
+    version: '2.34.1',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -2721,14 +2723,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// drift_dev 2.33.0
+/// drift_dev 2.34.0
 const _drift_dev = Package(
     name: 'drift_dev',
     description: 'Dev-dependency for users of drift. Contains the generator and development tools.',
     homepage: 'https://drift.simonbinder.eu/',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '2.33.0',
+    version: '2.34.0',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -2793,14 +2795,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// equatable 2.0.8
+/// equatable 2.1.0
 const _equatable = Package(
     name: 'equatable',
     description: 'A Dart package that helps to implement value based equality without needing to explicitly override == and hashCode.',
     homepage: 'https://github.com/felangel/equatable',
     repository: 'https://github.com/felangel/equatable',
     authors: [],
-    version: '2.0.8',
+    version: '2.1.0',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -3246,13 +3248,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// flutter 3.44.1
+/// flutter 3.44.5
 const _flutter = Package(
     name: 'flutter',
     description: 'A framework for writing Flutter applications',
     homepage: 'https://flutter.dev',
     authors: [],
-    version: '3.44.1',
+    version: '3.44.5',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: true,
@@ -4355,13 +4357,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// intl_utils 2.8.14
+/// intl_utils 2.8.15
 const _intl_utils = Package(
     name: 'intl_utils',
     description: 'intl_utils is a dart library that generates Dart localization code from ARB file. Generated code relies on Intl library.',
     homepage: 'https://github.com/localizely/intl_utils',
     authors: [],
-    version: '2.8.14',
+    version: '2.8.15',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -5270,13 +5272,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// native_toolchain_c 0.19.1
+/// native_toolchain_c 0.19.2
 const _native_toolchain_c = Package(
     name: 'native_toolchain_c',
     description: 'A library to invoke the native C compiler installed on the host machine.',
     repository: 'https://github.com/dart-lang/native/tree/main/pkgs/native_toolchain_c',
     authors: [],
-    version: '0.19.1',
+    version: '0.19.2',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -5690,19 +5692,19 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// path_provider 2.1.5
+/// path_provider 2.1.6
 const _path_provider = Package(
     name: 'path_provider',
     description: 'Flutter plugin for getting commonly used locations on host platform file systems, such as the temp and app data directories.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider',
     authors: [],
-    version: '2.1.5',
+    version: '2.1.6',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('flutter'), PackageRef('path_provider_android'), PackageRef('path_provider_foundation'), PackageRef('path_provider_linux'), PackageRef('path_provider_platform_interface'), PackageRef('path_provider_windows')],
     devDependencies: [PackageRef('flutter_test'), PackageRef('plugin_platform_interface'), PackageRef('test')],
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -5807,19 +5809,19 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// path_provider_linux 2.2.1
+/// path_provider_linux 2.2.2
 const _path_provider_linux = Package(
     name: 'path_provider_linux',
     description: 'Linux implementation of the path_provider plugin',
     repository: 'https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_linux',
     authors: [],
-    version: '2.2.1',
+    version: '2.2.2',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('ffi'), PackageRef('flutter'), PackageRef('path'), PackageRef('path_provider_platform_interface'), PackageRef('xdg_directories')],
     devDependencies: [PackageRef('flutter_test')],
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -5846,19 +5848,19 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// path_provider_platform_interface 2.1.2
+/// path_provider_platform_interface 2.1.3
 const _path_provider_platform_interface = Package(
     name: 'path_provider_platform_interface',
     description: 'A common platform interface for the path_provider plugin.',
     repository: 'https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_platform_interface',
     authors: [],
-    version: '2.1.2',
+    version: '2.1.3',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('flutter'), PackageRef('platform'), PackageRef('plugin_platform_interface')],
     devDependencies: [PackageRef('flutter_test')],
-    license: '''Copyright 2013 The Flutter Authors. All rights reserved.
+    license: '''Copyright 2013 The Flutter Authors
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -7315,17 +7317,17 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// shared_preferences_android 2.4.25
+/// shared_preferences_android 2.4.26
 const _shared_preferences_android = Package(
     name: 'shared_preferences_android',
     description: 'Android implementation of the shared_preferences plugin',
     repository: 'https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_android',
     authors: [],
-    version: '2.4.25',
+    version: '2.4.26',
     spdxIdentifiers: ['BSD-3-Clause'],
     isMarkdown: false,
     isSdk: false,
-    dependencies: [PackageRef('flutter'), PackageRef('shared_preferences_platform_interface')],
+    dependencies: [PackageRef('flutter'), PackageRef('meta'), PackageRef('shared_preferences_platform_interface')],
     devDependencies: [PackageRef('flutter_test')],
     license: '''Copyright 2013 The Flutter Authors
 
@@ -38006,6 +38008,41 @@ Copyright (C) 2009-2017, International Business Machines Corporation,
 Google, and others. All Rights Reserved.''',
   );
 
+/// sort_pubspec_dependencies 0.0.2
+const _sort_pubspec_dependencies = Package(
+    name: 'sort_pubspec_dependencies',
+    description: 'Dev dart package for sorting dependencies and dev_dependencies in pubspec.yaml',
+    repository: 'https://github.com/tokyolem/sort_pubspec_dependencies',
+    authors: [],
+    version: '0.0.2',
+    spdxIdentifiers: ['MIT'],
+    isMarkdown: false,
+    isSdk: false,
+    dependencies: [],
+    devDependencies: [],
+    license: '''MIT License
+
+Copyright (c) 2024 tokyolem
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.''',
+  );
+
 /// source_gen 4.2.3
 const _source_gen = Package(
     name: 'source_gen',
@@ -38416,13 +38453,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// sqlite3 3.3.2
+/// sqlite3 3.3.4
 const _sqlite3 = Package(
     name: 'sqlite3',
     description: 'Provides lightweight yet convenient bindings to SQLite by using dart:ffi',
     homepage: 'https://github.com/simolus3/sqlite3.dart/tree/main/sqlite3',
     authors: [],
-    version: '3.3.2',
+    version: '3.3.4',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -38486,14 +38523,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// sqlparser 0.44.4
+/// sqlparser 0.44.5
 const _sqlparser = Package(
     name: 'sqlparser',
     description: 'Parses sqlite statements and performs static analysis on them',
     homepage: 'https://github.com/simolus3/drift/tree/develop/sqlparser',
     repository: 'https://github.com/simolus3/drift',
     authors: [],
-    version: '0.44.4',
+    version: '0.44.5',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -38786,13 +38823,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// syncfusion_flutter_charts 33.2.10
+/// syncfusion_flutter_charts 33.2.15
 const _syncfusion_flutter_charts = Package(
     name: 'syncfusion_flutter_charts',
     description: 'A Flutter Charts library which includes data visualization widgets such as cartesian and circular charts, to create real-time, interactive, high-performance, animated charts.',
     homepage: 'https://github.com/syncfusion/flutter-widgets/tree/master/packages/syncfusion_flutter_charts',
     authors: [],
-    version: '33.2.10',
+    version: '33.2.15',
     spdxIdentifiers: [],
     isMarkdown: false,
     isSdk: false,
@@ -38812,13 +38849,13 @@ The Syncfusion<sup>&reg;</sup> license that contains the terms and conditions ca
 https://www.syncfusion.com/content/downloads/syncfusion_license.pdf''',
   );
 
-/// syncfusion_flutter_core 33.2.10
+/// syncfusion_flutter_core 33.2.15
 const _syncfusion_flutter_core = Package(
     name: 'syncfusion_flutter_core',
     description: 'Syncfusion Flutter Core is a dependent package for all the Syncfusion Flutter widgets.',
     homepage: 'https://github.com/syncfusion/flutter-widgets/tree/master/packages/syncfusion_flutter_core',
     authors: [],
-    version: '33.2.10',
+    version: '33.2.15',
     spdxIdentifiers: [],
     isMarkdown: false,
     isSdk: false,
@@ -39594,13 +39631,13 @@ freely, subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.''',
   );
 
-/// vibration 3.1.8
+/// vibration 3.2.0
 const _vibration = Package(
     name: 'vibration',
     description: 'A plugin for handling Vibration API on iOS, Android, web and OpenHarmony.',
     homepage: 'https://github.com/benjamindean/flutter_vibration',
     authors: [],
-    version: '3.1.8',
+    version: '3.2.0',
     spdxIdentifiers: ['BSD-2-Clause'],
     isMarkdown: false,
     isSdk: false,
@@ -40044,13 +40081,13 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
-/// xml 7.0.1
+/// xml 6.6.1
 const _xml = Package(
     name: 'xml',
-    description: 'Full-featured XML for Dart — DOM parsing, SAX streaming, XPath 3 querying, and a fluent builder API.',
-    repository: 'https://github.com/renggli/dart-xml',
+    description: 'A lightweight library for parsing, traversing, querying, transforming and building XML documents.',
+    homepage: 'https://github.com/renggli/dart-xml',
     authors: [],
-    version: '7.0.1',
+    version: '6.6.1',
     spdxIdentifiers: ['MIT'],
     isMarkdown: false,
     isSdk: false,
@@ -40058,7 +40095,7 @@ const _xml = Package(
     devDependencies: [PackageRef('args'), PackageRef('lints'), PackageRef('test')],
     license: '''The MIT License
 
-Copyright (c) 2006-2026 Lukas Renggli.
+Copyright (c) 2006-2025 Lukas Renggli.
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40114,16 +40151,181 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.''',
   );
 
-/// cabo_counter 1.0.7+1090
+/// cabo_counter 1.0.8+1091
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
-    version: '1.0.7+1090',
-    spdxIdentifiers: [],
+    version: '1.0.8+1091',
+    spdxIdentifiers: ['LGPL-3.0'],
     isMarkdown: false,
     isSdk: false,
     dependencies: [PackageRef('collection'), PackageRef('confetti'), PackageRef('cupertino_icons'), PackageRef('drift'), PackageRef('drift_flutter'), PackageRef('file_picker'), PackageRef('file_saver'), PackageRef('flutter'), PackageRef('flutter_keyboard_visibility'), PackageRef('flutter_localizations'), PackageRef('font_awesome_flutter'), PackageRef('google_fonts'), PackageRef('intl'), PackageRef('json_schema'), PackageRef('once'), PackageRef('package_info_plus'), PackageRef('path_provider'), PackageRef('provider'), PackageRef('pull_down_button'), PackageRef('rate_my_app'), PackageRef('share_plus'), PackageRef('shared_preferences'), PackageRef('shimmer'), PackageRef('syncfusion_flutter_charts'), PackageRef('url_launcher'), PackageRef('uuid'), PackageRef('vibration')],
-    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('test')],
+    devDependencies: [PackageRef('arb_utils'), PackageRef('build_runner'), PackageRef('dart_pubspec_licenses'), PackageRef('drift_dev'), PackageRef('flutter_lints'), PackageRef('flutter_test'), PackageRef('test'), PackageRef('sort_pubspec_dependencies')],
+    license: '''GNU LESSER GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+
+  This version of the GNU Lesser General Public License incorporates
+the terms and conditions of version 3 of the GNU General Public
+License, supplemented by the additional permissions listed below.
+
+  0. Additional Definitions.
+
+  As used herein, "this License" refers to version 3 of the GNU Lesser
+General Public License, and the "GNU GPL" refers to version 3 of the GNU
+General Public License.
+
+  "The Library" refers to a covered work governed by this License,
+other than an Application or a Combined Work as defined below.
+
+  An "Application" is any work that makes use of an interface provided
+by the Library, but which is not otherwise based on the Library.
+Defining a subclass of a class defined by the Library is deemed a mode
+of using an interface provided by the Library.
+
+  A "Combined Work" is a work produced by combining or linking an
+Application with the Library.  The particular version of the Library
+with which the Combined Work was made is also called the "Linked
+Version".
+
+  The "Minimal Corresponding Source" for a Combined Work means the
+Corresponding Source for the Combined Work, excluding any source code
+for portions of the Combined Work that, considered in isolation, are
+based on the Application, and not on the Linked Version.
+
+  The "Corresponding Application Code" for a Combined Work means the
+object code and/or source code for the Application, including any data
+and utility programs needed for reproducing the Combined Work from the
+Application, but excluding the System Libraries of the Combined Work.
+
+  1. Exception to Section 3 of the GNU GPL.
+
+  You may convey a covered work under sections 3 and 4 of this License
+without being bound by section 3 of the GNU GPL.
+
+  2. Conveying Modified Versions.
+
+  If you modify a copy of the Library, and, in your modifications, a
+facility refers to a function or data to be supplied by an Application
+that uses the facility (other than as an argument passed when the
+facility is invoked), then you may convey a copy of the modified
+version:
+
+   a) under this License, provided that you make a good faith effort to
+   ensure that, in the event an Application does not supply the
+   function or data, the facility still operates, and performs
+   whatever part of its purpose remains meaningful, or
+
+   b) under the GNU GPL, with none of the additional permissions of
+   this License applicable to that copy.
+
+  3. Object Code Incorporating Material from Library Header Files.
+
+  The object code form of an Application may incorporate material from
+a header file that is part of the Library.  You may convey such object
+code under terms of your choice, provided that, if the incorporated
+material is not limited to numerical parameters, data structure
+layouts and accessors, or small macros, inline functions and templates
+(ten or fewer lines in length), you do both of the following:
+
+   a) Give prominent notice with each copy of the object code that the
+   Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the object code with a copy of the GNU GPL and this license
+   document.
+
+  4. Combined Works.
+
+  You may convey a Combined Work under terms of your choice that,
+taken together, effectively do not restrict modification of the
+portions of the Library contained in the Combined Work and reverse
+engineering for debugging such modifications, if you also do each of
+the following:
+
+   a) Give prominent notice with each copy of the Combined Work that
+   the Library is used in it and that the Library and its use are
+   covered by this License.
+
+   b) Accompany the Combined Work with a copy of the GNU GPL and this license
+   document.
+
+   c) For a Combined Work that displays copyright notices during
+   execution, include the copyright notice for the Library among
+   these notices, as well as a reference directing the user to the
+   copies of the GNU GPL and this license document.
+
+   d) Do one of the following:
+
+       0) Convey the Minimal Corresponding Source under the terms of this
+       License, and the Corresponding Application Code in a form
+       suitable for, and under terms that permit, the user to
+       recombine or relink the Application with a modified version of
+       the Linked Version to produce a modified Combined Work, in the
+       manner specified by section 6 of the GNU GPL for conveying
+       Corresponding Source.
+
+       1) Use a suitable shared library mechanism for linking with the
+       Library.  A suitable mechanism is one that (a) uses at run time
+       a copy of the Library already present on the user's computer
+       system, and (b) will operate properly with a modified version
+       of the Library that is interface-compatible with the Linked
+       Version.
+
+   e) Provide Installation Information, but only if you would otherwise
+   be required to provide such information under section 6 of the
+   GNU GPL, and only to the extent that such information is
+   necessary to install and execute a modified version of the
+   Combined Work produced by recombining or relinking the
+   Application with a modified version of the Linked Version. (If
+   you use option 4d0, the Installation Information must accompany
+   the Minimal Corresponding Source and Corresponding Application
+   Code. If you use option 4d1, you must provide the Installation
+   Information in the manner specified by section 6 of the GNU GPL
+   for conveying Corresponding Source.)
+
+  5. Combined Libraries.
+
+  You may place library facilities that are a work based on the
+Library side by side in a single library together with other library
+facilities that are not Applications and are not covered by this
+License, and convey such a combined library under terms of your
+choice, if you do both of the following:
+
+   a) Accompany the combined library with a copy of the same work based
+   on the Library, uncombined with any other library facilities,
+   conveyed under the terms of this License.
+
+   b) Give prominent notice with the combined library that part of it
+   is a work based on the Library, and explaining where to find the
+   accompanying uncombined form of the same work.
+
+  6. Revised Versions of the GNU Lesser General Public License.
+
+  The Free Software Foundation may publish revised and/or new versions
+of the GNU Lesser General Public License from time to time. Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.
+
+  Each version is given a distinguishing version number. If the
+Library as you received it specifies that a certain numbered version
+of the GNU Lesser General Public License "or any later version"
+applies to it, you have the option of following the terms and
+conditions either of that published version or of any later version
+published by the Free Software Foundation. If the Library as you
+received it does not specify a version number of the GNU Lesser
+General Public License, you may choose any version of the GNU Lesser
+General Public License ever published by the Free Software Foundation.
+
+  If the Library as you received it specifies that a proxy can decide
+whether future versions of the GNU Lesser General Public License shall
+apply, that proxy's public statement of acceptance of any version is
+permanent authorization for you to choose that version for the
+Library.''',
   );
 
