@@ -17,11 +17,11 @@ class Player {
 
   @override
   String toString() {
-    return 'Player: [playerId: $id, gameSessionId: $gameSessionId, name: $name, position: $position]';
+    return 'Player: [id: $id, gameSessionId: $gameSessionId, name: $name, position: $position]';
   }
 
   Map<String, dynamic> toJson() => {
-    'playerId': id,
+    'id': id,
     'gameSessionId': gameSessionId,
     'name': name,
     'position': position,
@@ -29,7 +29,7 @@ class Player {
   };
 
   Player.fromJson(Map<String, dynamic> json)
-    : id = json['playerId'],
+    : id = json['id'],
       gameSessionId = json['gameSessionId'],
       name = json['name'],
       position = json['position'],

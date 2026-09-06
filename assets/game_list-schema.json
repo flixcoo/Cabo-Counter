@@ -11,7 +11,7 @@
       "createdAt": {
         "type": "string"
       },
-      "gameTitle": {
+      "title": {
         "type": "string"
       },
       "players": {
@@ -20,10 +20,10 @@
           {
             "type": "object",
             "properties": {
-              "playerId": {
+              "id": {
                 "type": "string"
               },
-              "gameId": {
+              "gameSessionId": {
                 "type": "string"
               },
               "name": {
@@ -37,12 +37,13 @@
               }
             },
             "required": [
-              "playerId",
-              "gameId",
+              "id",
+              "gameSessionId",
               "name",
               "position",
               "totalScore"
-            ]
+            ],
+            "additionalProperties": false
           }
         ]
       },
@@ -70,6 +71,12 @@
           {
             "type": "object",
             "properties": {
+              "id": {
+                "type": "string"
+              },
+              "gameSessionId": {
+                "type": "string"
+              },
               "roundNum": {
                 "type": "integer"
               },
@@ -103,12 +110,15 @@
               }
             },
             "required": [
+              "id",
+              "gameSessionId",
               "roundNum",
               "caboPlayerIndex",
               "kamikazePlayerIndex",
               "scores",
               "scoreUpdates"
-            ]
+            ],
+            "additionalProperties": false
           }
         ]
       }
@@ -116,7 +126,7 @@
     "required": [
       "id",
       "createdAt",
-      "gameTitle",
+      "title",
       "players",
       "pointLimit",
       "caboPenalty",
@@ -125,6 +135,7 @@
       "winner",
       "roundNumber",
       "roundList"
-    ]
+    ],
+    "additionalProperties": false
   }
 }
