@@ -7,14 +7,14 @@ class ActiveGameListSet extends StatefulWidget {
     super.key,
     required this.title,
     required this.content,
+    this.subtitle,
     this.tilePadding,
   });
 
   final String title;
-
-  final EdgeInsets? tilePadding;
-
   final List<ActiveGameListTile> content;
+  final String? subtitle;
+  final EdgeInsets? tilePadding;
 
   @override
   State<ActiveGameListSet> createState() => _ActiveGamelistSetState();
@@ -29,8 +29,18 @@ class _ActiveGamelistSetState extends State<ActiveGameListSet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(widget.title, style: CustomTheme.rowTitle),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.title, style: CustomTheme.rowTitle),
+                if (widget.subtitle != null)
+                  Text(
+                    widget.subtitle!,
+                    style: CustomTheme.rowTitle.copyWith(fontSize: 14),
+                  ),
+              ],
+            ),
           ),
           if (widget.content.isNotEmpty) ...[
             for (var tile in widget.content)
