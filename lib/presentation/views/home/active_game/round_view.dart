@@ -15,87 +15,71 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-/// A view for displaying and managing a single round
-///
-/// This widget allows users to input and review scores for each player in a round,
-/// select the player who called CABO, and handle special cases such as Kamikaze rounds.
-/// It manages the round state, validates input, and coordinates navigation between rounds.
-///
-/// Features:
-/// - Rotates player order based on the previous round's winner.
-/// - Supports Kamikaze rounds with dedicated UI and logic.
-/// - Handles score input, validation, and updates to the game session.
-/// - Displays bonus point popups when applicable.
-///
-/// Requires a [GameSession] and the current [roundNumber].
 class RoundView extends StatefulWidget {
-  final GameSessionController gameSession;
-  final int roundNumber;
-
+  /// A view for displaying and managing a single round
+  ///
+  /// - [roundNumber]: The number of the current round.
+  /// - [gameSession]: The controller managing the current game session.
   const RoundView({
     super.key,
     required this.roundNumber,
     required this.gameSession,
   });
 
+  final int roundNumber;
+
+  final GameSessionController gameSession;
+
   @override
   _RoundViewState createState() => _RoundViewState();
 }
 
 class _RoundViewState extends State<RoundView> {
-  /// The current game session.
   late GameSessionController gameSession = widget.gameSession;
 
-  /// Index of the player who said CABO.
-  int? caboPlayerIndex = 0;
-
-  /// Index of the player who has Kamikaze.
-  /// Default is null (no Kamikaze player).
+  int? caboPlayerIndex;
   int? kamikazePlayerIndex;
 
-  /// List of text controllers for the score text fields.
-  late final List<TextEditingController> _scoreControllerList = List.generate(
-    widget.gameSession.players.length,
+  bool get hasRoundBeenPlayed =>
+      widget.roundNumber < widget.gameSession.roundNumber;
+  bool get isGameFinished => widget.gameSession.isGameFinished;
+  int get playerAmount => widget.gameSession.players.length;
+
+  late int shufflePlayerIndex;
+
+  late final List<TextEditingController> scoreControllerList = List.generate(
+    playerAmount,
     (index) => TextEditingController(),
   );
 
-  /// List of focus nodes for the score text fields.
   late final List<FocusNode> focusNodes = List.generate(
-    widget.gameSession.players.length,
+    playerAmount,
     (index) => FocusNode(),
   );
 
   /// List of global keys for the score text fields.
   late List<GlobalKey> textFieldKeys;
 
-  /// Index of the player who shuffles the cards for this round.
-  late int shufflePlayerIndex;
-
   @override
   void initState() {
     shufflePlayerIndex = getShufflePlayerIndex();
-    if (widget.roundNumber < widget.gameSession.roundNumber ||
-        widget.gameSession.isGameFinished == true) {
-      // If the current round has already been played, the text fields
-      // are filled with the scores from this round
-      for (int i = 0; i < _scoreControllerList.length; i++) {
-        _scoreControllerList[i].text = gameSession
-            .roundList[widget.roundNumber - 1]
-            .scores[i]
-            .toString();
-      }
-      caboPlayerIndex =
-          gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
-      kamikazePlayerIndex =
-          gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
-    }
 
-    textFieldKeys = List.generate(
-      widget.gameSession.players.length,
-      (index) => GlobalKey(),
-    );
+    if (hasRoundBeenPlayed || isGameFinished) prefillFields();
+
+    textFieldKeys = List.generate(playerAmount, (index) => GlobalKey());
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (final controller in scoreControllerList) {
+      controller.dispose();
+    }
+    for (final focusNode in focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -115,7 +99,7 @@ class _RoundViewState extends State<RoundView> {
         title: Text(loc.results),
         actions: [
           Visibility(
-            visible: widget.gameSession.isGameFinished,
+            visible: isGameFinished,
             child: Icon(IconService.locked, size: 25),
           ),
         ],
@@ -210,8 +194,7 @@ class _RoundViewState extends State<RoundView> {
                         // The text input action for the score text field.
                         // It is "next" for all players except the last one,
                         // which is "done".
-                        final textInputAction =
-                            index == widget.gameSession.players.length - 1
+                        final textInputAction = index == playerAmount - 1
                             ? TextInputAction.done
                             : TextInputAction.next;
 
@@ -226,7 +209,7 @@ class _RoundViewState extends State<RoundView> {
                             points: score,
                             shufflePlayer: isShufflePlayer,
                             showMedal: shouldShowMedal,
-                            controller: _scoreControllerList[originalIndex],
+                            controller: scoreControllerList[originalIndex],
                             textInputAction: textInputAction,
                             onSubmitted: (_) =>
                                 focusNextTextfield(originalIndex),
@@ -279,7 +262,7 @@ class _RoundViewState extends State<RoundView> {
                             : null,
                         text: loc.done,
                       ),
-                      if (!widget.gameSession.isGameFinished)
+                      if (!isGameFinished)
                         OpacityButton.text(
                           onPressed: areRoundInputsValid()
                               ? () {
@@ -299,6 +282,19 @@ class _RoundViewState extends State<RoundView> {
         ],
       ),
     );
+  }
+
+  void prefillFields() {
+    for (int i = 0; i < scoreControllerList.length; i++) {
+      scoreControllerList[i].text = gameSession
+          .roundList[widget.roundNumber - 1]
+          .scores[i]
+          .toString();
+    }
+    caboPlayerIndex =
+        gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
+    kamikazePlayerIndex =
+        gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
   }
 
   /// Gets the index of the player who won the previous round.
@@ -333,7 +329,7 @@ class _RoundViewState extends State<RoundView> {
     // If the configuration is set to rotate the shuffler, calculate the
     // shuffler index according to the current round number and amount of players
     if (ConfigService.getRotateShuffler()) {
-      return (widget.roundNumber - 1) % widget.gameSession.players.length;
+      return (widget.roundNumber - 1) % playerAmount;
     }
 
     final List<int> scores =
@@ -380,7 +376,7 @@ class _RoundViewState extends State<RoundView> {
     return [
       winnerIndex,
       ...List.generate(
-        widget.gameSession.players.length - winnerIndex - 1,
+        playerAmount - winnerIndex - 1,
         (i) => winnerIndex + i + 1,
       ),
       ...List.generate(winnerIndex, (i) => i),
@@ -438,7 +434,7 @@ class _RoundViewState extends State<RoundView> {
   /// Checks if any of the text fields for the players points are empty.
   /// Returns true if any of the text fields is empty, false otherwise.
   bool areTextFieldsEmpty() {
-    for (TextEditingController t in _scoreControllerList) {
+    for (TextEditingController t in scoreControllerList) {
       if (t.text.isEmpty) {
         return true;
       }
@@ -459,7 +455,7 @@ class _RoundViewState extends State<RoundView> {
       );
     } else {
       List<int> roundScores = [];
-      for (TextEditingController c in _scoreControllerList) {
+      for (TextEditingController c in scoreControllerList) {
         if (c.text.isNotEmpty) roundScores.add(int.parse(c.text));
       }
       widget.gameSession.calculateScoredPoints(
@@ -470,7 +466,7 @@ class _RoundViewState extends State<RoundView> {
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
     if (widget.roundNumber == widget.gameSession.roundNumber &&
-        !widget.gameSession.isGameFinished) {
+        !isGameFinished) {
       widget.gameSession.increaseRound();
     }
     return bonusPlayers;
@@ -550,7 +546,7 @@ class _RoundViewState extends State<RoundView> {
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.
-      if (widget.gameSession.isGameFinished) {
+      if (isGameFinished) {
         Navigator.pop(context);
         return;
       }
@@ -563,16 +559,5 @@ class _RoundViewState extends State<RoundView> {
       // pop the context and navigate to the next round.
       Navigator.pop(context, widget.roundNumber + 1);
     }
-  }
-
-  @override
-  void dispose() {
-    for (final controller in _scoreControllerList) {
-      controller.dispose();
-    }
-    for (final focusNode in focusNodes) {
-      focusNode.dispose();
-    }
-    super.dispose();
   }
 }
