@@ -48,29 +48,37 @@ class CreateGameView extends StatefulWidget {
 
 class _CreateGameViewState extends State<CreateGameView> {
   final TextEditingController titleController = TextEditingController();
-  final List<TextEditingController> playerNameControllers = [
-    TextEditingController(),
-  ];
-  final List<FocusNode> playerNameFocusNodes = [FocusNode()];
+
+  final int minPlayers = 2;
   final int maxPlayers = 5;
+
+  late List<FocusNode> playerNameFocusNodes;
+  late List<TextEditingController> playerNameControllers;
 
   /// Variable to hold the selected game mode.
   late GameMode selectedGameMode;
 
+  bool get hasReachedMaxPlayers => playerNameControllers.length >= maxPlayers;
+  bool get hasReachedMinPlayers => playerNameControllers.length <= minPlayers;
+
   @override
   void initState() {
     super.initState();
-
     selectedGameMode = widget.gameMode;
-
     titleController.text = widget.gameTitle ?? '';
 
+    // Prefill player
     if (widget.players != null) {
-      playerNameControllers.clear();
       for (var player in widget.players!) {
         playerNameControllers.add(TextEditingController(text: player));
         playerNameFocusNodes.add(FocusNode());
       }
+    } else {
+      playerNameControllers = List.generate(
+        minPlayers,
+        (index) => TextEditingController(),
+      );
+      playerNameFocusNodes = List.generate(minPlayers, (index) => FocusNode());
     }
   }
 
@@ -91,11 +99,9 @@ class _CreateGameViewState extends State<CreateGameView> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          //previousPageTitle: widget.previousPageTitle,
-          title: Text(loc.new_game),
-        ),
+        appBar: AppBar(title: Text(loc.new_game)),
         body: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               Expanded(
@@ -111,6 +117,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                       ActiveGameListSet(
                         title: loc.game,
                         content: [
+                          // Title text field
                           ActiveGameListTile(
                             title: Text(loc.name),
                             trailing: SizedBox(
@@ -134,6 +141,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                               ),
                             ),
                           ),
+
+                          // Mode selection
                           ActiveGameListTile(
                             title: Text(loc.mode),
                             trailing: Row(
@@ -170,6 +179,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                         content: const [],
                         subtitle: '${playerNameControllers.length} / 5',
                       ),
+
+                      // Players
                       ReorderableListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -201,6 +212,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                                     setState(() {
                                       playerNameControllers[index].dispose();
                                       playerNameControllers.removeAt(index);
+                                      playerNameFocusNodes[index].dispose();
+                                      playerNameFocusNodes.removeAt(index);
                                     });
                                   },
                                 ),
@@ -272,29 +285,70 @@ class _CreateGameViewState extends State<CreateGameView> {
                             ),
                           );
                         },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
-                        child: Center(
-                          child: OpacityButton.text(
-                            text: loc.add_player,
-                            onPressed: () {
-                              if (playerNameControllers.length < maxPlayers) {
-                                setState(() {
-                                  playerNameControllers.add(
-                                    TextEditingController(),
+                        proxyDecorator:
+                            (
+                              Widget child,
+                              int index,
+                              Animation<double> animation,
+                            ) {
+                              return AnimatedBuilder(
+                                animation: animation,
+                                builder: (context, _) {
+                                  final overlayOpacity = 0.08 * animation.value;
+                                  return Material(
+                                    elevation: 6.0,
+                                    shadowColor: Colors.black,
+                                    child: Stack(
+                                      children: [
+                                        child,
+                                        Positioned.fill(
+                                          child: IgnorePointer(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withValues(
+                                                  alpha: overlayOpacity,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   );
-                                  playerNameFocusNodes.add(FocusNode());
-                                });
-                                WidgetsBinding.instance.addPostFrameCallback((
-                                  _,
-                                ) {
-                                  playerNameFocusNodes.last.requestFocus();
-                                });
-                              } else {
-                                showFeedbackDialog(CreateStatus.maxPlayers);
-                              }
+                                },
+                              );
                             },
+                      ),
+                      IgnorePointer(
+                        ignoring: hasReachedMaxPlayers,
+                        child: Opacity(
+                          opacity: hasReachedMaxPlayers ? 0.0 : 1.0,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
+                            child: Center(
+                              child: OpacityButton.text(
+                                text: loc.add_player,
+                                onPressed: () {
+                                  if (!hasReachedMaxPlayers) {
+                                    setState(() {
+                                      playerNameControllers.add(
+                                        TextEditingController(),
+                                      );
+                                      playerNameFocusNodes.add(FocusNode());
+                                    });
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                          playerNameFocusNodes.last
+                                              .requestFocus();
+                                        });
+                                  } else {
+                                    showFeedbackDialog(CreateStatus.maxPlayers);
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -303,6 +357,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                 ),
               ),
 
+              // Button
               Center(
                 child: SizedBox(
                   width: 200,
@@ -316,7 +371,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 50),
             ],
           ),
         ),
