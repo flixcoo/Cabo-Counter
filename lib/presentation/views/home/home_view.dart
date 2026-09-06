@@ -456,9 +456,11 @@ class _HomeViewState extends State<HomeView> {
   void showWhatsNewDialog(BuildContext context) {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (Platform.isIOS) {
-        Navigator.of(
-          context,
-        ).push(CupertinoSheetRoute(builder: (context) => const NewsView()));
+        Navigator.of(context).push(
+          CupertinoSheetRoute(
+            scrollableBuilder: (context, controller) => const NewsView(),
+          ),
+        );
       } else
         Navigator.of(context, rootNavigator: true).push(
           adaptivePageRoute(
