@@ -77,16 +77,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         ListenableBuilder(
           listenable: gameSession,
           builder: (context, _) {
-            sortedPlayerIndices = _getSortedPlayerIndices();
-            denseRanks = _calculateDenseRank(
+            sortedPlayerIndices = getSortedPlayerIndices();
+            denseRanks = calculateDenseRank(
               gameSession.getPlayerScoresAsList(),
               sortedPlayerIndices,
             );
             return Scaffold(
-              appBar: AppBar(
-                //previousPageTitle: loc.games,
-                title: Text(loc.overview),
-              ),
+              appBar: AppBar(title: Text(loc.overview)),
               body: SafeArea(
                 bottom: false,
                 child: SingleChildScrollView(
@@ -134,7 +131,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             ActiveGameListTile(
                               title: Row(
                                 children: [
-                                  _getPlacementTextWidget(index),
+                                  getPlacementTextWidget(index),
                                   const SizedBox(width: 5),
                                   Text(
                                     gameSession
@@ -188,7 +185,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 ],
                               ),
                               onTap: () async {
-                                _openRoundView(context, index + 1);
+                                openRoundView(context, index + 1);
                               },
                             ),
                         ],
@@ -231,15 +228,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               onTap:
                                   (gameSession.roundNumber > 1 &&
                                       !gameSession.isGameFinished)
-                                  ? () => _showEndGameDialog()
+                                  ? () => showEndGameDialog()
                                   : null,
                             ),
                           ActiveGameListTile(
                             title: Text(loc.delete_game),
                             onTap: () {
-                              _showDeleteGameDialog().then((shouldDeleteGame) {
+                              showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
-                                  _removeGameSession(widget.gameSession);
+                                  removeGameSession(widget.gameSession);
                                 }
                               });
                             },
@@ -326,7 +323,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
-  void _showEndGameDialog() {
+  void showEndGameDialog() {
     final loc = AppLocalizations.of(context);
 
     final endGameAction = CustomDialogAction<bool>(
@@ -368,7 +365,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Returns a list of player indices sorted by their scores in
   /// ascending order.
-  List<int> _getSortedPlayerIndices() {
+  List<int> getSortedPlayerIndices() {
     List<int> playerIndices = List<int>.generate(
       gameSession.players.length,
       (index) => index,
@@ -386,7 +383,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   }
 
   /// Calculates the dense rank for a player based on their index in the sorted list of players.
-  List<int> _calculateDenseRank(
+  List<int> calculateDenseRank(
     List<int> playerScores,
     List<int> sortedIndices,
   ) {
@@ -407,7 +404,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Returns a text widget representing the placement text based on the given placement number.
   /// [index] is the index of the player in [players] list,
-  Text _getPlacementTextWidget(int index) {
+  Text getPlacementTextWidget(int index) {
     int placement = denseRanks[index];
     switch (placement) {
       case 1:
@@ -425,7 +422,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   }
 
   /// Shows a dialog to confirm deleting the game session.
-  Future<bool> _showDeleteGameDialog() async {
+  Future<bool> showDeleteGameDialog() async {
     final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
@@ -445,7 +442,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
-  Future<void> _removeGameSession(GameSession gameSession) async {
+  Future<void> removeGameSession(GameSession gameSession) async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     final deleted = await db.gameSessionDao.deleteGameSession(
       gameId: gameSession.id,
@@ -466,7 +463,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Recursively opens the RoundView for the specified round number.
   /// It starts with the given [roundNumber] and continues to open the next round
   /// until the user navigates back or the round number is invalid.
-  void _openRoundView(BuildContext context, int roundNumber) async {
+  void openRoundView(BuildContext context, int roundNumber) async {
     final round = await Navigator.of(context, rootNavigator: true).push(
       adaptivePageRoute(
         fullscreenDialog: true,
@@ -489,7 +486,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
           const Duration(milliseconds: Constants.ROUND_VIEW_DELAY),
         );
         if (context.mounted) {
-          _openRoundView(context, round);
+          openRoundView(context, round);
         }
       });
     }
