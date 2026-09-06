@@ -10,7 +10,7 @@ import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_filter_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/main_menu_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
@@ -161,107 +161,121 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      floatingActionButton: MainMenuButton(
-        onPressed: () => Navigator.push(
-          context,
-          adaptivePageRoute(
-            builder: (context) => CreateGameView(
-              gameMode: ConfigService.getGameMode(),
-              onSessionsUpdated: loadSessions,
-            ),
-          ),
-        ),
-        icon: IconService.add,
-      ),
+
       body: SafeArea(
-        child: sessions.isEmpty
-            ? const EmptyGamesPlaceholder()
-            : displaySessions.isEmpty
-            ? EmptyFilterPlaceholder(
-                toggleShowOnlyActiveGames: toggleShowOnlyActiveGames,
-              )
-            : Skeletonizer(
-                enabled: isLoading,
-                child: ListView.builder(
-                  itemCount:
-                      displaySessions.length + (showOnlyActiveGames ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    // Show info about active games filter at the end of the list
-                    if (showOnlyActiveGames &&
-                        index == displaySessions.length) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 4, bottom: 30),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                IconService.visibility_off,
-                                color: CustomTheme.white.withAlpha(150),
-                                size: 16.0,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            sessions.isEmpty
+                ? const EmptyGamesPlaceholder()
+                : displaySessions.isEmpty
+                ? EmptyFilterPlaceholder(
+                    toggleShowOnlyActiveGames: toggleShowOnlyActiveGames,
+                  )
+                : Skeletonizer(
+                    enabled: isLoading,
+                    child: ListView.builder(
+                      itemCount:
+                          displaySessions.length +
+                          (showOnlyActiveGames ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        // Show info about active games filter at the end of the list
+                        if (showOnlyActiveGames &&
+                            index == displaySessions.length) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 30),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    IconService.visibility_off,
+                                    color: CustomTheme.white.withAlpha(150),
+                                    size: 16.0,
+                                  ),
+                                  const SizedBox(width: 6.0),
+                                  Text(
+                                    loc.only_active_games,
+                                    style: TextStyle(
+                                      color: CustomTheme.white.withAlpha(150),
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 6.0),
-                              Text(
-                                loc.only_active_games,
-                                style: TextStyle(
-                                  color: CustomTheme.white.withAlpha(150),
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    } else {
-                      final session = displaySessions[index];
-                      return Dismissible(
-                        key: Key(session.id),
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Icon(
-                            IconService.delete,
-                            color: CustomTheme.red,
-                          ),
-                        ),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          return await showDeleteGamePopup(
-                            context,
-                            session.title,
+                            ),
                           );
-                        },
-                        onDismissed: (direction) {
-                          setState(() {
-                            deleteSession(
-                              session.id,
-                              Provider.of<AppDatabase>(context, listen: false),
-                            );
-                          });
-                        },
-                        dismissThresholds: const {
-                          DismissDirection.startToEnd: 0.6,
-                        },
-                        child: GameTile(
-                          session: session,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              adaptivePageRoute(
-                                builder: (context) => ActiveGameView(
-                                  gameSession: session,
-                                  onSessionsUpdated: loadSessions,
-                                ),
+                        } else {
+                          final session = displaySessions[index];
+                          return Dismissible(
+                            key: Key(session.id),
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Icon(
+                                IconService.delete,
+                                color: CustomTheme.red,
                               ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                  },
+                            ),
+                            direction: DismissDirection.endToStart,
+                            confirmDismiss: (direction) async {
+                              return await showDeleteGamePopup(
+                                context,
+                                session.title,
+                              );
+                            },
+                            onDismissed: (direction) {
+                              setState(() {
+                                deleteSession(
+                                  session.id,
+                                  Provider.of<AppDatabase>(
+                                    context,
+                                    listen: false,
+                                  ),
+                                );
+                              });
+                            },
+                            dismissThresholds: const {
+                              DismissDirection.startToEnd: 0.6,
+                            },
+                            child: GameTile(
+                              session: session,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  adaptivePageRoute(
+                                    builder: (context) => ActiveGameView(
+                                      gameSession: session,
+                                      onSessionsUpdated: loadSessions,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+            Positioned(
+              bottom: MediaQuery.paddingOf(context).bottom + 10,
+              child: FloatingAnimatedButton(
+                text: loc.new_game,
+                icon: IconService.add,
+                onPressed: () => Navigator.push(
+                  context,
+                  adaptivePageRoute(
+                    builder: (context) => CreateGameView(
+                      gameMode: ConfigService.getGameMode(),
+                      onSessionsUpdated: loadSessions,
+                    ),
+                  ),
                 ),
               ),
+            ),
+          ],
+        ),
       ),
     );
   }

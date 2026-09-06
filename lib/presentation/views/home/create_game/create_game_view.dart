@@ -8,7 +8,7 @@ import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/custom_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
@@ -47,22 +47,12 @@ class CreateGameView extends StatefulWidget {
 }
 
 class _CreateGameViewState extends State<CreateGameView> {
-  final TextEditingController _gameTitleTextController =
-      TextEditingController();
-
-  /// List of text controllers for player names.
-  final List<TextEditingController> _playerNameTextControllers = [
+  final TextEditingController titleController = TextEditingController();
+  final List<TextEditingController> playerNameControllers = [
     TextEditingController(),
   ];
-
-  /// List of focus nodes for player name text fields.
-  final List<FocusNode> _playerNameFocusNodes = [FocusNode()];
-
-  /// Maximum number of players allowed in the game.
+  final List<FocusNode> playerNameFocusNodes = [FocusNode()];
   final int maxPlayers = 5;
-
-  /// Factor to adjust the view length when the keyboard is visible.
-  final double keyboardHeightAdjustmentFactor = 0.75;
 
   /// Variable to hold the selected game mode.
   late GameMode selectedGameMode;
@@ -73,13 +63,13 @@ class _CreateGameViewState extends State<CreateGameView> {
 
     selectedGameMode = widget.gameMode;
 
-    _gameTitleTextController.text = widget.gameTitle ?? '';
+    titleController.text = widget.gameTitle ?? '';
 
     if (widget.players != null) {
-      _playerNameTextControllers.clear();
+      playerNameControllers.clear();
       for (var player in widget.players!) {
-        _playerNameTextControllers.add(TextEditingController(text: player));
-        _playerNameFocusNodes.add(FocusNode());
+        playerNameControllers.add(TextEditingController(text: player));
+        playerNameFocusNodes.add(FocusNode());
       }
     }
   }
@@ -106,209 +96,228 @@ class _CreateGameViewState extends State<CreateGameView> {
           title: Text(loc.new_game),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                ActiveGameListSet(
-                  title: loc.game,
-                  content: [
-                    ActiveGameListTile(
-                      title: Text(loc.name),
-                      trailing: SizedBox(
-                        height: 30,
-                        width: 300,
-                        child: TextField(
-                          maxLength: 24,
-                          textAlign: TextAlign.right,
-                          controller: _gameTitleTextController,
-                          decoration: InputDecoration(
-                            counterText: '',
-                            hint: Text(
-                              textAlign: TextAlign.end,
-                              getFallbackGameTitle(),
-                              style: TextStyle(
-                                color: CustomTheme.hintTextColor,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          ActiveGameListTile(
+                            title: Text(loc.name),
+                            trailing: SizedBox(
+                              height: 30,
+                              width: 300,
+                              child: TextField(
+                                maxLength: 24,
+                                textAlign: TextAlign.right,
+                                controller: titleController,
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  hint: Text(
+                                    textAlign: TextAlign.end,
+                                    getFallbackGameTitle(),
+                                    style: TextStyle(
+                                      color: CustomTheme.hintTextColor,
+                                    ),
+                                  ),
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
-                            border: InputBorder.none,
+                          ),
+                          ActiveGameListTile(
+                            title: Text(loc.mode),
+                            trailing: Row(
+                              children: [
+                                _getDisplayedGameMode(),
+                                const SizedBox(width: 5),
+                                IconService.chevron,
+                              ],
+                            ),
+                            onTap: () async {
+                              await keyboardDelay();
+                              if (context.mounted) {
+                                final result = await Navigator.push(
+                                  context,
+                                  adaptivePageRoute(
+                                    builder: (context) => ModeSelectionView(
+                                      pointLimit: ConfigService.getPointLimit(),
+                                      showDeselection: false,
+                                      initialSelectedGameMode: selectedGameMode,
+                                    ),
+                                  ),
+                                );
+
+                                setState(() {
+                                  selectedGameMode = result ?? selectedGameMode;
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      ActiveGameListSet(
+                        title: loc.players,
+                        content: const [],
+                        subtitle: '${playerNameControllers.length} / 5',
+                      ),
+                      ReorderableListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(8),
+                        itemCount: playerNameControllers.length,
+                        onReorderItem: (oldIndex, newIndex) {
+                          setState(() {
+                            if (oldIndex < playerNameControllers.length &&
+                                newIndex <= playerNameControllers.length) {
+                              if (newIndex > oldIndex) newIndex--;
+                              final item = playerNameControllers.removeAt(
+                                oldIndex,
+                              );
+                              playerNameControllers.insert(newIndex, item);
+                            }
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            key: ValueKey(index),
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                OpacityButton.icon(
+                                  icon: IconService.remove_player,
+                                  size: 25,
+                                  color: CustomTheme.red,
+                                  onPressed: () {
+                                    setState(() {
+                                      playerNameControllers[index].dispose();
+                                      playerNameControllers.removeAt(index);
+                                    });
+                                  },
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: playerNameControllers[index],
+                                    focusNode: playerNameFocusNodes[index],
+                                    maxLength: 12,
+                                    decoration: InputDecoration(
+                                      hint: Text(
+                                        '${loc.player} ${index + 1}',
+                                        style: TextStyle(
+                                          color: CustomTheme.hintTextColor,
+                                        ),
+                                      ),
+                                      counterText: '',
+                                      border: InputBorder.none,
+                                    ),
+                                    textInputAction:
+                                        index + 1 < playerNameControllers.length
+                                        ? TextInputAction.next
+                                        : TextInputAction.done,
+                                    onSubmitted: (_) {
+                                      if (index + 1 <
+                                          playerNameFocusNodes.length) {
+                                        final nextNode =
+                                            playerNameFocusNodes[index + 1];
+                                        nextNode.requestFocus();
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              final nextContext =
+                                                  nextNode.context;
+                                              if (nextContext != null) {
+                                                Scrollable.ensureVisible(
+                                                  nextContext,
+                                                  alignment: 0.5,
+                                                  duration: const Duration(
+                                                    milliseconds: 200,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                );
+                                              }
+                                            });
+                                      } else {
+                                        FocusScope.of(context).unfocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                AnimatedOpacity(
+                                  opacity: playerNameControllers.length > 1
+                                      ? 1.0
+                                      : 0.0,
+                                  duration: const Duration(
+                                    milliseconds: Constants.FADE_IN_DURATION,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: ReorderableDragStartListener(
+                                      index: index,
+                                      child: Icon(
+                                        IconService.drag,
+                                        color: CustomTheme.subtitleColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
+                        child: Center(
+                          child: OpacityButton.text(
+                            text: loc.add_player,
+                            onPressed: () {
+                              if (playerNameControllers.length < maxPlayers) {
+                                setState(() {
+                                  playerNameControllers.add(
+                                    TextEditingController(),
+                                  );
+                                  playerNameFocusNodes.add(FocusNode());
+                                });
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
+                                  playerNameFocusNodes.last.requestFocus();
+                                });
+                              } else {
+                                showFeedbackDialog(CreateStatus.maxPlayers);
+                              }
+                            },
                           ),
                         ),
                       ),
-                    ),
-                    ActiveGameListTile(
-                      title: Text(loc.mode),
-                      trailing: Row(
-                        children: [
-                          _getDisplayedGameMode(),
-                          const SizedBox(width: 5),
-                          IconService.chevron,
-                        ],
-                      ),
-                      onTap: () async {
-                        await keyboardDelay();
-                        if (context.mounted) {
-                          final result = await Navigator.push(
-                            context,
-                            adaptivePageRoute(
-                              builder: (context) => ModeSelectionView(
-                                pointLimit: ConfigService.getPointLimit(),
-                                showDeselection: false,
-                                initialSelectedGameMode: selectedGameMode,
-                              ),
-                            ),
-                          );
+                    ],
+                  ),
+                ),
+              ),
 
-                          setState(() {
-                            selectedGameMode = result ?? selectedGameMode;
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                ActiveGameListSet(title: loc.players, content: const []),
-                ReorderableListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
-                  itemCount: _playerNameTextControllers.length,
-                  onReorderItem: (oldIndex, newIndex) {
-                    setState(() {
-                      if (oldIndex < _playerNameTextControllers.length &&
-                          newIndex <= _playerNameTextControllers.length) {
-                        if (newIndex > oldIndex) newIndex--;
-                        final item = _playerNameTextControllers.removeAt(
-                          oldIndex,
-                        );
-                        _playerNameTextControllers.insert(newIndex, item);
-                      }
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      key: ValueKey(index),
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          OpacityButton.icon(
-                            icon: IconService.remove_player,
-                            size: 25,
-                            color: CustomTheme.red,
-                            onPressed: () {
-                              setState(() {
-                                _playerNameTextControllers[index].dispose();
-                                _playerNameTextControllers.removeAt(index);
-                              });
-                            },
-                          ),
-                          Expanded(
-                            child: TextField(
-                              controller: _playerNameTextControllers[index],
-                              focusNode: _playerNameFocusNodes[index],
-                              maxLength: 12,
-                              decoration: InputDecoration(
-                                hint: Text(
-                                  '${loc.player} ${index + 1}',
-                                  style: TextStyle(
-                                    color: CustomTheme.hintTextColor,
-                                  ),
-                                ),
-                                counterText: '',
-                                border: InputBorder.none,
-                              ),
-                              textInputAction:
-                                  index + 1 < _playerNameTextControllers.length
-                                  ? TextInputAction.next
-                                  : TextInputAction.done,
-                              onSubmitted: (_) {
-                                if (index + 1 < _playerNameFocusNodes.length) {
-                                  _playerNameFocusNodes[index + 1]
-                                      .requestFocus();
-                                } else {
-                                  FocusScope.of(context).unfocus();
-                                }
-                              },
-                            ),
-                          ),
-                          AnimatedOpacity(
-                            opacity: _playerNameTextControllers.length > 1
-                                ? 1.0
-                                : 0.0,
-                            duration: const Duration(
-                              milliseconds: Constants.FADE_IN_DURATION,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: ReorderableDragStartListener(
-                                index: index,
-                                child: Icon(
-                                  IconService.drag,
-                                  color: CustomTheme.subtitleColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
-                  child: Center(
-                    child: OpacityButton.text(
-                      text: loc.add_player,
-                      onPressed: () {
-                        if (_playerNameTextControllers.length < maxPlayers) {
-                          setState(() {
-                            _playerNameTextControllers.add(
-                              TextEditingController(),
-                            );
-                            _playerNameFocusNodes.add(FocusNode());
-                          });
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _playerNameFocusNodes.last.requestFocus();
-                          });
-                        } else {
-                          _showFeedbackDialog(CreateStatus.maxPlayers);
-                        }
-                      },
-                    ),
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  child: FloatingAnimatedButton(
+                    text: loc.create_game,
+                    icon: IconService.add,
+                    onPressed: () async {
+                      await keyboardDelay();
+                      checkAllGameAttributes();
+                    },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-                  child: Center(
-                    child: CustomButton(
-                      child: Text(
-                        loc.create_game,
-                        style: const TextStyle(color: CustomTheme.primaryColor),
-                      ),
-                      onPressed: () async {
-                        await keyboardDelay();
-                        _checkAllGameAttributes();
-                      },
-                    ),
-                  ),
-                ),
-                KeyboardVisibilityBuilder(
-                  builder: (context, visible) {
-                    if (visible) {
-                      return SizedBox(
-                        height:
-                            MediaQuery.of(context).viewInsets.bottom *
-                            keyboardHeightAdjustmentFactor,
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
@@ -338,19 +347,19 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Checks all game attributes before creating a new game.
   /// If any attribute is invalid, it shows a feedback dialog.
   /// If all attributes are valid, it calls the `_createGame` method.
-  void _checkAllGameAttributes() {
+  void checkAllGameAttributes() {
     if (selectedGameMode == GameMode.none) {
-      _showFeedbackDialog(CreateStatus.noModeSelected);
+      showFeedbackDialog(CreateStatus.noModeSelected);
       return;
     }
 
-    if (_playerNameTextControllers.length < 2) {
-      _showFeedbackDialog(CreateStatus.minPlayers);
+    if (playerNameControllers.length < 2) {
+      showFeedbackDialog(CreateStatus.minPlayers);
       return;
     }
 
     if (!_everyPlayerHasAName()) {
-      _showFeedbackDialog(CreateStatus.noPlayerName);
+      showFeedbackDialog(CreateStatus.noPlayerName);
       return;
     }
 
@@ -360,7 +369,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// Checks if every player has a name.
   /// Returns true if all players have a name, false otherwise.
   bool _everyPlayerHasAName() {
-    for (var controller in _playerNameTextControllers) {
+    for (var controller in playerNameControllers) {
       if (controller.text == '') {
         return false;
       }
@@ -369,7 +378,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   }
 
   /// Displays a feedback dialog based on the [CreateStatus].
-  void _showFeedbackDialog(CreateStatus status) {
+  void showFeedbackDialog(CreateStatus status) {
     final (title, message) = _getDialogContent(status);
 
     PopupService.showInfoPopup(
@@ -404,7 +413,7 @@ class _CreateGameViewState extends State<CreateGameView> {
 
     // Collect player names from the text controllers.
     List<String> playerNames = [];
-    for (var controller in _playerNameTextControllers) {
+    for (var controller in playerNameControllers) {
       playerNames.add(controller.text);
     }
 
@@ -422,9 +431,9 @@ class _CreateGameViewState extends State<CreateGameView> {
       );
     }
 
-    final String gameTitle = _gameTitleTextController.text == ''
+    final String gameTitle = titleController.text == ''
         ? getFallbackGameTitle()
-        : _gameTitleTextController.text;
+        : titleController.text;
 
     final bool isPointsLimitEnabled = selectedGameMode == GameMode.pointLimit;
 
@@ -489,11 +498,11 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   @override
   void dispose() {
-    _gameTitleTextController.dispose();
-    for (var controller in _playerNameTextControllers) {
+    titleController.dispose();
+    for (var controller in playerNameControllers) {
       controller.dispose();
     }
-    for (var focusnode in _playerNameFocusNodes) {
+    for (var focusnode in playerNameFocusNodes) {
       focusnode.dispose();
     }
 
