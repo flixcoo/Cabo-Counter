@@ -68,6 +68,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contact_email => 'Contact via E-Mail';
 
   @override
+  String get continu => 'Continue';
+
+  @override
   String get create_game => 'Create Game';
 
   @override
@@ -401,7 +404,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get whats_new => 'What\'s New';
+  String get whats_new => 'What\'s New?';
 
   @override
   String get who_has_kamikaze => 'Who has Kamikaze?';

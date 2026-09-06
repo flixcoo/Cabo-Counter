@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
@@ -15,13 +16,14 @@ import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_but
 import 'package:cabo_counter/presentation/components/widgets/buttons/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/game_tile.dart';
-import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_dialog.dart';
+import 'package:cabo_counter/presentation/views/home/NewsView.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
@@ -452,12 +454,19 @@ class _HomeViewState extends State<HomeView> {
 
   /// Shows the "What's New" dialog.
   void showWhatsNewDialog(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).push(
-      adaptivePageRoute(
-        builder: (context) => const WhatsNewDialog(),
-        fullscreenDialog: true,
-      ),
-    );
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (Platform.isIOS) {
+        Navigator.of(
+          context,
+        ).push(CupertinoSheetRoute(builder: (context) => const NewsView()));
+      } else
+        Navigator.of(context, rootNavigator: true).push(
+          adaptivePageRoute(
+            builder: (context) => const NewsView(),
+            fullscreenDialog: true,
+          ),
+        );
+    });
   }
 
   @override

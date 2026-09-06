@@ -30,6 +30,7 @@
   "cancel": "Cancel",
   "config_change_info": "Changed values only apply to newly created games. Existing games retain their original settings.",
   "contact_email": "Contact via E-Mail",
+  "continu": "Continue",
   "create_game": "Create Game",
   "date": "Datum",
   "dealer": "Dealer",
@@ -159,12 +160,8 @@
   "unlimited": "Unlimited",
   "unlimited_description": "The game continues until you decide to stop playing. The game can be ended manually at any time.",
   "version": "Version",
-  "whats_new": "What's New",
+  "whats_new": "What's New?",
   "who_has_kamikaze": "Who has Kamikaze?",
   "who_said_cabo": "Who called Cabo?",
-  "wn_description_1": "The round overview shows who is dealing. In the settings, you can specify whether the previous loser deals by default or whether dealing rotates.",
-  "wn_description_2": "Chevrons have been added to make navigation clearer and more intuitive.",
-  "wn_item_1": "Dealer",
-  "wn_item_2": "Improved navigation",
   "yes": "Yes"
 }

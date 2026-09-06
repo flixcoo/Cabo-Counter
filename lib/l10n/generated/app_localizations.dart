@@ -187,6 +187,12 @@ abstract class AppLocalizations {
   /// **'E-Mail schreiben'**
   String get contact_email;
 
+  /// No description provided for @continu.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get continu;
+
   /// No description provided for @create_game.
   ///
   /// In de, this message translates to:
@@ -802,7 +808,7 @@ abstract class AppLocalizations {
   /// No description provided for @whats_new.
   ///
   /// In de, this message translates to:
-  /// **'Was ist neu'**
+  /// **'Was ist Neu?'**
   String get whats_new;
 
   /// No description provided for @who_has_kamikaze.

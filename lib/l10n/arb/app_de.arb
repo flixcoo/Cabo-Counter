@@ -30,6 +30,7 @@
   "cancel": "Abbrechen",
   "config_change_info": "Geänderte Punktewerte gelten nur für neu erstellte Spiele. Bereits bestehende Spiele behalten ihre ursprünglichen Einstellungen.",
   "contact_email": "E-Mail schreiben",
+  "continu": "Weiter",
   "create_game": "Spiel erstellen",
   "date": "Datum",
   "dealer": "Mischer:in",
@@ -159,12 +160,8 @@
   "unlimited": "Unbegrenzt",
   "unlimited_description": "Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.",
   "version": "Version",
-  "whats_new": "Was ist neu",
+  "whats_new": "Was ist Neu?",
   "who_has_kamikaze": "Wer hat Kamikaze?",
   "who_said_cabo": "Wer hat CABO gesagt?",
-  "wn_description_1": "In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.",
-  "wn_description_2": "Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.",
-  "wn_item_1": "Mischer:in",
-  "wn_item_2": "Verbesserte Navigation",
   "yes": "Ja"
 }

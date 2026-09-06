@@ -68,6 +68,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get contact_email => 'E-Mail schreiben';
 
   @override
+  String get continu => 'Weiter';
+
+  @override
   String get create_game => 'Spiel erstellen';
 
   @override
@@ -406,7 +409,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get whats_new => 'Was ist neu';
+  String get whats_new => 'Was ist Neu?';
 
   @override
   String get who_has_kamikaze => 'Wer hat Kamikaze?';

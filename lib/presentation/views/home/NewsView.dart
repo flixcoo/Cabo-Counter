@@ -1,16 +1,22 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/NewsItem.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/whats_new/whats_new_item.dart';
-import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/presentation/components/widgets/NewsTile.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class WhatsNewDialog extends StatelessWidget {
-  const WhatsNewDialog({super.key});
+class NewsView extends StatelessWidget {
+  const NewsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
+    final locale = loc.localeName;
+    final items = NewsItems.containsKey(locale)
+        ? NewsItems[locale]
+        : NewsItems['en'];
+
     return Dialog.fullscreen(
       backgroundColor: CustomTheme.backgroundColor,
       child: SafeArea(
@@ -37,21 +43,15 @@ class WhatsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             Expanded(
-              child: ListView(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
-                children: [
-                  WhatsNewItem(
-                    icon: IconService.shuffle_cards,
-                    title: loc.wn_item_1,
-                    text: loc.wn_description_1,
-                  ),
-                  const SizedBox(height: 28),
-                  WhatsNewItem(
-                    icon: Icons.navigation,
-                    title: AppLocalizations.of(context).wn_item_2,
-                    text: AppLocalizations.of(context).wn_description_2,
-                  ),
-                ],
+                child: Column(
+                  spacing: 20,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final item in items ?? []) NewsTile(newsItem: item),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -66,9 +66,12 @@ class WhatsNewDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => {
+                    HapticFeedback.selectionClick(),
+                    Navigator.pop(context),
+                  },
                   child: Text(
-                    loc.ok,
+                    loc.continu,
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

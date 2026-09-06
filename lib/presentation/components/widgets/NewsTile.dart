@@ -1,31 +1,25 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/NewsItem.dart';
 import 'package:flutter/material.dart';
 
-class WhatsNewItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String text;
+class NewsTile extends StatelessWidget {
+  const NewsTile({required this.newsItem, super.key});
 
-  const WhatsNewItem({
-    required this.icon,
-    required this.title,
-    required this.text,
-    super.key,
-  });
+  final NewsItem newsItem;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: CustomTheme.primaryColor, size: 32),
+        Icon(newsItem.icon, color: CustomTheme.primaryColor, size: 32),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                newsItem.title,
                 style: const TextStyle(
                   color: CustomTheme.textColor,
                   fontSize: 18,
@@ -34,7 +28,7 @@ class WhatsNewItem extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                text,
+                newsItem.text,
                 style: const TextStyle(
                   color: CustomTheme.textColor,
                   fontSize: 14,
