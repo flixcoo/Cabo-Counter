@@ -418,19 +418,5 @@ class AppLocalizationsDe extends AppLocalizations {
   String get who_said_cabo => 'Wer hat CABO gesagt?';
 
   @override
-  String get wn_description_1 =>
-      'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
-
-  @override
-  String get wn_description_2 =>
-      'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.';
-
-  @override
-  String get wn_item_1 => 'Mischer:in';
-
-  @override
-  String get wn_item_2 => 'Verbesserte Navigation';
-
-  @override
   String get yes => 'Ja';
 }

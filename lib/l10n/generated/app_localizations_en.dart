@@ -413,19 +413,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get who_said_cabo => 'Who called Cabo?';
 
   @override
-  String get wn_description_1 =>
-      'The round overview shows who is dealing. In the settings, you can specify whether the previous loser deals by default or whether dealing rotates.';
-
-  @override
-  String get wn_description_2 =>
-      'Chevrons have been added to make navigation clearer and more intuitive.';
-
-  @override
-  String get wn_item_1 => 'Dealer';
-
-  @override
-  String get wn_item_2 => 'Improved navigation';
-
-  @override
   String get yes => 'Yes';
 }

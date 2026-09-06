@@ -823,30 +823,6 @@ abstract class AppLocalizations {
   /// **'Wer hat CABO gesagt?'**
   String get who_said_cabo;
 
-  /// No description provided for @wn_description_1.
-  ///
-  /// In de, this message translates to:
-  /// **'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'**
-  String get wn_description_1;
-
-  /// No description provided for @wn_description_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'**
-  String get wn_description_2;
-
-  /// No description provided for @wn_item_1.
-  ///
-  /// In de, this message translates to:
-  /// **'Mischer:in'**
-  String get wn_item_1;
-
-  /// No description provided for @wn_item_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Verbesserte Navigation'**
-  String get wn_item_2;
-
   /// No description provided for @yes.
   ///
   /// In de, this message translates to:
