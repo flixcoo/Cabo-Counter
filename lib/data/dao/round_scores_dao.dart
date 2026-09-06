@@ -1,6 +1,6 @@
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
-import 'package:cabo_counter/data/dto/round_score.dart';
+import 'package:cabo_counter/data/models/round_score.dart';
 import 'package:drift/drift.dart';
 
 part 'round_scores_dao.g.dart';

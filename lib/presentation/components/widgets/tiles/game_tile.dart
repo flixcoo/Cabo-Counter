@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,7 +65,7 @@ class _GameTileState extends State<GameTile> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          widget.session.gameTitle,
+                          widget.session.title,
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(

@@ -1,6 +1,6 @@
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
@@ -16,22 +16,22 @@ void main() {
     Player(
       name: 'Alice',
       totalScore: 0,
-      playerId: '0',
-      gameId: 'abc',
+      id: '0',
+      gameSessionId: 'abc',
       position: 0,
     ),
     Player(
       name: 'Bobby',
       totalScore: 0,
-      playerId: '1',
-      gameId: 'abc',
+      id: '1',
+      gameSessionId: 'abc',
       position: 1,
     ),
     Player(
       name: 'Charlie',
       totalScore: 0,
-      playerId: '2',
-      gameId: 'abc',
+      id: '2',
+      gameSessionId: 'abc',
       position: 2,
     ),
   ];
@@ -48,7 +48,7 @@ void main() {
     session = GameSession(
       gameId: '1',
       createdAt: testDate,
-      gameTitle: testTitle,
+      title: testTitle,
       players: testPlayers,
       pointLimit: 100,
       caboPenalty: 5,
@@ -70,7 +70,7 @@ void main() {
 
   group('Initialization & JSON', () {
     test('Initialization', () {
-      expect(session.gameTitle, testTitle);
+      expect(session.title, testTitle);
       expect(session.players, testPlayers);
       expect(session.getPlayerScoresAsList(), [0, 0, 0]);
       expect(session.roundNumber, 1);
@@ -86,7 +86,7 @@ void main() {
       final jsonFile = session.toJson();
       final fromJsonSession = GameSession.fromJson(jsonFile);
 
-      expect(fromJsonSession.gameTitle, testTitle);
+      expect(fromJsonSession.title, testTitle);
       expect(fromJsonSession.players, testPlayers);
       expect(fromJsonSession.roundList.length, 2);
     });

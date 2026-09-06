@@ -1,8 +1,8 @@
 import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
-import 'package:cabo_counter/data/dto/round.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -33,9 +33,9 @@ class GameSessionController extends ChangeNotifier {
 
   /* Read-only delegation to the session */
 
-  String get gameId => session.gameId;
+  String get gameId => session.id;
   DateTime get createdAt => session.createdAt;
-  String get gameTitle => session.gameTitle;
+  String get gameTitle => session.title;
   List<Player> get players => session.players;
   int get pointLimit => session.pointLimit;
   int get caboPenalty => session.caboPenalty;
@@ -179,7 +179,7 @@ class GameSessionController extends ChangeNotifier {
     const uuid = Uuid();
     Round newRound = Round(
       roundId: uuid.v4(),
-      gameId: gameId,
+      gameSessionId: gameId,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,

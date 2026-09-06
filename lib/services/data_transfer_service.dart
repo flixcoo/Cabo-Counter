@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,7 +54,7 @@ class DataTransferService {
   /// Opens the file picker to save a single game session as a JSON file.
   static Future<bool> exportSingleGameSession(GameSession session) async {
     String jsonString = json.encode(session.toJson());
-    String fileName = 'cabo_counter-game_${session.gameId.substring(0, 7)}';
+    String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
     return _exportJsonData(jsonString, fileName);
   }
 

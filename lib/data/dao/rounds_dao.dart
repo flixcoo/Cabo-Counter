@@ -1,8 +1,8 @@
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
 import 'package:cabo_counter/data/db/tables/rounds_table.dart';
-import 'package:cabo_counter/data/dto/player.dart';
-import 'package:cabo_counter/data/dto/round.dart';
+import 'package:cabo_counter/data/models/player.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:drift/drift.dart';
 
 part 'rounds_dao.g.dart';
@@ -29,7 +29,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
         return Round(
           roundId: row.roundId,
-          gameId: row.gameId,
+          gameSessionId: row.gameId,
           roundNum: row.roundNumber,
           caboPlayerIndex: row.caboPlayerIndex,
           kamikazePlayerIndex: row.kamikazePlayerIndex,
@@ -63,7 +63,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
     return Round(
       roundId: roundResult.roundId,
-      gameId: roundResult.gameId,
+      gameSessionId: roundResult.gameId,
       roundNum: roundResult.roundNumber,
       caboPlayerIndex: roundResult.caboPlayerIndex,
       kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
@@ -84,7 +84,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required List<Player> players,
   }) async {
     final roundEntry = RoundsTableCompanion.insert(
-      roundId: round.roundId,
+      roundId: round.id,
       gameId: gameId,
       roundNumber: round.roundNum,
       caboPlayerIndex: round.caboPlayerIndex,
@@ -96,8 +96,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     for (int i = 0; i < players.length; i++) {
       final player = players[i];
       final roundScoreEntry = RoundScoresTableCompanion.insert(
-        roundId: round.roundId,
-        playerId: player.playerId,
+        roundId: round.id,
+        playerId: player.id,
         score: round.scores[i],
         scoreUpdate: round.scoreUpdates[i],
       );
@@ -138,7 +138,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       for (final round in rounds) {
         roundEntries.add(
           RoundsTableCompanion.insert(
-            roundId: round.roundId,
+            roundId: round.id,
             gameId: gameId,
             roundNumber: round.roundNum,
             caboPlayerIndex: round.caboPlayerIndex,
@@ -149,8 +149,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         for (int i = 0; i < players.length; i++) {
           roundScoreEntries.add(
             RoundScoresTableCompanion.insert(
-              roundId: round.roundId,
-              playerId: players[i].playerId,
+              roundId: round.id,
+              playerId: players[i].id,
               score: round.scores[i],
               scoreUpdate: round.scoreUpdates[i],
             ),

@@ -1,6 +1,6 @@
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,43 +25,43 @@ void main() {
       ),
     );
     player1 = Player(
-      playerId: 'player1_id',
-      gameId: 'test_game_id',
+      id: 'player1_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 1',
       position: 0,
       totalScore: 0,
     );
     player2 = Player(
-      playerId: 'player2_id',
-      gameId: 'test_game_id',
+      id: 'player2_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 2',
       position: 1,
       totalScore: 0,
     );
     player3 = Player(
-      playerId: 'player3_id',
-      gameId: 'test_game_id',
+      id: 'player3_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 3',
       position: 2,
       totalScore: 0,
     );
     player4 = Player(
-      playerId: 'player4_id',
-      gameId: 'test_game_without_players_id',
+      id: 'player4_id',
+      gameSessionId: 'test_game_without_players_id',
       name: 'Player 4',
       position: 0,
       totalScore: 0,
     );
     player5 = Player(
-      playerId: 'player5_id',
-      gameId: 'test_game_without_players_id',
+      id: 'player5_id',
+      gameSessionId: 'test_game_without_players_id',
       name: 'Player 5',
       position: 1,
       totalScore: 0,
     );
     player6 = Player(
-      playerId: 'player6_id',
-      gameId: 'test_game_without_players_id',
+      id: 'player6_id',
+      gameSessionId: 'test_game_without_players_id',
       name: 'Player 6',
       position: 2,
       totalScore: 0,
@@ -70,7 +70,7 @@ void main() {
       gameId: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
-      gameTitle: 'test game session',
+      title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
       isPointsLimitEnabled: true,
@@ -80,7 +80,7 @@ void main() {
       gameId: 'test_game_without_players_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
-      gameTitle: 'test game session',
+      title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
       isPointsLimitEnabled: true,
@@ -96,20 +96,20 @@ void main() {
       await database.gameSessionDao.insertGameSession(gameWithoutPlayers);
       final insertedPlayers = [player4, player5, player6];
       await database.playerDao.insertPlayers(
-        gameId: gameWithoutPlayers.gameId,
+        gameId: gameWithoutPlayers.id,
         players: insertedPlayers,
       );
 
       final players = await database.playerDao.getPlayersByGameId(
-        gameId: gameWithoutPlayers.gameId,
+        gameId: gameWithoutPlayers.id,
       );
 
       expect(players.length, 3);
       final expectedPlayers = [player4, player5, player6];
 
       for (int i = 0; i < players.length; i++) {
-        expect(players[i].playerId, expectedPlayers[i].playerId);
-        expect(players[i].gameId, expectedPlayers[i].gameId);
+        expect(players[i].id, expectedPlayers[i].id);
+        expect(players[i].gameSessionId, expectedPlayers[i].gameSessionId);
         expect(players[i].name, expectedPlayers[i].name);
         expect(players[i].position, expectedPlayers[i].position);
         expect(players[i].totalScore, expectedPlayers[i].totalScore);
@@ -119,15 +119,15 @@ void main() {
     test('Fetch all players of a game correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       final players = await database.playerDao.getPlayersByGameId(
-        gameId: gameSession.gameId,
+        gameId: gameSession.id,
       );
 
       expect(players.length, 3);
       final expectedPlayers = [player1, player2, player3];
 
       for (int i = 0; i < players.length; i++) {
-        expect(players[i].playerId, expectedPlayers[i].playerId);
-        expect(players[i].gameId, expectedPlayers[i].gameId);
+        expect(players[i].id, expectedPlayers[i].id);
+        expect(players[i].gameSessionId, expectedPlayers[i].gameSessionId);
         expect(players[i].name, expectedPlayers[i].name);
         expect(players[i].position, expectedPlayers[i].position);
         expect(players[i].totalScore, expectedPlayers[i].totalScore);
@@ -136,21 +136,15 @@ void main() {
 
     test('Fetch player position by playerId correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
-      var position = await database.playerDao.getPositionByPlayerId(
-        player1.playerId,
-      );
+      var position = await database.playerDao.getPositionByPlayerId(player1.id);
 
       expect(position, player1.position);
 
-      position = await database.playerDao.getPositionByPlayerId(
-        player2.playerId,
-      );
+      position = await database.playerDao.getPositionByPlayerId(player2.id);
 
       expect(position, player2.position);
 
-      position = await database.playerDao.getPositionByPlayerId(
-        player3.playerId,
-      );
+      position = await database.playerDao.getPositionByPlayerId(player3.id);
 
       expect(position, player3.position);
     });

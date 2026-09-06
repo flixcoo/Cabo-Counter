@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 /// [kamikazePlayerIndex] is the index of the player who got kamikaze. If no one got
 /// kamikaze, this value is null.
 class Round {
-  final String roundId;
-  final String gameId;
+  final String id;
+  final String gameSessionId;
   final int roundNum;
   final int caboPlayerIndex;
   final int? kamikazePlayerIndex;
@@ -18,25 +18,25 @@ class Round {
 
   Round({
     String? roundId,
-    required this.gameId,
+    required this.gameSessionId,
     required this.roundNum,
     required this.caboPlayerIndex,
     required this.scores,
     required this.scoreUpdates,
     this.kamikazePlayerIndex,
-  }) : roundId = roundId ?? const Uuid().v4();
+  }) : id = roundId ?? const Uuid().v4();
 
   @override
   toString() {
-    return '{RoundId: $roundId, gameId: $gameId, roundNum: $roundNum, caboPlayerIndex: $caboPlayerIndex, '
+    return '{id: $id, gameSessionId: $gameSessionId, roundNum: $roundNum, caboPlayerIndex: $caboPlayerIndex, '
         'kamikazePlayerIndex: $kamikazePlayerIndex, scores: $scores, '
         'scoreUpdates: $scoreUpdates}\n';
   }
 
   /// Converts the Round object to a JSON map.
   Map<String, dynamic> toJson() => {
-    'roundId': roundId,
-    'gameId': gameId,
+    'id': id,
+    'gameSessionId': gameSessionId,
     'roundNum': roundNum,
     'caboPlayerIndex': caboPlayerIndex,
     'kamikazePlayerIndex': kamikazePlayerIndex,
@@ -46,8 +46,8 @@ class Round {
 
   /// Creates a Round object from a JSON map.
   Round.fromJson(Map<String, dynamic> json)
-    : roundId = json['roundId'],
-      gameId = json['gameId'],
+    : id = json['id'],
+      gameSessionId = json['gameSessionId'],
       roundNum = json['roundNum'],
       caboPlayerIndex = json['caboPlayerIndex'],
       kamikazePlayerIndex = json['kamikazePlayerIndex'],

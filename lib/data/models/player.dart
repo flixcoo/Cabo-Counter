@@ -1,36 +1,36 @@
 import 'package:uuid/uuid.dart';
 
 class Player {
-  final String playerId;
-  final String gameId;
+  final String id;
+  final String gameSessionId;
   final String name;
   final int position;
   int totalScore;
 
   Player({
-    String? playerId,
-    required this.gameId,
+    String? id,
+    required this.gameSessionId,
     required this.name,
     required this.position,
     this.totalScore = 0,
-  }) : playerId = playerId ?? const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 
   @override
   String toString() {
-    return 'Player: [playerId: $playerId, gameId: $gameId, name: $name, position: $position]';
+    return 'Player: [playerId: $id, gameSessionId: $gameSessionId, name: $name, position: $position]';
   }
 
   Map<String, dynamic> toJson() => {
-    'playerId': playerId,
-    'gameId': gameId,
+    'playerId': id,
+    'gameSessionId': gameSessionId,
     'name': name,
     'position': position,
     'totalScore': totalScore,
   };
 
   Player.fromJson(Map<String, dynamic> json)
-    : playerId = json['playerId'],
-      gameId = json['gameId'],
+    : id = json['playerId'],
+      gameSessionId = json['gameSessionId'],
       name = json['name'],
       position = json['position'],
       totalScore = json['totalScore'];
@@ -40,13 +40,13 @@ class Player {
       identical(this, other) ||
       other is Player &&
           runtimeType == other.runtimeType &&
-          playerId == other.playerId &&
-          gameId == other.gameId &&
+          id == other.id &&
+          gameSessionId == other.gameSessionId &&
           name == other.name &&
           position == other.position &&
           totalScore == other.totalScore;
 
   @override
   int get hashCode =>
-      Object.hash(playerId, gameId, name, position, totalScore);
+      Object.hash(id, gameSessionId, name, position, totalScore);
 }

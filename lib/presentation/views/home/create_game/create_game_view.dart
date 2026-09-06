@@ -2,8 +2,8 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
@@ -413,8 +413,8 @@ class _CreateGameViewState extends State<CreateGameView> {
       String playerId = uuid.v4();
       playerList.add(
         Player(
-          playerId: playerId,
-          gameId: gameId,
+          id: playerId,
+          gameSessionId: gameId,
           name: playerNames[i],
           position: i,
         ),
@@ -430,7 +430,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     GameSession gameSession = GameSession(
       gameId: gameId,
       createdAt: DateTime.now(),
-      gameTitle: gameTitle,
+      title: gameTitle,
       players: playerList,
       pointLimit: ConfigService.getPointLimit(),
       caboPenalty: ConfigService.getCaboPenalty(),

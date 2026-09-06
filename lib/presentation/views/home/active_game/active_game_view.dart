@@ -2,12 +2,12 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
@@ -356,7 +356,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   }
 
   /// Ends a game session if its in unlimited mode.
-  /// Takes a String [gameId] as input. It finds the index of the game
+  /// Takes a String [id] as input. It finds the index of the game
   /// session with the matching ID marks it as finished,
   void endGame() {
     if (gameSession.isPointsLimitEnabled == true) return;
@@ -448,7 +448,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   Future<void> _removeGameSession(GameSession gameSession) async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     final deleted = await db.gameSessionDao.deleteGameSession(
-      gameId: gameSession.gameId,
+      gameId: gameSession.id,
     );
     if (!mounted) return;
     if (deleted) {

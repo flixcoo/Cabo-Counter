@@ -1,7 +1,7 @@
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
-import 'package:cabo_counter/data/dto/round.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,39 +25,39 @@ void main() {
       ),
     );
     player1 = Player(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 1',
       position: 0,
       totalScore: 0,
     );
     player2 = Player(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 2',
       position: 1,
       totalScore: 0,
     );
     player3 = Player(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       name: 'Player 3',
       position: 2,
       totalScore: 0,
     );
     round1 = Round(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       roundNum: 1,
       caboPlayerIndex: 0,
       scores: [5, 7, 10],
       scoreUpdates: [0, 7, 10],
     );
     round2 = Round(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       roundNum: 2,
       caboPlayerIndex: 1,
       scores: [2, 4, 4],
       scoreUpdates: [0, 9, 4],
     );
     round3 = Round(
-      gameId: 'test_game_id',
+      gameSessionId: 'test_game_id',
       roundNum: 3,
       caboPlayerIndex: 1,
       kamikazePlayerIndex: 2,
@@ -68,7 +68,7 @@ void main() {
       gameId: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
-      gameTitle: 'test game session',
+      title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
       isPointsLimitEnabled: true,
@@ -86,13 +86,13 @@ void main() {
 
       final List<List<int>> scores = await Future.wait([
         database.roundScoresDao.getScoresByRoundId(
-          roundId: gameSession.roundList[0].roundId,
+          roundId: gameSession.roundList[0].id,
         ),
         database.roundScoresDao.getScoresByRoundId(
-          roundId: gameSession.roundList[1].roundId,
+          roundId: gameSession.roundList[1].id,
         ),
         database.roundScoresDao.getScoresByRoundId(
-          roundId: gameSession.roundList[2].roundId,
+          roundId: gameSession.roundList[2].id,
         ),
       ]);
 
@@ -109,13 +109,13 @@ void main() {
 
       final List<List<int>> scoreUpdates = await Future.wait([
         database.roundScoresDao.getScoreUpdatesByRoundId(
-          roundId: gameSession.roundList[0].roundId,
+          roundId: gameSession.roundList[0].id,
         ),
         database.roundScoresDao.getScoreUpdatesByRoundId(
-          roundId: gameSession.roundList[1].roundId,
+          roundId: gameSession.roundList[1].id,
         ),
         database.roundScoresDao.getScoreUpdatesByRoundId(
-          roundId: gameSession.roundList[2].roundId,
+          roundId: gameSession.roundList[2].id,
         ),
       ]);
 

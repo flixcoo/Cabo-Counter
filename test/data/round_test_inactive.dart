@@ -1,4 +1,4 @@
-import 'package:cabo_counter/data/dto/round.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,7 +14,7 @@ void main() {
   setUp(() {
     round = Round(
       roundId: 'testRoundId',
-      gameId: 'testGameId',
+      gameSessionId: 'testGameId',
       roundNum: testRoundNum,
       caboPlayerIndex: testCaboPlayerIndex,
       kamikazePlayerIndex: testKamikazePlayerIndex,
@@ -35,7 +35,7 @@ void main() {
     test('Constructor with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
         roundId: testRoundId,
-        gameId: testGameId,
+        gameSessionId: testGameId,
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
@@ -112,7 +112,7 @@ void main() {
     test('toString() with null kamikazePlayerIndex', () {
       final roundWithoutKamikaze = Round(
         roundId: 'testRoundId',
-        gameId: 'testGameId',
+        gameSessionId: 'testGameId',
         roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,

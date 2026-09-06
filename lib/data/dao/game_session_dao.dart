@@ -1,8 +1,8 @@
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
-import 'package:cabo_counter/data/dto/round.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
+import 'package:cabo_counter/data/models/round.dart';
 import 'package:drift/drift.dart';
 
 part 'game_session_dao.g.dart';
@@ -20,9 +20,9 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertGameSession(GameSession gameSession) async {
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
-        gameId: gameSession.gameId,
+        gameId: gameSession.id,
         createdAt: gameSession.createdAt,
-        gameTitle: gameSession.gameTitle,
+        gameTitle: gameSession.title,
         pointLimit: gameSession.pointLimit,
         caboPenalty: gameSession.caboPenalty,
         isPointsLimitEnabled: gameSession.isPointsLimitEnabled,
@@ -33,12 +33,12 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     );
 
     await db.playerDao.insertPlayers(
-      gameId: gameSession.gameId,
+      gameId: gameSession.id,
       players: gameSession.players,
     );
 
     await db.roundsDao.insertMultipleRounds(
-      gameId: gameSession.gameId,
+      gameId: gameSession.id,
       rounds: gameSession.roundList,
       players: gameSession.players,
     );
@@ -67,7 +67,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         return GameSession(
           gameId: row.gameId,
           createdAt: row.createdAt,
-          gameTitle: row.gameTitle,
+          title: row.gameTitle,
           players: playerList,
           pointLimit: row.pointLimit,
           caboPenalty: row.caboPenalty,
@@ -106,7 +106,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     GameSession gameSession = GameSession(
       gameId: gameSessionResult.gameId,
       createdAt: gameSessionResult.createdAt,
-      gameTitle: gameSessionResult.gameTitle,
+      title: gameSessionResult.gameTitle,
       players: playerList,
       pointLimit: gameSessionResult.pointLimit,
       caboPenalty: gameSessionResult.caboPenalty,

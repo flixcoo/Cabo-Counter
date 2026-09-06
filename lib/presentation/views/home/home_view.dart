@@ -4,8 +4,8 @@ import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_filter_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
@@ -48,11 +48,11 @@ class _HomeViewState extends State<HomeView> {
     10,
     GameSession(
       createdAt: DateTime.now(),
-      gameTitle: 'Skeleton session',
+      title: 'Skeleton session',
       players: [
-        Player(name: 'Player 1', gameId: '', position: 0),
-        Player(name: 'Player 2', gameId: '', position: 1),
-        Player(name: 'Player 3', gameId: '', position: 2),
+        Player(name: 'Player 1', gameSessionId: '', position: 0),
+        Player(name: 'Player 2', gameSessionId: '', position: 1),
+        Player(name: 'Player 3', gameSessionId: '', position: 2),
       ],
       pointLimit: 100,
       caboPenalty: 5,
@@ -66,11 +66,11 @@ class _HomeViewState extends State<HomeView> {
     10,
     GameSession(
       createdAt: DateTime.now(),
-      gameTitle: 'Skeleton session',
+      title: 'Skeleton session',
       players: [
-        Player(name: 'Player 1', gameId: '', position: 0),
-        Player(name: 'Player 2', gameId: '', position: 1),
-        Player(name: 'Player 3', gameId: '', position: 2),
+        Player(name: 'Player 1', gameSessionId: '', position: 0),
+        Player(name: 'Player 2', gameSessionId: '', position: 1),
+        Player(name: 'Player 3', gameSessionId: '', position: 2),
       ],
       pointLimit: 100,
       caboPenalty: 5,
@@ -213,48 +213,45 @@ class _HomeViewState extends State<HomeView> {
                   } else {
                     final session = displaySessions[index];
                     return Dismissible(
-                          key: Key(session.gameId),
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Icon(
-                              IconService.delete,
-                              color: CustomTheme.red,
-                            ),
-                          ),
-                          direction: DismissDirection.endToStart,
-                          confirmDismiss: (direction) async {
-                            return await showDeleteGamePopup(
-                              context,
-                              session.gameTitle,
-                            );
-                          },
-                          onDismissed: (direction) {
-                            setState(() {
-                              deleteSession(
-                                session.gameId,
-                                Provider.of<AppDatabase>(context, listen: false),
-                              );
-                            });
-                          },
-                          dismissThresholds: const {
-                            DismissDirection.startToEnd: 0.6,
-                          },
-                          child: GameTile(
-                            session: session,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => ActiveGameView(
-                                    gameSession: session,
-                                    onSessionsUpdated: loadSessions,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                      key: Key(session.id),
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Icon(IconService.delete, color: CustomTheme.red),
+                      ),
+                      direction: DismissDirection.endToStart,
+                      confirmDismiss: (direction) async {
+                        return await showDeleteGamePopup(
+                          context,
+                          session.title,
                         );
+                      },
+                      onDismissed: (direction) {
+                        setState(() {
+                          deleteSession(
+                            session.id,
+                            Provider.of<AppDatabase>(context, listen: false),
+                          );
+                        });
+                      },
+                      dismissThresholds: const {
+                        DismissDirection.startToEnd: 0.6,
+                      },
+                      child: GameTile(
+                        session: session,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => ActiveGameView(
+                                gameSession: session,
+                                onSessionsUpdated: loadSessions,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   }
                 },
               ),
@@ -295,7 +292,7 @@ class _HomeViewState extends State<HomeView> {
 
   /// Deletes a game session with the given [gameId] from the local list and the database.
   Future<void> deleteSession(String gameId, AppDatabase db) async {
-    sessions = sessions..removeWhere((session) => session.gameId == gameId);
+    sessions = sessions..removeWhere((session) => session.id == gameId);
     sortGames(
       sortOption: currentSortOption,
       sortDirection: currentSortDirection,
@@ -395,7 +392,7 @@ class _HomeViewState extends State<HomeView> {
                 .replaceAll('ö', 'o~')
                 .replaceAll('ü', 'u~')
                 .replaceAll('ß', 'ss~');
-            return normalize(a.gameTitle).compareTo(normalize(b.gameTitle));
+            return normalize(a.title).compareTo(normalize(b.title));
           };
 
     displaySessions.sort(
