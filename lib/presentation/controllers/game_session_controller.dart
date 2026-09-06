@@ -55,7 +55,7 @@ class GameSessionController extends ChangeNotifier {
     List<int> scoreUpdates = List.generate(players.length, (_) => 0);
     for (int i = 0; i < scoreUpdates.length; i++) {
       if (i != kamikazePlayerIndex) {
-        scoreUpdates[i] += 50;
+        scoreUpdates[i] += (pointLimit / 2).round();
       }
     }
     addRoundScoresToList(
