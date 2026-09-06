@@ -174,94 +174,94 @@ class _HomeViewState extends State<HomeView> {
         icon: IconService.add,
       ),
       body: SafeArea(
-        child: Visibility(
-          visible: sessions.isEmpty,
-          replacement: Visibility(
-            visible: displaySessions.isEmpty,
-            replacement: Skeletonizer(
-              enabled: isLoading,
-              child: ListView.builder(
-                itemCount:
-                    displaySessions.length + (showOnlyActiveGames ? 1 : 0),
-                itemBuilder: (context, index) {
-                  // Show info about active games filter at the end of the list
-                  if (showOnlyActiveGames && index == displaySessions.length) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4, bottom: 30),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              IconService.visibility_off,
-                              color: CustomTheme.white.withAlpha(150),
-                              size: 16.0,
-                            ),
-                            const SizedBox(width: 6.0),
-                            Text(
-                              loc.only_active_games,
-                              style: TextStyle(
+        child: sessions.isEmpty
+            ? const EmptyGamesPlaceholder()
+            : displaySessions.isEmpty
+            ? EmptyFilterPlaceholder(
+                toggleShowOnlyActiveGames: toggleShowOnlyActiveGames,
+              )
+            : Skeletonizer(
+                enabled: isLoading,
+                child: ListView.builder(
+                  itemCount:
+                      displaySessions.length + (showOnlyActiveGames ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    // Show info about active games filter at the end of the list
+                    if (showOnlyActiveGames &&
+                        index == displaySessions.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 30),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                IconService.visibility_off,
                                 color: CustomTheme.white.withAlpha(150),
-                                fontSize: 12.0,
+                                size: 16.0,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 6.0),
+                              Text(
+                                loc.only_active_games,
+                                style: TextStyle(
+                                  color: CustomTheme.white.withAlpha(150),
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  } else {
-                    final session = displaySessions[index];
-                    return Dismissible(
-                      key: Key(session.id),
-                      background: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Icon(IconService.delete, color: CustomTheme.red),
-                      ),
-                      direction: DismissDirection.endToStart,
-                      confirmDismiss: (direction) async {
-                        return await showDeleteGamePopup(
-                          context,
-                          session.title,
-                        );
-                      },
-                      onDismissed: (direction) {
-                        setState(() {
-                          deleteSession(
-                            session.id,
-                            Provider.of<AppDatabase>(context, listen: false),
-                          );
-                        });
-                      },
-                      dismissThresholds: const {
-                        DismissDirection.startToEnd: 0.6,
-                      },
-                      child: GameTile(
-                        session: session,
-                        onTap: () {
-                          Navigator.push(
+                      );
+                    } else {
+                      final session = displaySessions[index];
+                      return Dismissible(
+                        key: Key(session.id),
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Icon(
+                            IconService.delete,
+                            color: CustomTheme.red,
+                          ),
+                        ),
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          return await showDeleteGamePopup(
                             context,
-                            CupertinoPageRoute(
-                              builder: (context) => ActiveGameView(
-                                gameSession: session,
-                                onSessionsUpdated: loadSessions,
-                              ),
-                            ),
+                            session.title,
                           );
                         },
-                      ),
-                    );
-                  }
-                },
+                        onDismissed: (direction) {
+                          setState(() {
+                            deleteSession(
+                              session.id,
+                              Provider.of<AppDatabase>(context, listen: false),
+                            );
+                          });
+                        },
+                        dismissThresholds: const {
+                          DismissDirection.startToEnd: 0.6,
+                        },
+                        child: GameTile(
+                          session: session,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => ActiveGameView(
+                                  gameSession: session,
+                                  onSessionsUpdated: loadSessions,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
-            ),
-            child: EmptyFilterPlaceholder(
-              toggleShowOnlyActiveGames: toggleShowOnlyActiveGames,
-            ),
-          ),
-          child: const EmptyGamesPlaceholder(),
-        ),
       ),
     );
   }
