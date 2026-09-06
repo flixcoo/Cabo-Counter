@@ -21,7 +21,7 @@ Future<void> main() async {
   await ConfigService.setMigrationDone(false);
   runApp(
     Provider<AppDatabase>(
-      create: (context) => databaseInstance,
+      create: (context) => AppDatabase(),
       child: const App(),
       dispose: (context, databaseInstance) => databaseInstance.close(),
     ),

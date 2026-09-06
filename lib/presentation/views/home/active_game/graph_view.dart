@@ -2,7 +2,7 @@ import 'dart:ui' as dart_ui;
 
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 /// using a line chart. It supports dynamic coloring for each player, axis formatting,
 /// and handles cases where insufficient data is available to render the graph.
 class GraphView extends StatefulWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
 
   const GraphView({super.key, required this.gameSession});
 

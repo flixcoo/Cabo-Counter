@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 ///
 /// Requires a [GameSession] to provide player and round data.
 class PointsView extends StatefulWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
 
   const PointsView({super.key, required this.gameSession});
 

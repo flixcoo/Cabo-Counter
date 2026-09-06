@@ -34,4 +34,19 @@ class Player {
       name = json['name'],
       position = json['position'],
       totalScore = json['totalScore'];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Player &&
+          runtimeType == other.runtimeType &&
+          playerId == other.playerId &&
+          gameId == other.gameId &&
+          name == other.name &&
+          position == other.position &&
+          totalScore == other.totalScore;
+
+  @override
+  int get hashCode =>
+      Object.hash(playerId, gameId, name, position, totalScore);
 }

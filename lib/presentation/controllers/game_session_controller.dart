@@ -1,0 +1,340 @@
+import 'package:cabo_counter/core/common.dart';
+import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/dto/round.dart';
+import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
+
+/// Controller for a single [GameSession].
+class GameSessionController extends ChangeNotifier {
+  final GameSession session;
+  final AppDatabase db;
+
+  GameSessionController({required this.session, required this.db});
+
+  /// Serializes all fire-and-forget database writes so operations that touch
+  /// the same round (e.g. an insert immediately followed by a replace) cannot
+  /// interleave and violate foreign key constraints.
+  Future<void> _writeQueue = Future<void>.value();
+
+  /// Completes once all queued database writes have finished. Mainly useful for
+  /// tests that need to await the controller's background persistence.
+  Future<void> get pendingWrites => _writeQueue;
+
+  void _enqueueWrite(Future<void> Function() operation) {
+    _writeQueue = _writeQueue.then((_) => operation()).catchError((
+      Object error,
+      StackTrace stackTrace,
+    ) {
+      debugPrint('GameSessionController database write failed: $error');
+    });
+  }
+
+  /* Read-only delegation to the session */
+
+  String get gameId => session.gameId;
+  DateTime get createdAt => session.createdAt;
+  String get gameTitle => session.gameTitle;
+  List<Player> get players => session.players;
+  int get pointLimit => session.pointLimit;
+  int get caboPenalty => session.caboPenalty;
+  bool get isPointsLimitEnabled => session.isPointsLimitEnabled;
+  bool get isGameFinished => session.isGameFinished;
+  String get winner => session.winner;
+  int get roundNumber => session.roundNumber;
+  List<Round> get roundList => session.roundList;
+
+  List<int> getPlayerScoresAsList() => session.getPlayerScoresAsList();
+  List<String> getPlayerNamesAsList() => session.getPlayerNamesAsList();
+
+  /// Assigns 50 points to all players except the kamikaze player.
+  /// [kamikazePlayerIndex] is the index of the kamikaze player.
+  void applyKamikaze(int roundNum, int kamikazePlayerIndex) {
+    List<int> roundScores = List.generate(players.length, (_) => 0);
+    List<int> scoreUpdates = List.generate(players.length, (_) => 0);
+    for (int i = 0; i < scoreUpdates.length; i++) {
+      if (i != kamikazePlayerIndex) {
+        scoreUpdates[i] += 50;
+      }
+    }
+    addRoundScoresToList(
+      roundNum,
+      roundScores,
+      scoreUpdates,
+      0,
+      kamikazePlayerIndex,
+    );
+  }
+
+  /// Checks the scores of the current round and assigns points to the players.
+  /// There are three possible outcomes of a round:
+  ///
+  /// **Case 1**<br>
+  /// The player who said CABO has the lowest score. They receive 0 points.
+  /// Every other player gets their round score.
+  ///
+  /// **Case 2**<br>
+  ///  The player who said CABO does not have the lowest score.
+  ///  They receive 5 extra points added to their round score.
+  ///  Every player with the lowest score gets 0 points.
+  ///  Every other player gets their round score.
+  void calculateScoredPoints(
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+  ) {
+    /// List of the index of the player(s) with the lowest score
+    List<int> lowestScoreIndex = _getLowestScoreIndex(roundScores);
+
+    if (lowestScoreIndex.contains(caboPlayerIndex)) {
+      // The player who said CABO is one of the players which have the
+      // fewest points.
+      _assignPoints(roundNum, roundScores, caboPlayerIndex, [caboPlayerIndex]);
+    } else {
+      // A player other than the one who said CABO has the fewest points.
+      _assignPoints(
+        roundNum,
+        roundScores,
+        caboPlayerIndex,
+        lowestScoreIndex,
+        caboPlayerIndex,
+      );
+    }
+  }
+
+  /// The _getLowestScoreIndex method but forwarded for testing purposes.
+  @visibleForTesting
+  List<int> testingGetLowestScoreIndex(List<int> roundScores) =>
+      _getLowestScoreIndex(roundScores);
+
+  /// Returns the index of the player with the lowest score. If there are
+  /// multiple players with the same lowest score, all of them are returned.
+  /// [roundScores] is a list of the scores of all players in the current round.
+  List<int> _getLowestScoreIndex(List<int> roundScores) {
+    int lowestScore = roundScores[0];
+    List<int> lowestScoreIndex = [0];
+
+    for (int i = 1; i < roundScores.length; i++) {
+      if (roundScores[i] < lowestScore) {
+        lowestScore = roundScores[i];
+        lowestScoreIndex = [i];
+      } else if (roundScores[i] == lowestScore) {
+        lowestScoreIndex.add(i);
+      }
+    }
+    return lowestScoreIndex;
+  }
+
+  @visibleForTesting
+  void testingAssignPoints(
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+    List<int> winnerIndex, [
+    int? loserIndex,
+  ]) => _assignPoints(
+    roundNum,
+    roundScores,
+    caboPlayerIndex,
+    winnerIndex,
+    loserIndex,
+  );
+
+  /// Assigns points to the players based on the scores of the current round.
+  /// [roundNum] is the number of the current round.
+  /// [roundScores] is the raw list of the scores of all players in the current round.
+  /// [winnerIndex] is the index of the player who receives 5 extra points
+  void _assignPoints(
+    int roundNum,
+    List<int> roundScores,
+    int caboPlayerIndex,
+    List<int> winnerIndex, [
+    int? loserIndex,
+  ]) {
+    /// List of the updates for every player score
+    List<int> scoreUpdates = [...roundScores];
+
+    for (int i in winnerIndex) {
+      scoreUpdates[i] = 0;
+    }
+    if (loserIndex != null) {
+      scoreUpdates[loserIndex] += 5;
+    }
+    addRoundScoresToList(roundNum, roundScores, scoreUpdates, caboPlayerIndex);
+  }
+
+  /// Sets the scores of the players for a specific round.
+  /// This method takes a list of round scores and a round number as parameters.
+  /// It then replaces the values for the given [roundNum] in the
+  /// playerScores. Its important that each index of the [roundScores] list
+  /// corresponds to the index of the player in the [playerScores] list.
+  void addRoundScoresToList(
+    int roundNum,
+    List<int> roundScores,
+    List<int> scoreUpdates,
+    int caboPlayerIndex, [
+    int? kamikazePlayerIndex,
+  ]) {
+    const uuid = Uuid();
+    Round newRound = Round(
+      roundId: uuid.v4(),
+      gameId: gameId,
+      roundNum: roundNum,
+      caboPlayerIndex: caboPlayerIndex,
+      kamikazePlayerIndex: kamikazePlayerIndex,
+      scores: roundScores,
+      scoreUpdates: scoreUpdates,
+    );
+    if (roundNum > roundList.length) {
+      roundList.add(newRound);
+      _enqueueWrite(
+        () => db.roundsDao.insertOneRound(
+          gameId: gameId,
+          round: newRound,
+          players: players,
+        ),
+      );
+    } else {
+      roundList[roundNum - 1] = newRound;
+      _enqueueWrite(
+        () => db.roundsDao.replaceRound(
+          gameId: gameId,
+          round: newRound,
+          players: players,
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  /// This method updates the points of each player after a round.
+  /// It first uses the _sumPoints() method to calculate the total points of each player.
+  /// Then, it checks if any player has reached 100 points. If so, saves their indices and marks
+  /// that player as having reached 100 points in that corresponding [Round] object.
+  /// If the game has the point limit activated, it first applies the
+  /// _subtractPointsForReachingHundred() method to subtract 50 points
+  /// for every time a player reached 100 points in the game.
+  /// It then checks if any player has exceeded 100 points. If so, it sets
+  /// isGameFinished to true and calls the _setWinner() method to determine
+  /// the winner.
+  /// It returns a list of players indices who reached 100 points (bonus player)
+  /// in the current round for the [RoundView] to show a popup
+  List<int> updatePoints() {
+    List<int> bonusPlayers = [];
+    _sumPoints();
+
+    if (isPointsLimitEnabled) {
+      bonusPlayers = _checkHundredPointsReached();
+      bool limitExceeded = false;
+
+      for (int i = 0; i < players.length; i++) {
+        if (players[i].totalScore > pointLimit) {
+          session.isGameFinished = true;
+          limitExceeded = true;
+          setWinner();
+        }
+      }
+      if (!limitExceeded) {
+        session.isGameFinished = false;
+      }
+    }
+    _enqueueWrite(
+      () => db.gameSessionDao.setGameFinishStatus(
+        gameId: gameId,
+        isFinished: isGameFinished,
+      ),
+    );
+    notifyListeners();
+    return bonusPlayers;
+  }
+
+  @visibleForTesting
+  void testingSumPoints() => _sumPoints();
+
+  /// Sums up the points of all players and stores the result in the
+  /// playerScores list.
+  void _sumPoints() {
+    for (int i = 0; i < players.length; i++) {
+      players[i].totalScore = 0;
+      for (int j = 0; j < roundList.length; j++) {
+        players[i].totalScore += roundList[j].scoreUpdates[i];
+      }
+    }
+    _enqueueWrite(() => db.playerDao.updatePlayerScores(players: players));
+    notifyListeners();
+  }
+
+  /// Checks if a player has reached 100 points in the current round.
+  /// If so, it updates the [scoreUpdate] List by subtracting 50 points from
+  /// the corresponding round update.
+  List<int> _checkHundredPointsReached() {
+    List<int> bonusPlayers = [];
+    for (int i = 0; i < players.length; i++) {
+      if (players[i].totalScore == pointLimit) {
+        bonusPlayers.add(i);
+        roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
+      }
+    }
+    if (bonusPlayers.isNotEmpty) {
+      // The round's score updates were adjusted after it was already persisted,
+      // so persist the corrected round again to keep the database in sync.
+      _enqueueWrite(
+        () => db.roundsDao.replaceRound(
+          gameId: gameId,
+          round: roundList[roundNumber - 1],
+          players: players,
+        ),
+      );
+    }
+    _sumPoints();
+    return bonusPlayers;
+  }
+
+  /// Determines the winner of the game session.
+  /// It iterates through the player scores and finds the player
+  /// with the lowest score.
+  void setWinner() {
+    int minScore = getPlayerScoresAsList().reduce((a, b) => a < b ? a : b);
+    List<String> lowestPlayers = [];
+    for (int i = 0; i < players.length; i++) {
+      if (players[i].totalScore == minScore) {
+        lowestPlayers.add(players[i].name);
+      }
+    }
+    if (lowestPlayers.length > 1) {
+      session.winner =
+          '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    } else {
+      session.winner = lowestPlayers.first;
+    }
+    _enqueueWrite(
+      () => db.gameSessionDao.setWinner(gameId: gameId, winner: winner),
+    );
+    vibrateIfPossible();
+    notifyListeners();
+  }
+
+  /// Increases the round number by 1.
+  void increaseRound() {
+    session.roundNumber++;
+    _enqueueWrite(
+      () => db.gameSessionDao.setRoundNumber(
+        gameId: gameId,
+        roundNumber: roundNumber,
+      ),
+    );
+
+    notifyListeners();
+  }
+
+  /// Ends the game if it is in unlimited mode.
+  /// It decreases the round number by 1, sets isGameFinished to true,
+  /// and calls the setWinner() method to determine the winner.
+  void endGame() {
+    session.roundNumber--;
+    session.isGameFinished = true;
+    setWinner();
+  }
+}

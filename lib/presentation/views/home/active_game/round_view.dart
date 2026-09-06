@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/custom_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
@@ -28,7 +28,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 ///
 /// Requires a [GameSession] and the current [roundNumber].
 class RoundView extends StatefulWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
   final int roundNumber;
 
   const RoundView({
@@ -44,7 +44,7 @@ class RoundView extends StatefulWidget {
 
 class _RoundViewState extends State<RoundView> {
   /// The current game session.
-  late GameSession gameSession = widget.gameSession;
+  late GameSessionController gameSession = widget.gameSession;
 
   /// Index of the player who said CABO.
   int _caboPlayerIndex = 0;

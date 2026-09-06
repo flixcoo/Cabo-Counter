@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// [gameSession] is the current game session containing the list of players.
 ///
 class KamikazeSheet extends StatelessWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
 
   const KamikazeSheet({super.key, required this.gameSession});
 
@@ -20,7 +20,7 @@ class KamikazeSheet extends StatelessWidget {
   /// The sheet adapts its UI based on the platform (iOS or Android).
   static Future<int?> show(
     BuildContext context,
-    GameSession gameSession,
+    GameSessionController gameSession,
   ) async {
     if (Platform.isIOS) {
       return await showCupertinoModalPopup<int?>(

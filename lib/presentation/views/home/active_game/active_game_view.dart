@@ -4,6 +4,7 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
@@ -50,7 +51,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     duration: const Duration(seconds: 10),
   );
 
-  late final GameSession gameSession;
+  late final GameSessionController gameSession;
 
   /// A list of the ranks for each player corresponding to their index in sortedPlayerIndices
   late List<int> denseRanks;
@@ -61,7 +62,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   @override
   void initState() {
     super.initState();
-    gameSession = widget.gameSession;
+    gameSession = GameSessionController(
+      session: widget.gameSession,
+      db: Provider.of<AppDatabase>(context, listen: false),
+    );
   }
 
   @override
@@ -235,7 +239,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             onTap: () {
                               _showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
-                                  _removeGameSession(gameSession);
+                                  _removeGameSession(widget.gameSession);
                                 }
                               });
                             },
@@ -517,6 +521,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   @override
   void dispose() {
+    gameSession.dispose();
     confettiController.dispose();
     super.dispose();
   }

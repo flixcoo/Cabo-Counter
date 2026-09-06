@@ -130,6 +130,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required List<Round> rounds,
     required List<Player> players,
   }) async {
+    if (rounds.isEmpty) return;
     await batch((batch) {
       final roundEntries = <RoundsTableCompanion>[];
       final roundScoreEntries = <RoundScoresTableCompanion>[];

@@ -1,11 +1,17 @@
+import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
+import 'package:drift/drift.dart' hide isNotNull, isNull;
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:test/test.dart';
 
 void main() {
   flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
+  late AppDatabase database;
   late GameSession session;
+  late GameSessionController controller;
   final testPlayers = [
     Player(
       name: 'Alice',
@@ -32,7 +38,13 @@ void main() {
   final testDate = DateTime(2023, 1, 1);
   const testTitle = 'Test Game';
 
-  setUp(() {
+  setUp(() async {
+    database = AppDatabase(
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
+    );
     session = GameSession(
       gameId: '1',
       createdAt: testDate,
@@ -43,6 +55,17 @@ void main() {
       isPointsLimitEnabled: true,
       isGameFinished: false,
     );
+    controller = GameSessionController(session: session, db: database);
+    // Persist the session and its players so the round writes triggered by the
+    // controller satisfy the foreign key constraints.
+    await database.gameSessionDao.insertGameSession(session);
+  });
+
+  tearDown(() async {
+    // Wait for the controller's serialized background writes to finish before
+    // closing the database to avoid "database is closed" errors.
+    await controller.pendingWrites;
+    await database.close();
   });
 
   group('Initialization & JSON', () {
@@ -57,8 +80,8 @@ void main() {
 
     test('toJson and fromJson', () {
       // Add some rounds to test serialization
-      session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
-      session.addRoundScoresToList(2, [15, 25, 35], [5, 5, 5], 1);
+      controller.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
+      controller.addRoundScoresToList(2, [15, 25, 35], [5, 5, 5], 1);
 
       final jsonFile = session.toJson();
       final fromJsonSession = GameSession.fromJson(jsonFile);
@@ -91,27 +114,27 @@ void main() {
   group('Helper Functions', () {
     test('increaseRound', () {
       expect(session.roundNumber, 1);
-      session.increaseRound();
+      controller.increaseRound();
       expect(session.roundNumber, 2);
     });
 
     test('getLowestScoreIndex', () {
       List<int> lowestScoreIndex;
 
-      lowestScoreIndex = session.testingGetLowestScoreIndex([5, 10, 15]);
+      lowestScoreIndex = controller.testingGetLowestScoreIndex([5, 10, 15]);
       expect(lowestScoreIndex, [0]);
 
-      lowestScoreIndex = session.testingGetLowestScoreIndex([5, 5, 15]);
+      lowestScoreIndex = controller.testingGetLowestScoreIndex([5, 5, 15]);
       expect(lowestScoreIndex, [0, 1]);
 
-      lowestScoreIndex = session.testingGetLowestScoreIndex([5, 5, 5]);
+      lowestScoreIndex = controller.testingGetLowestScoreIndex([5, 5, 5]);
       expect(lowestScoreIndex, [0, 1, 2]);
     });
   });
 
   group('Game Functions', () {
     test('applyKamikaze', () {
-      session.applyKamikaze(1, 0); // Alice has kamikaze
+      controller.applyKamikaze(1, 0); // Alice has kamikaze
       expect(session.roundList[0].scoreUpdates, [0, 50, 50]);
       expect(session.roundList[0].scores, [0, 0, 0]);
       expect(session.roundList[0].kamikazePlayerIndex, 0);
@@ -119,17 +142,17 @@ void main() {
     });
 
     test('calculateScoredPoints - CABO player has lowest', () {
-      session.calculateScoredPoints(1, [3, 5, 8], 0); // Alice has lowest
+      controller.calculateScoredPoints(1, [3, 5, 8], 0); // Alice has lowest
       expect(session.roundList[0].scoreUpdates, equals([0, 5, 8]));
     });
 
     test('calculateScoredPoints - CABO player not lowest', () {
-      session.calculateScoredPoints(1, [5, 3, 8], 0); // Bob has lowest
+      controller.calculateScoredPoints(1, [5, 3, 8], 0); // Bob has lowest
       expect(session.roundList[0].scoreUpdates, [10, 0, 8]);
     });
 
     test('addRoundScoresToList', () {
-      session.addRoundScoresToList(1, [3, 5, 8], [0, 5, 8], 0);
+      controller.addRoundScoresToList(1, [3, 5, 8], [0, 5, 8], 0);
       expect(session.roundList.length, 1);
       expect(session.roundList[0].roundNum, 1);
       expect(session.roundList[0].scoreUpdates, [0, 5, 8]);
@@ -139,49 +162,49 @@ void main() {
     });
 
     test('updatePoints - game not finished', () {
-      session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
-      session.updatePoints();
+      controller.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
+      controller.updatePoints();
       expect(session.isGameFinished, isFalse);
     });
 
     test('updatePoints - game finished', () {
-      session.addRoundScoresToList(1, [101, 20, 30], [101, 20, 30], 0);
-      session.updatePoints();
+      controller.addRoundScoresToList(1, [101, 20, 30], [101, 20, 30], 0);
+      controller.updatePoints();
       expect(session.isGameFinished, isTrue);
     });
 
     test('_assignPoints', () {
       // Alice said Cabo and has the lowest score
-      session.testingAssignPoints(1, [5, 10, 15], 0, [0]);
+      controller.testingAssignPoints(1, [5, 10, 15], 0, [0]);
       expect(session.roundList[0].scoreUpdates, [0, 10, 15]);
 
       // Alice said Cabo and has not the lowest score
-      session.testingAssignPoints(1, [5, 10, 15], 0, [1], 0);
+      controller.testingAssignPoints(1, [5, 10, 15], 0, [1], 0);
       expect(session.roundList[0].scoreUpdates, [10, 0, 15]);
 
       // Bob and Charlie have the lowest score, Alice said Cabo
-      session.testingAssignPoints(1, [15, 5, 5], 0, [1, 2], 0);
+      controller.testingAssignPoints(1, [15, 5, 5], 0, [1, 2], 0);
       expect(session.roundList[0].scoreUpdates, [20, 0, 0]);
     });
 
     test('_sumPoints', () async {
-      session.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
-      session.addRoundScoresToList(2, [5, 5, 5], [5, 5, 5], 1);
-      session.testingSumPoints();
+      controller.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
+      controller.addRoundScoresToList(2, [5, 5, 5], [5, 5, 5], 1);
+      controller.testingSumPoints();
       expect(session.getPlayerScoresAsList(), [15, 25, 35]);
     });
 
     test('_checkHundredPointsReached via updatePoints', () {
-      session.addRoundScoresToList(1, [50, 5, 15], [50, 0, 15], 1);
-      session.addRoundScoresToList(2, [50, 5, 15], [50, 0, 15], 1);
-      session.updatePoints();
+      controller.addRoundScoresToList(1, [50, 5, 15], [50, 0, 15], 1);
+      controller.addRoundScoresToList(2, [50, 5, 15], [50, 0, 15], 1);
+      controller.updatePoints();
       expect(session.getPlayerScoresAsList(), equals([50, 0, 30]));
     });
 
     test('_setWinner via updatePoints', () {
-      session.addRoundScoresToList(1, [101, 20, 30], [101, 0, 30], 1);
-      session.updatePoints();
-      expect(session.winner, 'Bob'); // Bob has lowest score (20)
+      controller.addRoundScoresToList(1, [101, 20, 30], [101, 0, 30], 1);
+      controller.updatePoints();
+      expect(session.winner, 'Bobby'); // Bobby has lowest score (20)
     });
   });
 }

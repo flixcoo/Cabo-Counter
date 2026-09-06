@@ -32,12 +32,12 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       ),
     );
 
-    db.playerDao.insertPlayers(
+    await db.playerDao.insertPlayers(
       gameId: gameSession.gameId,
       players: gameSession.players,
     );
 
-    db.roundsDao.insertMultipleRounds(
+    await db.roundsDao.insertMultipleRounds(
       gameId: gameSession.gameId,
       rounds: gameSession.roundList,
       players: gameSession.players,

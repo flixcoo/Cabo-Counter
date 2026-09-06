@@ -40,5 +40,3 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 }
-
-final databaseInstance = AppDatabase();

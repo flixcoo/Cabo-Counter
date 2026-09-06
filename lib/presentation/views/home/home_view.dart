@@ -24,6 +24,7 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:once/once.dart';
+import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -211,10 +212,7 @@ class _HomeViewState extends State<HomeView> {
                     );
                   } else {
                     final session = displaySessions[index];
-                    return ListenableBuilder(
-                      listenable: session,
-                      builder: (context, _) {
-                        return Dismissible(
+                    return Dismissible(
                           key: Key(session.gameId),
                           background: Container(
                             alignment: Alignment.centerRight,
@@ -233,7 +231,10 @@ class _HomeViewState extends State<HomeView> {
                           },
                           onDismissed: (direction) {
                             setState(() {
-                              deleteSession(session.gameId);
+                              deleteSession(
+                                session.gameId,
+                                Provider.of<AppDatabase>(context, listen: false),
+                              );
                             });
                           },
                           dismissThresholds: const {
@@ -254,8 +255,6 @@ class _HomeViewState extends State<HomeView> {
                             },
                           ),
                         );
-                      },
-                    );
                   }
                 },
               ),
@@ -272,9 +271,10 @@ class _HomeViewState extends State<HomeView> {
 
   void loadSessions() {
     isLoading = true;
+    final db = Provider.of<AppDatabase>(context, listen: false);
 
     Future.wait([
-      databaseInstance.gameSessionDao.getAllGameSessions(),
+      db.gameSessionDao.getAllGameSessions(),
       Future.delayed(
         const Duration(
           milliseconds: Constants.MINIMUM_SKELETON_SCREEN_DURATION,
@@ -294,13 +294,13 @@ class _HomeViewState extends State<HomeView> {
   }
 
   /// Deletes a game session with the given [gameId] from the local list and the database.
-  Future<void> deleteSession(String gameId) async {
+  Future<void> deleteSession(String gameId, AppDatabase db) async {
     sessions = sessions..removeWhere((session) => session.gameId == gameId);
     sortGames(
       sortOption: currentSortOption,
       sortDirection: currentSortDirection,
     );
-    await databaseInstance.gameSessionDao.deleteGameSession(gameId: gameId);
+    await db.gameSessionDao.deleteGameSession(gameId: gameId);
   }
 
   /// Handles the feedback dialog when the conditions for rating are met.
