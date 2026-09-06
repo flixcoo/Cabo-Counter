@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -14,7 +15,6 @@ import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
@@ -152,7 +152,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                         if (context.mounted) {
                           final result = await Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            adaptivePageRoute(
                               builder: (context) => ModeSelectionView(
                                 pointLimit: ConfigService.getPointLimit(),
                                 showDeselection: false,
@@ -445,7 +445,7 @@ class _CreateGameViewState extends State<CreateGameView> {
 
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute(
+      adaptivePageRoute(
         builder: (context) => ActiveGameView(
           gameSession: gameSession,
           onSessionsUpdated: widget.onSessionsUpdated,

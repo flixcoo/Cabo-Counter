@@ -71,7 +71,7 @@ class AboutView extends StatelessWidget {
                 text: loc.licenses,
                 onPressed: () => Navigator.push(
                   context,
-                  CupertinoPageRoute(builder: (_) => const LicenseView()),
+                  adaptivePageRoute(builder: (_) => const LicenseView()),
                 ),
               ),
               const SizedBox(height: 10),

@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -21,7 +22,6 @@ import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
@@ -139,7 +139,7 @@ class _HomeViewState extends State<HomeView> {
           onPressed: () {
             Navigator.push(
               context,
-              CupertinoPageRoute(
+              adaptivePageRoute(
                 builder: (context) =>
                     SettingsView(onSessionsUpdated: loadSessions),
               ),
@@ -164,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: MainMenuButton(
         onPressed: () => Navigator.push(
           context,
-          CupertinoPageRoute(
+          adaptivePageRoute(
             builder: (context) => CreateGameView(
               gameMode: ConfigService.getGameMode(),
               onSessionsUpdated: loadSessions,
@@ -248,7 +248,7 @@ class _HomeViewState extends State<HomeView> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              adaptivePageRoute(
                                 builder: (context) => ActiveGameView(
                                   gameSession: session,
                                   onSessionsUpdated: loadSessions,
@@ -437,7 +437,7 @@ class _HomeViewState extends State<HomeView> {
   /// Shows the "What's New" dialog.
   void showWhatsNewDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
+      adaptivePageRoute(
         builder: (context) => const WhatsNewDialog(),
         fullscreenDialog: true,
       ),

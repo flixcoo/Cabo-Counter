@@ -4,6 +4,7 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/custom_navigation_bar.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -75,9 +76,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         return supportedLocales.first;
       },
       theme: ThemeData(
+        brightness: Brightness.dark,
+
+        // colors
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
+        primaryColor: CustomTheme.primaryColor,
+        scaffoldBackgroundColor: CustomTheme.backgroundColor,
         colorScheme: ColorScheme.fromSeed(
           seedColor: CustomTheme.primaryColor,
           brightness: Brightness.dark,
@@ -86,18 +92,26 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           surface: CustomTheme.backgroundColor,
           onSurface: CustomTheme.textColor,
         ),
+
+        // icon button
         iconButtonTheme: const IconButtonThemeData(
           style: ButtonStyle(
             iconColor: WidgetStatePropertyAll(CustomTheme.primaryColor),
           ),
         ),
+
+        // text button
         textButtonTheme: const TextButtonThemeData(
           style: ButtonStyle(
             textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 17)),
             padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 12)),
           ),
         ),
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 17)),
+
+        // texts
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
+
+        // app bar
         appBarTheme: const AppBarTheme(
           backgroundColor: CustomTheme.backgroundColor,
           foregroundColor: CustomTheme.textColor,
@@ -110,9 +124,13 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             fontWeight: FontWeight.bold,
           ),
         ),
-        brightness: Brightness.dark,
-        primaryColor: CustomTheme.primaryColor,
-        scaffoldBackgroundColor: CustomTheme.backgroundColor,
+
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+          },
+        ),
       ),
       debugShowCheckedModeBanner: false,
       title: 'Cabo Counter',

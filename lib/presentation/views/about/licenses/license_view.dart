@@ -37,7 +37,7 @@ class LicenseView extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  adaptivePageRoute(
                     builder: (_) => LicenseDetailView(
                       title: allDependencies[index].name,
                       description: allDependencies[index].description,

@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -18,7 +19,6 @@ import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -202,7 +202,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             title: Text(loc.scoring_history),
                             onTap: () => Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              adaptivePageRoute(
                                 builder: (_) =>
                                     GraphView(gameSession: gameSession),
                               ),
@@ -213,7 +213,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             title: Text(loc.point_overview),
                             onTap: () => Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              adaptivePageRoute(
                                 builder: (_) =>
                                     PointsView(gameSession: gameSession),
                               ),
@@ -253,7 +253,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(
+                                adaptivePageRoute(
                                   builder: (_) => CreateGameView(
                                     gameTitle: gameSession.gameTitle,
                                     gameMode:
@@ -468,7 +468,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// until the user navigates back or the round number is invalid.
   void _openRoundView(BuildContext context, int roundNumber) async {
     final round = await Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
+      adaptivePageRoute(
         fullscreenDialog: true,
         builder: (context) =>
             RoundView(gameSession: gameSession, roundNumber: roundNumber),
