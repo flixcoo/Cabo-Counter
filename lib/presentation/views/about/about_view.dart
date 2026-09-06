@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -5,7 +6,6 @@ import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_but
 import 'package:cabo_counter/presentation/views/about/licenses/license_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

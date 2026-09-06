@@ -1,8 +1,8 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/license_tile.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/license_detail_view.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/oss_licenses.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Displays a list of open source software licenses used in the app.
