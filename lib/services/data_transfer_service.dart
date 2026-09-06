@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 class DataTransferService {
   /// Writes the game session list to a JSON file and returns it as string.
   static Future<String> _getGameDataAsJsonFile(BuildContext context) async {
-    final db = Provider.of<AppDatabase>(context);
+    final db = Provider.of<AppDatabase>(context, listen: false);
     final sessions = await db.gameSessionDao.getAllGameSessions();
 
     final jsonFile = sessions.map((session) => session.toJson()).toList();
@@ -24,10 +24,7 @@ class DataTransferService {
   /// Opens the file picker to export game data as a JSON file.
   /// This method will export the given [jsonString] as a JSON file. It opens
   /// the file picker with the choosen [fileName].
-  static Future<bool> _exportJsonData(
-    String jsonString,
-    String fileName,
-  ) async {
+  static Future<bool> exportJsonData(String jsonString, String fileName) async {
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
       await FileSaver.instance.saveAs(
@@ -48,14 +45,14 @@ class DataTransferService {
   static Future<bool> exportGameData(BuildContext context) async {
     String jsonString = await _getGameDataAsJsonFile(context);
     String fileName = 'cabo_counter-game_data';
-    return _exportJsonData(jsonString, fileName);
+    return exportJsonData(jsonString, fileName);
   }
 
   /// Opens the file picker to save a single game session as a JSON file.
   static Future<bool> exportSingleGameSession(GameSession session) async {
     String jsonString = json.encode(session.toJson());
     String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
-    return _exportJsonData(jsonString, fileName);
+    return exportJsonData(jsonString, fileName);
   }
 
   /// Opens the file picker to import a JSON file and loads the game data from it.
