@@ -18,39 +18,39 @@ class MainMenuButton extends StatefulWidget {
 
 class _MainMenuButtonState extends State<MainMenuButton>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
+  late AnimationController animationController;
+  late Animation<double> scaleAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(
+    animationController = AnimationController(
       duration: const Duration(milliseconds: 50),
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.easeInOut),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: _scaleAnimation,
+      scale: scaleAnimation,
       child: GestureDetector(
         onTapDown: (_) {
-          _animationController.forward();
+          animationController.forward();
         },
         onTapUp: (_) async {
-          await _animationController.reverse();
+          await animationController.reverse();
           if (mounted) {
             widget.onPressed();
           }
         },
         onTapCancel: () {
-          _animationController.reverse();
+          animationController.reverse();
         },
         child: Stack(
           children: [
@@ -92,7 +92,7 @@ class _MainMenuButtonState extends State<MainMenuButton>
 
   @override
   void dispose() {
-    _animationController.dispose();
+    animationController.dispose();
     super.dispose();
   }
 }
