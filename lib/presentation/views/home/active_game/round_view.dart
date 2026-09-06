@@ -4,6 +4,7 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/custom_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_segmendet_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/round_tile.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
@@ -38,7 +39,6 @@ class RoundView extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _RoundViewState createState() => _RoundViewState();
 }
 
@@ -47,11 +47,11 @@ class _RoundViewState extends State<RoundView> {
   late GameSessionController gameSession = widget.gameSession;
 
   /// Index of the player who said CABO.
-  int _caboPlayerIndex = 0;
+  int? caboPlayerIndex = 0;
 
   /// Index of the player who has Kamikaze.
   /// Default is null (no Kamikaze player).
-  int? _kamikazePlayerIndex;
+  int? kamikazePlayerIndex;
 
   /// List of text controllers for the score text fields.
   late final List<TextEditingController> _scoreControllerList = List.generate(
@@ -60,20 +60,20 @@ class _RoundViewState extends State<RoundView> {
   );
 
   /// List of focus nodes for the score text fields.
-  late final List<FocusNode> _focusNodeList = List.generate(
+  late final List<FocusNode> focusNodes = List.generate(
     widget.gameSession.players.length,
     (index) => FocusNode(),
   );
 
   /// List of global keys for the score text fields.
-  late List<GlobalKey> _textFieldKeys;
+  late List<GlobalKey> textFieldKeys;
 
   /// Index of the player who shuffles the cards for this round.
-  late int _shufflePlayerIndex;
+  late int shufflePlayerIndex;
 
   @override
   void initState() {
-    _shufflePlayerIndex = _getShufflePlayerIndex();
+    shufflePlayerIndex = getShufflePlayerIndex();
     if (widget.roundNumber < widget.gameSession.roundNumber ||
         widget.gameSession.isGameFinished == true) {
       // If the current round has already been played, the text fields
@@ -84,13 +84,13 @@ class _RoundViewState extends State<RoundView> {
             .scores[i]
             .toString();
       }
-      _caboPlayerIndex =
+      caboPlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
-      _kamikazePlayerIndex =
+      kamikazePlayerIndex =
           gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
     }
 
-    _textFieldKeys = List.generate(
+    textFieldKeys = List.generate(
       widget.gameSession.players.length,
       (index) => GlobalKey(),
     );
@@ -102,18 +102,14 @@ class _RoundViewState extends State<RoundView> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final rotatedPlayers = _getRotatedPlayers();
-    final originalIndices = _getOriginalIndices();
+    final rotatedPlayers = getRotatedPlayers();
+    final originalIndices = getOriginalIndices();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: TextButton(
-          //padding: EdgeInsets.zero,
-          onPressed: () => {
-            //LocalStorageService.saveGameSessions(),
-            Navigator.pop(context, -1),
-          },
+          onPressed: () => Navigator.of(context).pop(-1),
           child: const Icon(CupertinoIcons.xmark, size: 25),
         ),
         title: Text(loc.results),
@@ -143,19 +139,17 @@ class _RoundViewState extends State<RoundView> {
                       loc.who_said_cabo,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+
+                    // Cabo player selection
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: widget.gameSession.players.length > 3
-                            ? 5
-                            : 20,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
                         vertical: 10,
                       ),
                       child: SizedBox(
-                        height: 60,
-                        child: CupertinoSegmentedControl<int>(
-                          unselectedColor: CustomTheme.backgroundColor,
-                          selectedColor: CustomTheme.primaryColor,
-                          groupValue: _caboPlayerIndex,
+                        height: 40,
+                        child: CustomSegmendetControl<int>(
+                          groupValue: caboPlayerIndex,
                           children: Map.fromEntries(
                             widget.gameSession.players.asMap().entries.map((
                               entry,
@@ -185,9 +179,7 @@ class _RoundViewState extends State<RoundView> {
                             }),
                           ),
                           onValueChanged: (value) {
-                            setState(() {
-                              _caboPlayerIndex = value;
-                            });
+                            setState(() => caboPlayerIndex = value);
                           },
                         ),
                       ),
@@ -213,7 +205,7 @@ class _RoundViewState extends State<RoundView> {
 
                         // Whether to show the shuffle player indicator for this player
                         final isShufflePlayer =
-                            originalIndex == _shufflePlayerIndex;
+                            originalIndex == shufflePlayerIndex;
 
                         // The text input action for the score text field.
                         // It is "next" for all players except the last one,
@@ -229,7 +221,7 @@ class _RoundViewState extends State<RoundView> {
 
                         return Center(
                           child: RoundTile(
-                            key: _textFieldKeys[originalIndex],
+                            key: textFieldKeys[originalIndex],
                             playerName: name,
                             points: score,
                             shufflePlayer: isShufflePlayer,
@@ -237,8 +229,8 @@ class _RoundViewState extends State<RoundView> {
                             controller: _scoreControllerList[originalIndex],
                             textInputAction: textInputAction,
                             onSubmitted: (_) =>
-                                _focusNextTextfield(originalIndex),
-                            focusNode: _focusNodeList[originalIndex],
+                                focusNextTextfield(originalIndex),
+                            focusNode: focusNodes[originalIndex],
                             onChanged: (_) => setState(() {}),
                           ),
                         );
@@ -250,7 +242,7 @@ class _RoundViewState extends State<RoundView> {
                         heightFactor: 1,
                         child: CustomButton(
                           onPressed: () async {
-                            if (await _showKamikazeSheet(context)) {
+                            if (await showKamikazeSheet(context)) {
                               if (!context.mounted) return;
                               _endOfRoundNavigation(context, true);
                             }
@@ -280,7 +272,7 @@ class _RoundViewState extends State<RoundView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OpacityButton.text(
-                        onPressed: _areRoundInputsValid()
+                        onPressed: areRoundInputsValid()
                             ? () {
                                 _endOfRoundNavigation(context, false);
                               }
@@ -289,7 +281,7 @@ class _RoundViewState extends State<RoundView> {
                       ),
                       if (!widget.gameSession.isGameFinished)
                         OpacityButton.text(
-                          onPressed: _areRoundInputsValid()
+                          onPressed: areRoundInputsValid()
                               ? () {
                                   _endOfRoundNavigation(context, true);
                                 }
@@ -311,7 +303,7 @@ class _RoundViewState extends State<RoundView> {
 
   /// Gets the index of the player who won the previous round.
   /// Returns 0 in the first round, as there is no previous round.
-  int _getPreviousRoundWinnerIndex() {
+  int getPreviousRoundWinnerIndex() {
     if (widget.roundNumber == 1) {
       return 0; // If it's the first round, the order should be the same as the players list.
     }
@@ -332,7 +324,7 @@ class _RoundViewState extends State<RoundView> {
   /// the player with the highest score from the previous round (round loser)
   /// shuffles. If rotate shuffler is enabled in the configuration,
   /// the shuffler rotates among players each round.
-  int _getShufflePlayerIndex() {
+  int getShufflePlayerIndex() {
     // In the first round the first player shuffles the cards
     if (widget.roundNumber == 1) {
       return 0;
@@ -372,8 +364,8 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Rotates the players list based on the previous round's winner.
-  List<String> _getRotatedPlayers() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
+  List<String> getRotatedPlayers() {
+    final winnerIndex = getPreviousRoundWinnerIndex();
     final playerList = widget.gameSession.getPlayerNamesAsList();
     return [
       playerList[winnerIndex],
@@ -383,8 +375,8 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Gets the original indices of the players by recalculating it from the rotated list.
-  List<int> _getOriginalIndices() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
+  List<int> getOriginalIndices() {
+    final winnerIndex = getPreviousRoundWinnerIndex();
     return [
       winnerIndex,
       ...List.generate(
@@ -397,10 +389,10 @@ class _RoundViewState extends State<RoundView> {
 
   /// Shows a bottom sheet sheet to select the player who has Kamikaze.
   /// It returns true if a player was selected, false if the action was cancelled.
-  Future<bool> _showKamikazeSheet(BuildContext context) async {
+  Future<bool> showKamikazeSheet(BuildContext context) async {
     final selectedIndex = await KamikazeSheet.show(context, gameSession);
     if (selectedIndex != null) {
-      _kamikazePlayerIndex = selectedIndex;
+      kamikazePlayerIndex = selectedIndex;
       return true;
     }
     return false;
@@ -408,17 +400,17 @@ class _RoundViewState extends State<RoundView> {
 
   /// Focuses the next text field in the list of text fields.
   /// [index] is the index of the current text field.
-  void _focusNextTextfield(int index) {
-    final originalIndices = _getOriginalIndices();
+  void focusNextTextfield(int index) {
+    final originalIndices = getOriginalIndices();
     final currentPos = originalIndices.indexOf(index);
 
     if (currentPos < originalIndices.length - 1) {
       final nextIndex = originalIndices[currentPos + 1];
       FocusScope.of(
         context,
-      ).requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
+      ).requestFocus(focusNodes[originalIndices[currentPos + 1]]);
 
-      final scrollContext = _textFieldKeys[nextIndex].currentContext;
+      final scrollContext = textFieldKeys[nextIndex].currentContext;
       if (scrollContext != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Scrollable.ensureVisible(
@@ -430,7 +422,7 @@ class _RoundViewState extends State<RoundView> {
         });
       }
     } else {
-      _focusNodeList[index].unfocus();
+      focusNodes[index].unfocus();
     }
   }
 
@@ -438,14 +430,14 @@ class _RoundViewState extends State<RoundView> {
   /// Returns true if the inputs are valid, false otherwise.
   /// Round Inputs are valid if every player has a score or
   /// kamikaze is selected for a player
-  bool _areRoundInputsValid() {
-    if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
+  bool areRoundInputsValid() {
+    if (areTextFieldsEmpty() && kamikazePlayerIndex == null) return false;
     return true;
   }
 
   /// Checks if any of the text fields for the players points are empty.
   /// Returns true if any of the text fields is empty, false otherwise.
-  bool _areTextFieldsEmpty() {
+  bool areTextFieldsEmpty() {
     for (TextEditingController t in _scoreControllerList) {
       if (t.text.isEmpty) {
         return true;
@@ -459,11 +451,11 @@ class _RoundViewState extends State<RoundView> {
   /// every player. If the round is the highest round played in this game,
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
-  List<int> _finishRound() {
-    if (_kamikazePlayerIndex != null) {
+  List<int> finishRound() {
+    if (kamikazePlayerIndex != null) {
       widget.gameSession.applyKamikaze(
         widget.roundNumber,
-        _kamikazePlayerIndex!,
+        kamikazePlayerIndex!,
       );
     } else {
       List<int> roundScores = [];
@@ -473,7 +465,7 @@ class _RoundViewState extends State<RoundView> {
       widget.gameSession.calculateScoredPoints(
         widget.roundNumber,
         roundScores,
-        _caboPlayerIndex,
+        caboPlayerIndex!,
       );
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
@@ -549,7 +541,7 @@ class _RoundViewState extends State<RoundView> {
     BuildContext context,
     bool navigateToNextRound,
   ) async {
-    List<int> bonusPlayersIndices = _finishRound();
+    List<int> bonusPlayersIndices = finishRound();
     if (bonusPlayersIndices.isNotEmpty) {
       await _showBonusPopup(context, bonusPlayersIndices);
     }
@@ -578,7 +570,7 @@ class _RoundViewState extends State<RoundView> {
     for (final controller in _scoreControllerList) {
       controller.dispose();
     }
-    for (final focusNode in _focusNodeList) {
+    for (final focusNode in focusNodes) {
       focusNode.dispose();
     }
     super.dispose();
