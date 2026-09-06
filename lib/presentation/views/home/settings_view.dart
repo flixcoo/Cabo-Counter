@@ -111,9 +111,10 @@ class _SettingsViewState extends State<SettingsView> {
                       final selectedMode = await Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => ModeSelectionMenu(
+                          builder: (context) => ModeSelectionView(
                             pointLimit: ConfigService.getPointLimit(),
                             showDeselection: true,
+                            initialSelectedGameMode: defaultMode,
                           ),
                         ),
                       );

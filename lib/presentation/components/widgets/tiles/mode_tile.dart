@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ModeTile extends StatelessWidget {
   const ModeTile({
@@ -7,22 +7,29 @@ class ModeTile extends StatelessWidget {
     required this.title,
     required this.description,
     this.onTap,
+    this.selected = false,
   });
 
   final String title;
   final String description;
   final VoidCallback? onTap;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: CustomTheme.mainElementColor,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: selected ? CustomTheme.primaryColor : Colors.transparent,
+            width: 2,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

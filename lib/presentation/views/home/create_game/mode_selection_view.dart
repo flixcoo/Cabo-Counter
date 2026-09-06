@@ -5,54 +5,80 @@ import 'package:flutter/material.dart';
 
 /// A stateless widget that displays a menu for selecting the game mode.
 ///
-/// The [ModeSelectionMenu] allows the user to choose between different game modes:
+/// The [ModeSelectionView] allows the user to choose between different game modes:
 /// - Point limit mode with a specified [pointLimit]
 /// - Unlimited mode
 /// - Optionally, no default mode if [showDeselection] is true
-class ModeSelectionMenu extends StatelessWidget {
-  final int pointLimit;
-  final bool showDeselection;
-  const ModeSelectionMenu({
+class ModeSelectionView extends StatefulWidget {
+  const ModeSelectionView({
     super.key,
     required this.pointLimit,
     required this.showDeselection,
+    this.initialSelectedGameMode,
   });
+
+  final int pointLimit;
+  final bool showDeselection;
+  final GameMode? initialSelectedGameMode;
+
+  @override
+  State<ModeSelectionView> createState() => _ModeSelectionViewState();
+}
+
+class _ModeSelectionViewState extends State<ModeSelectionView> {
+  late GameMode? selectedMode;
+
+  // Supresses the tap while the Future.delayed are running
+  bool supressTap = false;
+
+  @override
+  void initState() {
+    selectedMode = widget.initialSelectedGameMode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.gamemode),
-        //previousPageTitle: !showDeselection ? loc.new_game : '',
-      ),
+      appBar: AppBar(title: Text(loc.gamemode)),
       body: ListView(
         children: [
+          // Point limit mode
           ModeTile(
-            title: '$pointLimit ${loc.points}',
-            description: loc.point_limit_description(pointLimit),
-            onTap: () {
-              Navigator.pop(context, GameMode.pointLimit);
-            },
+            title: '${widget.pointLimit} ${loc.points}',
+            description: loc.point_limit_description(widget.pointLimit),
+            onTap: () => onTapTile(GameMode.pointLimit),
+            selected: selectedMode == GameMode.pointLimit,
           ),
+
+          // Unlimited mode
           ModeTile(
             title: loc.unlimited,
             description: loc.unlimited_description,
-            onTap: () {
-              Navigator.pop(context, GameMode.unlimited);
-            },
+            onTap: () => onTapTile(GameMode.unlimited),
+            selected: selectedMode == GameMode.unlimited,
           ),
-          if (showDeselection)
+
+          if (widget.showDeselection)
             ModeTile(
               title: loc.no_default_mode,
               description: loc.no_default_description,
-              onTap: () {
-                Navigator.pop(context, GameMode.none);
-              },
+              onTap: () => onTapTile(GameMode.none),
+              selected: selectedMode == GameMode.none,
             ),
         ],
       ),
     );
+  }
+
+  void onTapTile(GameMode selectedMode) {
+    if (supressTap) return;
+    supressTap = true;
+    setState(() => this.selectedMode = selectedMode);
+    Future.delayed(const Duration(milliseconds: 400), () {
+      Navigator.of(context).pop(selectedMode);
+    });
   }
 }

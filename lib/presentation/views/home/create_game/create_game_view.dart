@@ -65,13 +65,13 @@ class _CreateGameViewState extends State<CreateGameView> {
   final double keyboardHeightAdjustmentFactor = 0.75;
 
   /// Variable to hold the selected game mode.
-  late GameMode gameMode;
+  late GameMode selectedGameMode;
 
   @override
   void initState() {
     super.initState();
 
-    gameMode = widget.gameMode;
+    selectedGameMode = widget.gameMode;
 
     _gameTitleTextController.text = widget.gameTitle ?? '';
 
@@ -150,18 +150,19 @@ class _CreateGameViewState extends State<CreateGameView> {
                       onTap: () async {
                         await keyboardDelay();
                         if (context.mounted) {
-                          final selectedMode = await Navigator.push(
+                          final result = await Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) => ModeSelectionMenu(
+                              builder: (context) => ModeSelectionView(
                                 pointLimit: ConfigService.getPointLimit(),
                                 showDeselection: false,
+                                initialSelectedGameMode: selectedGameMode,
                               ),
                             ),
                           );
 
                           setState(() {
-                            gameMode = selectedMode ?? gameMode;
+                            selectedGameMode = result ?? selectedGameMode;
                           });
                         }
                       },
@@ -322,9 +323,9 @@ class _CreateGameViewState extends State<CreateGameView> {
       color: CustomTheme.primaryColor,
     );
 
-    if (gameMode == GameMode.none) {
+    if (selectedGameMode == GameMode.none) {
       return Text(loc.no_mode_selected, style: textStyle);
-    } else if (gameMode == GameMode.pointLimit) {
+    } else if (selectedGameMode == GameMode.pointLimit) {
       return Text(
         '${ConfigService.getPointLimit()} ${loc.points}',
         style: selectedTextStyle,
@@ -338,7 +339,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   /// If any attribute is invalid, it shows a feedback dialog.
   /// If all attributes are valid, it calls the `_createGame` method.
   void _checkAllGameAttributes() {
-    if (gameMode == GameMode.none) {
+    if (selectedGameMode == GameMode.none) {
       _showFeedbackDialog(CreateStatus.noModeSelected);
       return;
     }
@@ -425,7 +426,7 @@ class _CreateGameViewState extends State<CreateGameView> {
         ? getFallbackGameTitle()
         : _gameTitleTextController.text;
 
-    final bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+    final bool isPointsLimitEnabled = selectedGameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
       gameId: gameId,
