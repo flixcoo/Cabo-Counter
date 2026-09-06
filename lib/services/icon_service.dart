@@ -85,6 +85,10 @@ abstract class IconService {
   static IconData get players =>
       Platform.isIOS ? CupertinoIcons.person_2_fill : Icons.group;
 
+  /// Icon for the point limit.
+  static IconData get point_limit =>
+      Platform.isIOS ? CupertinoIcons.flag_fill : Icons.flag;
+
   /// Icon for removing a player.
   static IconData get remove_player =>
       Platform.isIOS ? CupertinoIcons.minus_circle_fill : Icons.remove_circle;

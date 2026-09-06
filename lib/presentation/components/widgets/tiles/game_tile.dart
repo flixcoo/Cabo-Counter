@@ -18,85 +18,95 @@ class _GameTileState extends State<GameTile> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
+    final session = widget.session;
+    List<({IconData icon, String text})> attributes = [
+      (
+        icon: session.isPointsLimitEnabled
+            ? IconService.point_limit
+            : CupertinoIcons.infinite,
+        text: session.isPointsLimitEnabled
+            ? '${session.pointLimit.toString()} ${loc.points}'
+            : loc.unlimited,
+      ),
+      (
+        icon: IconService.cabo_penalty,
+        text: '${session.caboPenalty.toString()} ${loc.points}',
+      ),
+      (
+        icon: IconService.players,
+        text: '${session.players.length.toString()} ${loc.players}',
+      ),
+    ];
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       child: GestureDetector(
         onTap: widget.onTap,
         child: Container(
-          padding: const EdgeInsets.only(right: 4, left: 2),
           decoration: BoxDecoration(
             color: CustomTheme.mainElementColor,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: CustomTheme.primaryColor.withAlpha(100),
-                        borderRadius: BorderRadius.circular(12),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      session.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: widget.session.isPointsLimitEnabled
-                          ? Text(
-                              widget.session.pointLimit.toString(),
-                              style: TextStyle(
-                                color: CustomTheme.primaryColor.withRed(40),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          : Icon(
-                              CupertinoIcons.infinite,
-                              size: 32,
-                              color: CustomTheme.primaryColor.withRed(40),
-                            ),
                     ),
-                    const SizedBox(width: 15),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                  ),
+                  const SizedBox(width: 12),
+
+                  Text(
+                    session.isGameFinished
+                        ? '\u{1F947} ${session.winner}'
+                        : '${loc.round} ${session.roundNumber}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: CustomTheme.subtitleColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                session.players.map((p) => p.name).join(', '),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13, color: CustomTheme.white),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                spacing: 16,
+                children: [
+                  for (final a in attributes)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        Icon(a.icon, size: 16, color: CustomTheme.primaryColor),
+                        const SizedBox(width: 5),
                         Text(
-                          widget.session.title,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          widget.session.isGameFinished
-                              ? '\u{1F947} ${widget.session.winner}'
-                              : '${loc.round} ${widget.session.roundNumber}',
+                          a.text,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: CustomTheme.subtitleColor,
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${widget.session.players.length}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      IconService.players,
-                      size: 28,
-                      color: CustomTheme.primaryColor,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

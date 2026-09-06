@@ -81,7 +81,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                   CustomFormRow(
                     prefixText: loc.point_limit,
-                    prefixIcon: IconService.bullseye,
+                    prefixIcon: IconService.point_limit,
                     showChevron: false,
                     suffixWidget: CustomStepper(
                       key: _stepperKey2,

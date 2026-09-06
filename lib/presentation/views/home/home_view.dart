@@ -175,6 +175,9 @@ class _HomeViewState extends State<HomeView> {
                 : Skeletonizer(
                     enabled: isLoading,
                     child: ListView.builder(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom + 80,
+                      ),
                       itemCount:
                           displaySessions.length +
                           (showOnlyActiveGames ? 1 : 0),
