@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ModeTile extends StatelessWidget {
   const ModeTile({
@@ -18,7 +19,10 @@ class ModeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        HapticFeedback.selectionClick();
+        onTap?.call();
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),

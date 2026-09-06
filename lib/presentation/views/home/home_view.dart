@@ -161,7 +161,6 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-
       body: SafeArea(
         child: Stack(
           alignment: Alignment.center,

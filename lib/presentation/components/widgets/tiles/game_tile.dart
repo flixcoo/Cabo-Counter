@@ -3,6 +3,7 @@ import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class GameTile extends StatefulWidget {
   const GameTile({super.key, required this.session, required this.onTap});
@@ -41,7 +42,7 @@ class _GameTileState extends State<GameTile> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: () => {HapticFeedback.selectionClick(), widget.onTap?.call()},
         child: Container(
           decoration: BoxDecoration(
             color: CustomTheme.mainElementColor,

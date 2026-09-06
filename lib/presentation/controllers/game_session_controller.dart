@@ -1,9 +1,9 @@
-import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 /// Controller for a single [GameSession].
@@ -312,7 +312,7 @@ class GameSessionController extends ChangeNotifier {
     _enqueueWrite(
       () => db.gameSessionDao.setWinner(gameId: gameId, winner: winner),
     );
-    vibrateIfPossible();
+    HapticFeedback.successNotification();
     notifyListeners();
   }
 

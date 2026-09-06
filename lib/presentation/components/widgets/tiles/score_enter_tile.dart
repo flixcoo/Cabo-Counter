@@ -4,11 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RoundTile extends StatefulWidget {
-  const RoundTile({
+class ScoreEnterTile extends StatefulWidget {
+  /// A tile for entering scores for a player
+  ///
+  /// - [playerName]: The name of the player to display
+  /// - [points]: The current score of the player, displayed below the name
+  /// - [shufflePlayer]: Whether to show the "dealer" label next to the player's name
+  /// - [showMedal]: Whether to show a medal icon next to the player's name, indicating they won the previous round.
+  /// - [textInputAction]: The action to perform when the user submits the score (e.g., "next" or "done")
+  /// - [controller]: The controller for the text field, used to manage the input value
+  /// - [onSubmitted]: The callback to invoke when the user submits the score
+  /// - [focusNode]: The focus node for the text field, used to manage focus
+  /// - [onChanged]: The callback to invoke when the input value changes
+  const ScoreEnterTile({
     super.key,
-    this.shufflePlayer = false,
-    this.showMedal = false,
     required this.playerName,
     required this.points,
     required this.textInputAction,
@@ -16,36 +25,25 @@ class RoundTile extends StatefulWidget {
     required this.onSubmitted,
     required this.focusNode,
     required this.onChanged,
+    this.shufflePlayer = false,
+    this.showMedal = false,
   });
 
-  /// The name to display for the player
   final String playerName;
-
-  /// The current score of the player, displayed below the name
   final int points;
-
-  /// Whether to show the "dealer" label next to the player's name
   final bool shufflePlayer;
-
-  /// Whether to show a medal icon next to the player's name,
-  /// indicating they won the previous round.
   final bool showMedal;
-
   final TextInputAction textInputAction;
-
   final TextEditingController controller;
-
   final void Function(String) onSubmitted;
-
   final FocusNode focusNode;
-
   final ValueChanged<String>? onChanged;
 
   @override
-  State<RoundTile> createState() => _RoundTileState();
+  State<ScoreEnterTile> createState() => _ScoreEnterTileState();
 }
 
-class _RoundTileState extends State<RoundTile> {
+class _ScoreEnterTileState extends State<ScoreEnterTile> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);

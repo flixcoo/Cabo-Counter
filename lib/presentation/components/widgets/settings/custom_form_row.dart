@@ -1,6 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class CustomFormRow extends StatefulWidget {
   const CustomFormRow({
@@ -29,6 +30,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        HapticFeedback.selectionClick();
         widget.onPressed?.call();
       },
       child: SizedBox(

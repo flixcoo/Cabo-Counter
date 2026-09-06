@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OpacityButton extends StatefulWidget {
   final Widget child;
@@ -68,7 +69,7 @@ class OpacityButton extends StatefulWidget {
 }
 
 class _OpacityButtonState extends State<OpacityButton> {
-  bool _isPressed = false;
+  bool isPressed = false;
   double darkenAmount = 0.5;
 
   @override
@@ -120,14 +121,15 @@ class _OpacityButtonState extends State<OpacityButton> {
     return Opacity(
       opacity: isDisabled ? 0.3 : 1.0,
       child: GestureDetector(
-        onTapDown: !isDisabled
-            ? (_) => setState(() => _isPressed = true)
-            : null,
+        onTapDown: !isDisabled ? (_) => setState(() => isPressed = true) : null,
         onTapUp: (_) async => {
           await Future.delayed(const Duration(milliseconds: 100)),
-          setState(() => _isPressed = false),
+          setState(() => isPressed = false),
         },
-        onTap: widget.onPressed,
+        onTap: () => {
+          HapticFeedback.selectionClick(),
+          widget.onPressed?.call(),
+        },
         child: Stack(
           children: [
             Padding(
@@ -138,7 +140,7 @@ class _OpacityButtonState extends State<OpacityButton> {
             ),
             AnimatedOpacity(
               duration: const Duration(milliseconds: 100),
-              opacity: _isPressed ? darkenAmount : 0.0,
+              opacity: isPressed ? darkenAmount : 0.0,
               child: Padding(
                 padding:
                     widget.padding ??

@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// A themed rebuild of Cupertino's segmented control.
 ///
@@ -16,7 +17,7 @@ class CustomSegmendetControl<T extends Object> extends StatelessWidget {
 
   final Map<T, Widget> children;
   final T? groupValue;
-  final ValueChanged<T> onValueChanged;
+  final ValueChanged<T?> onValueChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class _Segment<T> extends StatelessWidget {
   final Color selectedColor;
   final Color unselectedColor;
   final Duration animationDuration;
-  final ValueChanged<T> onTap;
+  final ValueChanged<T?> onTap;
   final Widget child;
 
   @override
@@ -92,7 +93,7 @@ class _Segment<T> extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: selected ? null : () => onTap(value),
+      onTap: onTapSegment,
       child: AnimatedContainer(
         duration: animationDuration,
         curve: Curves.easeInOut,
@@ -113,5 +114,10 @@ class _Segment<T> extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onTapSegment() {
+    HapticFeedback.selectionClick();
+    selected ? onTap(null) : onTap(value);
   }
 }

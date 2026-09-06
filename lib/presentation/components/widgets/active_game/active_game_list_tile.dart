@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class ActiveGameListTile extends StatefulWidget {
   const ActiveGameListTile({
@@ -12,13 +13,9 @@ class ActiveGameListTile extends StatefulWidget {
   });
 
   final Widget title;
-
   final Widget? trailing;
-
   final EdgeInsets? padding;
-
   final VoidCallback? onTap;
-
   final bool showDisabledState;
 
   @override
@@ -43,7 +40,10 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
         await Future.delayed(const Duration(milliseconds: 250));
         setState(() => isPressed = false);
       },
-      onTap: widget.onTap,
+      onTap: () {
+        HapticFeedback.selectionClick();
+        widget.onTap?.call();
+      },
       child: AnimatedOpacity(
         opacity: isPressed
             ? 0.6

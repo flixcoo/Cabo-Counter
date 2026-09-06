@@ -6,7 +6,7 @@ import 'package:cabo_counter/presentation/components/widgets/buttons/custom_butt
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_segmendet_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
-import 'package:cabo_counter/presentation/components/widgets/tiles/round_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/tiles/score_enter_tile.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
@@ -203,7 +203,7 @@ class _RoundViewState extends State<RoundView> {
                             .getPlayerScoresAsList()[originalIndex];
 
                         return Center(
-                          child: RoundTile(
+                          child: ScoreEnterTile(
                             key: textFieldKeys[originalIndex],
                             playerName: name,
                             points: score,
@@ -227,7 +227,7 @@ class _RoundViewState extends State<RoundView> {
                           onPressed: () async {
                             if (await showKamikazeSheet(context)) {
                               if (!context.mounted) return;
-                              _endOfRoundNavigation(context, true);
+                              endOfRoundNavigation(context, true);
                             }
                           },
                           child: Text(
@@ -257,7 +257,7 @@ class _RoundViewState extends State<RoundView> {
                       OpacityButton.text(
                         onPressed: areRoundInputsValid()
                             ? () {
-                                _endOfRoundNavigation(context, false);
+                                endOfRoundNavigation(context, false);
                               }
                             : null,
                         text: loc.done,
@@ -266,7 +266,7 @@ class _RoundViewState extends State<RoundView> {
                         OpacityButton.text(
                           onPressed: areRoundInputsValid()
                               ? () {
-                                  _endOfRoundNavigation(context, true);
+                                  endOfRoundNavigation(context, true);
                                 }
                               : null,
                           text: loc.next_round,
@@ -533,7 +533,7 @@ class _RoundViewState extends State<RoundView> {
   /// and navigates to the next round or back to the previous screen.
   /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
   /// if it should navigate to the next round or not.
-  Future<void> _endOfRoundNavigation(
+  Future<void> endOfRoundNavigation(
     BuildContext context,
     bool navigateToNextRound,
   ) async {
