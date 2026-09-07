@@ -124,7 +124,7 @@ class _OpacityButtonState extends State<OpacityButton> {
         onTapDown: !isDisabled ? (_) => setState(() => isPressed = true) : null,
         onTapUp: (_) async => {
           await Future.delayed(const Duration(milliseconds: 100)),
-          setState(() => isPressed = false),
+          if (mounted) setState(() => isPressed = false),
         },
         onTap: () => {
           VibrationService.selectionClick(),
