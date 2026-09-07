@@ -391,6 +391,12 @@ abstract class AppLocalizations {
   /// **'Spiele'**
   String get games;
 
+  /// No description provided for @haptic_feedback.
+  ///
+  /// In de, this message translates to:
+  /// **'Haptisches Feedback'**
+  String get haptic_feedback;
+
   /// No description provided for @home.
   ///
   /// In de, this message translates to:
@@ -493,30 +499,6 @@ abstract class AppLocalizations {
   /// **'E-Mail an Entwickler'**
   String get mail_developer;
 
-  /// No description provided for @max_players_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es können maximal 5 Spieler:innen hinzugefügt werden.'**
-  String get max_players_message;
-
-  /// No description provided for @max_players_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Maximale Anzahl erreicht'**
-  String get max_players_title;
-
-  /// No description provided for @min_players_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es müssen mindestens 2 Spieler:innen hinzugefügt werden'**
-  String get min_players_message;
-
-  /// No description provided for @min_players_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Zu wenig Spieler:innen'**
-  String get min_players_title;
-
   /// No description provided for @mode.
   ///
   /// In de, this message translates to:
@@ -571,35 +553,11 @@ abstract class AppLocalizations {
   /// **'Keine Lizenz verfügbar'**
   String get no_license_text;
 
-  /// No description provided for @no_mode_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es muss ein Spielmodus ausgewählt werden.'**
-  String get no_mode_message;
-
   /// No description provided for @no_mode_selected.
   ///
   /// In de, this message translates to:
   /// **'Wähle einen Spielmodus'**
   String get no_mode_selected;
-
-  /// No description provided for @no_mode_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Kein Modus'**
-  String get no_mode_title;
-
-  /// No description provided for @no_name_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Jede:r Spieler:in muss einen Namen haben.'**
-  String get no_name_message;
-
-  /// No description provided for @no_name_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Kein Name'**
-  String get no_name_title;
 
   /// No description provided for @ok.
   ///
@@ -666,12 +624,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Punkte'**
   String get points;
-
-  /// No description provided for @haptic_feedback.
-  ///
-  /// In de, this message translates to:
-  /// **'Haptisches Feedback'**
-  String get haptic_feedback;
 
   /// No description provided for @pre_rating_message.
   ///

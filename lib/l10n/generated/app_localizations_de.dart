@@ -187,6 +187,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get games => 'Spiele';
 
   @override
+  String get haptic_feedback => 'Haptisches Feedback';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -242,20 +245,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mail_developer => 'E-Mail an Entwickler';
 
   @override
-  String get max_players_message =>
-      'Es können maximal 5 Spieler:innen hinzugefügt werden.';
-
-  @override
-  String get max_players_title => 'Maximale Anzahl erreicht';
-
-  @override
-  String get min_players_message =>
-      'Es müssen mindestens 2 Spieler:innen hinzugefügt werden';
-
-  @override
-  String get min_players_title => 'Zu wenig Spieler:innen';
-
-  @override
   String get mode => 'Modus';
 
   @override
@@ -284,19 +273,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get no_license_text => 'Keine Lizenz verfügbar';
 
   @override
-  String get no_mode_message => 'Es muss ein Spielmodus ausgewählt werden.';
-
-  @override
   String get no_mode_selected => 'Wähle einen Spielmodus';
-
-  @override
-  String get no_mode_title => 'Kein Modus';
-
-  @override
-  String get no_name_message => 'Jede:r Spieler:in muss einen Namen haben.';
-
-  @override
-  String get no_name_title => 'Kein Name';
 
   @override
   String get ok => 'OK';
@@ -333,9 +310,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get points => 'Punkte';
-
-  @override
-  String get haptic_feedback => 'Haptisches Feedback';
 
   @override
   String get pre_rating_message =>
