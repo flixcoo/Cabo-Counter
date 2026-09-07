@@ -41,8 +41,10 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
         setState(() => isPressed = false);
       },
       onTap: () {
-        HapticFeedback.selectionClick();
-        widget.onTap?.call();
+        if (widget.onTap != null) {
+          HapticFeedback.selectionClick();
+          widget.onTap!.call();
+        }
       },
       child: AnimatedOpacity(
         opacity: isPressed

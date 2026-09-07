@@ -30,8 +30,10 @@ class _CustomFormRowState extends State<CustomFormRow> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.selectionClick();
-        widget.onPressed?.call();
+        if (widget.onPressed != null) {
+          HapticFeedback.selectionClick();
+          widget.onPressed!.call();
+        }
       },
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.95,
