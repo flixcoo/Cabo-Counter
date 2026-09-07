@@ -255,19 +255,15 @@ class _RoundViewState extends State<RoundView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OpacityButton.text(
-                        onPressed: areRoundInputsValid()
-                            ? () {
-                                endOfRoundNavigation(context, false);
-                              }
+                        onPressed: canSubmitRound
+                            ? () => endOfRoundNavigation(context, false)
                             : null,
                         text: loc.done,
                       ),
                       if (!isGameFinished)
                         OpacityButton.text(
-                          onPressed: areRoundInputsValid()
-                              ? () {
-                                  endOfRoundNavigation(context, true);
-                                }
+                          onPressed: canSubmitRound
+                              ? () => endOfRoundNavigation(context, true)
                               : null,
                           text: loc.next_round,
                         ),
@@ -402,9 +398,8 @@ class _RoundViewState extends State<RoundView> {
 
     if (currentPos < originalIndices.length - 1) {
       final nextIndex = originalIndices[currentPos + 1];
-      FocusScope.of(
-        context,
-      ).requestFocus(focusNodes[originalIndices[currentPos + 1]]);
+      FocusScope.of(context)
+          .requestFocus(focusNodes[originalIndices[currentPos + 1]]);
 
       final scrollContext = textFieldKeys[nextIndex].currentContext;
       if (scrollContext != null) {
@@ -422,14 +417,12 @@ class _RoundViewState extends State<RoundView> {
     }
   }
 
-  /// Checks if the inputs for the round are valid.
-  /// Returns true if the inputs are valid, false otherwise.
-  /// Round Inputs are valid if every player has a score or
-  /// kamikaze is selected for a player
-  bool areRoundInputsValid() {
-    if (areTextFieldsEmpty() && kamikazePlayerIndex == null) return false;
-    return true;
-  }
+  /// Checks if the round can be submitted.
+  /// Therefore we need input in every text field and a cabo player selected
+  /// or a kamikaze player selected
+  bool get canSubmitRound =>
+      (!areTextFieldsEmpty() && caboPlayerIndex != null) ||
+      kamikazePlayerIndex != null;
 
   /// Checks if any of the text fields for the players points are empty.
   /// Returns true if any of the text fields is empty, false otherwise.
