@@ -6,10 +6,16 @@ import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class GameTile extends StatefulWidget {
-  const GameTile({super.key, required this.session, required this.onTap});
+  const GameTile({
+    super.key,
+    required this.session,
+    required this.onTap,
+    this.padding = const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+  });
 
   final GameSession session;
   final void Function()? onTap;
+  final EdgeInsetsGeometry padding;
 
   @override
   State<GameTile> createState() => _GameTileState();
@@ -35,78 +41,72 @@ class _GameTileState extends State<GameTile> {
       ),
     ];
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-      child: GestureDetector(
-        onTap: () => {VibrationService.selectionClick(), widget.onTap?.call()},
-        child: Container(
-          decoration: BoxDecoration(
-            color: CustomTheme.mainElementColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      session.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return GestureDetector(
+      onTap: () => {VibrationService.selectionClick(), widget.onTap?.call()},
+      child: Container(
+        decoration: const BoxDecoration(color: CustomTheme.mainElementColor),
+        padding: widget.padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    session.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                ),
+                const SizedBox(width: 12),
 
-                  Text(
-                    session.isGameFinished
-                        ? '\u{1F947} ${session.winner}'
-                        : '${loc.round} ${session.roundNumber}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: session.isGameFinished
-                          ? CustomTheme.textColor
-                          : CustomTheme.subtitleColor,
-                    ),
+                Text(
+                  session.isGameFinished
+                      ? '\u{1F947} ${session.winner}'
+                      : '${loc.round} ${session.roundNumber}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: session.isGameFinished
+                        ? CustomTheme.textColor
+                        : CustomTheme.subtitleColor,
                   ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Text(
-                session.players.map((p) => p.name).join(', '),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14, color: CustomTheme.white),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                spacing: 16,
-                children: [
-                  for (final a in attributes)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(a.icon, size: 16, color: CustomTheme.primaryColor),
-                        const SizedBox(width: 5),
-                        Text(
-                          a.text,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: CustomTheme.subtitleColor,
-                          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              session.players.map((p) => p.name).join(', '),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 14, color: CustomTheme.white),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              spacing: 16,
+              children: [
+                for (final a in attributes)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(a.icon, size: 16, color: CustomTheme.primaryColor),
+                      const SizedBox(width: 5),
+                      Text(
+                        a.text,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: CustomTheme.subtitleColor,
                         ),
-                      ],
-                    ),
-                ],
-              ),
-            ],
-          ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ],
         ),
       ),
     );

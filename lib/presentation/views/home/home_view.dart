@@ -212,50 +212,78 @@ class _HomeViewState extends State<HomeView> {
                           );
                         } else {
                           final session = displaySessions[index];
-                          return Dismissible(
-                            key: Key(session.id),
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Icon(
-                                IconService.delete,
-                                color: CustomTheme.red,
-                              ),
-                            ),
-                            direction: DismissDirection.endToStart,
-                            confirmDismiss: (direction) async {
-                              return await showDeleteGamePopup(
-                                context,
-                                session.title,
-                              );
-                            },
-                            onDismissed: (direction) {
-                              setState(() {
-                                deleteSession(
-                                  session.id,
-                                  Provider.of<AppDatabase>(
-                                    context,
-                                    listen: false,
-                                  ),
-                                );
-                              });
-                            },
-                            dismissThresholds: const {
-                              DismissDirection.startToEnd: 0.6,
-                            },
-                            child: GameTile(
-                              session: session,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  adaptivePageRoute(
-                                    builder: (context) => ActiveGameView(
-                                      gameSession: session,
-                                      onSessionsUpdated: loadSessions,
+                          return Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 20.0,
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Icon(
+                                          IconService.delete,
+                                          color: CustomTheme.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                );
-                              },
+                                ),
+                                Dismissible(
+                                  key: Key(session.id),
+                                  direction: DismissDirection.endToStart,
+                                  confirmDismiss: (direction) async {
+                                    return await showDeleteGamePopup(
+                                      context,
+                                      session.title,
+                                    );
+                                  },
+                                  onDismissed: (direction) {
+                                    setState(() {
+                                      deleteSession(
+                                        session.id,
+                                        Provider.of<AppDatabase>(
+                                          context,
+                                          listen: false,
+                                        ),
+                                      );
+                                    });
+                                  },
+                                  dismissThresholds: const {
+                                    DismissDirection.endToStart: 0.6,
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: GameTile(
+                                      session: session,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 20,
+                                        horizontal: 16,
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          adaptivePageRoute(
+                                            builder: (context) =>
+                                                ActiveGameView(
+                                                  gameSession: session,
+                                                  onSessionsUpdated:
+                                                      loadSessions,
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         }
