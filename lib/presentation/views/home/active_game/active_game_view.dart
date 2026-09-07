@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/adaptive_sheet_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -39,13 +40,12 @@ class ActiveGameView extends StatefulWidget {
   final VoidCallback onSessionsUpdated;
 
   @override
-  // ignore: library_private_types_in_public_api
   _ActiveGameViewState createState() => _ActiveGameViewState();
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
   /// Constant value to represent a press on the cancel button in round view.
-  static const int kRoundCancelled = -1;
+  static const int ROUND_CANCELED = -1;
 
   final confettiController = ConfettiController(
     duration: const Duration(seconds: 10),
@@ -66,6 +66,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       session: widget.gameSession,
       db: Provider.of<AppDatabase>(context, listen: false),
     );
+  }
+
+  @override
+  void dispose() {
+    gameSession.dispose();
+    confettiController.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,15 +104,18 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ActiveGameListSet(
                         title: loc.game,
                         content: [
+                          // Title
                           ActiveGameListTile(
                             title: Text(loc.name),
                             trailing: Text(
-                              gameSession.gameTitle,
+                              gameSession.title,
                               style: const TextStyle(
                                 color: CustomTheme.primaryColor,
                               ),
                             ),
                           ),
+
+                          // Mode
                           ActiveGameListTile(
                             title: Text(loc.mode),
                             trailing: Text(
@@ -119,6 +129,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                         ],
                       ),
+
+                      // Players
                       ActiveGameListSet(
                         title: loc.players,
                         tilePadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
@@ -251,7 +263,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 context,
                                 adaptivePageRoute(
                                   builder: (_) => CreateGameView(
-                                    gameTitle: gameSession.gameTitle,
+                                    gameTitle: gameSession.title,
                                     gameMode:
                                         widget
                                                 .gameSession
@@ -357,7 +369,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     gameSession.endGame();
 
     final db = Provider.of<AppDatabase>(context, listen: false);
-    db.gameSessionDao.endGame(gameId: gameSession.gameId);
+    db.gameSessionDao.endGame(gameId: gameSession.id);
   }
 
   /// Returns a list of player indices sorted by their scores in
@@ -424,7 +436,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           title: Text(loc.delete_game_title),
-          message: Text(loc.delete_game_message(gameSession.gameTitle)),
+          message: Text(loc.delete_game_message(gameSession.title)),
           actions: [
             CustomDialogAction(returnValue: false, actionText: loc.cancel),
             CustomDialogAction(
@@ -463,15 +475,14 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// until the user navigates back or the round number is invalid.
   void openRoundView(BuildContext context, int roundNumber) async {
     final round = await Navigator.of(context, rootNavigator: true).push(
-      adaptivePageRoute(
-        fullscreenDialog: true,
+      adaptiveSheetRoute(
         builder: (context) =>
             RoundView(gameSession: gameSession, roundNumber: roundNumber),
       ),
     );
 
     // If the user presses the cancel button
-    if (round == kRoundCancelled) return;
+    if (round == ROUND_CANCELED) return;
 
     if (widget.gameSession.isGameFinished && context.mounted) {
       playFinishAnimation(context);
@@ -512,12 +523,5 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         onAfterPop: () => confettiController.stop(),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    gameSession.dispose();
-    confettiController.dispose();
-    super.dispose();
   }
 }
