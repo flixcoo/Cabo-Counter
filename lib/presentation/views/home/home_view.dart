@@ -312,7 +312,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void loadSessions() {
-    isLoading = true;
+    setState(() => isLoading = true);
+
     final db = Provider.of<AppDatabase>(context, listen: false);
 
     Future.wait([
@@ -323,11 +324,11 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
     ]).then((results) {
+      final loadedSessions = results[0] as List<GameSession>;
+      sessions = [...loadedSessions]
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
       if (mounted) {
         setState(() {
-          final loadedSessions = results[0] as List<GameSession>;
-          sessions = [...loadedSessions]
-            ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
           displaySessions = [...sessions];
           isLoading = false;
         });

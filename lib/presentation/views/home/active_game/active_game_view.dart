@@ -446,6 +446,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     );
     if (!mounted) return;
     if (deleted) {
+      widget.onSessionsUpdated.call();
       Navigator.pop(context);
     } else {
       final loc = AppLocalizations.of(context);
