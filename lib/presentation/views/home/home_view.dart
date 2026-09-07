@@ -1,7 +1,7 @@
 import 'dart:core';
-import 'dart:io';
 
 import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/adaptive_sheet_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -16,14 +16,13 @@ import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_but
 import 'package:cabo_counter/presentation/components/widgets/buttons/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/game_tile.dart';
-import 'package:cabo_counter/presentation/views/home/NewsView.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
+import 'package:cabo_counter/presentation/views/home/news_view.dart';
 import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
@@ -92,7 +91,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   initState() {
     super.initState();
-
     loadSessions();
 
     // Caching app image
@@ -102,26 +100,14 @@ class _HomeViewState extends State<HomeView> {
         context,
       );
 
-      // Rating dialog
-      await Constants.rateMyApp.init();
-      if (Constants.rateMyApp.shouldOpenDialog) {
-        await Future.delayed(
-          const Duration(
-            milliseconds: Constants.MINIMUM_SKELETON_SCREEN_DURATION + 200,
-          ),
-        );
-        if (!mounted) return;
-        handleFeedbackDialog(context);
-      }
-
-      // Whats new dialog
-      Once.runOnEveryNewVersion(
-        key: 'whats_new_dialog',
-        callback: () {
-          showWhatsNewDialog(context);
-        },
-      );
+      showRatingDialog();
+      showNewsView(context);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -481,26 +467,28 @@ class _HomeViewState extends State<HomeView> {
   }
 
   /// Shows the "What's New" dialog.
-  void showWhatsNewDialog(BuildContext context) {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (Platform.isIOS) {
-        Navigator.of(context).push(
-          CupertinoSheetRoute(
-            scrollableBuilder: (context, controller) => const NewsView(),
-          ),
-        );
-      } else
-        Navigator.of(context, rootNavigator: true).push(
-          adaptivePageRoute(
-            builder: (context) => const NewsView(),
-            fullscreenDialog: true,
-          ),
-        );
-    });
+  void showNewsView(BuildContext context) {
+    Once.runOnEveryNewVersion(
+      key: 'whats_new_dialog',
+      callback: () {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.of(context)
+              .push(adaptiveSheetRoute(builder: (context) => const NewsView()));
+        });
+      },
+    );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> showRatingDialog() async {
+    await Constants.rateMyApp.init();
+    if (Constants.rateMyApp.shouldOpenDialog) {
+      await Future.delayed(
+        const Duration(
+          milliseconds: Constants.MINIMUM_SKELETON_SCREEN_DURATION + 200,
+        ),
+      );
+      if (!mounted) return;
+      handleFeedbackDialog(context);
+    }
   }
 }
