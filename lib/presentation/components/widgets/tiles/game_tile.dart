@@ -33,10 +33,6 @@ class _GameTileState extends State<GameTile> {
         icon: IconService.cabo_penalty,
         text: '${session.caboPenalty.toString()} ${loc.points}',
       ),
-      (
-        icon: IconService.players,
-        text: '${session.players.length.toString()} ${loc.players}',
-      ),
     ];
 
     return Container(
@@ -72,9 +68,11 @@ class _GameTileState extends State<GameTile> {
                     session.isGameFinished
                         ? '\u{1F947} ${session.winner}'
                         : '${loc.round} ${session.roundNumber}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: CustomTheme.subtitleColor,
+                      color: session.isGameFinished
+                          ? CustomTheme.textColor
+                          : CustomTheme.subtitleColor,
                     ),
                   ),
                 ],
