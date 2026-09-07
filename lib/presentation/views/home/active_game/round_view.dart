@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/custom_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_segmendet_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
@@ -98,9 +98,26 @@ class _RoundViewState extends State<RoundView> {
         ),
         title: Text(loc.results),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Center(
+              child: AnimatedIconButton(
+                icon: IconService.kamikaze,
+                onPressed: () async {
+                  if (await showKamikazeSheet(context)) {
+                    if (!context.mounted) return;
+                    endOfRoundNavigation(context, true);
+                  }
+                },
+              ),
+            ),
+          ),
           Visibility(
             visible: isGameFinished,
-            child: Icon(IconService.locked, size: 25),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(IconService.locked, size: 25),
+            ),
           ),
         ],
       ),
@@ -218,26 +235,6 @@ class _RoundViewState extends State<RoundView> {
                           ),
                         );
                       },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Center(
-                        heightFactor: 1,
-                        child: CustomButton(
-                          onPressed: () async {
-                            if (await showKamikazeSheet(context)) {
-                              if (!context.mounted) return;
-                              endOfRoundNavigation(context, true);
-                            }
-                          },
-                          child: Text(
-                            loc.kamikaze,
-                            style: const TextStyle(
-                              color: CustomTheme.kamikazeColor,
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),

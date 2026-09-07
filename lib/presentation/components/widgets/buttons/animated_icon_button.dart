@@ -1,0 +1,61 @@
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
+import 'package:flutter/material.dart';
+
+class AnimatedIconButton extends StatefulWidget {
+  /// A simple icon button with a scale animation
+  ///
+  /// - [icon]: The icon to display in the button.
+  /// - [onPressed]: The callback for when the button is pressed.
+  const AnimatedIconButton({super.key, required this.icon, this.onPressed});
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+
+  @override
+  State<AnimatedIconButton> createState() => _AnimatedIconButtonState();
+}
+
+class _AnimatedIconButtonState extends State<AnimatedIconButton> {
+  bool isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isEnabled = widget.onPressed != null;
+
+    return Opacity(
+      opacity: isEnabled ? 1.0 : 0.3,
+      child: GestureDetector(
+        onTapDown: isEnabled ? (_) => setPressed(true) : null,
+        onTapCancel: () => setPressed(false),
+        onTapUp: (_) => setPressed(false),
+        onTap: isEnabled
+            ? () {
+                VibrationService.selectionClick();
+                widget.onPressed?.call();
+              }
+            : null,
+        child: AnimatedScale(
+          scale: isPressed ? 0.96 : 1.0,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOut,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(widget.icon, size: 28, color: CustomTheme.kamikazeColor),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void setPressed(bool value) {
+    if (isPressed != value) {
+      setState(() => isPressed = value);
+    }
+  }
+}

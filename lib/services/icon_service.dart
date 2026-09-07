@@ -57,6 +57,10 @@ abstract class IconService {
   static IconData get info =>
       Platform.isIOS ? CupertinoIcons.info_circle : Icons.info_outline;
 
+  /// Icon for the kamikaze action.
+  static IconData get kamikaze =>
+      Platform.isIOS ? CupertinoIcons.flame_fill : Icons.local_fire_department;
+
   /// Icon for license representation.
   static IconData get license =>
       Platform.isIOS ? CupertinoIcons.doc_text : Icons.description;
