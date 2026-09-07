@@ -10,14 +10,20 @@ class NewsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 18,
       children: [
-        Icon(newsItem.icon, color: CustomTheme.primaryColor, size: 32),
-        const SizedBox(width: 16),
+        // Icon
+        SizedBox(width: 50, child: Center(child: newsItem.icon)),
+
+        // Text
         Expanded(
           child: Column(
+            spacing: 6,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Title
               Text(
                 newsItem.title,
                 style: const TextStyle(
@@ -26,7 +32,8 @@ class NewsTile extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 6),
+
+              // Text
               Text(
                 newsItem.text,
                 style: const TextStyle(

@@ -44,7 +44,7 @@ class NewsView extends StatelessWidget {
             const SizedBox(height: 40),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,

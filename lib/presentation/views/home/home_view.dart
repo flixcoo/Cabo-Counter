@@ -121,6 +121,7 @@ class _HomeViewState extends State<HomeView> {
           showWhatsNewDialog(context);
         },
       );
+      showWhatsNewDialog(context);
     });
   }
 
