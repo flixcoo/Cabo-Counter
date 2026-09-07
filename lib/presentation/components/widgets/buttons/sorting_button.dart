@@ -6,8 +6,8 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 /// A button widget that provides sorting and filtering options for the main menu.
@@ -57,7 +57,7 @@ class SortingButton extends StatelessWidget {
         itemBuilder: _pullDownMenuItems,
         buttonBuilder: (context, showMenu) => OpacityButton.icon(
           onPressed: () {
-            HapticFeedback.selectionClick();
+            VibrationService.selectionClick();
             showMenu();
           },
           padding: buttonPadding,

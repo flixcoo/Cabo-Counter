@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class FloatingAnimatedButton extends StatefulWidget {
   const FloatingAnimatedButton({
@@ -48,7 +48,7 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
         onTapUp: (_) async {
           await animationController.reverse();
           if (mounted) {
-            HapticFeedback.selectionClick();
+            VibrationService.selectionClick();
             widget.onPressed();
           }
         },

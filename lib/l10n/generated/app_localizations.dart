@@ -667,6 +667,12 @@ abstract class AppLocalizations {
   /// **'Punkte'**
   String get points;
 
+  /// No description provided for @haptic_feedback.
+  ///
+  /// In de, this message translates to:
+  /// **'Haptisches Feedback'**
+  String get haptic_feedback;
+
   /// No description provided for @pre_rating_message.
   ///
   /// In de, this message translates to:

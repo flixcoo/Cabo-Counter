@@ -1,7 +1,7 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 
 class CustomFormRow extends StatefulWidget {
   const CustomFormRow({
@@ -31,7 +31,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
     return GestureDetector(
       onTap: () {
         if (widget.onPressed != null) {
-          HapticFeedback.selectionClick();
+          VibrationService.selectionClick();
           widget.onPressed!.call();
         }
       },
@@ -51,7 +51,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
                     color: CustomTheme.primaryColor,
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                  Text(widget.prefixText),
+                  Text(widget.prefixText, style: const TextStyle(fontSize: 15)),
                 ],
               ),
               Row(

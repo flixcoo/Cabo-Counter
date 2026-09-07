@@ -3,8 +3,8 @@ import 'package:cabo_counter/data/dto/NewsItem.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/NewsTile.dart';
 import 'package:cabo_counter/services/version_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class NewsView extends StatelessWidget {
   const NewsView({super.key});
@@ -67,7 +67,7 @@ class NewsView extends StatelessWidget {
                     ),
                   ),
                   onPressed: () => {
-                    HapticFeedback.selectionClick(),
+                    VibrationService.selectionClick(),
                     Navigator.pop(context),
                   },
                   child: Text(

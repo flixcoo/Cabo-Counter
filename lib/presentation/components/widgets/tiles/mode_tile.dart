@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ModeTile extends StatelessWidget {
   const ModeTile({
@@ -21,7 +21,7 @@ class ModeTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (onTap != null) {
-          HapticFeedback.selectionClick();
+          VibrationService.selectionClick();
           onTap?.call();
         }
       },

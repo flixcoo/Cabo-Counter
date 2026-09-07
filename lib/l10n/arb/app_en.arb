@@ -135,6 +135,7 @@
       }
     }
   },
+  "haptic_feedback": "Haptic Feedback",
   "point_overview": "Point Overview",
   "points": "Points",
   "pre_rating_message": "Feedback helps me to continuously improve the app. Thank you!",

@@ -15,8 +15,8 @@ import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -187,8 +187,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(8),
                         itemCount: playerNameControllers.length,
-                        onReorderStart: (_) => HapticFeedback.heavyImpact(),
-                        onReorderEnd: (_) => HapticFeedback.selectionClick(),
+                        onReorderStart: (_) => VibrationService.heavyImpact(),
+                        onReorderEnd: (_) => VibrationService.selectionClick(),
                         onReorderItem: (oldIndex, newIndex) {
                           setState(() {
                             if (oldIndex < playerNameControllers.length &&

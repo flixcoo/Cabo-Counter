@@ -1,8 +1,8 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/oss_licenses.dart';
 import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class LicenseTile extends StatefulWidget {
   const LicenseTile({super.key, required this.package, required this.onTap});
@@ -19,7 +19,7 @@ class _LicenseTileState extends State<LicenseTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.selectionClick();
+        VibrationService.selectionClick();
         widget.onTap();
       },
       child: Container(

@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class OpacityButton extends StatefulWidget {
   final Widget child;
@@ -127,7 +127,7 @@ class _OpacityButtonState extends State<OpacityButton> {
           setState(() => isPressed = false),
         },
         onTap: () => {
-          HapticFeedback.selectionClick(),
+          VibrationService.selectionClick(),
           widget.onPressed?.call(),
         },
         child: Stack(

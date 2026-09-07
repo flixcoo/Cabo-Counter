@@ -335,6 +335,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get points => 'Punkte';
 
   @override
+  String get haptic_feedback => 'Haptisches Feedback';
+
+  @override
   String get pre_rating_message =>
       'Feedback hilft mir, die App zu verbessern. Vielen Dank!';
 

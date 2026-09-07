@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 
 class ActiveGameListTile extends StatefulWidget {
   const ActiveGameListTile({
@@ -42,7 +42,7 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
       },
       onTap: () {
         if (widget.onTap != null) {
-          HapticFeedback.selectionClick();
+          VibrationService.selectionClick();
           widget.onTap!.call();
         }
       },

@@ -4,6 +4,7 @@ import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/adaptive_switch.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_section.dart';
@@ -14,8 +15,8 @@ import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,6 +38,7 @@ class _SettingsViewState extends State<SettingsView> {
   UniqueKey _stepperKey2 = UniqueKey();
   GameMode defaultMode = ConfigService.getGameMode();
   bool rotateShuffler = ConfigService.getRotateShuffler();
+  bool enableVibrations = ConfigService.getVibrationsEnabled();
 
   @override
   void initState() {
@@ -59,10 +61,12 @@ class _SettingsViewState extends State<SettingsView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Points section
               CustomFormSection(
                 title: loc.points,
                 infoText: loc.rotate_dealer_info,
                 rows: [
+                  // Cabo penalty
                   CustomFormRow(
                     prefixText: loc.cabo_penalty,
                     prefixIcon: IconService.cabo_penalty,
@@ -80,6 +84,8 @@ class _SettingsViewState extends State<SettingsView> {
                       },
                     ),
                   ),
+
+                  // Point limit
                   CustomFormRow(
                     prefixText: loc.point_limit,
                     prefixIcon: IconService.point_limit,
@@ -97,6 +103,8 @@ class _SettingsViewState extends State<SettingsView> {
                       },
                     ),
                   ),
+
+                  // Standard mode
                   CustomFormRow(
                     prefixText: loc.standard_mode,
                     prefixIcon: IconService.mode,
@@ -125,28 +133,27 @@ class _SettingsViewState extends State<SettingsView> {
                       ConfigService.setGameMode(defaultMode);
                     },
                   ),
+
+                  // Rotate dealer
                   CustomFormRow(
                     prefixText: loc.rotate_dealer,
                     prefixIcon: IconService.shuffle_cards,
-                    suffixWidget: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Switch.adaptive(
-                        activeTrackColor: CustomTheme.primaryColor,
-                        inactiveThumbColor: Colors.white,
-                        value: rotateShuffler,
-                        onChanged: (switchValue) {
-                          HapticFeedback.selectionClick();
-                          setState(() {
-                            ConfigService.setRotateShuffler(switchValue);
-                            rotateShuffler = switchValue;
-                          });
-                        },
-                      ),
+                    suffixWidget: AdaptiveSwitch(
+                      value: rotateShuffler,
+                      onChanged: (switchValue) {
+                        VibrationService.selectionClick();
+                        setState(() {
+                          ConfigService.setRotateShuffler(switchValue);
+                          rotateShuffler = switchValue;
+                        });
+                      },
                     ),
                     showChevron: false,
                   ),
                 ],
               ),
+
+              // Reset config
               CustomFormSection(
                 infoText: loc.config_change_info,
                 rows: [
@@ -157,15 +164,20 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ],
               ),
+
+              // Game data section
               CustomFormSection(
                 title: loc.game_data,
                 rows: [
+                  // Export data
                   CustomFormRow(
                     prefixText: loc.export_data,
                     prefixIcon: IconService.export,
                     onPressed: () =>
                         DataTransferService.exportGameData(context),
                   ),
+
+                  // Import data
                   CustomFormRow(
                     prefixText: loc.import_data,
                     prefixIcon: IconService.import,
@@ -177,6 +189,8 @@ class _SettingsViewState extends State<SettingsView> {
                       widget.onSessionsUpdated.call();
                     },
                   ),
+
+                  // Delete data
                   CustomFormRow(
                     prefixText: loc.delete_data,
                     prefixIcon: IconService.delete,
@@ -185,9 +199,26 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ],
               ),
+
+              // App section
               CustomFormSection(
                 title: loc.app,
                 rows: [
+                  // Mail developer
+                  CustomFormRow(
+                    prefixText: loc.haptic_feedback,
+                    prefixIcon: Icons.phone_android,
+                    showChevron: false,
+                    suffixWidget: AdaptiveSwitch(
+                      value: enableVibrations,
+                      onChanged: (bool value) => setState(() {
+                        ConfigService.setVibrationsEnabled(value);
+                        enableVibrations = value;
+                      }),
+                    ),
+                  ),
+
+                  // Mail developer
                   CustomFormRow(
                     prefixText: loc.mail_developer,
                     prefixIcon: IconService.e_mail,
@@ -195,12 +226,16 @@ class _SettingsViewState extends State<SettingsView> {
                       Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
                     ),
                   ),
+
+                  // Report error
                   CustomFormRow(
                     prefixText: loc.report_error,
                     prefixIcon: IconService.brand_github,
                     onPressed: () =>
                         launchUrl(Uri.parse(Constants.GITHUB_ISSUE_LINK)),
                   ),
+
+                  // Version
                   CustomFormRow(
                     prefixText: loc.version,
                     prefixIcon: IconService.version,
@@ -211,6 +246,8 @@ class _SettingsViewState extends State<SettingsView> {
                     suffixPadding: 12,
                     showChevron: false,
                   ),
+
+                  // Build number
                   CustomFormRow(
                     prefixText: loc.build,
                     prefixIcon: IconService.number,
