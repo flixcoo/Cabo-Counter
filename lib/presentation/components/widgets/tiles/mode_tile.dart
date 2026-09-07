@@ -20,8 +20,10 @@ class ModeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.selectionClick();
-        onTap?.call();
+        if (onTap != null) {
+          HapticFeedback.selectionClick();
+          onTap?.call();
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

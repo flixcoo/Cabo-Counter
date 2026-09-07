@@ -49,7 +49,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
           ModeTile(
             title: '${widget.pointLimit} ${loc.points}',
             description: loc.point_limit_description(widget.pointLimit),
-            onTap: () => onTapTile(GameMode.pointLimit),
+            onTap: supressTap ? null : () => onTapTile(GameMode.pointLimit),
             selected: selectedMode == GameMode.pointLimit,
           ),
 
@@ -57,7 +57,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
           ModeTile(
             title: loc.unlimited,
             description: loc.unlimited_description,
-            onTap: () => onTapTile(GameMode.unlimited),
+            onTap: supressTap ? null : () => onTapTile(GameMode.unlimited),
             selected: selectedMode == GameMode.unlimited,
           ),
 
@@ -65,7 +65,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
             ModeTile(
               title: loc.no_default_mode,
               description: loc.no_default_description,
-              onTap: () => onTapTile(GameMode.none),
+              onTap: supressTap ? null : () => onTapTile(GameMode.none),
               selected: selectedMode == GameMode.none,
             ),
         ],
