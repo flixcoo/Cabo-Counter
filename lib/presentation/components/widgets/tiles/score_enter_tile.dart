@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -119,10 +121,12 @@ class _ScoreEnterTileState extends State<ScoreEnterTile> {
                   hintText: loc.points,
                   hintStyle: TextStyle(color: CustomTheme.hintTextColor),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(
-                  signed: true,
-                  decimal: false,
-                ),
+                keyboardType: Platform.isAndroid
+                    ? TextInputType.number
+                    : const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: false,
+                      ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 textInputAction: widget.textInputAction,
                 controller: widget.controller,
