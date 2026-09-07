@@ -35,10 +35,7 @@ class CustomTheme {
   static const Color mainElementColor = Color(0xFF171717);
 
   /// Background color for settings tiles and list items.
-  static const Color settingsTilecolor = Color(0xFF1C1C1E);
-
-  /// Background color for player tiles in lists.
-  static const Color playerTileColor = Color(0xFF2A2A2A);
+  static const Color tileColor = Color(0xFF1C1C1E);
 
   /// Background color for buttons and interactive controls.
   static const Color buttonBackgroundColor = Color(0xFF202020);

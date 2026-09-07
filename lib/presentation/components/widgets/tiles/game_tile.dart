@@ -44,7 +44,7 @@ class _GameTileState extends State<GameTile> {
     return GestureDetector(
       onTap: () => {VibrationService.selectionClick(), widget.onTap?.call()},
       child: Container(
-        decoration: const BoxDecoration(color: CustomTheme.mainElementColor),
+        decoration: const BoxDecoration(color: CustomTheme.tileColor),
         padding: widget.padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

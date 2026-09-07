@@ -53,7 +53,7 @@ class _ScoreEnterTileState extends State<ScoreEnterTile> {
       width: MediaQuery.of(context).size.width * 0.9,
       height: 60,
       decoration: BoxDecoration(
-        color: CustomTheme.buttonBackgroundColor,
+        color: CustomTheme.tileColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(

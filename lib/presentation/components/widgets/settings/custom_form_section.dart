@@ -29,7 +29,7 @@ class CustomFormSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
           child: Container(
             decoration: BoxDecoration(
-              color: CustomTheme.settingsTilecolor,
+              color: CustomTheme.tileColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
