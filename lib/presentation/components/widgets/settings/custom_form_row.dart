@@ -29,6 +29,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.onPressed != null) {
           VibrationService.selectionClick();

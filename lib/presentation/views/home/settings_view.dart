@@ -138,15 +138,10 @@ class _SettingsViewState extends State<SettingsView> {
                   CustomFormRow(
                     prefixText: loc.rotate_dealer,
                     prefixIcon: IconService.shuffle_cards,
+                    onPressed: () => toggleShuffler(!rotateShuffler),
                     suffixWidget: AdaptiveSwitch(
                       value: rotateShuffler,
-                      onChanged: (switchValue) {
-                        VibrationService.selectionClick();
-                        setState(() {
-                          ConfigService.setRotateShuffler(switchValue);
-                          rotateShuffler = switchValue;
-                        });
-                      },
+                      onChanged: (bool value) => toggleShuffler(value),
                     ),
                     showChevron: false,
                   ),
@@ -209,12 +204,10 @@ class _SettingsViewState extends State<SettingsView> {
                     prefixText: loc.haptic_feedback,
                     prefixIcon: IconService.vibration,
                     showChevron: false,
+                    onPressed: () => toggleVibrations(!enableVibrations),
                     suffixWidget: AdaptiveSwitch(
                       value: enableVibrations,
-                      onChanged: (bool value) => setState(() {
-                        ConfigService.setVibrationsEnabled(value);
-                        enableVibrations = value;
-                      }),
+                      onChanged: (bool value) => toggleVibrations(value),
                     ),
                   ),
 
@@ -359,5 +352,21 @@ class _SettingsViewState extends State<SettingsView> {
       message: Text(loc.reset_config_message),
       actions: dialogActions,
     );
+  }
+
+  void toggleShuffler(bool newValue) {
+    VibrationService.selectionClick();
+    setState(() {
+      ConfigService.setRotateShuffler(newValue);
+      rotateShuffler = newValue;
+    });
+  }
+
+  void toggleVibrations(bool newValue) {
+    VibrationService.selectionClick();
+    setState(() {
+      ConfigService.setVibrationsEnabled(newValue);
+      enableVibrations = newValue;
+    });
   }
 }
