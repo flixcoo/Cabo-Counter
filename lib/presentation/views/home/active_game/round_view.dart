@@ -452,7 +452,7 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Shows a popup dialog with the information which player received the bonus points.
-  Future<void> _showBonusPopup(
+  Future<void> showBonusPopup(
     BuildContext context,
     List<int> bonusPlayers,
   ) async {
@@ -460,7 +460,7 @@ class _RoundViewState extends State<RoundView> {
     final pointLimit = widget.gameSession.pointLimit;
     final bonusPoints = (pointLimit / 2).round();
 
-    String resultText = _getBonusPopupMessageString(
+    String resultText = getBonusPopupMessageString(
       pointLimit,
       bonusPoints,
       bonusPlayers,
@@ -476,7 +476,7 @@ class _RoundViewState extends State<RoundView> {
   /// Generates the message string for the bonus popup.
   /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
   /// and returns a formatted string.
-  String _getBonusPopupMessageString(
+  String getBonusPopupMessageString(
     int pointLimit,
     int bonusPoints,
     List<int> bonusPlayers,
@@ -518,7 +518,7 @@ class _RoundViewState extends State<RoundView> {
   ) async {
     List<int> bonusPlayersIndices = finishRound();
     if (bonusPlayersIndices.isNotEmpty) {
-      await _showBonusPopup(context, bonusPlayersIndices);
+      await showBonusPopup(context, bonusPlayersIndices);
     }
 
     //LocalStorageService.saveGameSessions();

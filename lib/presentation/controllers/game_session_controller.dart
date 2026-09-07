@@ -33,9 +33,9 @@ class GameSessionController extends ChangeNotifier {
 
   /* Read-only delegation to the session */
 
-  String get gameId => session.id;
+  String get id => session.id;
   DateTime get createdAt => session.createdAt;
-  String get gameTitle => session.title;
+  String get title => session.title;
   List<Player> get players => session.players;
   int get pointLimit => session.pointLimit;
   int get caboPenalty => session.caboPenalty;
@@ -179,7 +179,7 @@ class GameSessionController extends ChangeNotifier {
     const uuid = Uuid();
     Round newRound = Round(
       roundId: uuid.v4(),
-      gameSessionId: gameId,
+      gameSessionId: id,
       roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,
@@ -190,7 +190,7 @@ class GameSessionController extends ChangeNotifier {
       roundList.add(newRound);
       _enqueueWrite(
         () => db.roundsDao.insertOneRound(
-          gameId: gameId,
+          gameId: id,
           round: newRound,
           players: players,
         ),
@@ -199,7 +199,7 @@ class GameSessionController extends ChangeNotifier {
       roundList[roundNum - 1] = newRound;
       _enqueueWrite(
         () => db.roundsDao.replaceRound(
-          gameId: gameId,
+          gameId: id,
           round: newRound,
           players: players,
         ),
@@ -242,7 +242,7 @@ class GameSessionController extends ChangeNotifier {
     }
     _enqueueWrite(
       () => db.gameSessionDao.setGameFinishStatus(
-        gameId: gameId,
+        gameId: id,
         isFinished: isGameFinished,
       ),
     );
@@ -282,7 +282,7 @@ class GameSessionController extends ChangeNotifier {
       // so persist the corrected round again to keep the database in sync.
       _enqueueWrite(
         () => db.roundsDao.replaceRound(
-          gameId: gameId,
+          gameId: id,
           round: roundList[roundNumber - 1],
           players: players,
         ),
@@ -310,7 +310,7 @@ class GameSessionController extends ChangeNotifier {
       session.winner = lowestPlayers.first;
     }
     _enqueueWrite(
-      () => db.gameSessionDao.setWinner(gameId: gameId, winner: winner),
+      () => db.gameSessionDao.setWinner(gameId: id, winner: winner),
     );
     VibrationService.successNotification();
     notifyListeners();
@@ -321,7 +321,7 @@ class GameSessionController extends ChangeNotifier {
     session.roundNumber++;
     _enqueueWrite(
       () => db.gameSessionDao.setRoundNumber(
-        gameId: gameId,
+        gameId: id,
         roundNumber: roundNumber,
       ),
     );
