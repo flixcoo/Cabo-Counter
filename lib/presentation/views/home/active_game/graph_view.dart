@@ -1,9 +1,9 @@
 import 'dart:ui' as dart_ui;
 
-import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -46,10 +46,9 @@ class _GraphViewState extends State<GraphView> {
       appBar: AppBar(
         title: Text(loc.scoring_history),
         actions: [
-          IconButton(
-            onPressed: isGraphAvailable ? () => _shareImage() : null,
-            icon: Icon(IconService.share),
-            iconSize: Constants.NAVBAR_ICON_SIZE,
+          AnimatedIconButton(
+            onPressed: isGraphAvailable ? () => shareImage() : null,
+            icon: IconService.share,
           ),
         ],
         //previousPageTitle: loc.overview,
@@ -163,7 +162,7 @@ class _GraphViewState extends State<GraphView> {
   /// Captures the current state of the graph as an image and shares it using the SharePlus package.
   /// The image is saved as a PNG file and shared via available sharing options on the device.
   /// The method uses a pixel ratio of 5.0 for high-resolution images.
-  Future<void> _shareImage() async {
+  Future<void> shareImage() async {
     // Get the RenderBox of the current view to determine its position on screen.
     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
 
