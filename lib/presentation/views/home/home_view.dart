@@ -264,7 +264,7 @@ class _HomeViewState extends State<HomeView> {
                                     child: GameTile(
                                       session: session,
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 20,
+                                        vertical: 12,
                                         horizontal: 16,
                                       ),
                                       onTap: () {
