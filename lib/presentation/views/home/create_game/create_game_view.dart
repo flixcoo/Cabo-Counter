@@ -333,7 +333,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 onPressed: () {
                                   setState(() {
                                     playerNameControllers.add(
-                                      TextEditingController(),
+                                      TextEditingController()
+                                        ..addListener(() => setState(() {})),
                                     );
                                     playerNameFocusNodes.add(FocusNode());
                                   });
@@ -375,13 +376,15 @@ class _CreateGameViewState extends State<CreateGameView> {
     // Prefill player
     if (widget.players != null) {
       for (var player in widget.players!) {
-        playerNameControllers.add(TextEditingController(text: player));
+        final controller = TextEditingController(text: player);
+        controller.addListener(() => setState(() {}));
+        playerNameControllers.add(controller);
         playerNameFocusNodes.add(FocusNode());
       }
     } else {
       playerNameControllers = List.generate(
         minPlayers,
-        (index) => TextEditingController(),
+        (index) => TextEditingController()..addListener(() => setState(() {})),
       );
       playerNameFocusNodes = List.generate(minPlayers, (index) => FocusNode());
     }
@@ -390,7 +393,7 @@ class _CreateGameViewState extends State<CreateGameView> {
   bool get isValidGame =>
       selectedGameMode != GameMode.none &&
       playerNameControllers.length >= 2 &&
-      everyPlayerHasAName();
+      everyPlayerHasAName;
 
   /// Returns a widget that displays the currently selected game mode in the View.
   Text getDisplayedGameMode() {
@@ -414,14 +417,8 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   /// Checks if every player has a name.
   /// Returns true if all players have a name, false otherwise.
-  bool everyPlayerHasAName() {
-    for (var controller in playerNameControllers) {
-      if (controller.text == '') {
-        return false;
-      }
-    }
-    return true;
-  }
+  bool get everyPlayerHasAName =>
+      playerNameControllers.every((controller) => controller.text != '');
 
   /// Creates a new gameSession and navigates to the active game view.
   /// This method creates a new gameSession object with the provided attributes in the text fields.
