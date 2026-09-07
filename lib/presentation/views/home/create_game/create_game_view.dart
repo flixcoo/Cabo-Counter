@@ -51,8 +51,8 @@ class _CreateGameViewState extends State<CreateGameView> {
   final int minPlayers = 2;
   final int maxPlayers = 5;
 
-  late List<FocusNode> playerNameFocusNodes;
-  late List<TextEditingController> playerNameControllers;
+  List<FocusNode> playerNameFocusNodes = [];
+  List<TextEditingController> playerNameControllers = [];
 
   /// Variable to hold the selected game mode.
   late GameMode selectedGameMode;
