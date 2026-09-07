@@ -243,9 +243,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                           ActiveGameListTile(
                             title: Text(
-                              AppLocalizations.of(
-                                context,
-                              ).new_game_same_settings,
+                              AppLocalizations.of(context)
+                                  .new_game_same_settings,
                             ),
                             onTap: () {
                               Navigator.push(
@@ -278,14 +277,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                 PopupService.showInfoPopup(
                                   context: context,
                                   title: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).export_error_title,
+                                    AppLocalizations.of(context)
+                                        .export_error_title,
                                   ),
                                   content: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).export_error_message,
+                                    AppLocalizations.of(context)
+                                        .export_error_message,
                                   ),
                                 );
                               }

@@ -52,7 +52,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
                     color: CustomTheme.primaryColor,
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                  Text(widget.prefixText, style: const TextStyle(fontSize: 15)),
+                  Text(widget.prefixText, style: const TextStyle(fontSize: 16)),
                 ],
               ),
               Row(

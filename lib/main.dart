@@ -110,7 +110,7 @@ class _CaboCounterAppState extends State<CaboCounterApp>
         ),
 
         // texts
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 14)),
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
 
         // app bar
         appBarTheme: const AppBarTheme(

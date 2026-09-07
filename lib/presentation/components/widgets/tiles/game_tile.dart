@@ -57,7 +57,7 @@ class _GameTileState extends State<GameTile> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -69,7 +69,7 @@ class _GameTileState extends State<GameTile> {
                         ? '\u{1F947} ${session.winner}'
                         : '${loc.round} ${session.roundNumber}',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       color: session.isGameFinished
                           ? CustomTheme.textColor
                           : CustomTheme.subtitleColor,
@@ -82,7 +82,7 @@ class _GameTileState extends State<GameTile> {
                 session.players.map((p) => p.name).join(', '),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 13, color: CustomTheme.white),
+                style: const TextStyle(fontSize: 14, color: CustomTheme.white),
               ),
               const SizedBox(height: 12),
               Row(
@@ -97,7 +97,7 @@ class _GameTileState extends State<GameTile> {
                         Text(
                           a.text,
                           style: const TextStyle(
-                            fontSize: 13,
+                            fontSize: 14,
                             color: CustomTheme.subtitleColor,
                           ),
                         ),
