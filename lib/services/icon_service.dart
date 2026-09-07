@@ -161,4 +161,17 @@ abstract class IconService {
     fontFamily: 'FontAwesomeBrands',
     fontPackage: 'font_awesome_flutter',
   );
+
+  static IconData get vibration => Platform.isIOS
+      ? CupertinoIcons.device_phone_portrait
+      : Icons.phone_android;
+
+  static IconData get support =>
+      Platform.isIOS ? CupertinoIcons.heart : Icons.favorite;
+
+  static IconData get privacy =>
+      Platform.isIOS ? CupertinoIcons.lock_shield : Icons.shield_rounded;
+
+  static IconData get legal =>
+      Platform.isIOS ? CupertinoIcons.compass : Icons.directions;
 }

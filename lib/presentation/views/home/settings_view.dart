@@ -207,7 +207,7 @@ class _SettingsViewState extends State<SettingsView> {
                   // Mail developer
                   CustomFormRow(
                     prefixText: loc.haptic_feedback,
-                    prefixIcon: Icons.phone_android,
+                    prefixIcon: IconService.vibration,
                     showChevron: false,
                     suffixWidget: AdaptiveSwitch(
                       value: enableVibrations,
