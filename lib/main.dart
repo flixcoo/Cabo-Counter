@@ -109,7 +109,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         ),
 
         // texts
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 14)),
 
         // app bar
         appBarTheme: const AppBarTheme(

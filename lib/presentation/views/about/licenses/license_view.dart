@@ -34,21 +34,16 @@ class LicenseView extends StatelessWidget {
           itemCount: allDependencies.length,
           itemBuilder: (_, index) {
             return LicenseTile(
+              package: allDependencies[index],
               onTap: () {
                 Navigator.push(
                   context,
                   adaptivePageRoute(
-                    builder: (_) => LicenseDetailView(
-                      title: allDependencies[index].name,
-                      description: allDependencies[index].description,
-                      license:
-                          allDependencies[index].license ?? loc.no_license_text,
-                    ),
+                    builder: (_) =>
+                        LicenseDetailView(package: allDependencies[index]),
                   ),
                 );
               },
-              title: allDependencies[index].name,
-              description: allDependencies[index].description,
             );
           },
         ),
