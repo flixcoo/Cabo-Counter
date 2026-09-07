@@ -9,7 +9,7 @@ class FloatingAnimatedButton extends StatefulWidget {
     required this.text,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String text;
 
   @override
@@ -37,6 +37,8 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
 
   @override
   Widget build(BuildContext context) {
+    final enabled = widget.onPressed != null;
+
     return ScaleTransition(
       scale: scaleAnimation,
       child: GestureDetector(
@@ -46,8 +48,10 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
         onTapUp: (_) async {
           await animationController.reverse();
           if (mounted) {
-            VibrationService.selectionClick();
-            widget.onPressed();
+            if (enabled) {
+              VibrationService.selectionClick();
+              widget.onPressed!();
+            }
           }
         },
         onTapCancel: () {
@@ -58,7 +62,9 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
             Container(
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: CustomTheme.white,
+                color: enabled
+                    ? CustomTheme.white
+                    : CustomTheme.white.withAlpha(128),
                 borderRadius: BorderRadius.circular(14),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

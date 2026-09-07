@@ -14,10 +14,8 @@ import 'package:cabo_counter/presentation/views/home/active_game/active_game_vie
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -68,19 +66,20 @@ class _CreateGameViewState extends State<CreateGameView> {
     selectedGameMode = widget.gameMode;
     titleController.text = widget.gameTitle ?? '';
 
-    // Prefill player
-    if (widget.players != null) {
-      for (var player in widget.players!) {
-        playerNameControllers.add(TextEditingController(text: player));
-        playerNameFocusNodes.add(FocusNode());
-      }
-    } else {
-      playerNameControllers = List.generate(
-        minPlayers,
-        (index) => TextEditingController(),
-      );
-      playerNameFocusNodes = List.generate(minPlayers, (index) => FocusNode());
+    initializeController();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    for (var controller in playerNameControllers) {
+      controller.dispose();
     }
+    for (var focusnode in playerNameFocusNodes) {
+      focusnode.dispose();
+    }
+
+    super.dispose();
   }
 
   @override
@@ -91,7 +90,6 @@ class _CreateGameViewState extends State<CreateGameView> {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) {
-          await keyboardDelay();
           if (context.mounted) {
             widget.onSessionsUpdated();
             Navigator.pop(context);
@@ -148,13 +146,12 @@ class _CreateGameViewState extends State<CreateGameView> {
                             title: Text(loc.mode),
                             trailing: Row(
                               children: [
-                                _getDisplayedGameMode(),
+                                getDisplayedGameMode(),
                                 const SizedBox(width: 5),
                                 IconService.chevron,
                               ],
                             ),
                             onTap: () async {
-                              await keyboardDelay();
                               if (context.mounted) {
                                 final result = await Navigator.push(
                                   context,
@@ -334,21 +331,17 @@ class _CreateGameViewState extends State<CreateGameView> {
                               child: OpacityButton.text(
                                 text: loc.add_player,
                                 onPressed: () {
-                                  if (!hasReachedMaxPlayers) {
-                                    setState(() {
-                                      playerNameControllers.add(
-                                        TextEditingController(),
-                                      );
-                                      playerNameFocusNodes.add(FocusNode());
-                                    });
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                          playerNameFocusNodes.last
-                                              .requestFocus();
-                                        });
-                                  } else {
-                                    showFeedbackDialog(CreateStatus.maxPlayers);
-                                  }
+                                  setState(() {
+                                    playerNameControllers.add(
+                                      TextEditingController(),
+                                    );
+                                    playerNameFocusNodes.add(FocusNode());
+                                  });
+                                  WidgetsBinding.instance.addPostFrameCallback((
+                                    _,
+                                  ) {
+                                    playerNameFocusNodes.last.requestFocus();
+                                  });
                                 },
                               ),
                             ),
@@ -366,10 +359,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                   width: 200,
                   child: FloatingAnimatedButton(
                     text: loc.create_game,
-                    onPressed: () async {
-                      await keyboardDelay();
-                      checkAllGameAttributes();
-                    },
+                    onPressed: isValidGame ? () async => createGame() : null,
                   ),
                 ),
               ),
@@ -381,8 +371,29 @@ class _CreateGameViewState extends State<CreateGameView> {
     );
   }
 
+  void initializeController() {
+    // Prefill player
+    if (widget.players != null) {
+      for (var player in widget.players!) {
+        playerNameControllers.add(TextEditingController(text: player));
+        playerNameFocusNodes.add(FocusNode());
+      }
+    } else {
+      playerNameControllers = List.generate(
+        minPlayers,
+        (index) => TextEditingController(),
+      );
+      playerNameFocusNodes = List.generate(minPlayers, (index) => FocusNode());
+    }
+  }
+
+  bool get isValidGame =>
+      selectedGameMode != GameMode.none &&
+      playerNameControllers.length >= 2 &&
+      everyPlayerHasAName();
+
   /// Returns a widget that displays the currently selected game mode in the View.
-  Text _getDisplayedGameMode() {
+  Text getDisplayedGameMode() {
     final loc = AppLocalizations.of(context);
     const textStyle = TextStyle(color: CustomTheme.textColor);
     final selectedTextStyle = textStyle.copyWith(
@@ -401,31 +412,9 @@ class _CreateGameViewState extends State<CreateGameView> {
     }
   }
 
-  /// Checks all game attributes before creating a new game.
-  /// If any attribute is invalid, it shows a feedback dialog.
-  /// If all attributes are valid, it calls the `_createGame` method.
-  void checkAllGameAttributes() {
-    if (selectedGameMode == GameMode.none) {
-      showFeedbackDialog(CreateStatus.noModeSelected);
-      return;
-    }
-
-    if (playerNameControllers.length < 2) {
-      showFeedbackDialog(CreateStatus.minPlayers);
-      return;
-    }
-
-    if (!_everyPlayerHasAName()) {
-      showFeedbackDialog(CreateStatus.noPlayerName);
-      return;
-    }
-
-    _createGame();
-  }
-
   /// Checks if every player has a name.
   /// Returns true if all players have a name, false otherwise.
-  bool _everyPlayerHasAName() {
+  bool everyPlayerHasAName() {
     for (var controller in playerNameControllers) {
       if (controller.text == '') {
         return false;
@@ -434,39 +423,12 @@ class _CreateGameViewState extends State<CreateGameView> {
     return true;
   }
 
-  /// Displays a feedback dialog based on the [CreateStatus].
-  void showFeedbackDialog(CreateStatus status) {
-    final (title, message) = _getDialogContent(status);
-
-    PopupService.showInfoPopup(
-      context: context,
-      title: Text(title),
-      content: Text(message),
-    );
-  }
-
-  /// Returns the title and message for the dialog based on the [CreateStatus].
-  (String, String) _getDialogContent(CreateStatus status) {
-    final loc = AppLocalizations.of(context);
-    switch (status) {
-      case CreateStatus.noModeSelected:
-        return (loc.no_mode_title, loc.no_mode_message);
-
-      case CreateStatus.minPlayers:
-        return (loc.min_players_title, loc.min_players_message);
-      case CreateStatus.maxPlayers:
-        return (loc.max_players_title, loc.max_players_message);
-      case CreateStatus.noPlayerName:
-        return (loc.no_name_title, loc.no_name_message);
-    }
-  }
-
   /// Creates a new gameSession and navigates to the active game view.
   /// This method creates a new gameSession object with the provided attributes in the text fields.
   /// It then adds the game session to the game manager and navigates to the active game view.
-  void _createGame() {
+  void createGame() {
     var uuid = const Uuid();
-    final String gameId = uuid.v4();
+    final String gameSessionId = uuid.v4();
 
     // Collect player names from the text controllers.
     List<String> playerNames = [];
@@ -475,30 +437,30 @@ class _CreateGameViewState extends State<CreateGameView> {
     }
 
     // Create a list of Player objects with unique IDs and the corresponding attributes
-    List<Player> playerList = [];
+    List<Player> players = [];
     for (int i = 0; i < playerNames.length; i++) {
-      String playerId = uuid.v4();
-      playerList.add(
+      String id = uuid.v4();
+      players.add(
         Player(
-          id: playerId,
-          gameSessionId: gameId,
+          id: id,
+          gameSessionId: gameSessionId,
           name: playerNames[i],
           position: i,
         ),
       );
     }
 
-    final String gameTitle = titleController.text == ''
+    final String title = titleController.text == ''
         ? getFallbackGameTitle()
         : titleController.text;
 
     final bool isPointsLimitEnabled = selectedGameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-      gameId: gameId,
+      gameId: gameSessionId,
       createdAt: DateTime.now(),
-      title: gameTitle,
-      players: playerList,
+      title: title,
+      players: players,
       pointLimit: ConfigService.getPointLimit(),
       caboPenalty: ConfigService.getCaboPenalty(),
       isPointsLimitEnabled: isPointsLimitEnabled,
@@ -521,48 +483,16 @@ class _CreateGameViewState extends State<CreateGameView> {
     );
   }
 
-  /// If the keyboard is visible, this method will unfocus the current text field
-  /// to prevent the keyboard from interfering with the navigation bar.
-  Future<void> keyboardDelay() async {
-    if (!KeyboardVisibilityController().isVisible) {
-      return;
-    } else {
-      FocusScope.of(context).unfocus();
-      await Future.delayed(
-        const Duration(milliseconds: Constants.KEYBOARD_DELAY),
-      );
-    }
-  }
-
   /// Generates a fallback game title based on the current date and locale.
   /// If the user does not provide a game title, this method will create one
   /// using the current date formatted according to the user's locale.
   String getFallbackGameTitle() {
-    final loc = AppLocalizations.of(context);
-    final now = DateTime.now();
-    final String formattedDate;
+    final locale = Localizations.localeOf(context);
+    final formattedDate = DateFormat(
+      'dd.MM.yy',
+      locale.toLanguageTag(),
+    ).format(DateTime.now());
 
-    Locale currentLocale = Localizations.localeOf(context);
-    switch (currentLocale.languageCode) {
-      case 'en':
-        formattedDate = DateFormat('MMMM d, y', 'en_US').format(now);
-      default:
-        formattedDate = DateFormat('dd.MM.yy').format(now);
-    }
-
-    return loc.standard_game_title(formattedDate);
-  }
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    for (var controller in playerNameControllers) {
-      controller.dispose();
-    }
-    for (var focusnode in playerNameFocusNodes) {
-      focusnode.dispose();
-    }
-
-    super.dispose();
+    return AppLocalizations.of(context).standard_game_title(formattedDate);
   }
 }
