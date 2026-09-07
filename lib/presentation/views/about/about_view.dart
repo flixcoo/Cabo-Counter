@@ -53,8 +53,11 @@ class AboutView extends StatelessWidget {
               OpacityButton.text(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 text: loc.privacy_policy,
-                onPressed: () =>
-                    launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
+                onPressed: () => launchUrl(
+                  Uri.parse(
+                    '${Constants.PRIVACY_POLICY_LINK}?lang=${loc.localeName}',
+                  ),
+                ),
               ),
               OpacityButton.text(
                 padding: const EdgeInsets.symmetric(vertical: 4),
@@ -64,7 +67,9 @@ class AboutView extends StatelessWidget {
               OpacityButton.text(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 text: loc.legal_notice,
-                onPressed: () => launchUrl(Uri.parse(Constants.LEGAL_LINK)),
+                onPressed: () => launchUrl(
+                  Uri.parse('${Constants.LEGAL_LINK}?lang=${loc.localeName}'),
+                ),
               ),
               OpacityButton.text(
                 padding: const EdgeInsets.symmetric(vertical: 4),
