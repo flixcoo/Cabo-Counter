@@ -15,6 +15,7 @@ import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -134,6 +135,7 @@ class _SettingsViewState extends State<SettingsView> {
                         inactiveThumbColor: Colors.white,
                         value: rotateShuffler,
                         onChanged: (switchValue) {
+                          HapticFeedback.selectionClick();
                           setState(() {
                             ConfigService.setRotateShuffler(switchValue);
                             rotateShuffler = switchValue;
