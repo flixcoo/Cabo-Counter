@@ -7,10 +7,16 @@ class AnimatedIconButton extends StatefulWidget {
   ///
   /// - [icon]: The icon to display in the button.
   /// - [onPressed]: The callback for when the button is pressed.
-  const AnimatedIconButton({super.key, required this.icon, this.onPressed});
+  const AnimatedIconButton({
+    super.key,
+    required this.icon,
+    this.onPressed,
+    this.iconColor = CustomTheme.primaryColor,
+  });
 
   final IconData icon;
   final VoidCallback? onPressed;
+  final Color iconColor;
 
   @override
   State<AnimatedIconButton> createState() => _AnimatedIconButtonState();
@@ -36,16 +42,14 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
               }
             : null,
         child: AnimatedScale(
-          scale: isPressed ? 0.96 : 1.0,
+          scale: isPressed ? 0.9 : 1.0,
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(widget.icon, size: 28, color: CustomTheme.kamikazeColor),
-              ],
+              children: [Icon(widget.icon, size: 28, color: widget.iconColor)],
             ),
           ),
         ),
