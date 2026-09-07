@@ -6,12 +6,10 @@ class FloatingAnimatedButton extends StatefulWidget {
   const FloatingAnimatedButton({
     super.key,
     required this.onPressed,
-    required this.icon,
     required this.text,
   });
 
   final void Function() onPressed;
-  final IconData icon;
   final String text;
 
   @override
@@ -63,12 +61,10 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
                 color: CustomTheme.white,
                 borderRadius: BorderRadius.circular(14),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(widget.icon, size: 24, color: Colors.black),
-                  const SizedBox(width: 8),
                   Text(
                     widget.text,
                     style: const TextStyle(

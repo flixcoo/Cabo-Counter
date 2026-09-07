@@ -294,7 +294,6 @@ class _HomeViewState extends State<HomeView> {
               bottom: MediaQuery.paddingOf(context).bottom + 10,
               child: FloatingAnimatedButton(
                 text: loc.new_game,
-                icon: IconService.add,
                 onPressed: () => Navigator.push(
                   context,
                   adaptivePageRoute(

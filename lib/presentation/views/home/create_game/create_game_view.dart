@@ -366,7 +366,6 @@ class _CreateGameViewState extends State<CreateGameView> {
                   width: 200,
                   child: FloatingAnimatedButton(
                     text: loc.create_game,
-                    icon: IconService.add,
                     onPressed: () async {
                       await keyboardDelay();
                       checkAllGameAttributes();
