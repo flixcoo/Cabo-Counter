@@ -23,20 +23,21 @@ Future<void> main() async {
   runApp(
     Provider<AppDatabase>(
       create: (context) => AppDatabase(),
-      child: const App(),
+      child: const CaboCounterApp(),
       dispose: (context, databaseInstance) => databaseInstance.close(),
     ),
   );
 }
 
-class App extends StatefulWidget {
-  const App({super.key});
+class CaboCounterApp extends StatefulWidget {
+  const CaboCounterApp({super.key});
 
   @override
-  State<StatefulWidget> createState() => _AppState();
+  State<StatefulWidget> createState() => _CaboCounterAppState();
 }
 
-class _AppState extends State<App> with WidgetsBindingObserver {
+class _CaboCounterAppState extends State<CaboCounterApp>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
