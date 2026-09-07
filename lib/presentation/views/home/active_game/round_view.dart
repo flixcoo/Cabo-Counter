@@ -98,26 +98,15 @@ class _RoundViewState extends State<RoundView> {
         ),
         title: Text(loc.results),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Center(
-              child: AnimatedIconButton(
-                icon: IconService.kamikaze,
-                onPressed: () async {
-                  if (await showKamikazeSheet(context)) {
-                    if (!context.mounted) return;
-                    endOfRoundNavigation(context, true);
-                  }
-                },
-              ),
-            ),
-          ),
-          Visibility(
-            visible: isGameFinished,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Icon(IconService.locked, size: 25),
-            ),
+          AnimatedIconButton(
+            icon: IconService.kamikaze,
+            color: CustomTheme.kamikazeColor,
+            onPressed: () async {
+              if (await showKamikazeSheet(context)) {
+                if (!context.mounted) return;
+                endOfRoundNavigation(context, true);
+              }
+            },
           ),
         ],
       ),

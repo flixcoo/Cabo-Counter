@@ -11,12 +11,12 @@ class AnimatedIconButton extends StatefulWidget {
     super.key,
     required this.icon,
     this.onPressed,
-    this.iconColor = CustomTheme.primaryColor,
+    this.color = CustomTheme.primaryColor,
   });
 
   final IconData icon;
   final VoidCallback? onPressed;
-  final Color iconColor;
+  final Color color;
 
   @override
   State<AnimatedIconButton> createState() => _AnimatedIconButtonState();
@@ -49,7 +49,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Icon(widget.icon, size: 28, color: widget.iconColor)],
+              children: [Icon(widget.icon, size: 28, color: widget.color)],
             ),
           ),
         ),
