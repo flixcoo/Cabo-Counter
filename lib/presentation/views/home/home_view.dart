@@ -486,11 +486,11 @@ class _HomeViewState extends State<HomeView> {
           currentSortOption: currentSortOption,
           currentSortDirection: currentSortDirection,
           showOnlyActiveGames: showOnlyActiveGames,
-          onSortOptionChanged: (newSortingOption) =>
+          onOptionChanged: (newSortingOption) =>
               setSortOption(newSortingOption),
-          onSortDirectionChanged: (newSortingDirection) =>
+          onDirectionChanged: (newSortingDirection) =>
               setSortDirection(newSortingDirection),
-          onShowOnlyActiveGamesChanged: () => toggleShowOnlyActiveGames(),
+          onFilterChanged: () => toggleShowOnlyActiveGames(),
         );
       },
       icon: IconService.sort,
