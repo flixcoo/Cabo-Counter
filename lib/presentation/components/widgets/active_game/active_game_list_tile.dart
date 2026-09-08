@@ -61,16 +61,20 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
             children: [
               widget.title,
               Row(
-                spacing: widget.trailing is Text ? 5 : 10,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                spacing: 5,
                 children: [
                   if (widget.trailing != null) widget.trailing!,
-                  if (widget.showChevron) ...[
+                  if (widget.showChevron)
                     Icon(
                       IconService.chevron,
                       size: 17,
                       color: CustomTheme.hintTextColor,
-                    ),
-                  ],
+                    )
+                  else
+                    // A little more space to the right when no chevron is shown
+                    const SizedBox.shrink(),
                 ],
               ),
             ],
