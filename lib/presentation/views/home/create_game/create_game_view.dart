@@ -350,16 +350,17 @@ class _CreateGameViewState extends State<CreateGameView> {
               ),
 
               // Button
-              Center(
-                child: SizedBox(
-                  width: 200,
-                  child: FloatingAnimatedButton(
-                    text: loc.create_game,
-                    onPressed: isValidGame ? () async => createGame() : null,
-                  ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewPadding.bottom,
+                  right: 16,
+                  left: 16,
+                ),
+                child: FloatingAnimatedButton(
+                  text: loc.create_game,
+                  onPressed: isValidGame ? () async => createGame() : null,
                 ),
               ),
-              const SizedBox(height: 50),
             ],
           ),
         ),
