@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_segmendet_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/score_enter_tile.dart';
@@ -13,7 +13,6 @@ import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class RoundView extends StatefulWidget {
   /// A view for displaying and managing a single round
@@ -104,7 +103,10 @@ class _RoundViewState extends State<RoundView> {
             onPressed: () async {
               if (await showKamikazeSheet(context)) {
                 if (!context.mounted) return;
-                endOfRoundNavigation(context, true);
+                endOfRoundNavigation(
+                  context: context,
+                  navigateToNextRound: true,
+                );
               }
             },
           ),
@@ -234,36 +236,44 @@ class _RoundViewState extends State<RoundView> {
               ),
             ),
           ),
-          KeyboardVisibilityBuilder(
-            builder: (context, visible) {
-              if (!visible) {
-                return Container(
-                  height: 80,
-                  padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.mainElementColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      OpacityButton.text(
+          Container(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  spacing: 10,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: FloatingAnimatedButton(
                         onPressed: canSubmitRound
-                            ? () => endOfRoundNavigation(context, false)
+                            ? () => endOfRoundNavigation(
+                                context: context,
+                                navigateToNextRound: false,
+                              )
                             : null,
                         text: loc.done,
                       ),
-                      if (!isGameFinished)
-                        OpacityButton.text(
+                    ),
+                    if (!isGameFinished)
+                      Expanded(
+                        child: FloatingAnimatedButton(
                           onPressed: canSubmitRound
-                              ? () => endOfRoundNavigation(context, true)
+                              ? () => endOfRoundNavigation(
+                                  context: context,
+                                  navigateToNextRound: true,
+                                )
                               : null,
                           text: loc.next_round,
                         ),
-                    ],
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+                      ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -516,10 +526,10 @@ class _RoundViewState extends State<RoundView> {
   /// and navigates to the next round or back to the previous screen.
   /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
   /// if it should navigate to the next round or not.
-  Future<void> endOfRoundNavigation(
-    BuildContext context,
-    bool navigateToNextRound,
-  ) async {
+  Future<void> endOfRoundNavigation({
+    required BuildContext context,
+    required bool navigateToNextRound,
+  }) async {
     List<int> bonusPlayersIndices = finishRound();
     if (bonusPlayersIndices.isNotEmpty) {
       await showBonusPopup(context, bonusPlayersIndices);
