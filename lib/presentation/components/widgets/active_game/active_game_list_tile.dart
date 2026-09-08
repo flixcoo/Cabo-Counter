@@ -47,6 +47,7 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
         await Future.delayed(const Duration(milliseconds: 250));
         setState(() => isPressed = false);
       },
+      onTapCancel: () => setState(() => isPressed = false),
       onTap: () {
         if (widget.onTap != null) {
           VibrationService.selectionClick();
