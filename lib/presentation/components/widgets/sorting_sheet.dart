@@ -1,0 +1,261 @@
+import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/core/enums.dart';
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
+import 'package:flutter/material.dart';
+
+/// A bottom sheet for sorting and filtering the game list.
+///
+/// - [currentSortOption]: The currently selected sorting option.
+/// - [currentSortDirection]: The currently selected sorting direction.
+/// - [showOnlyActiveGames]: Whether only active games are shown.
+/// - [onSortOptionChanged]: Called when the sorting option changes.
+/// - [onSortDirectionChanged]: Called when the sorting direction changes.
+/// - [onShowOnlyActiveGamesChanged]: Called when the active-only filter toggles.
+class SortingSheet extends StatefulWidget {
+  final SortOption currentSortOption;
+  final SortDirection currentSortDirection;
+  final bool showOnlyActiveGames;
+  final ValueChanged<SortOption> onSortOptionChanged;
+  final ValueChanged<SortDirection> onSortDirectionChanged;
+  final VoidCallback onShowOnlyActiveGamesChanged;
+
+  const SortingSheet({
+    super.key,
+    required this.currentSortOption,
+    required this.currentSortDirection,
+    required this.showOnlyActiveGames,
+    required this.onSortOptionChanged,
+    required this.onSortDirectionChanged,
+    required this.onShowOnlyActiveGamesChanged,
+  });
+
+  /// Displays the sorting bottom sheet.
+  static Future<void> show(
+    BuildContext context, {
+    required SortOption currentSortOption,
+    required SortDirection currentSortDirection,
+    required bool showOnlyActiveGames,
+    required ValueChanged<SortOption> onSortOptionChanged,
+    required ValueChanged<SortDirection> onSortDirectionChanged,
+    required VoidCallback onShowOnlyActiveGamesChanged,
+  }) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SortingSheet(
+        currentSortOption: currentSortOption,
+        currentSortDirection: currentSortDirection,
+        showOnlyActiveGames: showOnlyActiveGames,
+        onSortOptionChanged: onSortOptionChanged,
+        onSortDirectionChanged: onSortDirectionChanged,
+        onShowOnlyActiveGamesChanged: onShowOnlyActiveGamesChanged,
+      ),
+    );
+  }
+
+  @override
+  State<SortingSheet> createState() => _SortingSheetState();
+}
+
+class _SortingSheetState extends State<SortingSheet> {
+  late SortOption sortOption = widget.currentSortOption;
+  late SortDirection sortDirection = widget.currentSortDirection;
+  late bool showOnlyActiveGames = widget.showOnlyActiveGames;
+
+  void selectOption(SortOption option) {
+    if (option == sortOption) return;
+    VibrationService.selectionClick();
+    setState(() => sortOption = option);
+    widget.onSortOptionChanged(option);
+  }
+
+  void selectDirection(SortDirection direction) {
+    if (direction == sortDirection) return;
+    VibrationService.selectionClick();
+    setState(() => sortDirection = direction);
+    widget.onSortDirectionChanged(direction);
+  }
+
+  void toggleActiveGames() {
+    VibrationService.selectionClick();
+    setState(() => showOnlyActiveGames = !showOnlyActiveGames);
+    widget.onShowOnlyActiveGamesChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: CustomTheme.mainElementColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
+            children: [
+              // Drag handle
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: CustomTheme.subtitleColor.withAlpha(120),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: 12,
+                    children: [
+                      // Sort Option
+                      Column(
+                        children: [
+                          buildLabel(loc.sort_by),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: SelectableTile(
+                                  icon: IconService.sort_by_date,
+                                  title: loc.date,
+                                  selectionColor: CustomTheme.primaryColor,
+                                  selected: sortOption == SortOption.date,
+                                  onTap: () => setState(
+                                    () => sortOption = SortOption.date,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SelectableTile(
+                                  icon: IconService.sort_by_name,
+                                  title: loc.game_name,
+                                  selectionColor: CustomTheme.primaryColor,
+                                  selected: sortOption == SortOption.title,
+                                  onTap: () => setState(
+                                    () => sortOption = SortOption.title,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      // Sort direction
+                      Column(
+                        children: [
+                          buildLabel(loc.sort_order),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: SelectableTile(
+                                  icon: IconService.sort_desc,
+                                  title: loc.descending,
+                                  selectionColor: CustomTheme.primaryColor,
+                                  selected:
+                                      sortDirection == SortDirection.descending,
+                                  onTap: () => setState(
+                                    () => sortDirection =
+                                        SortDirection.descending,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SelectableTile(
+                                  icon: IconService.sort_asc,
+                                  title: loc.ascending,
+                                  selectionColor: CustomTheme.primaryColor,
+                                  selected:
+                                      sortDirection == SortDirection.ascending,
+
+                                  onTap: () => setState(
+                                    () =>
+                                        sortDirection = SortDirection.ascending,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      // Filter
+                      Column(
+                        children: [
+                          buildLabel(loc.filter),
+                          SelectableTile(
+                            icon: IconService.visibility_off,
+                            title: loc.only_active_game_title,
+                            selectionColor: CustomTheme.primaryColor,
+                            selected: showOnlyActiveGames,
+                            onTap: () => setState(
+                              () => showOnlyActiveGames = !showOnlyActiveGames,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              FloatingAnimatedButton(
+                text: loc.submit,
+                onPressed: () => {
+                  propagateChangedOptions(),
+                  Navigator.pop(context),
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void propagateChangedOptions() {
+    if (showOnlyActiveGames != widget.showOnlyActiveGames) {
+      toggleActiveGames();
+    }
+    if (sortDirection != widget.currentSortDirection) {
+      selectDirection(widget.currentSortDirection);
+    }
+    if (sortOption != widget.currentSortOption) {
+      selectOption(widget.currentSortOption);
+    }
+  }
+
+  Widget buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text.toUpperCase(),
+          style: const TextStyle(
+            color: CustomTheme.subtitleColor,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+}

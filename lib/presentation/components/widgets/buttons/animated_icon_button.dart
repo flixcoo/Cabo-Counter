@@ -50,7 +50,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
             padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Icon(widget.icon, color: widget.color)],
+              children: [Icon(widget.icon, size: 24, color: widget.color)],
             ),
           ),
         ),

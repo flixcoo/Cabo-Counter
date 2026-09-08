@@ -11,10 +11,10 @@ import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_filter_placeholder.dart';
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/sorting_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/sorting_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/game_tile.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
@@ -23,6 +23,7 @@ import 'package:cabo_counter/presentation/views/home/settings_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
@@ -79,13 +80,9 @@ class _HomeViewState extends State<HomeView> {
     ),
   );
 
-  /// Current sorting option for the game list
+  // Sorting & fiilter
   SortOption currentSortOption = ConfigService.getSortingOption();
-
-  /// Current sorting direction for the game list
   SortDirection currentSortDirection = ConfigService.getSortingDirection();
-
-  /// If true, only active (unfinished) games are shown in the list
   bool showOnlyActiveGames = ConfigService.getShowActiveGamesOnly();
 
   @override
@@ -122,8 +119,7 @@ class _HomeViewState extends State<HomeView> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        leading: OpacityButton.icon(
-          size: Constants.NAVBAR_ICON_SIZE,
+        leading: AnimatedIconButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -136,18 +132,7 @@ class _HomeViewState extends State<HomeView> {
           icon: IconService.settings,
         ),
         title: Text(loc.games),
-        actions: [
-          SortingButton(
-            currentSortOption: currentSortOption,
-            currentSortDirection: currentSortDirection,
-            showOnlyActiveGames: showOnlyActiveGames,
-            onSortOptionChanged: (newSortingOption) =>
-                setSortOption(newSortingOption),
-            onSortDirectionChanged: (newSortingDirection) =>
-                setSortDirection(newSortingDirection),
-            onShowOnlyActiveGamesChanged: () => toggleShowOnlyActiveGames(),
-          ),
-        ],
+        actions: [sortingButton()],
       ),
       body: SafeArea(
         child: Stack(
@@ -490,5 +475,25 @@ class _HomeViewState extends State<HomeView> {
       if (!mounted) return;
       handleFeedbackDialog(context);
     }
+  }
+
+  Widget sortingButton() {
+    return AnimatedIconButton(
+      onPressed: () {
+        VibrationService.selectionClick();
+        SortingSheet.show(
+          context,
+          currentSortOption: currentSortOption,
+          currentSortDirection: currentSortDirection,
+          showOnlyActiveGames: showOnlyActiveGames,
+          onSortOptionChanged: (newSortingOption) =>
+              setSortOption(newSortingOption),
+          onSortDirectionChanged: (newSortingDirection) =>
+              setSortDirection(newSortingDirection),
+          onShowOnlyActiveGamesChanged: () => toggleShowOnlyActiveGames(),
+        );
+      },
+      icon: IconService.sort,
+    );
   }
 }

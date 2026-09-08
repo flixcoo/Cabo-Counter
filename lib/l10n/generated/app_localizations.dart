@@ -361,6 +361,12 @@ abstract class AppLocalizations {
   /// **'Spiel exportieren'**
   String get export_game;
 
+  /// No description provided for @filter.
+  ///
+  /// In de, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
   /// No description provided for @game.
   ///
   /// In de, this message translates to:
@@ -373,11 +379,11 @@ abstract class AppLocalizations {
   /// **'Spieldaten'**
   String get game_data;
 
-  /// No description provided for @game_title.
+  /// No description provided for @game_name.
   ///
   /// In de, this message translates to:
-  /// **'Spieltitel'**
-  String get game_title;
+  /// **'Spielname'**
+  String get game_name;
 
   /// No description provided for @gamemode.
   ///
@@ -577,12 +583,6 @@ abstract class AppLocalizations {
   /// **'Nur aktive Spiele werden angezeigt'**
   String get only_active_games;
 
-  /// No description provided for @only_active_games_description.
-  ///
-  /// In de, this message translates to:
-  /// **'Beendete Spiele werden ausgeblendet.'**
-  String get only_active_games_description;
-
   /// No description provided for @overview.
   ///
   /// In de, this message translates to:
@@ -715,11 +715,17 @@ abstract class AppLocalizations {
   /// **'Einstellungen'**
   String get settings;
 
-  /// No description provided for @sort_and_filter_options.
+  /// No description provided for @sort_by.
   ///
   /// In de, this message translates to:
-  /// **'Sortier- & Filteroptionen'**
-  String get sort_and_filter_options;
+  /// **'Sortieren nach'**
+  String get sort_by;
+
+  /// No description provided for @sort_order.
+  ///
+  /// In de, this message translates to:
+  /// **'Reihenfolge'**
+  String get sort_order;
 
   /// No description provided for @standard_game_title.
   ///

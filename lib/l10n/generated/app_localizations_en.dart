@@ -75,7 +75,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_game => 'Create Game';
 
   @override
-  String get date => 'Datum';
+  String get date => 'Date';
 
   @override
   String get dealer => 'Dealer';
@@ -171,13 +171,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get export_game => 'Export Game';
 
   @override
+  String get filter => 'Filter';
+
+  @override
   String get game => 'Game';
 
   @override
   String get game_data => 'Game Data';
 
   @override
-  String get game_title => 'Game Title';
+  String get game_name => 'Game Name';
 
   @override
   String get gamemode => 'Gamemode';
@@ -283,9 +286,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get only_active_games => 'Only active games are shown';
 
   @override
-  String get only_active_games_description => 'Finished games will be hidden.';
-
-  @override
   String get overview => 'Overview';
 
   @override
@@ -356,7 +356,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get sort_and_filter_options => 'Sort & Filter Options';
+  String get sort_by => 'Sort by';
+
+  @override
+  String get sort_order => 'Order';
 
   @override
   String standard_game_title(Object date) {

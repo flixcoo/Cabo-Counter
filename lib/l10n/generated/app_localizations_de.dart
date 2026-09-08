@@ -172,13 +172,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_game => 'Spiel exportieren';
 
   @override
+  String get filter => 'Filter';
+
+  @override
   String get game => 'Spiel';
 
   @override
   String get game_data => 'Spieldaten';
 
   @override
-  String get game_title => 'Spieltitel';
+  String get game_name => 'Spielname';
 
   @override
   String get gamemode => 'Spielmodus';
@@ -285,10 +288,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get only_active_games => 'Nur aktive Spiele werden angezeigt';
 
   @override
-  String get only_active_games_description =>
-      'Beendete Spiele werden ausgeblendet.';
-
-  @override
   String get overview => 'Übersicht';
 
   @override
@@ -360,7 +359,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
-  String get sort_and_filter_options => 'Sortier- & Filteroptionen';
+  String get sort_by => 'Sortieren nach';
+
+  @override
+  String get sort_order => 'Reihenfolge';
 
   @override
   String standard_game_title(Object date) {

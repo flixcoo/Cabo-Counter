@@ -1,6 +1,9 @@
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/tiles/mode_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// A stateless widget that displays a menu for selecting the game mode.
@@ -44,29 +47,36 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
     return Scaffold(
       appBar: AppBar(title: Text(loc.gamemode)),
       body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         children: [
           // Point limit mode
-          ModeTile(
+          SelectableTile(
+            icon: IconService.point_limit,
             title: '${widget.pointLimit} ${loc.points}',
             description: loc.point_limit_description(widget.pointLimit),
             onTap: supressTap ? null : () => onTapTile(GameMode.pointLimit),
             selected: selectedMode == GameMode.pointLimit,
+            selectionColor: CustomTheme.primaryColor,
           ),
 
           // Unlimited mode
-          ModeTile(
+          SelectableTile(
+            icon: CupertinoIcons.infinite,
             title: loc.unlimited,
             description: loc.unlimited_description,
             onTap: supressTap ? null : () => onTapTile(GameMode.unlimited),
             selected: selectedMode == GameMode.unlimited,
+            selectionColor: CustomTheme.primaryColor,
           ),
 
+          // Deselection
           if (widget.showDeselection)
-            ModeTile(
+            SelectableTile(
               title: loc.no_default_mode,
               description: loc.no_default_description,
               onTap: supressTap ? null : () => onTapTile(GameMode.none),
               selected: selectedMode == GameMode.none,
+              selectionColor: CustomTheme.primaryColor,
             ),
         ],
       ),

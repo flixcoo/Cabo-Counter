@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
@@ -114,8 +113,10 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                       ...widget.gameSession.players.asMap().entries.map((
                         entry,
                       ) {
-                        return _PlayerTile(
-                          name: entry.value.name,
+                        return SelectableTile(
+                          title: entry.value.name,
+                          selectionColor: CustomTheme.kamikazeColor,
+                          selectedTintAlpha: 45,
                           selected: _selectedIndex == entry.key,
                           onTap: () {
                             VibrationService.selectionClick();
@@ -138,87 +139,6 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                       },
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// A selectable tile representing a single player in the Kamikaze sheet.
-class _PlayerTile extends StatefulWidget {
-  final String name;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _PlayerTile({
-    required this.name,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  State<_PlayerTile> createState() => _PlayerTileState();
-}
-
-class _PlayerTileState extends State<_PlayerTile> {
-  bool isPressed = false;
-  Timer? timer;
-
-  void _activatePressState() {
-    timer?.cancel();
-    setState(() => isPressed = true);
-
-    timer = Timer(const Duration(milliseconds: 250), () {
-      if (mounted) {
-        setState(() => isPressed = false);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final selected = widget.selected;
-
-    final Color backgroundColor = selected
-        ? Color.alphaBlend(
-            CustomTheme.kamikazeColor.withAlpha(45),
-            CustomTheme.tileColor,
-          )
-        : CustomTheme.tileColor;
-    final borderColor = selected
-        ? CustomTheme.kamikazeColor
-        : Colors.transparent;
-
-    return GestureDetector(
-      onTapDown: (_) => _activatePressState(),
-      onTapUp: (_) => widget.onTap(),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: borderColor, width: 1.5),
-        ),
-        child: Center(
-          child: Text(
-            widget.name,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: CustomTheme.textColor,
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-            ),
           ),
         ),
       ),
