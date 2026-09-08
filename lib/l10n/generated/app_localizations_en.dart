@@ -159,6 +159,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get end_of_game_title => 'End of Game';
 
   @override
+  String get created_at => 'Created At';
+
+  @override
   String get export_data => 'Export Data';
 
   @override

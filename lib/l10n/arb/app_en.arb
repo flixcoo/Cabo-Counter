@@ -83,6 +83,7 @@
   "game": "Game",
   "game_data": "Game Data",
   "game_name": "Game Name",
+  "created_at": "Created At",
   "gamemode": "Gamemode",
   "games": "Games",
   "haptic_feedback": "Haptic Feedback",

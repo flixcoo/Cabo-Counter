@@ -20,6 +20,7 @@ import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
@@ -57,6 +58,13 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// A list of player indices sorted by their scores in ascending order.
   late List<int> sortedPlayerIndices;
+
+  String get formattedDate {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMd(locale)
+        .add_Hm()
+        .format(gameSession.createdAt.toLocal());
+  }
 
   @override
   void initState() {
@@ -126,6 +134,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                             ),
                           ),
+
+                          // Date
+                          ActiveGameListTile(
+                            title: Text(loc.created_at),
+                            trailing: Text(
+                              formattedDate,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
 
@@ -141,9 +160,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ) ...[
                             ActiveGameListTile(
                               title: Row(
+                                spacing: 5,
                                 children: [
                                   getPlacementTextWidget(index),
-                                  const SizedBox(width: 5),
                                   Text(
                                     gameSession
                                         .players[sortedPlayerIndices[index]]
@@ -167,9 +186,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ],
                         ],
                       ),
+
+                      // Rounds
                       ActiveGameListSet(
                         title: loc.rounds,
-                        tilePadding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
                         content: [
                           for (
                             int index = 0;
@@ -199,9 +219,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             ),
                         ],
                       ),
+
+                      // Statistics
                       ActiveGameListSet(
                         title: loc.statistics,
-                        tilePadding: const EdgeInsets.fromLTRB(16, 12, 6, 12),
                         content: [
                           ActiveGameListTile(
                             showChevron: true,
@@ -227,13 +248,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                         ],
                       ),
+
+                      // Settings
                       ActiveGameListSet(
-                        title: loc.game,
+                        title: loc.settings,
                         content: [
                           if (!gameSession.isPointsLimitEnabled)
                             ActiveGameListTile(
                               title: Text(loc.end_game),
-                              showDisabledState: true,
+                              showChevron: true,
                               onTap:
                                   (gameSession.roundNumber > 1 &&
                                       !gameSession.isGameFinished)
@@ -242,6 +265,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             ),
                           ActiveGameListTile(
                             title: Text(loc.delete_game),
+                            showChevron: true,
                             onTap: () {
                               showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
@@ -251,6 +275,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             },
                           ),
                           ActiveGameListTile(
+                            showChevron: true,
                             title: Text(
                               AppLocalizations.of(context)
                                   .new_game_same_settings,
@@ -276,6 +301,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             },
                           ),
                           ActiveGameListTile(
+                            showChevron: true,
                             title: Text(loc.export_game),
                             onTap: () async {
                               final success =

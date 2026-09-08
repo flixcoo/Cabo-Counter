@@ -9,14 +9,12 @@ class ActiveGameListTile extends StatefulWidget {
     required this.title,
     this.trailing,
     this.onTap,
-    this.showDisabledState = false,
     this.showChevron = false,
   });
 
   final Widget title;
   final Widget? trailing;
   final VoidCallback? onTap;
-  final bool showDisabledState;
   final bool showChevron;
 
   @override
@@ -26,10 +24,18 @@ class ActiveGameListTile extends StatefulWidget {
 class _ActiveGameListTileState extends State<ActiveGameListTile> {
   bool isPressed = false;
   bool isDisabled = false;
+  bool showDisabled = false;
+
+  double get effectiveOpacity {
+    if (isPressed) return 0.6;
+    if (showDisabled && isDisabled) return 0.3;
+    return 1.0;
+  }
 
   @override
   Widget build(BuildContext context) {
     isDisabled = widget.onTap == null;
+    showDisabled = widget.trailing == null;
 
     return GestureDetector(
       onTapDown: isDisabled
@@ -48,11 +54,7 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
         }
       },
       child: AnimatedOpacity(
-        opacity: isPressed
-            ? 0.6
-            : (widget.showDisabledState && isDisabled)
-            ? 0.3
-            : 1.0,
+        opacity: effectiveOpacity,
         duration: const Duration(milliseconds: 300),
         child: Container(
           color: CustomTheme.backgroundColor,
@@ -63,7 +65,7 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
-                spacing: 5,
+                spacing: 12,
                 children: [
                   if (widget.trailing != null) widget.trailing!,
                   if (widget.showChevron)

@@ -337,6 +337,12 @@ abstract class AppLocalizations {
   /// **'Spiel beendet'**
   String get end_of_game_title;
 
+  /// No description provided for @created_at.
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt am'**
+  String get created_at;
+
   /// No description provided for @export_data.
   ///
   /// In de, this message translates to:

@@ -160,6 +160,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get end_of_game_title => 'Spiel beendet';
 
   @override
+  String get created_at => 'Erstellt am';
+
+  @override
   String get export_data => 'Spieldaten exportieren';
 
   @override
