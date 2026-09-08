@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,10 +24,7 @@ class _PointsViewState extends State<PointsView> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.point_overview),
-        //previousPageTitle: loc.overview,
-      ),
+      appBar: AppBar(title: Text(loc.point_overview)),
       body: SafeArea(
         bottom: false,
         child: LayoutBuilder(

@@ -51,7 +51,6 @@ class _GraphViewState extends State<GraphView> {
             icon: IconService.share,
           ),
         ],
-        //previousPageTitle: loc.overview,
       ),
       body: SafeArea(
         child: Visibility(

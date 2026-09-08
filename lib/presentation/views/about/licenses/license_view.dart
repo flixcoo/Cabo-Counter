@@ -20,10 +20,7 @@ class LicenseView extends StatelessWidget {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.licenses),
-        //previousPageTitle: loc.about,
-      ),
+      appBar: AppBar(title: Text(loc.licenses)),
       body: SafeArea(
         bottom: false,
         child: ListView.builder(
