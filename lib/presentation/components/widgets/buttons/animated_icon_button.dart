@@ -29,7 +29,8 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
   Widget build(BuildContext context) {
     final bool isEnabled = widget.onPressed != null;
 
-    return Opacity(
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 100),
       opacity: isEnabled ? 1.0 : 0.3,
       child: GestureDetector(
         onTapDown: isEnabled ? (_) => setPressed(true) : null,
