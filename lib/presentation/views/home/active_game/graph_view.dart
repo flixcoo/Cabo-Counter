@@ -24,7 +24,6 @@ class GraphView extends StatefulWidget {
 }
 
 class _GraphViewState extends State<GraphView> {
-  /// List of colors for the graph lines.
   final List<Color> lineColors = [
     CustomTheme.graphColor1,
     CustomTheme.graphColor2,
@@ -32,9 +31,17 @@ class _GraphViewState extends State<GraphView> {
     CustomTheme.graphColor4,
     CustomTheme.graphColor5,
   ];
-
-  /// Global key to access the state of the SfCartesianChart for image capturing.
   final GlobalKey<SfCartesianChartState> _key = GlobalKey();
+  bool hasZoomed = false;
+
+  late final ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+    enablePinching: true,
+    enablePanning: true,
+    enableDoubleTapZooming: true,
+    enableMouseWheelZooming: true,
+    zoomMode: ZoomMode.x,
+    maximumZoomLevel: 0.05,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +53,12 @@ class _GraphViewState extends State<GraphView> {
       appBar: AppBar(
         title: Text(loc.scoring_history),
         actions: [
+          AnimatedIconButton(
+            onPressed: isGraphAvailable && hasZoomed
+                ? () => zoomPanBehavior.reset()
+                : null,
+            icon: IconService.reset,
+          ),
           AnimatedIconButton(
             onPressed: isGraphAvailable ? () => shareImage() : null,
             icon: IconService.share,
@@ -74,22 +87,39 @@ class _GraphViewState extends State<GraphView> {
           child: SfCartesianChart(
             key: _key,
             backgroundColor: CustomTheme.backgroundColor,
-            enableAxisAnimation: true,
+            enableAxisAnimation: false,
+            zoomPanBehavior: zoomPanBehavior,
+            onZoomEnd: (ZoomPanArgs args) {
+              if (args.axis?.name != 'rounds') return;
+              final bool zoomed = args.currentZoomFactor < 1;
+              if (zoomed != hasZoomed) {
+                setState(() => hasZoomed = zoomed);
+              }
+            },
+            onZoomReset: (ZoomPanArgs args) {
+              if (args.axis?.name != 'rounds') return;
+              if (hasZoomed) {
+                setState(() => hasZoomed = false);
+              }
+            },
             legend: const Legend(
               alignment: ChartAlignment.near,
               overflowMode: LegendItemOverflowMode.scroll,
               isVisible: true,
               position: LegendPosition.bottom,
             ),
-            primaryXAxis: const NumericAxis(
+            primaryXAxis: const CategoryAxis(
+              name: 'rounds',
               labelStyle: TextStyle(fontWeight: FontWeight.bold),
               interval: 1,
-              decimalPlaces: 0,
+              labelPlacement: LabelPlacement.onTicks,
             ),
             primaryYAxis: NumericAxis(
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               labelAlignment: LabelAlignment.center,
               labelPosition: ChartDataLabelPosition.inside,
+              anchorRangeToVisiblePoints: false,
+              rangePadding: ChartRangePadding.round,
               interval: 1,
               decimalPlaces: 0,
               axisLabelFormatter: (AxisLabelRenderDetails details) {
@@ -112,7 +142,7 @@ class _GraphViewState extends State<GraphView> {
   /// Returns a list of LineSeries representing the cumulative scores of each player.
   /// Each series contains data points for each round, showing the cumulative score up to that round.
   /// The x-axis represents the round number, and the y-axis represents the cumulative score.
-  List<LineSeries<(int, num), int>> getCumulativeScores() {
+  List<LineSeries<(int, num), String>> getCumulativeScores() {
     final rounds = widget.gameSession.roundList;
     final playerCount = widget.gameSession.players.length;
     final playerNames = widget.gameSession.getPlayerNamesAsList();
@@ -147,10 +177,10 @@ class _GraphViewState extends State<GraphView> {
 
       /// Create a LineSeries for the player
       /// The xValueMapper maps the round number, and the yValueMapper maps the cumulative score.
-      return LineSeries<(int, num), int>(
+      return LineSeries<(int, num), String>(
         name: playerNames[i],
         dataSource: data,
-        xValueMapper: (record, _) => record.$1,
+        xValueMapper: (record, _) => '${record.$1}',
         yValueMapper: (record, _) => record.$2,
         markerSettings: const MarkerSettings(isVisible: true),
         color: lineColors[i],
