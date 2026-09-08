@@ -739,6 +739,12 @@ abstract class AppLocalizations {
   /// **'Statistiken'**
   String get statistics;
 
+  /// No description provided for @submit.
+  ///
+  /// In de, this message translates to:
+  /// **'Bestätigen'**
+  String get submit;
+
   /// No description provided for @support_me.
   ///
   /// In de, this message translates to:

@@ -1,127 +1,226 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
-/// A widget that displays a bottom sheet for selecting a player who has Kamikaze.
-/// The sheet adapts its UI based on the platform (iOS or Android) to provide a native experience.
+/// A bottom sheet for selecting the player who has Kamikaze.
 ///
-/// [gameSession] is the current game session containing the list of players.
-///
-class KamikazeSheet extends StatelessWidget {
+/// - [gameSession]: The current game session.
+class KamikazeSheet extends StatefulWidget {
   final GameSessionController gameSession;
 
   const KamikazeSheet({super.key, required this.gameSession});
 
-  /// Displays a bottom sheet for selecting a player with Kamikaze.
-  /// The sheet adapts its UI based on the platform (iOS or Android).
+  /// Displays the Kamikaze bottom sheet and returns the selected player index,
+  /// or `null` if the sheet was dismissed.
   static Future<int?> show(
     BuildContext context,
     GameSessionController gameSession,
   ) async {
-    if (Platform.isIOS) {
-      return await showCupertinoModalPopup<int?>(
-        context: context,
-        builder: (context) => KamikazeSheet(gameSession: gameSession),
-      );
-    } else {
-      return await showModalBottomSheet<int?>(
-        context: context,
-        isDismissible: true,
-        isScrollControlled: true,
-        showDragHandle: true,
-        backgroundColor: CustomTheme.mainElementColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    return await showModalBottomSheet<int?>(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => KamikazeSheet(gameSession: gameSession),
+    );
+  }
+
+  @override
+  State<KamikazeSheet> createState() => _KamikazeSheetState();
+}
+
+class _KamikazeSheetState extends State<KamikazeSheet> {
+  int? _selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: CustomTheme.mainElementColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: CustomTheme.subtitleColor.withAlpha(120),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Title
+              Column(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.kamikazeColor.withAlpha(30),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      IconService.kamikaze,
+                      color: CustomTheme.kamikazeColor,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    loc.kamikaze,
+                    style: const TextStyle(
+                      color: CustomTheme.textColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    loc.who_has_kamikaze,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: CustomTheme.subtitleColor,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Player
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ...widget.gameSession.players.asMap().entries.map((
+                        entry,
+                      ) {
+                        return _PlayerTile(
+                          name: entry.value.name,
+                          selected: _selectedIndex == entry.key,
+                          onTap: () {
+                            VibrationService.selectionClick();
+                            setState(() => _selectedIndex = entry.key);
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              FloatingAnimatedButton(
+                text: loc.submit,
+                onPressed: _selectedIndex == null
+                    ? null
+                    : () {
+                        VibrationService.mediumImpact();
+                        Navigator.pop(context, _selectedIndex);
+                      },
+              ),
+            ],
+          ),
         ),
-        builder: (context) => KamikazeSheet(gameSession: gameSession),
-      );
-    }
+      ),
+    );
+  }
+}
+
+/// A selectable tile representing a single player in the Kamikaze sheet.
+class _PlayerTile extends StatefulWidget {
+  final String name;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _PlayerTile({
+    required this.name,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  State<_PlayerTile> createState() => _PlayerTileState();
+}
+
+class _PlayerTileState extends State<_PlayerTile> {
+  bool isPressed = false;
+  Timer? timer;
+
+  void _activatePressState() {
+    timer?.cancel();
+    setState(() => isPressed = true);
+
+    timer = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) {
+        setState(() => isPressed = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return _buildIosSheet(context);
-    } else {
-      return _buildAndroidSheet(context);
-    }
-  }
+    final selected = widget.selected;
 
-  /// Builds the iOS-style action sheet for selecting a player with Kamikaze.
-  Widget _buildIosSheet(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final Color backgroundColor = selected
+        ? Color.alphaBlend(
+            CustomTheme.kamikazeColor.withAlpha(45),
+            CustomTheme.tileColor,
+          )
+        : CustomTheme.tileColor;
+    final borderColor = selected
+        ? CustomTheme.kamikazeColor
+        : Colors.transparent;
 
-    return CupertinoActionSheet(
-      title: Text(loc.kamikaze),
-      message: Text(loc.who_has_kamikaze),
-      actions: gameSession.players.asMap().entries.map((entry) {
-        final index = entry.key;
-        final player = entry.value;
-        return CupertinoActionSheetAction(
-          onPressed: () => Navigator.pop(context, index),
+    return GestureDetector(
+      onTapDown: (_) => _activatePressState(),
+      onTapUp: (_) => widget.onTap(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: borderColor, width: 1.5),
+        ),
+        child: Center(
           child: Text(
-            player.name,
-            style: const TextStyle(color: CustomTheme.kamikazeColor),
-          ),
-        );
-      }).toList(),
-      cancelButton: CupertinoActionSheetAction(
-        onPressed: () => Navigator.pop(context, null),
-        isDestructiveAction: true,
-        child: Text(loc.cancel),
-      ),
-    );
-  }
-
-  /// Builds the Android-style bottom sheet for selecting a player with Kamikaze.
-  Widget _buildAndroidSheet(BuildContext context) {
-    final loc = AppLocalizations.of(context);
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            loc.kamikaze,
-            style: Theme.of(context).textTheme.titleLarge,
+            widget.name,
             textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              loc.who_has_kamikaze,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: CustomTheme.textColor,
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const Divider(indent: 40, endIndent: 40),
-          ...gameSession.players.asMap().entries.map((entry) {
-            final index = entry.key;
-            final player = entry.value;
-            return ListTile(
-              title: Text(
-                player.name,
-                style: const TextStyle(
-                  color: CustomTheme.kamikazeColor,
-                  fontSize: 18,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              onTap: () => Navigator.pop(context, index),
-            );
-          }),
-          ListTile(
-            title: Text(
-              loc.cancel,
-              style: const TextStyle(color: CustomTheme.red, fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-            onTap: () => Navigator.pop(context, null),
-          ),
-        ],
+        ),
       ),
     );
   }

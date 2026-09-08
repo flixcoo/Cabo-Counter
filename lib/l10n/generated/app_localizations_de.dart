@@ -374,6 +374,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
+  String get submit => 'Bestätigen';
+
+  @override
   String get support_me => 'Unterstütze mich';
 
   @override

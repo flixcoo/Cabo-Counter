@@ -370,6 +370,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statistics => 'Statistics';
 
   @override
+  String get submit => 'Submit';
+
+  @override
   String get support_me => 'Support Me';
 
   @override
