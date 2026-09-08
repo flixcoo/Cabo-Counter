@@ -4,34 +4,33 @@ import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
-/// A bottom sheet for sorting and filtering the game list.
-///
-/// - [currentSortOption]: The currently selected sorting option.
-/// - [currentSortDirection]: The currently selected sorting direction.
-/// - [showOnlyActiveGames]: Whether only active games are shown.
-/// - [onSortOptionChanged]: Called when the sorting option changes.
-/// - [onSortDirectionChanged]: Called when the sorting direction changes.
-/// - [onShowOnlyActiveGamesChanged]: Called when the active-only filter toggles.
 class SortingSheet extends StatefulWidget {
-  final SortOption currentSortOption;
-  final SortDirection currentSortDirection;
-  final bool showOnlyActiveGames;
-  final ValueChanged<SortOption> onSortOptionChanged;
-  final ValueChanged<SortDirection> onSortDirectionChanged;
-  final VoidCallback onShowOnlyActiveGamesChanged;
-
+  /// A bottom sheet for sorting and filtering the game list.
+  ///
+  /// - [currentSortOption]: The currently selected sorting option.
+  /// - [currentSortDirection]: The currently selected sorting direction.
+  /// - [showOnlyActiveGames]: Whether only active games are shown.
+  /// - [onOptionChanged]: Called when the sorting option changes.
+  /// - [onDirectionChanged]: Called when the sorting direction changes.
+  /// - [onFilterChanged]: Called when the active-only filter toggles.
   const SortingSheet({
     super.key,
     required this.currentSortOption,
     required this.currentSortDirection,
     required this.showOnlyActiveGames,
-    required this.onSortOptionChanged,
-    required this.onSortDirectionChanged,
-    required this.onShowOnlyActiveGamesChanged,
+    required this.onOptionChanged,
+    required this.onDirectionChanged,
+    required this.onFilterChanged,
   });
+
+  final SortOption currentSortOption;
+  final SortDirection currentSortDirection;
+  final bool showOnlyActiveGames;
+  final ValueChanged<SortOption> onOptionChanged;
+  final ValueChanged<SortDirection> onDirectionChanged;
+  final VoidCallback onFilterChanged;
 
   /// Displays the sorting bottom sheet.
   static Future<void> show(
@@ -39,9 +38,9 @@ class SortingSheet extends StatefulWidget {
     required SortOption currentSortOption,
     required SortDirection currentSortDirection,
     required bool showOnlyActiveGames,
-    required ValueChanged<SortOption> onSortOptionChanged,
-    required ValueChanged<SortDirection> onSortDirectionChanged,
-    required VoidCallback onShowOnlyActiveGamesChanged,
+    required ValueChanged<SortOption> onOptionChanged,
+    required ValueChanged<SortDirection> onDirectionChanged,
+    required VoidCallback onFilterChanged,
   }) {
     return showModalBottomSheet<void>(
       context: context,
@@ -53,9 +52,9 @@ class SortingSheet extends StatefulWidget {
         currentSortOption: currentSortOption,
         currentSortDirection: currentSortDirection,
         showOnlyActiveGames: showOnlyActiveGames,
-        onSortOptionChanged: onSortOptionChanged,
-        onSortDirectionChanged: onSortDirectionChanged,
-        onShowOnlyActiveGamesChanged: onShowOnlyActiveGamesChanged,
+        onOptionChanged: onOptionChanged,
+        onDirectionChanged: onDirectionChanged,
+        onFilterChanged: onFilterChanged,
       ),
     );
   }
@@ -68,26 +67,6 @@ class _SortingSheetState extends State<SortingSheet> {
   late SortOption sortOption = widget.currentSortOption;
   late SortDirection sortDirection = widget.currentSortDirection;
   late bool showOnlyActiveGames = widget.showOnlyActiveGames;
-
-  void selectOption(SortOption option) {
-    if (option == sortOption) return;
-    VibrationService.selectionClick();
-    setState(() => sortOption = option);
-    widget.onSortOptionChanged(option);
-  }
-
-  void selectDirection(SortDirection direction) {
-    if (direction == sortDirection) return;
-    VibrationService.selectionClick();
-    setState(() => sortDirection = direction);
-    widget.onSortDirectionChanged(direction);
-  }
-
-  void toggleActiveGames() {
-    VibrationService.selectionClick();
-    setState(() => showOnlyActiveGames = !showOnlyActiveGames);
-    widget.onShowOnlyActiveGamesChanged();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +95,7 @@ class _SortingSheetState extends State<SortingSheet> {
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
+
               Flexible(
                 child: SingleChildScrollView(
                   child: Column(
@@ -130,6 +110,7 @@ class _SortingSheetState extends State<SortingSheet> {
                           Row(
                             spacing: 10,
                             children: [
+                              // Sort by date
                               Expanded(
                                 child: SelectableTile(
                                   icon: IconService.sort_by_date,
@@ -141,6 +122,8 @@ class _SortingSheetState extends State<SortingSheet> {
                                   ),
                                 ),
                               ),
+
+                              // Sort by name
                               Expanded(
                                 child: SelectableTile(
                                   icon: IconService.sort_by_name,
@@ -164,6 +147,7 @@ class _SortingSheetState extends State<SortingSheet> {
                           Row(
                             spacing: 10,
                             children: [
+                              // Sort descending
                               Expanded(
                                 child: SelectableTile(
                                   icon: IconService.sort_desc,
@@ -177,6 +161,8 @@ class _SortingSheetState extends State<SortingSheet> {
                                   ),
                                 ),
                               ),
+
+                              // Sort ascending
                               Expanded(
                                 child: SelectableTile(
                                   icon: IconService.sort_asc,
@@ -215,6 +201,8 @@ class _SortingSheetState extends State<SortingSheet> {
                   ),
                 ),
               ),
+
+              // Submit button
               FloatingAnimatedButton(
                 text: loc.submit,
                 onPressed: () => {
@@ -231,13 +219,13 @@ class _SortingSheetState extends State<SortingSheet> {
 
   void propagateChangedOptions() {
     if (showOnlyActiveGames != widget.showOnlyActiveGames) {
-      toggleActiveGames();
+      widget.onFilterChanged();
     }
     if (sortDirection != widget.currentSortDirection) {
-      selectDirection(widget.currentSortDirection);
+      widget.onDirectionChanged(sortDirection);
     }
     if (sortOption != widget.currentSortOption) {
-      selectOption(widget.currentSortOption);
+      widget.onOptionChanged(sortOption);
     }
   }
 

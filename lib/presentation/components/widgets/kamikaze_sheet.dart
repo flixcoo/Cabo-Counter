@@ -36,7 +36,7 @@ class KamikazeSheet extends StatefulWidget {
 }
 
 class _KamikazeSheetState extends State<KamikazeSheet> {
-  int? _selectedIndex;
+  int? selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +53,7 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           child: Column(
+            spacing: 16,
             mainAxisSize: MainAxisSize.min,
             children: [
               // Drag handle
@@ -64,14 +65,16 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
-              const SizedBox(height: 16),
 
               // Title
               Column(
+                spacing: 4,
                 children: [
+                  // Icon
                   Container(
                     width: 56,
                     height: 56,
+                    margin: const EdgeInsets.only(bottom: 6),
                     decoration: BoxDecoration(
                       color: CustomTheme.kamikazeColor.withAlpha(30),
                       shape: BoxShape.circle,
@@ -82,7 +85,8 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                       size: 28,
                     ),
                   ),
-                  const SizedBox(height: 12),
+
+                  // Title
                   Text(
                     loc.kamikaze,
                     style: const TextStyle(
@@ -91,7 +95,8 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+
+                  // Description
                   Text(
                     loc.who_has_kamikaze,
                     textAlign: TextAlign.center,
@@ -102,7 +107,6 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
 
               // Player
               Flexible(
@@ -117,10 +121,10 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                           title: entry.value.name,
                           selectionColor: CustomTheme.kamikazeColor,
                           selectedTintAlpha: 45,
-                          selected: _selectedIndex == entry.key,
+                          selected: selectedIndex == entry.key,
                           onTap: () {
                             VibrationService.selectionClick();
-                            setState(() => _selectedIndex = entry.key);
+                            setState(() => selectedIndex = entry.key);
                           },
                         );
                       }),
@@ -128,14 +132,15 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+
+              // Submit
               FloatingAnimatedButton(
                 text: loc.submit,
-                onPressed: _selectedIndex == null
+                onPressed: selectedIndex == null
                     ? null
                     : () {
                         VibrationService.mediumImpact();
-                        Navigator.pop(context, _selectedIndex);
+                        Navigator.of(context).pop(selectedIndex);
                       },
               ),
             ],
