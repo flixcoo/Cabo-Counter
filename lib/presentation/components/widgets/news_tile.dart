@@ -1,5 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/NewsItem.dart';
+import 'package:cabo_counter/data/dto/news_item.dart';
 import 'package:flutter/material.dart';
 
 class NewsTile extends StatelessWidget {

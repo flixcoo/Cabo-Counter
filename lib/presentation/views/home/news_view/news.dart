@@ -1,15 +1,8 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/data/dto/news_item.dart';
 import 'package:flutter_sficon/flutter_sficon.dart';
 
-class NewsItem {
-  final String title;
-  final String text;
-  final SFIcon icon;
-
-  NewsItem({required this.title, required this.text, required this.icon});
-}
-
-final NewsItems = {
+final localizedNews = {
   'de': [
     NewsItem(
       title: 'Neues Design',
@@ -43,6 +36,15 @@ final NewsItems = {
       text: 'Zu Beginn der Runde ist der/die Spieler:in, die Cabo angesagt hat, nun nicht mehr automatisch ausgewählt. Zudem kannst du die Auswahl jederzeit wieder aufheben.',
       icon: const SFIcon(
         SFIcons.sf_person_fill,
+        fontSize: 28,
+        color: CustomTheme.primaryColor,
+      ),
+    ),
+    NewsItem(
+      title: 'Zoomen im Graphen',
+      text: 'Es ist jetzt möglich im Graphen des Spielverlaufs zu zoomen und herumzunavigieren.',
+      icon: const SFIcon(
+        SFIcons.sf_graph_2d,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
@@ -81,6 +83,15 @@ final NewsItems = {
       text: 'At the beginning of the round, the player who called Cabo is no longer automatically selected. You can also deselect the choice at any time.',
       icon: const SFIcon(
         SFIcons.sf_person_fill,
+        fontSize: 28,
+        color: CustomTheme.primaryColor,
+      ),
+    ),
+    NewsItem(
+      title: 'Zoom in Graph',
+      text: 'It is now possible to zoom and navigate around the graph of the game progress.',
+      icon: const SFIcon(
+        SFIcons.sf_graph_2d,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
