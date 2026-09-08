@@ -143,14 +143,9 @@ class _CreateGameViewState extends State<CreateGameView> {
 
                           // Mode selection
                           ActiveGameListTile(
+                            showChevron: true,
                             title: Text(loc.mode),
-                            trailing: Row(
-                              children: [
-                                getDisplayedGameMode(),
-                                const SizedBox(width: 5),
-                                IconService.chevron,
-                              ],
-                            ),
+                            trailing: getDisplayedGameMode(),
                             onTap: () async {
                               if (context.mounted) {
                                 final result = await Navigator.push(

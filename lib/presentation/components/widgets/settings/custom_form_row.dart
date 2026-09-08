@@ -60,7 +60,11 @@ class _CustomFormRowState extends State<CustomFormRow> {
                   widget.suffixWidget ?? const SizedBox.shrink(),
                   if (widget.showChevron) ...[
                     const SizedBox(width: 10),
-                    IconService.chevron,
+                    Icon(
+                      IconService.chevron,
+                      color: CustomTheme.hintTextColor,
+                      size: 17,
+                    ),
                   ],
                 ],
               ),

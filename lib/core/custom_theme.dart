@@ -1,3 +1,5 @@
+import 'package:cabo_counter/presentation/components/widgets/buttons/haptic_back_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/haptic_close_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomTheme {
@@ -84,5 +86,43 @@ class CustomTheme {
     fontSize: 60,
     color: white,
     fontWeight: FontWeight.bold,
+  );
+
+  // ==================== Component Themes ====================
+  static const AppBarTheme appBarTheme = AppBarTheme(
+    backgroundColor: backgroundColor,
+    foregroundColor: textColor,
+    elevation: 0,
+    scrolledUnderElevation: 0,
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+      color: textColor,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis,
+    ),
+    iconTheme: IconThemeData(color: primaryColor),
+  );
+
+  static final ActionIconThemeData actionIconTheme = ActionIconThemeData(
+    backButtonIconBuilder: (context) => const HapticBackButton(),
+    closeButtonIconBuilder: (context) => const HapticCloseButton(),
+  );
+
+  static const IconButtonThemeData iconButtonTheme = IconButtonThemeData(
+    style: ButtonStyle(
+      iconColor: WidgetStatePropertyAll(CustomTheme.primaryColor),
+    ),
+  );
+
+  static const TextButtonThemeData textButtonTheme = TextButtonThemeData(
+    style: ButtonStyle(
+      textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 17)),
+      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 12)),
+    ),
+  );
+
+  static const TextTheme textTheme = TextTheme(
+    bodyMedium: TextStyle(fontSize: 16),
   );
 }

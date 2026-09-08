@@ -16,7 +16,6 @@ import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
-import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
@@ -178,8 +177,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             index++
                           )
                             ActiveGameListTile(
-                              padding: const EdgeInsets.fromLTRB(20, 6, 8, 6),
                               title: Text('${loc.round} ${index + 1}'),
+                              showChevron: true,
                               trailing: Row(
                                 children: [
                                   index + 1 != gameSession.roundNumber ||
@@ -192,8 +191,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                           '\u{23F3}',
                                           style: TextStyle(fontSize: 22),
                                         ),
-                                  const SizedBox(width: 10),
-                                  IconService.chevron,
                                 ],
                               ),
                               onTap: () async {
@@ -207,7 +204,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         tilePadding: const EdgeInsets.fromLTRB(16, 12, 6, 12),
                         content: [
                           ActiveGameListTile(
-                            trailing: IconService.chevron,
+                            showChevron: true,
                             title: Text(loc.scoring_history),
                             onTap: () => Navigator.push(
                               context,
@@ -218,7 +215,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             ),
                           ),
                           ActiveGameListTile(
-                            trailing: IconService.chevron,
+                            showChevron: true,
                             title: Text(loc.point_overview),
                             onTap: () => Navigator.push(
                               context,

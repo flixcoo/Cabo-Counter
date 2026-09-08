@@ -63,11 +63,12 @@ class _CaboCounterAppState extends State<CaboCounterApp>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateTitle: (context) => AppLocalizations.of(context).app_name,
+      debugShowCheckedModeBanner: false,
+
+      // Localizations
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('de'), // German
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       localeResolutionCallback: (locale, supportedLocales) {
         for (final supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale?.languageCode) {
@@ -76,6 +77,9 @@ class _CaboCounterAppState extends State<CaboCounterApp>
         }
         return supportedLocales.first;
       },
+
+      // Theme
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
         brightness: Brightness.dark,
 
@@ -94,37 +98,12 @@ class _CaboCounterAppState extends State<CaboCounterApp>
           onSurface: CustomTheme.textColor,
         ),
 
-        // icon button
-        iconButtonTheme: const IconButtonThemeData(
-          style: ButtonStyle(
-            iconColor: WidgetStatePropertyAll(CustomTheme.primaryColor),
-          ),
-        ),
-
-        // text button
-        textButtonTheme: const TextButtonThemeData(
-          style: ButtonStyle(
-            textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 17)),
-            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 12)),
-          ),
-        ),
-
-        // texts
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
-
-        // app bar
-        appBarTheme: const AppBarTheme(
-          backgroundColor: CustomTheme.backgroundColor,
-          foregroundColor: CustomTheme.textColor,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            color: CustomTheme.textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        // Component themes
+        iconButtonTheme: CustomTheme.iconButtonTheme,
+        actionIconTheme: CustomTheme.actionIconTheme,
+        textButtonTheme: CustomTheme.textButtonTheme,
+        textTheme: CustomTheme.textTheme,
+        appBarTheme: CustomTheme.appBarTheme,
 
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: {
@@ -133,8 +112,6 @@ class _CaboCounterAppState extends State<CaboCounterApp>
           },
         ),
       ),
-      debugShowCheckedModeBanner: false,
-      title: 'Cabo Counter',
       home: const CustomNavigationBar(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -7,16 +8,16 @@ class ActiveGameListTile extends StatefulWidget {
     super.key,
     required this.title,
     this.trailing,
-    this.padding,
     this.onTap,
     this.showDisabledState = false,
+    this.showChevron = false,
   });
 
   final Widget title;
   final Widget? trailing;
-  final EdgeInsets? padding;
   final VoidCallback? onTap;
   final bool showDisabledState;
+  final bool showChevron;
 
   @override
   State<ActiveGameListTile> createState() => _ActiveGameListTileState();
@@ -59,7 +60,19 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               widget.title,
-              widget.trailing ?? const SizedBox.shrink(),
+              Row(
+                spacing: widget.trailing is Text ? 5 : 10,
+                children: [
+                  if (widget.trailing != null) widget.trailing!,
+                  if (widget.showChevron) ...[
+                    Icon(
+                      IconService.chevron,
+                      size: 17,
+                      color: CustomTheme.hintTextColor,
+                    ),
+                  ],
+                ],
+              ),
             ],
           ),
         ),

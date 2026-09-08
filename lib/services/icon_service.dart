@@ -23,9 +23,14 @@ abstract class IconService {
   static IconData get chart =>
       Platform.isIOS ? CupertinoIcons.chart_bar_alt_fill : Icons.bar_chart;
 
-  static Widget get chevron => Platform.isIOS
-      ? const CupertinoListTileChevron()
-      : const Icon(Icons.chevron_right_sharp, size: 24, color: Colors.grey);
+  static IconData get chevron =>
+      Platform.isIOS ? CupertinoIcons.right_chevron : Icons.chevron_right;
+
+  static IconData get back =>
+      Platform.isIOS ? CupertinoIcons.chevron_left : Icons.chevron_left;
+
+  static IconData get close =>
+      Platform.isIOS ? CupertinoIcons.xmark : Icons.close;
 
   /// Icon for deleting.
   static IconData get delete =>

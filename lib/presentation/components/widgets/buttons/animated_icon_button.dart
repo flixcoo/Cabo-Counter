@@ -46,10 +46,10 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+            padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Icon(widget.icon, size: 28, color: widget.color)],
+              children: [Icon(widget.icon, color: widget.color)],
             ),
           ),
         ),
