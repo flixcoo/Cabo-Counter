@@ -47,11 +47,9 @@ class _FloatingAnimatedButtonState extends State<FloatingAnimatedButton>
         },
         onTapUp: (_) async {
           await animationController.reverse();
-          if (mounted) {
-            if (enabled) {
-              VibrationService.selectionClick();
-              widget.onPressed!();
-            }
+          if (mounted && enabled) {
+            VibrationService.selectionClick();
+            widget.onPressed!();
           }
         },
         onTapCancel: () {
