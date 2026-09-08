@@ -61,30 +61,10 @@ class CustomTheme {
 
   /* ===== Text Styles ===== */
 
-  /// Text style for mode titles, typically used in headers or section titles.
-  static const TextStyle modeTitle = TextStyle(
-    color: primaryColor,
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  );
-
-  /// Default text style for mode descriptions.
-  static const TextStyle modeDescription = TextStyle(
-    color: Colors.grey,
-    fontSize: 14,
-  );
-
   /// Text style for titles of sections.
   static const TextStyle rowTitle = TextStyle(
     fontSize: 20,
     color: primaryColor,
-    fontWeight: FontWeight.bold,
-  );
-
-  /// Text style for round titles, used for prominent display of the round title
-  static const TextStyle roundTitle = TextStyle(
-    fontSize: 60,
-    color: white,
     fontWeight: FontWeight.bold,
   );
 

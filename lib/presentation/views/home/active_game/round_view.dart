@@ -122,7 +122,11 @@ class _RoundViewState extends State<RoundView> {
                     const SizedBox(height: 40),
                     Text(
                       '${loc.round} ${widget.roundNumber}',
-                      style: CustomTheme.roundTitle,
+                      style: const TextStyle(
+                        fontSize: 60,
+                        color: CustomTheme.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(

@@ -18,6 +18,13 @@ class ModeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color backgroundColor = selected
+        ? Color.alphaBlend(
+            CustomTheme.primaryColor.withAlpha(25),
+            CustomTheme.mainElementColor,
+          )
+        : CustomTheme.tileColor;
+
     return GestureDetector(
       onTap: () {
         if (onTap != null) {
@@ -30,7 +37,7 @@ class ModeTile extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
-          color: CustomTheme.mainElementColor,
+          color: backgroundColor,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(
             color: selected ? CustomTheme.primaryColor : Colors.transparent,
@@ -38,11 +45,24 @@ class ModeTile extends StatelessWidget {
           ),
         ),
         child: Column(
+          spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: CustomTheme.modeTitle),
-            const SizedBox(height: 10),
-            Text(description, style: CustomTheme.modeDescription),
+            // Title
+            Text(
+              title,
+              style: const TextStyle(
+                color: CustomTheme.primaryColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            // Description
+            Text(
+              description,
+              style: const TextStyle(color: Colors.grey, fontSize: 14),
+            ),
           ],
         ),
       ),
