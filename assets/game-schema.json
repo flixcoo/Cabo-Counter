@@ -72,7 +72,7 @@
               "type": "integer"
             },
             "kamikazePlayerIndex": {
-              "type": "null"
+              "type": ["integer", "null"]
             },
             "scores": {
               "type": "array",

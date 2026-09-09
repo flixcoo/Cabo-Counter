@@ -140,6 +140,7 @@ class DataTransferService {
       final schema = JsonSchema.create(json.decode(schemaString));
       final jsonData = json.decode(jsonString);
       final result = schema.validate(jsonData);
+      print(result);
 
       if (result.isValid) {
         return true;

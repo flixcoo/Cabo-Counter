@@ -87,9 +87,17 @@ void main() {
           totalScore: 5,
         ),
       ],
+      roundList: [
+        Round(
+          gameSessionId: 'test-game-id',
+          caboPlayerIndex: 0,
+          kamikazePlayerIndex: 0,
+          scores: [0, 0, 0],
+          scoreUpdates: [0, 50, 50],
+        ),
+      ],
       pointLimit: 100,
       caboPenalty: 5,
-
       isGameFinished: true,
     );
   });
