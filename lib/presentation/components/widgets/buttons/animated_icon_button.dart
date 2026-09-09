@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,8 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = widget.onPressed != null;
+    final bool applyPadding =
+        widget.icon != IconService.back && widget.icon != IconService.close;
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 100),
@@ -47,10 +50,12 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: applyPadding
+                ? const EdgeInsets.symmetric(horizontal: 12.0)
+                : null,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Icon(widget.icon, size: 24, color: widget.color)],
+              children: [Icon(widget.icon, size: 28, color: widget.color)],
             ),
           ),
         ),

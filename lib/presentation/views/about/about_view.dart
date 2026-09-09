@@ -2,7 +2,7 @@ import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_section.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/license_view.dart';
@@ -100,6 +100,7 @@ class AboutView extends StatelessWidget {
                   ),
                 ],
               ),
+
               Column(
                 children: [
                   const SizedBox(height: 10),
@@ -110,20 +111,25 @@ class AboutView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      OpacityButton.icon(
+                      // Website
+                      AnimatedIconButton(
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
                         icon: IconService.website,
                         color: CustomTheme.primaryColor,
                       ),
-                      OpacityButton.icon(
+
+                      // Contact
+                      AnimatedIconButton(
                         onPressed: () => launchUrl(
                           Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
                         ),
                         icon: IconService.e_mail,
                         color: CustomTheme.primaryColor,
                       ),
-                      OpacityButton.icon(
+
+                      // Github
+                      AnimatedIconButton(
                         onPressed: () =>
                             launchUrl(Uri.parse(Constants.GITHUB_LINK)),
                         icon: IconService.brand_github,
