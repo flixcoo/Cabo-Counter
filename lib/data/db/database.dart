@@ -2,6 +2,7 @@ import 'package:cabo_counter/data/dao/game_session_dao.dart';
 import 'package:cabo_counter/data/dao/player_dao.dart';
 import 'package:cabo_counter/data/dao/round_scores_dao.dart';
 import 'package:cabo_counter/data/dao/rounds_dao.dart';
+import 'package:cabo_counter/data/db/migrations/database_migration.dart';
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:cabo_counter/data/db/tables/player_table.dart';
 import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
@@ -23,53 +24,7 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 2;
 
   @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      onUpgrade: (migrator, from, to) async {
-        if (from < 3) {
-          // Rename GameSessionTable.gameId -> id
-          await customStatement(
-            'ALTER TABLE game_session_table RENAME COLUMN game_id TO id',
-          );
-
-          // Deleting isPointLimitEnabled
-          await migrator.alterTable(
-            TableMigration(
-              gameSessionTable,
-              columnTransformer: {
-                gameSessionTable.pointLimit: const CustomExpression<int>(
-                  'CASE WHEN is_points_limit_enabled THEN point_limit ELSE NULL END',
-                ),
-              },
-            ),
-          );
-
-          // Rename PlayerTable.playerId -> id
-          await customStatement(
-            'ALTER TABLE player_table RENAME COLUMN player_id TO id',
-          );
-
-          // Rename PlayerTable.gameId -> gameSessionId
-          await customStatement(
-            'ALTER TABLE player_table RENAME COLUMN game_id TO game_session_id',
-          );
-
-          // Rename RoundsTable.roundId -> id
-          await customStatement(
-            'ALTER TABLE rounds_table RENAME COLUMN round_id TO id',
-          );
-
-          // Rename RoundsTable.gameId -> gameSessionId
-          await customStatement(
-            'ALTER TABLE rounds_table RENAME COLUMN game_id TO game_session_id',
-          );
-        }
-      },
-      beforeOpen: (details) async {
-        await customStatement('PRAGMA foreign_keys = ON');
-      },
-    );
-  }
+  MigrationStrategy get migration => migrationStrategy(this);
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
