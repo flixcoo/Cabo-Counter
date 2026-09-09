@@ -61,7 +61,11 @@ class OpacityButton extends StatefulWidget {
       padding: padding,
       isText: false,
       isIcon: true,
-      child: AppIcon(icon, size: size, color: color ?? CustomTheme.primaryColor),
+      child: AppIcon(
+        icon,
+        size: size,
+        color: color ?? CustomTheme.primaryColor,
+      ),
     );
   }
 
@@ -131,6 +135,9 @@ class _OpacityButtonState extends State<OpacityButton> {
           VibrationService.selectionClick(),
           widget.onPressed?.call(),
         },
+        onTapCancel: !isDisabled
+            ? () => setState(() => isPressed = false)
+            : null,
         child: Stack(
           children: [
             Padding(
