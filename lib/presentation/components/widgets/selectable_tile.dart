@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
 /// A simple tile with a selection animation
@@ -41,17 +42,6 @@ class _SelectableTileState extends State<SelectableTile> {
   bool isPressed = false;
   Timer? timer;
 
-  void _activatePressState() {
-    timer?.cancel();
-    setState(() => isPressed = true);
-
-    timer = Timer(const Duration(milliseconds: 250), () {
-      if (mounted) {
-        setState(() => isPressed = false);
-      }
-    });
-  }
-
   @override
   void dispose() {
     timer?.cancel();
@@ -71,8 +61,7 @@ class _SelectableTileState extends State<SelectableTile> {
         : CustomTheme.tileColor;
 
     return GestureDetector(
-      onTapDown: (_) => _activatePressState(),
-      onTapUp: (_) => widget.onTap?.call(),
+      onTap: () => {VibrationService.selectionClick(), widget.onTap?.call()},
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 120),
         margin: const EdgeInsets.symmetric(vertical: 5),

@@ -1,5 +1,6 @@
 import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class HapticBackButton extends StatefulWidget {
@@ -15,6 +16,7 @@ class _HapticBackButtonState extends State<HapticBackButton> {
     return AnimatedIconButton(
       icon: IconService.back,
       onPressed: () async {
+        VibrationService.selectionClick();
         Navigator.of(context).maybePop();
       },
     );
