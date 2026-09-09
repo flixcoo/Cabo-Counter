@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 /// The whole control is painted in [borderColor]; the individual segments are
 /// laid on top with a [spacing] gap between them, so the transitions between
 /// segments are completely filled with color.
-class CustomSegmentetControl<T extends Object> extends StatelessWidget {
-  const CustomSegmentetControl({
+class CustomSegmentedControl<T extends Object> extends StatelessWidget {
+  const CustomSegmentedControl({
     super.key,
     required this.children,
     required this.groupValue,
