@@ -218,8 +218,7 @@ class GameSessionController extends ChangeNotifier {
   /// _subtractPointsForReachingHundred() method to subtract 50 points
   /// for every time a player reached 100 points in the game.
   /// It then checks if any player has exceeded 100 points. If so, it sets
-  /// isGameFinished to true and calls the _setWinner() method to determine
-  /// the winner.
+  /// isGameFinished to true and triggers the end-of-game side effects
   /// It returns a list of players indices who reached 100 points (bonus player)
   /// in the current round for the [RoundView] to show a popup
   List<int> updatePoints() {
@@ -234,7 +233,7 @@ class GameSessionController extends ChangeNotifier {
         if (players[i].totalScore > pointLimit) {
           session.isGameFinished = true;
           limitExceeded = true;
-          setWinner();
+          _onGameFinished();
         }
       }
       if (!limitExceeded) {
@@ -295,35 +294,18 @@ class GameSessionController extends ChangeNotifier {
     return bonusPlayers;
   }
 
-  /// Determines the winner of the game session.
-  /// It iterates through the player scores and finds the player
-  /// with the lowest score.
-  void setWinner() {
-    int minScore = getPlayerScoresAsList().reduce((a, b) => a < b ? a : b);
-    List<String> lowestPlayers = [];
-    for (int i = 0; i < players.length; i++) {
-      if (players[i].totalScore == minScore) {
-        lowestPlayers.add(players[i].name);
-      }
-    }
-    if (lowestPlayers.length > 1) {
-      session.winner =
-          '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
-    } else {
-      session.winner = lowestPlayers.first;
-    }
-    _enqueueWrite(
-      () => db.gameSessionDao.setWinner(gameId: id, winner: winner),
-    );
+  /// Handles side effects when the game has just finished: gives haptic
+  /// feedback and notifies listeners. The winner itself is derived from the
+  /// players' scores, so nothing needs to be computed or persisted here.
+  void _onGameFinished() {
     VibrationService.successNotification();
     notifyListeners();
   }
 
   /// Ends the game if it is in unlimited mode.
-  /// It sets isGameFinished to true and calls the setWinner() method to
-  /// determine the winner.
+  /// It sets isGameFinished to true; the winner is derived automatically.
   void endGame() {
     session.isGameFinished = true;
-    setWinner();
+    _onGameFinished();
   }
 }

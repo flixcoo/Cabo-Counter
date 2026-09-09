@@ -10,7 +10,6 @@ import 'package:uuid/uuid.dart';
 /// point limit of 101 points or not.
 /// [players] is a string list of player names.
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
-/// [winner] is the name of the player who won the game.
 class GameSession {
   final String id;
   final DateTime createdAt;
@@ -20,7 +19,6 @@ class GameSession {
   final int caboPenalty;
   final bool isPointsLimitEnabled;
   bool isGameFinished;
-  String winner;
   List<Round> roundList;
 
   GameSession({
@@ -32,12 +30,27 @@ class GameSession {
     required this.caboPenalty,
     required this.isPointsLimitEnabled,
     this.isGameFinished = false,
-    this.winner = '',
     List<Round>? roundList,
   }) : id = gameId ?? const Uuid().v4(),
        roundList = roundList ?? [];
 
   int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
+
+  /// The players with the loweste score when the match is finished.
+  String get winner {
+    if (!isGameFinished || players.isEmpty) return '';
+    final int minScore = players
+        .map((p) => p.totalScore)
+        .reduce((a, b) => a < b ? a : b);
+    final lowestPlayers = players
+        .where((p) => p.totalScore == minScore)
+        .map((p) => p.name)
+        .toList();
+    if (lowestPlayers.length > 1) {
+      return '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    }
+    return lowestPlayers.first;
+  }
 
   @override
   toString() {
@@ -56,7 +69,6 @@ class GameSession {
     'caboPenalty': caboPenalty,
     'isPointsLimitEnabled': isPointsLimitEnabled,
     'isGameFinished': isGameFinished,
-    'winner': winner,
     'roundList': roundList.map((e) => e.toJson()).toList(),
   };
 
@@ -72,7 +84,6 @@ class GameSession {
       caboPenalty = json['caboPenalty'],
       isPointsLimitEnabled = json['isPointsLimitEnabled'],
       isGameFinished = json['isGameFinished'],
-      winner = json['winner'],
       roundList = (json['roundList'] as List)
           .map((e) => Round.fromJson(e))
           .toList();

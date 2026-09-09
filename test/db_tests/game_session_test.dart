@@ -301,30 +301,6 @@ void main() {
       expect(updatedSession!.isGameFinished, isFalse);
     });
 
-    test('Updating winner works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao.setWinner(
-        gameId: gameSession.id,
-        winner: 'Player 1',
-      );
-      var updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
-      );
-
-      expect(updatedSession, isNotNull);
-      expect(updatedSession!.winner, 'Player 1');
-
-      await database.gameSessionDao.setWinner(
-        gameId: gameSession.id,
-        winner: 'Player 2, Player 3',
-      );
-      updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
-      );
-      expect(updatedSession, isNotNull);
-      expect(updatedSession!.winner, 'Player 2, Player 3');
-    });
-
     test('Ending a game works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       int initialRoundNumber = gameSession.roundNumber;

@@ -89,15 +89,6 @@ class $GameSessionTableTable extends GameSessionTable
       'CHECK ("is_game_finished" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _winnerMeta = const VerificationMeta('winner');
-  @override
-  late final GeneratedColumn<String> winner = GeneratedColumn<String>(
-    'winner',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     gameId,
@@ -107,7 +98,6 @@ class $GameSessionTableTable extends GameSessionTable
     caboPenalty,
     isPointsLimitEnabled,
     isGameFinished,
-    winner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -186,12 +176,6 @@ class $GameSessionTableTable extends GameSessionTable
     } else if (isInserting) {
       context.missing(_isGameFinishedMeta);
     }
-    if (data.containsKey('winner')) {
-      context.handle(
-        _winnerMeta,
-        winner.isAcceptableOrUnknown(data['winner']!, _winnerMeta),
-      );
-    }
     return context;
   }
 
@@ -229,10 +213,6 @@ class $GameSessionTableTable extends GameSessionTable
         DriftSqlType.bool,
         data['${effectivePrefix}is_game_finished'],
       )!,
-      winner: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}winner'],
-      ),
     );
   }
 
@@ -251,7 +231,6 @@ class GameSessionTableData extends DataClass
   final int caboPenalty;
   final bool isPointsLimitEnabled;
   final bool isGameFinished;
-  final String? winner;
   const GameSessionTableData({
     required this.gameId,
     required this.createdAt,
@@ -260,7 +239,6 @@ class GameSessionTableData extends DataClass
     required this.caboPenalty,
     required this.isPointsLimitEnabled,
     required this.isGameFinished,
-    this.winner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -272,9 +250,6 @@ class GameSessionTableData extends DataClass
     map['cabo_penalty'] = Variable<int>(caboPenalty);
     map['is_points_limit_enabled'] = Variable<bool>(isPointsLimitEnabled);
     map['is_game_finished'] = Variable<bool>(isGameFinished);
-    if (!nullToAbsent || winner != null) {
-      map['winner'] = Variable<String>(winner);
-    }
     return map;
   }
 
@@ -287,9 +262,6 @@ class GameSessionTableData extends DataClass
       caboPenalty: Value(caboPenalty),
       isPointsLimitEnabled: Value(isPointsLimitEnabled),
       isGameFinished: Value(isGameFinished),
-      winner: winner == null && nullToAbsent
-          ? const Value.absent()
-          : Value(winner),
     );
   }
 
@@ -308,7 +280,6 @@ class GameSessionTableData extends DataClass
         json['isPointsLimitEnabled'],
       ),
       isGameFinished: serializer.fromJson<bool>(json['isGameFinished']),
-      winner: serializer.fromJson<String?>(json['winner']),
     );
   }
   @override
@@ -322,7 +293,6 @@ class GameSessionTableData extends DataClass
       'caboPenalty': serializer.toJson<int>(caboPenalty),
       'isPointsLimitEnabled': serializer.toJson<bool>(isPointsLimitEnabled),
       'isGameFinished': serializer.toJson<bool>(isGameFinished),
-      'winner': serializer.toJson<String?>(winner),
     };
   }
 
@@ -334,7 +304,6 @@ class GameSessionTableData extends DataClass
     int? caboPenalty,
     bool? isPointsLimitEnabled,
     bool? isGameFinished,
-    Value<String?> winner = const Value.absent(),
   }) => GameSessionTableData(
     gameId: gameId ?? this.gameId,
     createdAt: createdAt ?? this.createdAt,
@@ -343,7 +312,6 @@ class GameSessionTableData extends DataClass
     caboPenalty: caboPenalty ?? this.caboPenalty,
     isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
     isGameFinished: isGameFinished ?? this.isGameFinished,
-    winner: winner.present ? winner.value : this.winner,
   );
   GameSessionTableData copyWithCompanion(GameSessionTableCompanion data) {
     return GameSessionTableData(
@@ -362,7 +330,6 @@ class GameSessionTableData extends DataClass
       isGameFinished: data.isGameFinished.present
           ? data.isGameFinished.value
           : this.isGameFinished,
-      winner: data.winner.present ? data.winner.value : this.winner,
     );
   }
 
@@ -375,8 +342,7 @@ class GameSessionTableData extends DataClass
           ..write('pointLimit: $pointLimit, ')
           ..write('caboPenalty: $caboPenalty, ')
           ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
-          ..write('isGameFinished: $isGameFinished, ')
-          ..write('winner: $winner')
+          ..write('isGameFinished: $isGameFinished')
           ..write(')'))
         .toString();
   }
@@ -390,7 +356,6 @@ class GameSessionTableData extends DataClass
     caboPenalty,
     isPointsLimitEnabled,
     isGameFinished,
-    winner,
   );
   @override
   bool operator ==(Object other) =>
@@ -402,8 +367,7 @@ class GameSessionTableData extends DataClass
           other.pointLimit == this.pointLimit &&
           other.caboPenalty == this.caboPenalty &&
           other.isPointsLimitEnabled == this.isPointsLimitEnabled &&
-          other.isGameFinished == this.isGameFinished &&
-          other.winner == this.winner);
+          other.isGameFinished == this.isGameFinished);
 }
 
 class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
@@ -414,7 +378,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
   final Value<int> caboPenalty;
   final Value<bool> isPointsLimitEnabled;
   final Value<bool> isGameFinished;
-  final Value<String?> winner;
   final Value<int> rowid;
   const GameSessionTableCompanion({
     this.gameId = const Value.absent(),
@@ -424,7 +387,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     this.caboPenalty = const Value.absent(),
     this.isPointsLimitEnabled = const Value.absent(),
     this.isGameFinished = const Value.absent(),
-    this.winner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   GameSessionTableCompanion.insert({
@@ -435,7 +397,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     required int caboPenalty,
     required bool isPointsLimitEnabled,
     required bool isGameFinished,
-    this.winner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : gameId = Value(gameId),
        createdAt = Value(createdAt),
@@ -452,7 +413,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Expression<int>? caboPenalty,
     Expression<bool>? isPointsLimitEnabled,
     Expression<bool>? isGameFinished,
-    Expression<String>? winner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -464,7 +424,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
       if (isPointsLimitEnabled != null)
         'is_points_limit_enabled': isPointsLimitEnabled,
       if (isGameFinished != null) 'is_game_finished': isGameFinished,
-      if (winner != null) 'winner': winner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -477,7 +436,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Value<int>? caboPenalty,
     Value<bool>? isPointsLimitEnabled,
     Value<bool>? isGameFinished,
-    Value<String?>? winner,
     Value<int>? rowid,
   }) {
     return GameSessionTableCompanion(
@@ -488,7 +446,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
       caboPenalty: caboPenalty ?? this.caboPenalty,
       isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
       isGameFinished: isGameFinished ?? this.isGameFinished,
-      winner: winner ?? this.winner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -519,9 +476,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     if (isGameFinished.present) {
       map['is_game_finished'] = Variable<bool>(isGameFinished.value);
     }
-    if (winner.present) {
-      map['winner'] = Variable<String>(winner.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -538,7 +492,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
           ..write('caboPenalty: $caboPenalty, ')
           ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
           ..write('isGameFinished: $isGameFinished, ')
-          ..write('winner: $winner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1703,7 +1656,6 @@ typedef $$GameSessionTableTableCreateCompanionBuilder =
       required int caboPenalty,
       required bool isPointsLimitEnabled,
       required bool isGameFinished,
-      Value<String?> winner,
       Value<int> rowid,
     });
 typedef $$GameSessionTableTableUpdateCompanionBuilder =
@@ -1715,7 +1667,6 @@ typedef $$GameSessionTableTableUpdateCompanionBuilder =
       Value<int> caboPenalty,
       Value<bool> isPointsLimitEnabled,
       Value<bool> isGameFinished,
-      Value<String?> winner,
       Value<int> rowid,
     });
 
@@ -1813,11 +1764,6 @@ class $$GameSessionTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get winner => $composableBuilder(
-    column: $table.winner,
-    builder: (column) => ColumnFilters(column),
-  );
-
   Expression<bool> playerTableRefs(
     Expression<bool> Function($$PlayerTableTableFilterComposer f) f,
   ) {
@@ -1912,11 +1858,6 @@ class $$GameSessionTableTableOrderingComposer
     column: $table.isGameFinished,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<String> get winner => $composableBuilder(
-    column: $table.winner,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$GameSessionTableTableAnnotationComposer
@@ -1956,9 +1897,6 @@ class $$GameSessionTableTableAnnotationComposer
     column: $table.isGameFinished,
     builder: (column) => column,
   );
-
-  GeneratedColumn<String> get winner =>
-      $composableBuilder(column: $table.winner, builder: (column) => column);
 
   Expression<T> playerTableRefs<T extends Object>(
     Expression<T> Function($$PlayerTableTableAnnotationComposer a) f,
@@ -2048,7 +1986,6 @@ class $$GameSessionTableTableTableManager
                 Value<int> caboPenalty = const Value.absent(),
                 Value<bool> isPointsLimitEnabled = const Value.absent(),
                 Value<bool> isGameFinished = const Value.absent(),
-                Value<String?> winner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion(
                 gameId: gameId,
@@ -2058,7 +1995,6 @@ class $$GameSessionTableTableTableManager
                 caboPenalty: caboPenalty,
                 isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
-                winner: winner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2070,7 +2006,6 @@ class $$GameSessionTableTableTableManager
                 required int caboPenalty,
                 required bool isPointsLimitEnabled,
                 required bool isGameFinished,
-                Value<String?> winner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion.insert(
                 gameId: gameId,
@@ -2080,7 +2015,6 @@ class $$GameSessionTableTableTableManager
                 caboPenalty: caboPenalty,
                 isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
-                winner: winner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

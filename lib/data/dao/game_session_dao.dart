@@ -27,7 +27,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         caboPenalty: gameSession.caboPenalty,
         isPointsLimitEnabled: gameSession.isPointsLimitEnabled,
         isGameFinished: gameSession.isGameFinished,
-        winner: Value(gameSession.winner),
       ),
     );
 
@@ -72,7 +71,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
           caboPenalty: row.caboPenalty,
           isPointsLimitEnabled: row.isPointsLimitEnabled,
           isGameFinished: row.isGameFinished,
-          winner: row.winner ?? '',
           roundList: roundList,
         );
       }),
@@ -110,7 +108,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       caboPenalty: gameSessionResult.caboPenalty,
       isPointsLimitEnabled: gameSessionResult.isPointsLimitEnabled,
       isGameFinished: gameSessionResult.isGameFinished,
-      winner: gameSessionResult.winner ?? '',
       roundList: roundList,
     );
 
@@ -144,19 +141,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   }) async {
     await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
         .write(GameSessionTableCompanion(isGameFinished: Value(isFinished)));
-  }
-
-  /// Updates the winner of a specific game session.
-  /// This method updates the [winner] field in the [gameSessionTable]
-  /// for the game session with the given [gameId].
-  /// [gameId] The ID of the game session to update.
-  /// [winner] The name of the winner(s) to set.
-  Future<void> setWinner({
-    required String gameId,
-    required String winner,
-  }) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
-        .write(GameSessionTableCompanion(winner: Value(winner)));
   }
 
   /// Ends a game session by marking it as finished.

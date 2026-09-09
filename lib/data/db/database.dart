@@ -25,9 +25,9 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onUpgrade: (m, from, to) async {
+      onUpgrade: (migrator, from, to) async {
         if (from < 2) {
-          await m.alterTable(TableMigration(gameSessionTable));
+          await migrator.alterTable(TableMigration(gameSessionTable));
         }
       },
       beforeOpen: (details) async {
