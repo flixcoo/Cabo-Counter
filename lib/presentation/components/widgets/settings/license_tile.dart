@@ -104,7 +104,11 @@ class _LicenseTileState extends State<LicenseTile> {
                 ],
               ),
             ),
-            Icon(IconService.close),
+            Icon(
+              IconService.chevron,
+              size: 17,
+              color: CustomTheme.hintTextColor,
+            ),
           ],
         ),
       ),
