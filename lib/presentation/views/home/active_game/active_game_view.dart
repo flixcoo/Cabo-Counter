@@ -44,13 +44,6 @@ class ActiveGameView extends StatefulWidget {
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
-  /// Constant value to represent a press on the cancel button in round view.
-  static const int ROUND_CANCELED = -1;
-
-  final confettiController = ConfettiController(
-    duration: const Duration(seconds: 10),
-  );
-
   late final GameSessionController gameSession;
 
   /// A list of the ranks for each player corresponding to their index in sortedPlayerIndices
@@ -65,6 +58,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         .add_Hm()
         .format(gameSession.createdAt.toLocal());
   }
+
+  final confettiController = ConfettiController(
+    duration: const Duration(seconds: 10),
+  );
 
   @override
   void initState() {
@@ -502,31 +499,33 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// It starts with the given [roundNumber] and continues to open the next round
   /// until the user navigates back or the round number is invalid.
   void openRoundView(BuildContext context, int roundNumber) async {
-    final round = await Navigator.of(context, rootNavigator: true).push(
-      adaptiveSheetRoute(
-        builder: (context) =>
-            RoundView(gameSession: gameSession, roundNumber: roundNumber),
-      ),
-    );
+    final int? nextRoundNumber =
+        await Navigator.of(context, rootNavigator: true).push(
+          adaptiveSheetRoute(
+            builder: (context) =>
+                RoundView(gameSession: gameSession, roundNumber: roundNumber),
+          ),
+        );
 
     // If the user presses the cancel button
-    if (round == ROUND_CANCELED) return;
+    if (nextRoundNumber == -1) return;
 
     if (widget.gameSession.isGameFinished && context.mounted) {
       playFinishAnimation(context);
     }
 
     // If the previous round was not the last one
-    if (round != null && round >= 0) {
+    if (nextRoundNumber != null && nextRoundNumber >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Future.delayed(
           const Duration(milliseconds: Constants.ROUND_VIEW_DELAY),
         );
         if (context.mounted) {
-          openRoundView(context, round);
+          openRoundView(context, nextRoundNumber);
         }
       });
     }
+    widget.onSessionsUpdated.call();
   }
 
   /// Plays the confetti animation and shows a dialog with the winner's information.
