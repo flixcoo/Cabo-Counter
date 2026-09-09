@@ -209,7 +209,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 color: CustomTheme.tileColor,
                                 borderRadius: BorderRadius.circular(14),
                               ),
-                              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Row(
                                 spacing: 4,
                                 children: [
