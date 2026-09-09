@@ -109,6 +109,9 @@ void main() {
     expect(namesList, ['player1', 'player2']);
 
     namesList = gameSession2.getPlayerNamesList;
+    expect(namesList, ['player3', 'player4']);
+
+    namesList = gameSession3.getPlayerNamesList;
     expect(namesList, ['player3', 'player4', 'player5']);
   });
 
@@ -117,6 +120,9 @@ void main() {
     expect(winner, '');
 
     winner = gameSession2.winner;
+    expect(winner, 'player4');
+
+    winner = gameSession3.winner;
     expect(winner, 'player3, player4 & player5');
   });
 }
