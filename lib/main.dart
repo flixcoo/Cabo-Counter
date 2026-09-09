@@ -51,16 +51,6 @@ class _CaboCounterAppState extends State<CaboCounterApp>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      precacheImage(
-        const AssetImage('assets/cabo_counter-logo_rounded.png'),
-        context,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context).app_name,

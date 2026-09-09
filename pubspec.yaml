@@ -1,5 +1,5 @@
 name: cabo_counter
-version: 1.1.0+1291
+version: 1.1.0+1293
 publish_to: none
 
 environment:
@@ -52,6 +52,6 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - assets/cabo_counter-logo_rounded.png
+    - assets/app-logo.jpg
     - assets/game_list-schema.json
     - assets/game-schema.json

@@ -88,13 +88,7 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     loadSessions();
 
-    // Caching app image
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      precacheImage(
-        const AssetImage('assets/cabo_counter-logo_rounded.png'),
-        context,
-      );
-
       showRatingDialog();
       showNewsView(context);
     });

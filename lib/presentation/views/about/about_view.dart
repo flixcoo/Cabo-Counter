@@ -54,7 +54,10 @@ class AboutView extends StatelessWidget {
               // Logo
               SizedBox(
                 height: 200,
-                child: Image.asset('assets/cabo_counter-logo_rounded.png'),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset('assets/app-logo.jpg'),
+                ),
               ),
 
               CustomFormSection(
