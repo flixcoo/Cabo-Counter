@@ -4,11 +4,10 @@ import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
-import 'package:flutter_test/flutter_test.dart' as flutter_test;
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
+  TestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase database;
   late GameSession session;
   late GameSessionController controller;
