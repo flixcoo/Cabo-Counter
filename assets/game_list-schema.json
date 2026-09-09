@@ -43,7 +43,9 @@
               "position",
               "totalScore"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "minItems": 2,
+            "maxItems": 5
           }
         ]
       },

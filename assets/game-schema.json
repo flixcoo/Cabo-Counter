@@ -15,7 +15,7 @@
     "players": {
       "type": "array",
       "items": [
-       {
+        {
           "type": "object",
           "properties": {
             "id": {
@@ -35,14 +35,16 @@
             }
           },
           "required": [
-            "playerId",
-            "gameId",
+            "id",
+            "gameSessionId",
             "name",
             "position",
             "totalScore"
           ],
-         "additionalProperties": false
-       }
+          "additionalProperties": false,
+          "minItems": 2,
+          "maxItems": 5
+        }
       ]
     },
     "pointLimit": {
