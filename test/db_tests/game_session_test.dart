@@ -111,7 +111,7 @@ void main() {
       scoreUpdates: [0, 7, 5],
     );
     gameSession = GameSession(
-      gameId: 'test_game_id',
+      id: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session',
@@ -121,7 +121,7 @@ void main() {
       roundList: [round1, round2, round3],
     );
     gameSession2 = GameSession(
-      gameId: 'test_game_id2',
+      id: 'test_game_id2',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session 2',
@@ -139,7 +139,7 @@ void main() {
     test('Inserting and fetching a game session works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       final fetchedSessions = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
+        gameSessionId: gameSession.id,
       );
 
       if (fetchedSessions == null) {
@@ -248,12 +248,14 @@ void main() {
     test('Deleting a game session works correctly', () async {
       await database.gameSessionDao.insertGameSession(gameSession);
       var session = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
+        gameSessionId: gameSession.id,
       );
 
       expect(session, isNotNull);
 
-      await database.gameSessionDao.deleteGameSession(gameId: gameSession.id);
+      await database.gameSessionDao.deleteGameSession(
+        gameSessionId: gameSession.id,
+      );
       final fetchedSessions = await database.gameSessionDao
           .getAllGameSessions();
 
@@ -282,7 +284,7 @@ void main() {
         isFinished: true,
       );
       var updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
+        gameSessionId: gameSession.id,
       );
 
       expect(updatedSession, isNotNull);
@@ -293,7 +295,7 @@ void main() {
         isFinished: false,
       );
       updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
+        gameSessionId: gameSession.id,
       );
       expect(updatedSession, isNotNull);
       expect(updatedSession!.isGameFinished, isFalse);
@@ -304,7 +306,7 @@ void main() {
       int initialRoundNumber = gameSession.roundNumber;
       await database.gameSessionDao.endGame(gameId: gameSession.id);
       var updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
+        gameSessionId: gameSession.id,
       );
 
       expect(updatedSession, isNotNull);

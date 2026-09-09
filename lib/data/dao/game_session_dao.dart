@@ -20,7 +20,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertGameSession(GameSession gameSession) async {
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
-        gameId: gameSession.id,
+        id: gameSession.id,
         createdAt: gameSession.createdAt,
         gameTitle: gameSession.title,
         pointLimit: Value(gameSession.pointLimit),
@@ -35,7 +35,7 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     );
 
     await db.roundsDao.insertMultipleRounds(
-      gameId: gameSession.id,
+      gameSessionId: gameSession.id,
       rounds: gameSession.roundList,
       players: gameSession.players,
     );
@@ -55,14 +55,14 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     List<GameSession> gameSessions = await Future.wait(
       gameSessionResults.map((row) async {
         List<Player> playerList = await db.playerDao.getPlayersByGameId(
-          gameId: row.gameId,
+          gameId: row.id,
         );
         List<Round> roundList = await db.roundsDao.getRoundsByGameId(
-          gameId: row.gameId,
+          gameId: row.id,
         );
 
         return GameSession(
-          gameId: row.gameId,
+          id: row.id,
           createdAt: row.createdAt,
           title: row.gameTitle,
           players: playerList,
@@ -81,24 +81,24 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   /// This method fetches the game session details from the `gameSessionTable`,
   /// along with associated players and rounds from their respective DAOs.
   /// It constructs and returns a `GameSession` object containing all relevant data.
-  /// [gameId] The ID of the game session to retrieve.
-  Future<GameSession?> getGameSession({required String gameId}) async {
+  /// [gameSessionId] The ID of the game session to retrieve.
+  Future<GameSession?> getGameSession({required String gameSessionId}) async {
     final query = select(gameSessionTable)
-      ..where((tbl) => tbl.gameId.equals(gameId));
+      ..where((tbl) => tbl.id.equals(gameSessionId));
     final gameSessionResult = await query.getSingleOrNull();
     if (gameSessionResult == null) {
       return null;
     }
 
     List<Player> playerList = await db.playerDao.getPlayersByGameId(
-      gameId: gameId,
+      gameId: gameSessionId,
     );
     List<Round> roundList = await db.roundsDao.getRoundsByGameId(
-      gameId: gameId,
+      gameId: gameSessionId,
     );
 
     GameSession gameSession = GameSession(
-      gameId: gameSessionResult.gameId,
+      id: gameSessionResult.id,
       createdAt: gameSessionResult.createdAt,
       title: gameSessionResult.gameTitle,
       players: playerList,
@@ -111,12 +111,12 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     return gameSession;
   }
 
-  /// Deletes the game session with the given [gameId].
+  /// Deletes the game session with the given [gameSessionId].
   /// Returns `true` if the deletion was successful, `false` otherwise.
-  Future<bool> deleteGameSession({required String gameId}) async {
+  Future<bool> deleteGameSession({required String gameSessionId}) async {
     final rowsAffected = await (delete(
       gameSessionTable,
-    )..where((tbl) => tbl.gameId.equals(gameId))).go();
+    )..where((tbl) => tbl.id.equals(gameSessionId))).go();
     return rowsAffected > 0;
   }
 
@@ -136,14 +136,14 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     required String gameId,
     required bool isFinished,
   }) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
+    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
         .write(GameSessionTableCompanion(isGameFinished: Value(isFinished)));
   }
 
   /// Ends a game session by marking it as finished.
   /// [gameId] The ID of the game session to end.
   Future<void> endGame({required String gameId}) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
+    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
         .write(const GameSessionTableCompanion(isGameFinished: Value(true)));
   }
 }

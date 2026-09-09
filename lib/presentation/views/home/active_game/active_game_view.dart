@@ -477,7 +477,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   Future<void> removeGameSession(GameSession gameSession) async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     final deleted = await db.gameSessionDao.deleteGameSession(
-      gameId: gameSession.id,
+      gameSessionId: gameSession.id,
     );
     if (!mounted) return;
     if (deleted) {

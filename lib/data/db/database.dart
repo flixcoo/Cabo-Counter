@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -36,6 +36,17 @@ class AppDatabase extends _$AppDatabase {
                 ),
               },
             ),
+          );
+        }
+        if (from < 4) {
+          await customStatement(
+            'ALTER TABLE game_session_table RENAME COLUMN game_id TO id',
+          );
+          await customStatement(
+            'ALTER TABLE player_table RENAME COLUMN player_id TO id',
+          );
+          await customStatement(
+            'ALTER TABLE player_table RENAME COLUMN game_id TO game_session_id',
           );
         }
       },

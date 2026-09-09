@@ -16,7 +16,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// round in the returned list matches its round number (index + 1).
   Future<List<Round>> getRoundsByGameId({required String gameId}) async {
     final query = select(roundsTable)
-      ..where((tbl) => tbl.gameId.equals(gameId))
+      ..where((tbl) => tbl.gameSessionId.equals(gameId))
       ..orderBy([(tbl) => OrderingTerm(expression: tbl.roundNumber)]);
 
     final roundResult = await query.get();
@@ -32,7 +32,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
         return Round(
           roundId: row.roundId,
-          gameSessionId: row.gameId,
+          gameSessionId: row.gameSessionId,
           caboPlayerIndex: row.caboPlayerIndex,
           kamikazePlayerIndex: row.kamikazePlayerIndex,
           scores: scores,
@@ -53,7 +53,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final query = select(roundsTable)
       ..where(
         (tbl) =>
-            tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber),
+            tbl.gameSessionId.equals(gameId) &
+            tbl.roundNumber.equals(roundNumber),
       );
     final roundResult = await query.getSingleOrNull();
     if (roundResult == null) return null;
@@ -65,7 +66,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
     return Round(
       roundId: roundResult.roundId,
-      gameSessionId: roundResult.gameId,
+      gameSessionId: roundResult.gameSessionId,
       caboPlayerIndex: roundResult.caboPlayerIndex,
       kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
       scores: scoreResult[0],
@@ -88,7 +89,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   }) async {
     final roundEntry = RoundsTableCompanion.insert(
       roundId: round.id,
-      gameId: gameId,
+      gameSessionId: gameId,
       roundNumber: roundNumber,
       caboPlayerIndex: round.caboPlayerIndex,
       kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
@@ -133,11 +134,11 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// This method uses a batch operation to insert all rounds and their scores
   /// in a single transaction. The round number of each round is derived from
   /// its position in the [rounds] list (index + 1).
-  /// [gameId] is the ID of the game session these rounds belong to.
+  /// [gameSessionId] is the ID of the game session these rounds belong to.
   /// [rounds] is the list of rounds to be inserted.
   /// [players] is the list of players in the game session.
   Future<void> insertMultipleRounds({
-    required String gameId,
+    required String gameSessionId,
     required List<Round> rounds,
     required List<Player> players,
   }) async {
@@ -151,7 +152,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         roundEntries.add(
           RoundsTableCompanion.insert(
             roundId: round.id,
-            gameId: gameId,
+            gameSessionId: gameSessionId,
             roundNumber: r + 1,
             caboPlayerIndex: round.caboPlayerIndex,
             kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
@@ -187,7 +188,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final query = select(roundsTable)
       ..where(
         (tbl) =>
-            tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber),
+            tbl.gameSessionId.equals(gameId) &
+            tbl.roundNumber.equals(roundNumber),
       );
     final roundResult = await query.getSingleOrNull();
     if (roundResult == null) return false;
@@ -195,7 +197,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final deleteQuery = delete(roundsTable)
       ..where(
         (tbl) =>
-            tbl.gameId.equals(gameId) & tbl.roundNumber.equals(roundNumber),
+            tbl.gameSessionId.equals(gameId) &
+            tbl.roundNumber.equals(roundNumber),
       );
     await deleteQuery.go();
     return true;

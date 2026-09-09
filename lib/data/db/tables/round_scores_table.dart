@@ -6,7 +6,7 @@ class RoundScoresTable extends Table {
   TextColumn get roundId =>
       text().references(RoundsTable, #roundId, onDelete: KeyAction.cascade)();
   TextColumn get playerId =>
-      text().references(PlayerTable, #playerId, onDelete: KeyAction.cascade)();
+      text().references(PlayerTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get score => integer()();
   IntColumn get scoreUpdate => integer()();
 

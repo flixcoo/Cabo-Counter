@@ -67,7 +67,7 @@ void main() {
       totalScore: 0,
     );
     gameSession = GameSession(
-      gameId: 'test_game_id',
+      id: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session',
@@ -76,7 +76,7 @@ void main() {
       players: [player1, player2, player3],
     );
     gameWithoutPlayers = GameSession(
-      gameId: 'test_game_without_players_id',
+      id: 'test_game_without_players_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session',

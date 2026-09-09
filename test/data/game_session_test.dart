@@ -46,7 +46,7 @@ void main() {
       ),
     );
     session = GameSession(
-      gameId: '1',
+      id: '1',
       createdAt: testDate,
       title: testTitle,
       players: testPlayers,

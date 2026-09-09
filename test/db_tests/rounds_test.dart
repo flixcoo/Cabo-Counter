@@ -92,7 +92,7 @@ void main() {
       scoreUpdates: [0, 7, 5],
     );
     gameSession = GameSession(
-      gameId: 'test_game_id',
+      id: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session',
@@ -102,7 +102,7 @@ void main() {
       roundList: [round1, round2, round3],
     );
     emptyGameSession = GameSession(
-      gameId: 'test_game_id',
+      id: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'empty game session',
@@ -266,7 +266,7 @@ void main() {
       final newRounds = [round1, round2, round3, round4, round5];
 
       await database.roundsDao.insertMultipleRounds(
-        gameId: emptyGameSession.id,
+        gameSessionId: emptyGameSession.id,
         rounds: newRounds,
         players: emptyGameSession.players,
       );

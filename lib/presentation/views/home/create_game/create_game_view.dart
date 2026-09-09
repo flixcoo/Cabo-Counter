@@ -450,7 +450,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     final bool isPointsLimitEnabled = selectedGameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-      gameId: gameSessionId,
+      id: gameSessionId,
       createdAt: DateTime.now(),
       title: title,
       players: players,

@@ -21,7 +21,7 @@ class GameSession {
   List<Round> roundList;
 
   GameSession({
-    String? gameId,
+    String? id,
     required this.createdAt,
     required this.title,
     required this.players,
@@ -29,7 +29,7 @@ class GameSession {
     required this.caboPenalty,
     this.isGameFinished = false,
     List<Round>? roundList,
-  }) : id = gameId ?? const Uuid().v4(),
+  }) : id = id ?? const Uuid().v4(),
        roundList = roundList ?? [];
 
   int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);

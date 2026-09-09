@@ -305,14 +305,14 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  /// Deletes a game session with the given [gameId] from the local list and the database.
-  Future<void> deleteSession(String gameId, AppDatabase db) async {
-    sessions = sessions..removeWhere((session) => session.id == gameId);
+  /// Deletes a game session with the given [gameSessionId] from the local list and the database.
+  Future<void> deleteSession(String gameSessionId, AppDatabase db) async {
+    sessions = sessions..removeWhere((session) => session.id == gameSessionId);
     sortGames(
       sortOption: currentSortOption,
       sortDirection: currentSortDirection,
     );
-    await db.gameSessionDao.deleteGameSession(gameId: gameId);
+    await db.gameSessionDao.deleteGameSession(gameSessionId: gameSessionId);
   }
 
   /// Handles the feedback dialog when the conditions for rating are met.

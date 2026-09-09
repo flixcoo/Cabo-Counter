@@ -17,7 +17,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
 
     return playerResults.map((row) {
       return Player(
-        id: row.playerId,
+        id: row.id,
         gameSessionId: row.gameId,
         name: row.name,
         position: row.position,
@@ -29,7 +29,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   /// Retrieves a players position by its id
   Future<int> getPositionByPlayerId(String playerId) async {
     final query = select(playerTable)
-      ..where((tbl) => tbl.playerId.equals(playerId));
+      ..where((tbl) => tbl.id.equals(playerId));
     final result = await query.getSingle();
 
     return result.position;
@@ -45,7 +45,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
         batch.insert(
           playerTable,
           PlayerTableCompanion.insert(
-            playerId: players[i].id,
+            id: players[i].id,
             gameId: gameId,
             name: players[i].name,
             position: i,
@@ -65,7 +65,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
         batch.update(
           playerTable,
           PlayerTableCompanion(totalScore: Value(updatedScore)),
-          where: (tbl) => tbl.playerId.equals(player.id),
+          where: (tbl) => tbl.id.equals(player.id),
         );
       }
     });

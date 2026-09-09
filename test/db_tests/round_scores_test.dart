@@ -62,7 +62,7 @@ void main() {
       scoreUpdates: [50, 50, 0],
     );
     gameSession = GameSession(
-      gameId: 'test_game_id',
+      id: 'test_game_id',
       createdAt: DateTime.now(),
       isGameFinished: false,
       title: 'test game session',
