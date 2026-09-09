@@ -30,7 +30,7 @@ class _GameTileState extends State<GameTile> {
       (
         icon: session.isPointsLimitEnabled
             ? IconService.point_limit
-            : CupertinoIcons.infinite,
+            : IconService.infinity,
         text: session.isPointsLimitEnabled
             ? '${session.pointLimit.toString()} ${loc.points}'
             : loc.unlimited,
@@ -93,7 +93,11 @@ class _GameTileState extends State<GameTile> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      AppIcon(a.icon, size: 16, color: CustomTheme.primaryColor),
+                      AppIcon(
+                        a.icon,
+                        size: 16,
+                        color: CustomTheme.primaryColor,
+                      ),
                       const SizedBox(width: 5),
                       Text(
                         a.text,

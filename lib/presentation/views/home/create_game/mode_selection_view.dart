@@ -3,7 +3,6 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// A stateless widget that displays a menu for selecting the game mode.
@@ -61,7 +60,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
 
           // Unlimited mode
           SelectableTile(
-            icon: CupertinoIcons.infinite,
+            icon: IconService.infinity,
             title: loc.unlimited,
             description: loc.unlimited_description,
             onTap: supressTap ? null : () => onTapTile(GameMode.unlimited),

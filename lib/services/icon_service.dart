@@ -48,6 +48,9 @@ abstract class IconService {
   static IconData get info =>
       Platform.isIOS ? SFIcons.sf_info_circle : Icons.info_outline;
 
+  static IconData get infinity =>
+      Platform.isIOS ? SFIcons.sf_infinity : Icons.all_inclusive;
+
   static IconData get kamikaze =>
       Platform.isIOS ? SFIcons.sf_flame_fill : Icons.local_fire_department;
 

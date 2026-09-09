@@ -12,7 +12,6 @@ import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundView extends StatefulWidget {
@@ -92,9 +91,9 @@ class _RoundViewState extends State<RoundView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: TextButton(
+        leading: AnimatedIconButton(
           onPressed: () => Navigator.of(context).pop(-1),
-          child: const Icon(CupertinoIcons.xmark, size: 25),
+          icon: IconService.back,
         ),
         title: Text(loc.results),
         actions: [
