@@ -123,10 +123,7 @@ class _ScoreEnterTileState extends State<ScoreEnterTile> {
                 ),
                 keyboardType: Platform.isAndroid
                     ? TextInputType.number
-                    : const TextInputType.numberWithOptions(
-                        signed: true,
-                        decimal: false,
-                      ),
+                    : const TextInputType.numberWithOptions(decimal: false),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 textInputAction: widget.textInputAction,
                 controller: widget.controller,
