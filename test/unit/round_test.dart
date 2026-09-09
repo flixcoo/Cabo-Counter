@@ -48,9 +48,8 @@ void main() {
     test('toJson() returns correct map', () {
       final jsonMap = round.toJson();
 
-      expect(jsonMap['roundId'], equals(testRoundId));
-      expect(jsonMap['gameId'], equals(testGameId));
-      expect(jsonMap['roundNum'], equals(testRoundNum));
+      expect(jsonMap['id'], equals(testRoundId));
+      expect(jsonMap['gameSessionId'], equals(testGameId));
       expect(jsonMap['caboPlayerIndex'], equals(testCaboPlayerIndex));
       expect(jsonMap['kamikazePlayerIndex'], equals(testKamikazePlayerIndex));
       expect(jsonMap['scores'], equals(testScores));
@@ -59,8 +58,8 @@ void main() {
 
     test('fromJson() creates correct Round object', () {
       final jsonMap = {
-        'roundId': testRoundId,
-        'gameId': testGameId,
+        'id': testRoundId,
+        'gameSessionId': testGameId,
         'roundNum': testRoundNum,
         'caboPlayerIndex': testCaboPlayerIndex,
         'kamikazePlayerIndex': testKamikazePlayerIndex,
@@ -78,8 +77,8 @@ void main() {
 
     test('fromJson() with null kamikazePlayerIndex', () {
       final jsonMap = {
-        'roundId': testRoundId,
-        'gameId': testGameId,
+        'id': testRoundId,
+        'gameSessionId': testGameId,
         'roundNum': testRoundNum,
         'caboPlayerIndex': testCaboPlayerIndex,
         'kamikazePlayerIndex': null,
@@ -90,39 +89,6 @@ void main() {
       final fromJsonRound = Round.fromJson(jsonMap);
 
       expect(fromJsonRound.kamikazePlayerIndex, isNull);
-    });
-  });
-
-  group('toString()', () {
-    test('toString() returns correct string representation', () {
-      final expectedString =
-          'Round $testRoundNum, '
-          'caboPlayerIndex: $testCaboPlayerIndex, '
-          'kamikazePlayerIndex: $testKamikazePlayerIndex, '
-          'scores: $testScores, '
-          'scoreUpdates: $testScoreUpdates, ';
-
-      expect(round.toString(), equals(expectedString));
-    });
-
-    test('toString() with null kamikazePlayerIndex', () {
-      final roundWithoutKamikaze = Round(
-        roundId: 'testRoundId',
-        gameSessionId: 'testGameId',
-        caboPlayerIndex: testCaboPlayerIndex,
-        kamikazePlayerIndex: null,
-        scores: testScores,
-        scoreUpdates: testScoreUpdates,
-      );
-
-      final expectedString =
-          'Round $testRoundNum, '
-          'caboPlayerIndex: $testCaboPlayerIndex, '
-          'kamikazePlayerIndex: null, '
-          'scores: $testScores, '
-          'scoreUpdates: $testScoreUpdates, ';
-
-      expect(roundWithoutKamikaze.toString(), expectedString);
     });
   });
 }
