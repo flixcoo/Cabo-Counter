@@ -1,5 +1,4 @@
 import 'package:cabo_counter/core/adaptive_page_route.dart';
-import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
@@ -8,8 +7,9 @@ import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/add_player_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
@@ -59,6 +59,10 @@ class _CreateGameViewState extends State<CreateGameView> {
 
   bool get hasReachedMaxPlayers => playerNameControllers.length >= maxPlayers;
   bool get hasReachedMinPlayers => playerNameControllers.length <= minPlayers;
+  bool get isValidGame =>
+      selectedGameMode != GameMode.none &&
+      playerNameControllers.length >= 2 &&
+      everyPlayerHasAName;
 
   @override
   void initState() {
@@ -177,7 +181,10 @@ class _CreateGameViewState extends State<CreateGameView> {
                       ReorderableListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         itemCount: playerNameControllers.length,
                         onReorderStart: (_) => VibrationService.heavyImpact(),
                         onReorderEnd: (_) => VibrationService.selectionClick(),
@@ -196,77 +203,85 @@ class _CreateGameViewState extends State<CreateGameView> {
                         itemBuilder: (context, index) {
                           return Padding(
                             key: ValueKey(index),
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              children: [
-                                OpacityButton.icon(
-                                  icon: IconService.remove_player,
-                                  size: 25,
-                                  color: CustomTheme.red,
-                                  onPressed: () {
-                                    setState(() {
-                                      playerNameControllers[index].dispose();
-                                      playerNameControllers.removeAt(index);
-                                      playerNameFocusNodes[index].dispose();
-                                      playerNameFocusNodes.removeAt(index);
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                  child: TextField(
-                                    controller: playerNameControllers[index],
-                                    focusNode: playerNameFocusNodes[index],
-                                    maxLength: 12,
-                                    decoration: InputDecoration(
-                                      hint: Text(
-                                        '${loc.player} ${index + 1}',
-                                        style: TextStyle(
-                                          color: CustomTheme.hintTextColor,
-                                        ),
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: CustomTheme.tileColor,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+                              child: Row(
+                                spacing: 4,
+                                children: [
+                                  // Remove button
+                                  AnimatedIconButton(
+                                    icon: IconService.remove_player,
+                                    color: CustomTheme.red,
+                                    onPressed: () =>
+                                        removePlayerTextfield(index),
+                                  ),
+
+                                  // Name field
+                                  Expanded(
+                                    child: TextField(
+                                      controller: playerNameControllers[index],
+                                      focusNode: playerNameFocusNodes[index],
+                                      maxLength: 12,
+                                      style: const TextStyle(
+                                        color: CustomTheme.textColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      counterText: '',
-                                      border: InputBorder.none,
+                                      cursorColor: CustomTheme.primaryColor,
+                                      decoration: InputDecoration(
+                                        isCollapsed: true,
+                                        hint: Text(
+                                          '${loc.player} ${index + 1}',
+                                          style: TextStyle(
+                                            color: CustomTheme.hintTextColor,
+                                          ),
+                                        ),
+                                        counterText: '',
+                                        border: InputBorder.none,
+                                      ),
+                                      textInputAction:
+                                          index + 1 <
+                                              playerNameControllers.length
+                                          ? TextInputAction.next
+                                          : TextInputAction.done,
+                                      onSubmitted: (_) {
+                                        if (index + 1 <
+                                            playerNameFocusNodes.length) {
+                                          final nextNode =
+                                              playerNameFocusNodes[index + 1];
+                                          nextNode.requestFocus();
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                                final nextContext =
+                                                    nextNode.context;
+                                                if (nextContext != null) {
+                                                  Scrollable.ensureVisible(
+                                                    nextContext,
+                                                    alignment: 0.5,
+                                                    duration: const Duration(
+                                                      milliseconds: 200,
+                                                    ),
+                                                    curve: Curves.easeInOut,
+                                                  );
+                                                }
+                                              });
+                                        } else {
+                                          FocusScope.of(context).unfocus();
+                                        }
+                                      },
                                     ),
-                                    textInputAction:
-                                        index + 1 < playerNameControllers.length
-                                        ? TextInputAction.next
-                                        : TextInputAction.done,
-                                    onSubmitted: (_) {
-                                      if (index + 1 <
-                                          playerNameFocusNodes.length) {
-                                        final nextNode =
-                                            playerNameFocusNodes[index + 1];
-                                        nextNode.requestFocus();
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                              final nextContext =
-                                                  nextNode.context;
-                                              if (nextContext != null) {
-                                                Scrollable.ensureVisible(
-                                                  nextContext,
-                                                  alignment: 0.5,
-                                                  duration: const Duration(
-                                                    milliseconds: 200,
-                                                  ),
-                                                  curve: Curves.easeInOut,
-                                                );
-                                              }
-                                            });
-                                      } else {
-                                        FocusScope.of(context).unfocus();
-                                      }
-                                    },
                                   ),
-                                ),
-                                AnimatedOpacity(
-                                  opacity: playerNameControllers.length > 1
-                                      ? 1.0
-                                      : 0.0,
-                                  duration: const Duration(
-                                    milliseconds: Constants.FADE_IN_DURATION,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
+
+                                  // Drag handle
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6.0,
+                                    ),
                                     child: ReorderableDragStartListener(
                                       index: index,
                                       child: Icon(
@@ -275,8 +290,8 @@ class _CreateGameViewState extends State<CreateGameView> {
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -291,20 +306,28 @@ class _CreateGameViewState extends State<CreateGameView> {
                                 builder: (context, _) {
                                   final overlayOpacity = 0.08 * animation.value;
                                   return Material(
+                                    color: Colors.transparent,
                                     elevation: 6.0,
                                     shadowColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
                                     child: Stack(
                                       children: [
                                         child,
                                         Positioned.fill(
                                           child: IgnorePointer(
                                             child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 5.0,
+                                                  ),
                                               decoration: BoxDecoration(
                                                 color: Colors.white.withValues(
                                                   alpha: overlayOpacity,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                    BorderRadius.circular(14),
                                               ),
                                             ),
                                           ),
@@ -316,34 +339,14 @@ class _CreateGameViewState extends State<CreateGameView> {
                               );
                             },
                       ),
-                      IgnorePointer(
-                        ignoring: hasReachedMaxPlayers,
-                        child: Opacity(
-                          opacity: hasReachedMaxPlayers ? 0.0 : 1.0,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 8, 50),
-                            child: Center(
-                              child: OpacityButton.text(
-                                text: loc.add_player,
-                                onPressed: () {
-                                  setState(() {
-                                    playerNameControllers.add(
-                                      TextEditingController()
-                                        ..addListener(() => setState(() {})),
-                                    );
-                                    playerNameFocusNodes.add(FocusNode());
-                                  });
-                                  WidgetsBinding.instance.addPostFrameCallback((
-                                    _,
-                                  ) {
-                                    playerNameFocusNodes.last.requestFocus();
-                                  });
-                                },
+                      hasReachedMaxPlayers
+                          ? const SizedBox(width: double.infinity)
+                          : Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 1, 10, 50),
+                              child: AddPlayerButton(
+                                onPressed: addPlayerTextfield,
                               ),
                             ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -386,10 +389,26 @@ class _CreateGameViewState extends State<CreateGameView> {
     }
   }
 
-  bool get isValidGame =>
-      selectedGameMode != GameMode.none &&
-      playerNameControllers.length >= 2 &&
-      everyPlayerHasAName;
+  void addPlayerTextfield() {
+    setState(() {
+      playerNameControllers.add(
+        TextEditingController()..addListener(() => setState(() {})),
+      );
+      playerNameFocusNodes.add(FocusNode());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      playerNameFocusNodes.last.requestFocus();
+    });
+  }
+
+  void removePlayerTextfield(int index) {
+    setState(() {
+      playerNameControllers[index].dispose();
+      playerNameControllers.removeAt(index);
+      playerNameFocusNodes[index].dispose();
+      playerNameFocusNodes.removeAt(index);
+    });
+  }
 
   /// Returns a widget that displays the currently selected game mode in the View.
   Text getDisplayedGameMode() {
