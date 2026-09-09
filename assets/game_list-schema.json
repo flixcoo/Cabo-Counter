@@ -130,7 +130,6 @@
       "pointLimit",
       "caboPenalty",
       "isGameFinished",
-      "winner",
       "roundNumber",
       "roundList"
     ],
