@@ -44,7 +44,7 @@ class AboutView extends StatelessWidget {
 
                   // Version
                   Text(
-                    '${loc.version} ${VersionService.getVersionWithBuild()}',
+                    '${loc.version} ${VersionService.getVersionNumber()}',
                     style: TextStyle(fontSize: 15, color: Colors.grey[300]),
                   ),
                 ],
