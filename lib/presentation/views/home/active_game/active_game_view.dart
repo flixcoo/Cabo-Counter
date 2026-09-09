@@ -8,7 +8,7 @@ import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
@@ -311,14 +311,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               if (!success && context.mounted) {
                                 PopupService.showInfoPopup(
                                   context: context,
-                                  title: Text(
-                                    AppLocalizations.of(context)
-                                        .export_error_title,
-                                  ),
-                                  content: Text(
-                                    AppLocalizations.of(context)
-                                        .export_error_message,
-                                  ),
+                                  icon: Icons.error_outline_rounded,
+                                  title: AppLocalizations.of(context)
+                                      .export_error_title,
+                                  message: AppLocalizations.of(context)
+                                      .export_error_message,
                                 );
                               }
                             },
@@ -358,11 +355,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   void showEndGameDialog() {
     final loc = AppLocalizations.of(context);
 
-    final endGameAction = CustomDialogAction<bool>(
-      isDestructiveAction: true,
-      actionText: loc.end_game,
+    final endGameAction = CustomPopupAction<bool>(
+      style: CustomPopupActionStyle.primary,
+      isDestructive: true,
+      label: loc.end_game,
       returnValue: true,
-      onAfterPop: () {
+      onPressed: () {
         if (mounted) {
           setState(() {
             endGame();
@@ -371,16 +369,18 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         }
       },
     );
-    final cancelAction = CustomDialogAction<bool>(
-      actionText: loc.cancel,
+    final cancelAction = CustomPopupAction<bool>(
+      style: CustomPopupActionStyle.secondary,
+      label: loc.cancel,
       returnValue: false,
     );
 
     PopupService.showSelectionPopup<bool>(
       context: context,
-      title: Text(loc.end_game_title),
-      message: Text(loc.end_game_message),
-      actions: [cancelAction, endGameAction],
+      icon: Icons.flag_outlined,
+      title: loc.end_game_title,
+      message: loc.end_game_message,
+      actions: [endGameAction, cancelAction],
     );
   }
 
@@ -458,14 +458,20 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(loc.delete_game_title),
-          message: Text(loc.delete_game_message(gameSession.title)),
+          icon: Icons.delete_outline_rounded,
+          title: loc.delete_game_title,
+          message: loc.delete_game_message(gameSession.title),
           actions: [
-            CustomDialogAction(returnValue: false, actionText: loc.cancel),
-            CustomDialogAction(
-              isDestructiveAction: true,
-              actionText: loc.delete,
+            CustomPopupAction(
+              style: CustomPopupActionStyle.primary,
+              isDestructive: true,
+              label: loc.delete,
               returnValue: true,
+            ),
+            CustomPopupAction(
+              returnValue: false,
+              style: CustomPopupActionStyle.secondary,
+              label: loc.cancel,
             ),
           ],
         ) ??
@@ -487,8 +493,9 @@ class _ActiveGameViewState extends State<ActiveGameView> {
       final loc = AppLocalizations.of(context);
       PopupService.showInfoPopup(
         context: context,
-        title: Text(loc.id_error_title),
-        content: Text(loc.id_error_message),
+        icon: Icons.error_outline_rounded,
+        title: loc.id_error_title,
+        message: loc.id_error_message,
       );
     }
   }
@@ -539,10 +546,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (context.mounted) {
       PopupService.showInfoPopup(
         context: context,
-        title: Text(loc.end_of_game_title),
-        content: Text(
-          loc.end_of_game_message(winnerAmount, winner, winnerPoints),
-        ),
+        icon: Icons.emoji_events_rounded,
+        iconColor: CustomTheme.kamikazeColor,
+        title: loc.end_of_game_title,
+        message: loc.end_of_game_message(winnerAmount, winner, winnerPoints),
         onAfterPop: () => confettiController.stop(),
       );
     }

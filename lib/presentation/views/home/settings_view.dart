@@ -5,7 +5,7 @@ import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/adaptive_switch.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_section.dart';
 import 'package:cabo_counter/presentation/components/widgets/settings/custom_stepper.dart';
@@ -52,7 +52,6 @@ class _SettingsViewState extends State<SettingsView> {
     return Scaffold(
       appBar: AppBar(title: Text(loc.settings)),
       body: SafeArea(
-        bottom: false,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.paddingOf(context).bottom,
@@ -254,7 +253,6 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
             ],
           ),
         ),
@@ -268,21 +266,26 @@ class _SettingsViewState extends State<SettingsView> {
     final loc = AppLocalizations.of(context);
     final db = Provider.of<AppDatabase>(context, listen: false);
     final dialogActions = [
-      CustomDialogAction(isDefaultAction: true, actionText: loc.cancel),
-      CustomDialogAction(
-        isDestructiveAction: true,
-        onAfterPop: () async {
+      CustomPopupAction<void>(
+        style: CustomPopupActionStyle.primary,
+        isDestructive: true,
+        onPressed: () async {
           await db.gameSessionDao.deleteAllGames();
           widget.onSessionsUpdated.call();
         },
-        actionText: loc.delete,
+        label: loc.delete,
+      ),
+      CustomPopupAction<void>(
+        style: CustomPopupActionStyle.secondary,
+        label: loc.cancel,
       ),
     ];
 
-    PopupService.showSelectionPopup(
+    PopupService.showSelectionPopup<void>(
       context: context,
-      title: Text(loc.delete_data_title),
-      message: Text(loc.delete_data_message),
+      icon: Icons.delete_outline_rounded,
+      title: loc.delete_data_title,
+      message: loc.delete_data_message,
       actions: dialogActions,
     );
   }
@@ -295,8 +298,11 @@ class _SettingsViewState extends State<SettingsView> {
 
     PopupService.showInfoPopup(
       context: context,
-      title: Text(title),
-      content: Text(message),
+      icon: status == ImportStatus.success
+          ? Icons.check_circle_outline_rounded
+          : Icons.error_outline_rounded,
+      title: title,
+      message: message,
     );
   }
 
@@ -330,12 +336,10 @@ class _SettingsViewState extends State<SettingsView> {
   void showConfirmPopup() {
     final loc = AppLocalizations.of(context);
     final dialogActions = [
-      CustomDialogAction(actionText: loc.cancel),
-      CustomDialogAction(
-        isDestructiveAction: true,
-        isDefaultAction: true,
-        actionText: loc.reset,
-        onAfterPop: () {
+      CustomPopupAction<void>(
+        style: CustomPopupActionStyle.primary,
+        label: loc.reset,
+        onPressed: () {
           ConfigService.resetUserConfig();
           setState(() {
             _stepperKey1 = UniqueKey();
@@ -345,11 +349,16 @@ class _SettingsViewState extends State<SettingsView> {
           });
         },
       ),
+      CustomPopupAction<void>(
+        style: CustomPopupActionStyle.secondary,
+        label: loc.cancel,
+      ),
     ];
-    PopupService.showSelectionPopup(
+    PopupService.showSelectionPopup<void>(
       context: context,
-      title: Text(loc.reset_config_title),
-      message: Text(loc.reset_config_message),
+      icon: Icons.settings_backup_restore_rounded,
+      title: loc.reset_config_title,
+      message: loc.reset_config_message,
       actions: dialogActions,
     );
   }

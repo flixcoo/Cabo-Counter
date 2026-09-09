@@ -13,7 +13,7 @@ import 'package:cabo_counter/presentation/components/placeholders/empty_filter_p
 import 'package:cabo_counter/presentation/components/placeholders/empty_games_placeholder.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
 import 'package:cabo_counter/presentation/components/widgets/sorting_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/game_tile.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
@@ -318,12 +318,32 @@ class _HomeViewState extends State<HomeView> {
   /// Handles the feedback dialog when the conditions for rating are met.
   /// It shows a dialog asking the user if they like the app,
   /// and based on their response, it either opens the rating dialog or an email client for feedback.
-  Future<void> handleFeedbackDialog(BuildContext context) async {
+  Future<void> startFeedbackDialogProcess() async {
+    PreRatingDialogDecision preRatingDecision =
+        await PopupService.showPreRatingDialog(context);
+    BadRatingDialogDecision? badRatingDecision;
+
+    // so that the bad rating dialog is not shown immediately
+    await Future.delayed(const Duration(milliseconds: Constants.POP_UP_DELAY));
+
+    switch (preRatingDecision) {
+      case PreRatingDialogDecision.yes:
+        Constants.rateMyApp.showStarRateDialog(context);
+        break;
+      case PreRatingDialogDecision.no:
+        badRatingDecision = await PopupService.showBadRatingDialog(context);
+        if (badRatingDecision == BadRatingDialogDecision.email)
+          openFeedbackEmail();
+        break;
+      case PreRatingDialogDecision.cancel:
+    }
+  }
+
+  void openFeedbackEmail() {
     final loc = AppLocalizations.of(context);
     final emailSubject = loc.email_subject;
     final emailBody = loc.email_body;
-
-    final Uri emailUri = Uri(
+    final emailUri = Uri(
       scheme: 'mailto',
       path: Constants.CONTACT_EMAIL,
       query:
@@ -331,30 +351,7 @@ class _HomeViewState extends State<HomeView> {
           '&body=$emailBody',
     );
 
-    PreRatingDialogDecision preRatingDecision =
-        await PopupService.showPreRatingDialog(context);
-    BadRatingDialogDecision badRatingDecision = BadRatingDialogDecision.cancel;
-
-    // so that the bad rating dialog is not shown immediately
-    await Future.delayed(const Duration(milliseconds: Constants.POP_UP_DELAY));
-
-    switch (preRatingDecision) {
-      case PreRatingDialogDecision.yes:
-        if (context.mounted) Constants.rateMyApp.showStarRateDialog(context);
-        break;
-      case PreRatingDialogDecision.no:
-        if (context.mounted) {
-          badRatingDecision = await PopupService.showBadRatingDialog(context);
-        }
-        if (badRatingDecision == BadRatingDialogDecision.email) {
-          if (context.mounted) {
-            launchUrl(emailUri);
-          }
-        }
-        break;
-      case PreRatingDialogDecision.cancel:
-        break;
-    }
+    launchUrl(emailUri);
   }
 
   /// Shows a confirmation dialog to delete all game sessions.
@@ -367,18 +364,19 @@ class _HomeViewState extends State<HomeView> {
     final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(loc.delete_game_title),
-          message: Text(loc.delete_game_message(gameTitle)),
+          title: loc.delete_game_title,
+          message: loc.delete_game_message(gameTitle),
           actions: [
-            CustomDialogAction(
-              returnValue: false,
-              isDefaultAction: true,
-              actionText: loc.cancel,
-            ),
-            CustomDialogAction(
-              isDestructiveAction: true,
+            CustomPopupAction(
+              style: CustomPopupActionStyle.primary,
               returnValue: true,
-              actionText: loc.delete,
+              isDestructive: true,
+              label: loc.delete,
+            ),
+            CustomPopupAction(
+              returnValue: false,
+              style: CustomPopupActionStyle.secondary,
+              label: loc.cancel,
             ),
           ],
         ) ??
@@ -467,14 +465,17 @@ class _HomeViewState extends State<HomeView> {
     if (Constants.rateMyApp.shouldOpenDialog) {
       await Future.delayed(
         const Duration(
-          milliseconds: Constants.MINIMUM_SKELETON_SCREEN_DURATION + 200,
+          milliseconds:
+              Constants.MINIMUM_SKELETON_SCREEN_DURATION +
+              Constants.POP_UP_DELAY,
         ),
       );
       if (!mounted) return;
-      handleFeedbackDialog(context);
+      startFeedbackDialogProcess();
     }
   }
 
+  /// The sorting button shown in the navigation bar.
   Widget sortingButton() {
     return AnimatedIconButton(
       onPressed: () {

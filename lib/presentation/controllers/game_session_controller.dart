@@ -2,7 +2,6 @@ import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
-import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,18 +33,29 @@ class GameSessionController extends ChangeNotifier {
   /* Read-only delegation to the session */
 
   String get id => session.id;
+
   DateTime get createdAt => session.createdAt;
+
   String get title => session.title;
+
   List<Player> get players => session.players;
+
   int? get pointLimit => session.pointLimit;
+
   int get caboPenalty => session.caboPenalty;
+
   bool get isPointsLimitEnabled => session.isPointsLimitEnabled;
+
   bool get isGameFinished => session.isGameFinished;
+
   String get winner => session.winner;
+
   int get roundNumber => session.roundNumber;
+
   List<Round> get roundList => session.roundList;
 
   List<int> getPlayerScoresAsList() => session.getPlayerScoresAsList();
+
   List<String> getPlayerNamesAsList() => session.getPlayerNamesAsList();
 
   /// Assigns the kamikaze points to all players except the kamikaze player.
@@ -207,8 +217,6 @@ class GameSessionController extends ChangeNotifier {
         ),
       );
     }
-
-    notifyListeners();
   }
 
   /// This method updates the points of each player after a round.
@@ -234,7 +242,6 @@ class GameSessionController extends ChangeNotifier {
         if (players[i].totalScore > pointLimit!) {
           session.isGameFinished = true;
           limitExceeded = true;
-          _onGameFinished();
         }
       }
       if (!limitExceeded) {
@@ -247,7 +254,7 @@ class GameSessionController extends ChangeNotifier {
         isFinished: isGameFinished,
       ),
     );
-    notifyListeners();
+
     return bonusPlayers;
   }
 
@@ -264,7 +271,6 @@ class GameSessionController extends ChangeNotifier {
       }
     }
     _enqueueWrite(() => db.playerDao.updatePlayerScores(players: players));
-    notifyListeners();
   }
 
   /// Checks if a player has reached 100 points in the current round.
@@ -295,18 +301,7 @@ class GameSessionController extends ChangeNotifier {
     return bonusPlayers;
   }
 
-  /// Handles side effects when the game has just finished: gives haptic
-  /// feedback and notifies listeners. The winner itself is derived from the
-  /// players' scores, so nothing needs to be computed or persisted here.
-  void _onGameFinished() {
-    VibrationService.successNotification();
-    notifyListeners();
-  }
-
   /// Ends the game if it is in unlimited mode.
   /// It sets isGameFinished to true; the winner is derived automatically.
-  void endGame() {
-    session.isGameFinished = true;
-    _onGameFinished();
-  }
+  void endGame() => session.isGameFinished = true;
 }

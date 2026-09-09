@@ -11,6 +11,7 @@ import 'package:cabo_counter/presentation/controllers/game_session_controller.da
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -476,10 +477,12 @@ class _RoundViewState extends State<RoundView> {
       bonusPlayers,
     );
 
+    VibrationService.heavyImpact();
     await PopupService.showInfoPopup(
       context: context,
-      title: Text(loc.bonus_points_title),
-      content: Text(resultText),
+      icon: Icons.star_rounded,
+      title: loc.bonus_points_title,
+      message: resultText,
     );
   }
 
