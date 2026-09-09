@@ -58,7 +58,6 @@ class _HomeViewState extends State<HomeView> {
       ],
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
     ),
   );
 
@@ -76,7 +75,6 @@ class _HomeViewState extends State<HomeView> {
       ],
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
     ),
   );
 

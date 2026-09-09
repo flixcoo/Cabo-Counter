@@ -454,9 +454,8 @@ class _CreateGameViewState extends State<CreateGameView> {
       createdAt: DateTime.now(),
       title: title,
       players: players,
-      pointLimit: ConfigService.getPointLimit(),
+      pointLimit: isPointsLimitEnabled ? ConfigService.getPointLimit() : null,
       caboPenalty: ConfigService.getCaboPenalty(),
-      isPointsLimitEnabled: isPointsLimitEnabled,
       isGameFinished: false,
     );
 

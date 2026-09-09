@@ -37,7 +37,7 @@ class GameSessionController extends ChangeNotifier {
   DateTime get createdAt => session.createdAt;
   String get title => session.title;
   List<Player> get players => session.players;
-  int get pointLimit => session.pointLimit;
+  int? get pointLimit => session.pointLimit;
   int get caboPenalty => session.caboPenalty;
   bool get isPointsLimitEnabled => session.isPointsLimitEnabled;
   bool get isGameFinished => session.isGameFinished;
@@ -48,14 +48,15 @@ class GameSessionController extends ChangeNotifier {
   List<int> getPlayerScoresAsList() => session.getPlayerScoresAsList();
   List<String> getPlayerNamesAsList() => session.getPlayerNamesAsList();
 
-  /// Assigns 50 points to all players except the kamikaze player.
-  /// [kamikazePlayerIndex] is the index of the kamikaze player.
+  /// Assigns the kamikaze points to all players except the kamikaze player.
   void applyKamikaze(int roundNum, int kamikazePlayerIndex) {
     List<int> roundScores = List.generate(players.length, (_) => 0);
     List<int> scoreUpdates = List.generate(players.length, (_) => 0);
     for (int i = 0; i < scoreUpdates.length; i++) {
       if (i != kamikazePlayerIndex) {
-        scoreUpdates[i] += (pointLimit / 2).round();
+        // In unlimited mode use standard point limit
+        final limit = pointLimit ?? 100;
+        scoreUpdates[i] += (limit / 2).round();
       }
     }
     addRoundScoresToList(
@@ -230,7 +231,7 @@ class GameSessionController extends ChangeNotifier {
       bool limitExceeded = false;
 
       for (int i = 0; i < players.length; i++) {
-        if (players[i].totalScore > pointLimit) {
+        if (players[i].totalScore > pointLimit!) {
           session.isGameFinished = true;
           limitExceeded = true;
           _onGameFinished();
@@ -275,7 +276,7 @@ class GameSessionController extends ChangeNotifier {
     for (int i = 0; i < players.length; i++) {
       if (players[i].totalScore == pointLimit) {
         bonusPlayers.add(i);
-        roundList[lastRoundIndex].scoreUpdates[i] -= (pointLimit / 2).round();
+        roundList[lastRoundIndex].scoreUpdates[i] -= (pointLimit! / 2).round();
       }
     }
     if (bonusPlayers.isNotEmpty) {

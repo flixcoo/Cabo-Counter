@@ -48,13 +48,10 @@
       ]
     },
     "pointLimit": {
-      "type": "integer"
+      "type": ["integer", "null"]
     },
     "caboPenalty": {
       "type": "integer"
-    },
-    "isPointsLimitEnabled": {
-      "type": "boolean"
     },
     "isGameFinished": {
       "type": "boolean"
@@ -130,7 +127,6 @@
     "players",
     "pointLimit",
     "caboPenalty",
-    "isPointsLimitEnabled",
     "isGameFinished",
     "winner",
     "roundNumber",

@@ -467,7 +467,7 @@ class _RoundViewState extends State<RoundView> {
     List<int> bonusPlayers,
   ) async {
     final loc = AppLocalizations.of(context);
-    final pointLimit = widget.gameSession.pointLimit;
+    final pointLimit = widget.gameSession.pointLimit!;
     final bonusPoints = (pointLimit / 2).round();
 
     String resultText = getBonusPopupMessageString(

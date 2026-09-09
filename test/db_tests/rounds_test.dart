@@ -98,7 +98,6 @@ void main() {
       title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
       players: [player1, player2, player3],
       roundList: [round1, round2, round3],
     );
@@ -109,7 +108,6 @@ void main() {
       title: 'empty game session',
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
       players: [player1, player2, player3],
       roundList: [],
     );

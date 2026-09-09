@@ -6,8 +6,8 @@ import 'package:uuid/uuid.dart';
 ///
 /// [createdAt] is the timestamp of when the game session was created.
 /// [title] is the title of the game.
-/// [isPointsLimitEnabled] is a boolean indicating if the game has the default
-/// point limit of 101 points or not.
+/// [pointLimit] is the point limit of the game, or `null` if the game is
+/// played without a point limit (unlimited mode).
 /// [players] is a string list of player names.
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 class GameSession {
@@ -15,9 +15,8 @@ class GameSession {
   final DateTime createdAt;
   final String title;
   final List<Player> players;
-  final int pointLimit;
+  final int? pointLimit;
   final int caboPenalty;
-  final bool isPointsLimitEnabled;
   bool isGameFinished;
   List<Round> roundList;
 
@@ -28,13 +27,13 @@ class GameSession {
     required this.players,
     required this.pointLimit,
     required this.caboPenalty,
-    required this.isPointsLimitEnabled,
     this.isGameFinished = false,
     List<Round>? roundList,
   }) : id = gameId ?? const Uuid().v4(),
        roundList = roundList ?? [];
 
   int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
+  bool get isPointsLimitEnabled => pointLimit != null;
 
   /// The players with the loweste score when the match is finished.
   String get winner {
@@ -67,7 +66,6 @@ class GameSession {
     'players': players.map((p) => p.toJson()).toList(),
     'pointLimit': pointLimit,
     'caboPenalty': caboPenalty,
-    'isPointsLimitEnabled': isPointsLimitEnabled,
     'isGameFinished': isGameFinished,
     'roundList': roundList.map((e) => e.toJson()).toList(),
   };
@@ -82,7 +80,6 @@ class GameSession {
           .toList(),
       pointLimit = json['pointLimit'],
       caboPenalty = json['caboPenalty'],
-      isPointsLimitEnabled = json['isPointsLimitEnabled'],
       isGameFinished = json['isGameFinished'],
       roundList = (json['roundList'] as List)
           .map((e) => Round.fromJson(e))

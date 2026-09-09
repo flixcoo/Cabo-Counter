@@ -52,7 +52,6 @@ void main() {
       players: testPlayers,
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
       isGameFinished: false,
     );
     controller = GameSessionController(session: session, db: database);

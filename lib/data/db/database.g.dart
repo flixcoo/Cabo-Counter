@@ -47,9 +47,9 @@ class $GameSessionTableTable extends GameSessionTable
   late final GeneratedColumn<int> pointLimit = GeneratedColumn<int>(
     'point_limit',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _caboPenaltyMeta = const VerificationMeta(
     'caboPenalty',
@@ -61,19 +61,6 @@ class $GameSessionTableTable extends GameSessionTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-  );
-  static const VerificationMeta _isPointsLimitEnabledMeta =
-      const VerificationMeta('isPointsLimitEnabled');
-  @override
-  late final GeneratedColumn<bool> isPointsLimitEnabled = GeneratedColumn<bool>(
-    'is_points_limit_enabled',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_points_limit_enabled" IN (0, 1))',
-    ),
   );
   static const VerificationMeta _isGameFinishedMeta = const VerificationMeta(
     'isGameFinished',
@@ -96,7 +83,6 @@ class $GameSessionTableTable extends GameSessionTable
     gameTitle,
     pointLimit,
     caboPenalty,
-    isPointsLimitEnabled,
     isGameFinished,
   ];
   @override
@@ -140,8 +126,6 @@ class $GameSessionTableTable extends GameSessionTable
         _pointLimitMeta,
         pointLimit.isAcceptableOrUnknown(data['point_limit']!, _pointLimitMeta),
       );
-    } else if (isInserting) {
-      context.missing(_pointLimitMeta);
     }
     if (data.containsKey('cabo_penalty')) {
       context.handle(
@@ -153,17 +137,6 @@ class $GameSessionTableTable extends GameSessionTable
       );
     } else if (isInserting) {
       context.missing(_caboPenaltyMeta);
-    }
-    if (data.containsKey('is_points_limit_enabled')) {
-      context.handle(
-        _isPointsLimitEnabledMeta,
-        isPointsLimitEnabled.isAcceptableOrUnknown(
-          data['is_points_limit_enabled']!,
-          _isPointsLimitEnabledMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_isPointsLimitEnabledMeta);
     }
     if (data.containsKey('is_game_finished')) {
       context.handle(
@@ -200,14 +173,10 @@ class $GameSessionTableTable extends GameSessionTable
       pointLimit: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}point_limit'],
-      )!,
+      ),
       caboPenalty: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}cabo_penalty'],
-      )!,
-      isPointsLimitEnabled: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}is_points_limit_enabled'],
       )!,
       isGameFinished: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
@@ -227,17 +196,15 @@ class GameSessionTableData extends DataClass
   final String gameId;
   final DateTime createdAt;
   final String gameTitle;
-  final int pointLimit;
+  final int? pointLimit;
   final int caboPenalty;
-  final bool isPointsLimitEnabled;
   final bool isGameFinished;
   const GameSessionTableData({
     required this.gameId,
     required this.createdAt,
     required this.gameTitle,
-    required this.pointLimit,
+    this.pointLimit,
     required this.caboPenalty,
-    required this.isPointsLimitEnabled,
     required this.isGameFinished,
   });
   @override
@@ -246,9 +213,10 @@ class GameSessionTableData extends DataClass
     map['game_id'] = Variable<String>(gameId);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['game_title'] = Variable<String>(gameTitle);
-    map['point_limit'] = Variable<int>(pointLimit);
+    if (!nullToAbsent || pointLimit != null) {
+      map['point_limit'] = Variable<int>(pointLimit);
+    }
     map['cabo_penalty'] = Variable<int>(caboPenalty);
-    map['is_points_limit_enabled'] = Variable<bool>(isPointsLimitEnabled);
     map['is_game_finished'] = Variable<bool>(isGameFinished);
     return map;
   }
@@ -258,9 +226,10 @@ class GameSessionTableData extends DataClass
       gameId: Value(gameId),
       createdAt: Value(createdAt),
       gameTitle: Value(gameTitle),
-      pointLimit: Value(pointLimit),
+      pointLimit: pointLimit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pointLimit),
       caboPenalty: Value(caboPenalty),
-      isPointsLimitEnabled: Value(isPointsLimitEnabled),
       isGameFinished: Value(isGameFinished),
     );
   }
@@ -274,11 +243,8 @@ class GameSessionTableData extends DataClass
       gameId: serializer.fromJson<String>(json['gameId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       gameTitle: serializer.fromJson<String>(json['gameTitle']),
-      pointLimit: serializer.fromJson<int>(json['pointLimit']),
+      pointLimit: serializer.fromJson<int?>(json['pointLimit']),
       caboPenalty: serializer.fromJson<int>(json['caboPenalty']),
-      isPointsLimitEnabled: serializer.fromJson<bool>(
-        json['isPointsLimitEnabled'],
-      ),
       isGameFinished: serializer.fromJson<bool>(json['isGameFinished']),
     );
   }
@@ -289,9 +255,8 @@ class GameSessionTableData extends DataClass
       'gameId': serializer.toJson<String>(gameId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'gameTitle': serializer.toJson<String>(gameTitle),
-      'pointLimit': serializer.toJson<int>(pointLimit),
+      'pointLimit': serializer.toJson<int?>(pointLimit),
       'caboPenalty': serializer.toJson<int>(caboPenalty),
-      'isPointsLimitEnabled': serializer.toJson<bool>(isPointsLimitEnabled),
       'isGameFinished': serializer.toJson<bool>(isGameFinished),
     };
   }
@@ -300,17 +265,15 @@ class GameSessionTableData extends DataClass
     String? gameId,
     DateTime? createdAt,
     String? gameTitle,
-    int? pointLimit,
+    Value<int?> pointLimit = const Value.absent(),
     int? caboPenalty,
-    bool? isPointsLimitEnabled,
     bool? isGameFinished,
   }) => GameSessionTableData(
     gameId: gameId ?? this.gameId,
     createdAt: createdAt ?? this.createdAt,
     gameTitle: gameTitle ?? this.gameTitle,
-    pointLimit: pointLimit ?? this.pointLimit,
+    pointLimit: pointLimit.present ? pointLimit.value : this.pointLimit,
     caboPenalty: caboPenalty ?? this.caboPenalty,
-    isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
     isGameFinished: isGameFinished ?? this.isGameFinished,
   );
   GameSessionTableData copyWithCompanion(GameSessionTableCompanion data) {
@@ -324,9 +287,6 @@ class GameSessionTableData extends DataClass
       caboPenalty: data.caboPenalty.present
           ? data.caboPenalty.value
           : this.caboPenalty,
-      isPointsLimitEnabled: data.isPointsLimitEnabled.present
-          ? data.isPointsLimitEnabled.value
-          : this.isPointsLimitEnabled,
       isGameFinished: data.isGameFinished.present
           ? data.isGameFinished.value
           : this.isGameFinished,
@@ -341,7 +301,6 @@ class GameSessionTableData extends DataClass
           ..write('gameTitle: $gameTitle, ')
           ..write('pointLimit: $pointLimit, ')
           ..write('caboPenalty: $caboPenalty, ')
-          ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
           ..write('isGameFinished: $isGameFinished')
           ..write(')'))
         .toString();
@@ -354,7 +313,6 @@ class GameSessionTableData extends DataClass
     gameTitle,
     pointLimit,
     caboPenalty,
-    isPointsLimitEnabled,
     isGameFinished,
   );
   @override
@@ -366,7 +324,6 @@ class GameSessionTableData extends DataClass
           other.gameTitle == this.gameTitle &&
           other.pointLimit == this.pointLimit &&
           other.caboPenalty == this.caboPenalty &&
-          other.isPointsLimitEnabled == this.isPointsLimitEnabled &&
           other.isGameFinished == this.isGameFinished);
 }
 
@@ -374,9 +331,8 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
   final Value<String> gameId;
   final Value<DateTime> createdAt;
   final Value<String> gameTitle;
-  final Value<int> pointLimit;
+  final Value<int?> pointLimit;
   final Value<int> caboPenalty;
-  final Value<bool> isPointsLimitEnabled;
   final Value<bool> isGameFinished;
   final Value<int> rowid;
   const GameSessionTableCompanion({
@@ -385,7 +341,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     this.gameTitle = const Value.absent(),
     this.pointLimit = const Value.absent(),
     this.caboPenalty = const Value.absent(),
-    this.isPointsLimitEnabled = const Value.absent(),
     this.isGameFinished = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -393,17 +348,14 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     required String gameId,
     required DateTime createdAt,
     required String gameTitle,
-    required int pointLimit,
+    this.pointLimit = const Value.absent(),
     required int caboPenalty,
-    required bool isPointsLimitEnabled,
     required bool isGameFinished,
     this.rowid = const Value.absent(),
   }) : gameId = Value(gameId),
        createdAt = Value(createdAt),
        gameTitle = Value(gameTitle),
-       pointLimit = Value(pointLimit),
        caboPenalty = Value(caboPenalty),
-       isPointsLimitEnabled = Value(isPointsLimitEnabled),
        isGameFinished = Value(isGameFinished);
   static Insertable<GameSessionTableData> custom({
     Expression<String>? gameId,
@@ -411,7 +363,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Expression<String>? gameTitle,
     Expression<int>? pointLimit,
     Expression<int>? caboPenalty,
-    Expression<bool>? isPointsLimitEnabled,
     Expression<bool>? isGameFinished,
     Expression<int>? rowid,
   }) {
@@ -421,8 +372,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
       if (gameTitle != null) 'game_title': gameTitle,
       if (pointLimit != null) 'point_limit': pointLimit,
       if (caboPenalty != null) 'cabo_penalty': caboPenalty,
-      if (isPointsLimitEnabled != null)
-        'is_points_limit_enabled': isPointsLimitEnabled,
       if (isGameFinished != null) 'is_game_finished': isGameFinished,
       if (rowid != null) 'rowid': rowid,
     });
@@ -432,9 +381,8 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Value<String>? gameId,
     Value<DateTime>? createdAt,
     Value<String>? gameTitle,
-    Value<int>? pointLimit,
+    Value<int?>? pointLimit,
     Value<int>? caboPenalty,
-    Value<bool>? isPointsLimitEnabled,
     Value<bool>? isGameFinished,
     Value<int>? rowid,
   }) {
@@ -444,7 +392,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
       gameTitle: gameTitle ?? this.gameTitle,
       pointLimit: pointLimit ?? this.pointLimit,
       caboPenalty: caboPenalty ?? this.caboPenalty,
-      isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
       isGameFinished: isGameFinished ?? this.isGameFinished,
       rowid: rowid ?? this.rowid,
     );
@@ -468,11 +415,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     if (caboPenalty.present) {
       map['cabo_penalty'] = Variable<int>(caboPenalty.value);
     }
-    if (isPointsLimitEnabled.present) {
-      map['is_points_limit_enabled'] = Variable<bool>(
-        isPointsLimitEnabled.value,
-      );
-    }
     if (isGameFinished.present) {
       map['is_game_finished'] = Variable<bool>(isGameFinished.value);
     }
@@ -490,7 +432,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
           ..write('gameTitle: $gameTitle, ')
           ..write('pointLimit: $pointLimit, ')
           ..write('caboPenalty: $caboPenalty, ')
-          ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
           ..write('isGameFinished: $isGameFinished, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1652,9 +1593,8 @@ typedef $$GameSessionTableTableCreateCompanionBuilder =
       required String gameId,
       required DateTime createdAt,
       required String gameTitle,
-      required int pointLimit,
+      Value<int?> pointLimit,
       required int caboPenalty,
-      required bool isPointsLimitEnabled,
       required bool isGameFinished,
       Value<int> rowid,
     });
@@ -1663,9 +1603,8 @@ typedef $$GameSessionTableTableUpdateCompanionBuilder =
       Value<String> gameId,
       Value<DateTime> createdAt,
       Value<String> gameTitle,
-      Value<int> pointLimit,
+      Value<int?> pointLimit,
       Value<int> caboPenalty,
-      Value<bool> isPointsLimitEnabled,
       Value<bool> isGameFinished,
       Value<int> rowid,
     });
@@ -1751,11 +1690,6 @@ class $$GameSessionTableTableFilterComposer
 
   ColumnFilters<int> get caboPenalty => $composableBuilder(
     column: $table.caboPenalty,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get isPointsLimitEnabled => $composableBuilder(
-    column: $table.isPointsLimitEnabled,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1849,11 +1783,6 @@ class $$GameSessionTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isPointsLimitEnabled => $composableBuilder(
-    column: $table.isPointsLimitEnabled,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<bool> get isGameFinished => $composableBuilder(
     column: $table.isGameFinished,
     builder: (column) => ColumnOrderings(column),
@@ -1885,11 +1814,6 @@ class $$GameSessionTableTableAnnotationComposer
 
   GeneratedColumn<int> get caboPenalty => $composableBuilder(
     column: $table.caboPenalty,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<bool> get isPointsLimitEnabled => $composableBuilder(
-    column: $table.isPointsLimitEnabled,
     builder: (column) => column,
   );
 
@@ -1982,9 +1906,8 @@ class $$GameSessionTableTableTableManager
                 Value<String> gameId = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<String> gameTitle = const Value.absent(),
-                Value<int> pointLimit = const Value.absent(),
+                Value<int?> pointLimit = const Value.absent(),
                 Value<int> caboPenalty = const Value.absent(),
-                Value<bool> isPointsLimitEnabled = const Value.absent(),
                 Value<bool> isGameFinished = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion(
@@ -1993,7 +1916,6 @@ class $$GameSessionTableTableTableManager
                 gameTitle: gameTitle,
                 pointLimit: pointLimit,
                 caboPenalty: caboPenalty,
-                isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
                 rowid: rowid,
               ),
@@ -2002,9 +1924,8 @@ class $$GameSessionTableTableTableManager
                 required String gameId,
                 required DateTime createdAt,
                 required String gameTitle,
-                required int pointLimit,
+                Value<int?> pointLimit = const Value.absent(),
                 required int caboPenalty,
-                required bool isPointsLimitEnabled,
                 required bool isGameFinished,
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion.insert(
@@ -2013,7 +1934,6 @@ class $$GameSessionTableTableTableManager
                 gameTitle: gameTitle,
                 pointLimit: pointLimit,
                 caboPenalty: caboPenalty,
-                isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
                 rowid: rowid,
               ),

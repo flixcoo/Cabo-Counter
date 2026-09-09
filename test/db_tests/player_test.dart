@@ -73,7 +73,6 @@ void main() {
       title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
       players: [player1, player2, player3],
     );
     gameWithoutPlayers = GameSession(
@@ -83,7 +82,6 @@ void main() {
       title: 'test game session',
       pointLimit: 100,
       caboPenalty: 5,
-      isPointsLimitEnabled: true,
       players: [],
     );
   });

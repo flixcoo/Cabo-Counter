@@ -20,14 +20,23 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onUpgrade: (migrator, from, to) async {
-        if (from < 2) {
-          await migrator.alterTable(TableMigration(gameSessionTable));
+        if (from < 3) {
+          await migrator.alterTable(
+            TableMigration(
+              gameSessionTable,
+              columnTransformer: {
+                gameSessionTable.pointLimit: const CustomExpression<int>(
+                  'CASE WHEN is_points_limit_enabled THEN point_limit ELSE NULL END',
+                ),
+              },
+            ),
+          );
         }
       },
       beforeOpen: (details) async {

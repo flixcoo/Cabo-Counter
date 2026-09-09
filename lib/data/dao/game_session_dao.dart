@@ -23,9 +23,8 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         gameId: gameSession.id,
         createdAt: gameSession.createdAt,
         gameTitle: gameSession.title,
-        pointLimit: gameSession.pointLimit,
+        pointLimit: Value(gameSession.pointLimit),
         caboPenalty: gameSession.caboPenalty,
-        isPointsLimitEnabled: gameSession.isPointsLimitEnabled,
         isGameFinished: gameSession.isGameFinished,
       ),
     );
@@ -69,7 +68,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
           players: playerList,
           pointLimit: row.pointLimit,
           caboPenalty: row.caboPenalty,
-          isPointsLimitEnabled: row.isPointsLimitEnabled,
           isGameFinished: row.isGameFinished,
           roundList: roundList,
         );
@@ -106,7 +104,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       players: playerList,
       pointLimit: gameSessionResult.pointLimit,
       caboPenalty: gameSessionResult.caboPenalty,
-      isPointsLimitEnabled: gameSessionResult.isPointsLimitEnabled,
       isGameFinished: gameSessionResult.isGameFinished,
       roundList: roundList,
     );
