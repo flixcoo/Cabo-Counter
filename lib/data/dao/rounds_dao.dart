@@ -1,13 +1,13 @@
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
-import 'package:cabo_counter/data/db/tables/rounds_table.dart';
+import 'package:cabo_counter/data/db/tables/round_score_table.dart';
+import 'package:cabo_counter/data/db/tables/round_table.dart';
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
 import 'package:drift/drift.dart';
 
 part 'rounds_dao.g.dart';
 
-@DriftAccessor(tables: [RoundsTable, RoundScoresTable])
+@DriftAccessor(tables: [RoundTable, RoundScoreTable])
 class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   RoundsDao(super.db);
 
@@ -15,7 +15,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// The rounds are ordered by their round number so that the position of a
   /// round in the returned list matches its round number (index + 1).
   Future<List<Round>> getRoundsByGameId({required String gameId}) async {
-    final query = select(roundsTable)
+    final query = select(roundTable)
       ..where((tbl) => tbl.gameSessionId.equals(gameId))
       ..orderBy([(tbl) => OrderingTerm(expression: tbl.roundNumber)]);
 
@@ -50,7 +50,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required String gameId,
     required int roundNumber,
   }) async {
-    final query = select(roundsTable)
+    final query = select(roundTable)
       ..where(
         (tbl) =>
             tbl.gameSessionId.equals(gameId) &
@@ -87,7 +87,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required int roundNumber,
     required List<Player> players,
   }) async {
-    final roundEntry = RoundsTableCompanion.insert(
+    final roundEntry = RoundTableCompanion.insert(
       id: round.id,
       gameSessionId: gameId,
       roundNumber: roundNumber,
@@ -95,17 +95,17 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
     );
 
-    await into(roundsTable).insert(roundEntry);
+    await into(roundTable).insert(roundEntry);
 
     for (int i = 0; i < players.length; i++) {
       final player = players[i];
-      final roundScoreEntry = RoundScoresTableCompanion.insert(
+      final roundScoreEntry = RoundScoreTableCompanion.insert(
         roundId: round.id,
         playerId: player.id,
         score: round.scores[i],
         scoreUpdate: round.scoreUpdates[i],
       );
-      await into(roundScoresTable).insert(roundScoreEntry);
+      await into(roundScoreTable).insert(roundScoreEntry);
     }
   }
 
@@ -144,13 +144,13 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   }) async {
     if (rounds.isEmpty) return;
     await batch((batch) {
-      final roundEntries = <RoundsTableCompanion>[];
-      final roundScoreEntries = <RoundScoresTableCompanion>[];
+      final roundEntries = <RoundTableCompanion>[];
+      final roundScoreEntries = <RoundScoreTableCompanion>[];
 
       for (int r = 0; r < rounds.length; r++) {
         final round = rounds[r];
         roundEntries.add(
-          RoundsTableCompanion.insert(
+          RoundTableCompanion.insert(
             id: round.id,
             gameSessionId: gameSessionId,
             roundNumber: r + 1,
@@ -161,7 +161,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
 
         for (int i = 0; i < players.length; i++) {
           roundScoreEntries.add(
-            RoundScoresTableCompanion.insert(
+            RoundScoreTableCompanion.insert(
               roundId: round.id,
               playerId: players[i].id,
               score: round.scores[i],
@@ -171,8 +171,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         }
       }
 
-      batch.insertAll(roundsTable, roundEntries);
-      batch.insertAll(roundScoresTable, roundScoreEntries);
+      batch.insertAll(roundTable, roundEntries);
+      batch.insertAll(roundScoreTable, roundScoreEntries);
     });
   }
 
@@ -185,7 +185,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required String gameId,
     required int roundNumber,
   }) async {
-    final query = select(roundsTable)
+    final query = select(roundTable)
       ..where(
         (tbl) =>
             tbl.gameSessionId.equals(gameId) &
@@ -194,7 +194,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final roundResult = await query.getSingleOrNull();
     if (roundResult == null) return false;
 
-    final deleteQuery = delete(roundsTable)
+    final deleteQuery = delete(roundTable)
       ..where(
         (tbl) =>
             tbl.gameSessionId.equals(gameId) &

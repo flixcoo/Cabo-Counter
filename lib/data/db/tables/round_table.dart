@@ -1,7 +1,7 @@
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:drift/drift.dart';
 
-class RoundsTable extends Table {
+class RoundTable extends Table {
   TextColumn get id => text()();
   TextColumn get gameSessionId =>
       text().references(GameSessionTable, #id, onDelete: KeyAction.cascade)();

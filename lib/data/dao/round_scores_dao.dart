@@ -1,11 +1,11 @@
 import 'package:cabo_counter/data/db/database.dart';
-import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
+import 'package:cabo_counter/data/db/tables/round_score_table.dart';
 import 'package:cabo_counter/data/dto/round_score.dart';
 import 'package:drift/drift.dart';
 
 part 'round_scores_dao.g.dart';
 
-@DriftAccessor(tables: [RoundScoresTable])
+@DriftAccessor(tables: [RoundScoreTable])
 class RoundScoresDao extends DatabaseAccessor<AppDatabase>
     with _$RoundScoresDaoMixin {
   RoundScoresDao(super.db);
@@ -16,7 +16,7 @@ class RoundScoresDao extends DatabaseAccessor<AppDatabase>
   Future<List<RoundScore>> _getRoundScoresByRoundId({
     required String roundId,
   }) async {
-    final query = select(roundScoresTable)
+    final query = select(roundScoreTable)
       ..where((tbl) => tbl.roundId.equals(roundId));
 
     final result = await query.get();

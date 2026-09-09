@@ -6,10 +6,9 @@ part of 'round_scores_dao.dart';
 mixin _$RoundScoresDaoMixin on DatabaseAccessor<AppDatabase> {
   $GameSessionTableTable get gameSessionTable =>
       attachedDatabase.gameSessionTable;
-  $RoundsTableTable get roundsTable => attachedDatabase.roundsTable;
+  $RoundTableTable get roundTable => attachedDatabase.roundTable;
   $PlayerTableTable get playerTable => attachedDatabase.playerTable;
-  $RoundScoresTableTable get roundScoresTable =>
-      attachedDatabase.roundScoresTable;
+  $RoundScoreTableTable get roundScoreTable => attachedDatabase.roundScoreTable;
   RoundScoresDaoManager get managers => RoundScoresDaoManager(this);
 }
 
@@ -21,13 +20,13 @@ class RoundScoresDaoManager {
         _db.attachedDatabase,
         _db.gameSessionTable,
       );
-  $$RoundsTableTableTableManager get roundsTable =>
-      $$RoundsTableTableTableManager(_db.attachedDatabase, _db.roundsTable);
+  $$RoundTableTableTableManager get roundTable =>
+      $$RoundTableTableTableManager(_db.attachedDatabase, _db.roundTable);
   $$PlayerTableTableTableManager get playerTable =>
       $$PlayerTableTableTableManager(_db.attachedDatabase, _db.playerTable);
-  $$RoundScoresTableTableTableManager get roundScoresTable =>
-      $$RoundScoresTableTableTableManager(
+  $$RoundScoreTableTableTableManager get roundScoreTable =>
+      $$RoundScoreTableTableTableManager(
         _db.attachedDatabase,
-        _db.roundScoresTable,
+        _db.roundScoreTable,
       );
 }

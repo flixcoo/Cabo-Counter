@@ -6,6 +6,8 @@ import 'package:drift/drift.dart';
 /// - Drops `isPointsLimitEnabled` and folds it into a nullable `pointLimit`.
 /// - Renames the primary keys / foreign keys to the new naming scheme
 ///   (`id`, `gameSessionId`).
+/// - Renames the tables `rounds_table` -> `round_table` and
+///   `round_scores_table` -> `round_score_table`.
 class V2RenameIdsAndDropPointLimitFlag extends Migration {
   const V2RenameIdsAndDropPointLimitFlag();
 
@@ -49,6 +51,14 @@ class V2RenameIdsAndDropPointLimitFlag extends Migration {
     // Rename RoundsTable.gameId -> gameSessionId
     await db.customStatement(
       'ALTER TABLE rounds_table RENAME COLUMN game_id TO game_session_id',
+    );
+
+    // Rename table RoundsTable -> RoundTable
+    await db.customStatement('ALTER TABLE rounds_table RENAME TO round_table');
+
+    // Rename table RoundScoresTable -> RoundScoreTable
+    await db.customStatement(
+      'ALTER TABLE round_scores_table RENAME TO round_score_table',
     );
   }
 }

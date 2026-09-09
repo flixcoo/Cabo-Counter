@@ -5,8 +5,8 @@ import 'package:cabo_counter/data/dao/rounds_dao.dart';
 import 'package:cabo_counter/data/db/migrations/database_migration.dart';
 import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:cabo_counter/data/db/tables/player_table.dart';
-import 'package:cabo_counter/data/db/tables/round_scores_table.dart';
-import 'package:cabo_counter/data/db/tables/rounds_table.dart';
+import 'package:cabo_counter/data/db/tables/round_score_table.dart';
+import 'package:cabo_counter/data/db/tables/round_table.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 part 'database.g.dart';
 
 @DriftDatabase(
-  tables: [GameSessionTable, PlayerTable, RoundScoresTable, RoundsTable],
+  tables: [GameSessionTable, PlayerTable, RoundScoreTable, RoundTable],
   daos: [GameSessionDao, PlayerDao, RoundsDao, RoundScoresDao],
 )
 class AppDatabase extends _$AppDatabase {
