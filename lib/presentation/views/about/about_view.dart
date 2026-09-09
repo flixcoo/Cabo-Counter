@@ -102,8 +102,8 @@ class AboutView extends StatelessWidget {
               ),
 
               Column(
+                spacing: 10,
                 children: [
-                  const SizedBox(height: 10),
                   const Text(
                     '\u00A9 Felix Kirchner',
                     style: TextStyle(fontSize: 16),
