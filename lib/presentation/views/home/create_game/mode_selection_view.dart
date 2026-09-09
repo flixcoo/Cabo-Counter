@@ -87,7 +87,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
     supressTap = true;
     setState(() => this.selectedMode = selectedMode);
     Future.delayed(const Duration(milliseconds: 400), () {
-      Navigator.of(context).pop(selectedMode);
+      if (mounted) Navigator.of(context).pop(selectedMode);
     });
   }
 }
