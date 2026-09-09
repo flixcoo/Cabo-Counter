@@ -27,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       onUpgrade: (migrator, from, to) async {
         if (from < 3) {
-          // Deleteing isPointLimitEnabled
+          // Deleting isPointLimitEnabled
           await migrator.alterTable(
             TableMigration(
               gameSessionTable,
@@ -39,33 +39,27 @@ class AppDatabase extends _$AppDatabase {
             ),
           );
 
-          /* GameSessionTable */
-
-          // Renaming gameID -> id
+          // Rename GameSessionTable.gameId -> id
           await customStatement(
             'ALTER TABLE game_session_table RENAME COLUMN game_id TO id',
           );
 
-          // Renaming playerID -> id
+          // Rename PlayerTable.playerId -> id
           await customStatement(
             'ALTER TABLE player_table RENAME COLUMN player_id TO id',
           );
 
-          /* PlayerTable */
-
-          // Renaming gameId -> gameSessionId
+          // Rename PlayerTable.gameId -> gameSessionId
           await customStatement(
             'ALTER TABLE player_table RENAME COLUMN game_id TO game_session_id',
           );
 
-          /* RoundsTable */
-
-          // Renaming roundId -> id
+          // Rename RoundsTable.roundId -> id
           await customStatement(
             'ALTER TABLE rounds_table RENAME COLUMN round_id TO id',
           );
 
-          //Renaming gameID -> gameSession
+          // Rename RoundsTable.gameId -> gameSessionId
           await customStatement(
             'ALTER TABLE rounds_table RENAME COLUMN game_id TO game_session_id',
           );
