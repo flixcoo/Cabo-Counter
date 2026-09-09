@@ -1,5 +1,6 @@
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
+import 'package:collection/collection.dart';
 import 'package:uuid/uuid.dart';
 
 /// This class represents a game session for  Cabo game.
@@ -94,4 +95,30 @@ class GameSession {
   List<String> getPlayerNamesAsList() {
     return players.map((player) => player.name).toList();
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GameSession &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          createdAt == other.createdAt &&
+          title == other.title &&
+          const ListEquality<Player>().equals(players, other.players) &&
+          pointLimit == other.pointLimit &&
+          caboPenalty == other.caboPenalty &&
+          isGameFinished == other.isGameFinished &&
+          const ListEquality<Round>().equals(roundList, other.roundList);
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    title,
+    const ListEquality<Player>().hash(players),
+    pointLimit,
+    caboPenalty,
+    isGameFinished,
+    const ListEquality<Round>().hash(roundList),
+  );
 }

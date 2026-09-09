@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:uuid/uuid.dart';
 
 /// This class represents a single round in the game.
@@ -45,4 +46,26 @@ class Round {
       kamikazePlayerIndex = json['kamikazePlayerIndex'],
       scores = List<int>.from(json['scores']),
       scoreUpdates = List<int>.from(json['scoreUpdates']);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Round &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          gameSessionId == other.gameSessionId &&
+          caboPlayerIndex == other.caboPlayerIndex &&
+          kamikazePlayerIndex == other.kamikazePlayerIndex &&
+          const ListEquality<int>().equals(scores, other.scores) &&
+          const ListEquality<int>().equals(scoreUpdates, other.scoreUpdates);
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    gameSessionId,
+    caboPlayerIndex,
+    kamikazePlayerIndex,
+    const ListEquality<int>().hash(scores),
+    const ListEquality<int>().hash(scoreUpdates),
+  );
 }
