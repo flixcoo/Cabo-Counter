@@ -148,7 +148,7 @@ class _RoundViewState extends State<RoundView> {
                       ),
                       child: SizedBox(
                         height: 40,
-                        child: CustomSegmendetControl<int>(
+                        child: CustomSegmentetControl<int>(
                           groupValue: caboPlayerIndex,
                           children: Map.fromEntries(
                             widget.gameSession.players.asMap().entries.map((
