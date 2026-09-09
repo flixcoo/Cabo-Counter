@@ -12,7 +12,7 @@ class CustomTheme {
   static const Color white = Color(0xFFFFFFFF);
 
   /// Red color, typically used for destructive actions or error states
-  static const Color red = Color(0xFFDD0000);
+  static const Color red = Color(0xFFF44336);
 
   /* ===== Text Colors ===== */
 
