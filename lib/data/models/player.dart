@@ -15,11 +15,6 @@ class Player {
     this.totalScore = 0,
   }) : id = id ?? const Uuid().v4();
 
-  @override
-  String toString() {
-    return 'Player: [id: $id, gameSessionId: $gameSessionId, name: $name, position: $position]';
-  }
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'gameSessionId': gameSessionId,

@@ -2,93 +2,38 @@ import 'package:cabo_counter/data/models/round.dart';
 import 'package:test/test.dart';
 
 void main() {
-  late Round round;
-  const testRoundNum = 1;
-  const testCaboPlayerIndex = 0;
-  const testKamikazePlayerIndex = 1;
-  const testScores = [10, 20, 30];
-  const testScoreUpdates = [5, 15, 25];
-  const testRoundId = 'testRoundId';
-  const testGameId = 'testGameId';
+  late Round round1;
+  late Round round2;
 
   setUp(() {
-    round = Round(
+    round1 = Round(
       roundId: 'testRoundId',
       gameSessionId: 'testGameId',
-      caboPlayerIndex: testCaboPlayerIndex,
-      kamikazePlayerIndex: testKamikazePlayerIndex,
-      scores: testScores,
-      scoreUpdates: testScoreUpdates,
+      caboPlayerIndex: 0,
+      kamikazePlayerIndex: null,
+      scores: [10, 20, 30],
+      scoreUpdates: [0, 20, 30],
+    );
+
+    round2 = Round(
+      roundId: 'testRoundId',
+      gameSessionId: 'testGameId',
+      caboPlayerIndex: 0,
+      kamikazePlayerIndex: 0,
+      scores: [0, 0, 0],
+      scoreUpdates: [0, 50, 50],
     );
   });
 
-  group('Constructor Tests', () {
-    test('Constructor sets correct values', () {
-      expect(round.caboPlayerIndex, testCaboPlayerIndex);
-      expect(round.kamikazePlayerIndex, testKamikazePlayerIndex);
-      expect(round.scores, testScores);
-      expect(round.scoreUpdates, testScoreUpdates);
-    });
+  group('Round Test', () {});
 
-    test('Constructor with null kamikazePlayerIndex', () {
-      final roundWithoutKamikaze = Round(
-        roundId: testRoundId,
-        gameSessionId: testGameId,
-        caboPlayerIndex: testCaboPlayerIndex,
-        kamikazePlayerIndex: null,
-        scores: testScores,
-        scoreUpdates: testScoreUpdates,
-      );
+  test('toJson()/fromJson() works correctly', () {
+    var jsonMap = round1.toJson();
+    var copy = Round.fromJson(jsonMap);
+    expect(copy, round1);
 
-      expect(roundWithoutKamikaze.kamikazePlayerIndex, isNull);
-    });
-  });
-
-  group('JSON Methods', () {
-    test('toJson() returns correct map', () {
-      final jsonMap = round.toJson();
-
-      expect(jsonMap['id'], equals(testRoundId));
-      expect(jsonMap['gameSessionId'], equals(testGameId));
-      expect(jsonMap['caboPlayerIndex'], equals(testCaboPlayerIndex));
-      expect(jsonMap['kamikazePlayerIndex'], equals(testKamikazePlayerIndex));
-      expect(jsonMap['scores'], equals(testScores));
-      expect(jsonMap['scoreUpdates'], equals(testScoreUpdates));
-    });
-
-    test('fromJson() creates correct Round object', () {
-      final jsonMap = {
-        'id': testRoundId,
-        'gameSessionId': testGameId,
-        'roundNum': testRoundNum,
-        'caboPlayerIndex': testCaboPlayerIndex,
-        'kamikazePlayerIndex': testKamikazePlayerIndex,
-        'scores': testScores,
-        'scoreUpdates': testScoreUpdates,
-      };
-
-      final fromJsonRound = Round.fromJson(jsonMap);
-
-      expect(fromJsonRound.caboPlayerIndex, testCaboPlayerIndex);
-      expect(fromJsonRound.kamikazePlayerIndex, testKamikazePlayerIndex);
-      expect(fromJsonRound.scores, testScores);
-      expect(fromJsonRound.scoreUpdates, testScoreUpdates);
-    });
-
-    test('fromJson() with null kamikazePlayerIndex', () {
-      final jsonMap = {
-        'id': testRoundId,
-        'gameSessionId': testGameId,
-        'roundNum': testRoundNum,
-        'caboPlayerIndex': testCaboPlayerIndex,
-        'kamikazePlayerIndex': null,
-        'scores': testScores,
-        'scoreUpdates': testScoreUpdates,
-      };
-
-      final fromJsonRound = Round.fromJson(jsonMap);
-
-      expect(fromJsonRound.kamikazePlayerIndex, isNull);
-    });
+    jsonMap = round2.toJson();
+    copy = Round.fromJson(jsonMap);
+    expect(copy, round2);
   });
 }

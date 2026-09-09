@@ -23,13 +23,6 @@ class Round {
     this.kamikazePlayerIndex,
   }) : id = roundId ?? const Uuid().v4();
 
-  @override
-  toString() {
-    return '{id: $id, gameSessionId: $gameSessionId, caboPlayerIndex: $caboPlayerIndex, '
-        'kamikazePlayerIndex: $kamikazePlayerIndex, scores: $scores, '
-        'scoreUpdates: $scoreUpdates}\n';
-  }
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'gameSessionId': gameSessionId,

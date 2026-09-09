@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cabo_counter/core/enums.dart';
+import 'package:cabo_counter/core/string_extension.dart';
 import 'package:cabo_counter/data/db/database.dart';
 import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,7 +14,8 @@ import 'package:provider/provider.dart';
 
 class DataTransferService {
   /// Writes the game session list to a JSON file and returns it as string.
-  static Future<String> _getGameDataAsJsonFile(BuildContext context) async {
+  @visibleForTesting
+  static Future<String> getGameDataAsJsonFile(BuildContext context) async {
     final db = Provider.of<AppDatabase>(context, listen: false);
     final sessions = await db.gameSessionDao.getAllGameSessions();
 
@@ -24,7 +26,10 @@ class DataTransferService {
   /// Opens the file picker to export game data as a JSON file.
   /// This method will export the given [jsonString] as a JSON file. It opens
   /// the file picker with the choosen [fileName].
-  static Future<bool> exportJsonData(String jsonString, String fileName) async {
+  static Future<bool> _exportJsonData(
+    String jsonString,
+    String fileName,
+  ) async {
     try {
       final bytes = Uint8List.fromList(utf8.encode(jsonString));
       await FileSaver.instance.saveAs(
@@ -43,16 +48,16 @@ class DataTransferService {
 
   /// Opens the file picker to export all game sessions as a JSON file.
   static Future<bool> exportGameData(BuildContext context) async {
-    String jsonString = await _getGameDataAsJsonFile(context);
-    String fileName = 'cabo_counter-game_data';
-    return exportJsonData(jsonString, fileName);
+    String jsonString = await getGameDataAsJsonFile(context);
+    String fileName = 'cabo_counter';
+    return _exportJsonData(jsonString, fileName);
   }
 
   /// Opens the file picker to save a single game session as a JSON file.
   static Future<bool> exportSingleGameSession(GameSession session) async {
     String jsonString = json.encode(session.toJson());
-    String fileName = 'cabo_counter-game_${session.id.substring(0, 7)}';
-    return exportJsonData(jsonString, fileName);
+    String fileName = session.title.toSafeFilename();
+    return _exportJsonData(jsonString, fileName);
   }
 
   /// Opens the file picker to import a JSON file and loads the game data from it.

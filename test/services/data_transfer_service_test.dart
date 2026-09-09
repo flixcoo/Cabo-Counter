@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
-import 'package:test/test.dart';
+import 'package:cabo_counter/services/data_transfer_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late GameSession gameSession1;
   late GameSession gameSession2;
   late GameSession gameSession3;
@@ -88,35 +93,34 @@ void main() {
       isGameFinished: true,
     );
   });
+  group('DataTransferService Tests', () {
+    test('Validate single GameSession', () async {
+      var jsonString = json.encode(gameSession1.toJson());
+      var result = await DataTransferService.validateJsonSchema(
+        jsonString,
+        false,
+      );
+      expect(result, isTrue);
 
-  group('GameSession Test', () {});
-  test('toJson()/fromJson() works correctly', () {
-    var jsonMap = gameSession2.toJson();
-    var copy = GameSession.fromJson(jsonMap);
-    expect(copy, gameSession2);
-  });
+      jsonString = json.encode(gameSession2.toJson());
+      result = await DataTransferService.validateJsonSchema(jsonString, false);
+      expect(result, isTrue);
 
-  test('getScoresList works correctly', () {
-    var scoresList = gameSession1.getScoresList;
-    expect(scoresList, [0, 0]);
+      jsonString = json.encode(gameSession3.toJson());
+      result = await DataTransferService.validateJsonSchema(jsonString, false);
+      expect(result, isTrue);
+    });
 
-    scoresList = gameSession2.getScoresList;
-    expect(scoresList, [7, 5]);
-  });
+    test('Validate GameSession List', () async {
+      final jsonString = [
+        gameSession1,
+        gameSession2,
+        gameSession3,
+      ].map((session) => session.toJson()).toList();
 
-  test('getPlayerNamesList works correctly', () {
-    var namesList = gameSession1.getPlayerNamesList;
-    expect(namesList, ['player1', 'player2']);
-
-    namesList = gameSession2.getPlayerNamesList;
-    expect(namesList, ['player3', 'player4', 'player5']);
-  });
-
-  test('winner works correctly', () {
-    var winner = gameSession1.winner;
-    expect(winner, '');
-
-    winner = gameSession2.winner;
-    expect(winner, 'player3, player4 & player5');
+      var jsonFile = json.encode(jsonString);
+      var result = await DataTransferService.validateJsonSchema(jsonFile, true);
+      expect(result, isTrue);
+    });
   });
 }

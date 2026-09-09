@@ -533,7 +533,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     final loc = AppLocalizations.of(context);
     String winner = widget.gameSession.winner;
 
-    int winnerPoints = widget.gameSession.getPlayerScoresAsList().min;
+    int winnerPoints = widget.gameSession.getScoresList.min;
     int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();

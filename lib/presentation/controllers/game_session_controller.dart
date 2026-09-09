@@ -54,9 +54,9 @@ class GameSessionController extends ChangeNotifier {
 
   List<Round> get roundList => session.roundList;
 
-  List<int> getPlayerScoresAsList() => session.getPlayerScoresAsList();
+  List<int> getPlayerScoresAsList() => session.getScoresList;
 
-  List<String> getPlayerNamesAsList() => session.getPlayerNamesAsList();
+  List<String> getPlayerNamesAsList() => session.getPlayerNamesList;
 
   /// Assigns the kamikaze points to all players except the kamikaze player.
   void applyKamikaze(int roundNum, int kamikazePlayerIndex) {

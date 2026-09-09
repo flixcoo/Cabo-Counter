@@ -56,12 +56,6 @@
     "isGameFinished": {
       "type": "boolean"
     },
-    "winner": {
-      "type": "string"
-    },
-    "roundNumber": {
-      "type": "integer"
-    },
     "roundList": {
       "type": "array",
       "items": [
@@ -73,9 +67,6 @@
             },
             "gameSessionId": {
               "type": "string"
-            },
-            "roundNum": {
-              "type": "integer"
             },
             "caboPlayerIndex": {
               "type": "integer"
@@ -109,7 +100,6 @@
           "required": [
             "id",
             "gameSessionId",
-            "roundNum",
             "caboPlayerIndex",
             "kamikazePlayerIndex",
             "scores",
@@ -128,8 +118,6 @@
     "pointLimit",
     "caboPenalty",
     "isGameFinished",
-    "winner",
-    "roundNumber",
     "roundList"
   ],
   "additionalProperties": false

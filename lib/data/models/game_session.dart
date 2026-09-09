@@ -33,32 +33,6 @@ class GameSession {
   }) : id = id ?? const Uuid().v4(),
        roundList = roundList ?? [];
 
-  int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
-  bool get isPointsLimitEnabled => pointLimit != null;
-
-  /// The players with the loweste score when the match is finished.
-  String get winner {
-    if (!isGameFinished || players.isEmpty) return '';
-    final int minScore = players
-        .map((p) => p.totalScore)
-        .reduce((a, b) => a < b ? a : b);
-    final lowestPlayers = players
-        .where((p) => p.totalScore == minScore)
-        .map((p) => p.name)
-        .toList();
-    if (lowestPlayers.length > 1) {
-      return '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
-    }
-    return lowestPlayers.first;
-  }
-
-  @override
-  toString() {
-    return 'GameSession: [id: $id, createdAt: $createdAt, title: $title, '
-        'isPointsLimitEnabled: $isPointsLimitEnabled, pointLimit: $pointLimit, caboPenalty: $caboPenalty,'
-        ' players: $players, roundList: $roundList, winner: $winner]';
-  }
-
   /// Converts the GameSession object to a JSON map.
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -86,16 +60,6 @@ class GameSession {
           .map((e) => Round.fromJson(e))
           .toList();
 
-  /// Returns the summed scores of all players as a list.
-  List<int> getPlayerScoresAsList() {
-    return players.map((player) => player.totalScore).toList();
-  }
-
-  /// Returns the names of all players as a list.
-  List<String> getPlayerNamesAsList() {
-    return players.map((player) => player.name).toList();
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -121,4 +85,31 @@ class GameSession {
     isGameFinished,
     const ListEquality<Round>().hash(roundList),
   );
+
+  int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
+  bool get isPointsLimitEnabled => pointLimit != null;
+
+  /// The players with the loweste score when the match is finished.
+  String get winner {
+    if (!isGameFinished || players.isEmpty) return '';
+    final int minScore = players
+        .map((p) => p.totalScore)
+        .reduce((a, b) => a < b ? a : b);
+    final lowestPlayers = players
+        .where((p) => p.totalScore == minScore)
+        .map((p) => p.name)
+        .toList();
+    if (lowestPlayers.length > 1) {
+      return '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
+    }
+    return lowestPlayers.first;
+  }
+
+  /// Returns the summed scores of all players as a list.
+  List<int> get getScoresList =>
+      players.map((player) => player.totalScore).toList();
+
+  /// Returns the names of all players as a list.
+  List<String> get getPlayerNamesList =>
+      players.map((player) => player.name).toList();
 }
