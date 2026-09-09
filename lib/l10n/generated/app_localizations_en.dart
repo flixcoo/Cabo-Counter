@@ -127,11 +127,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'You must play at least one round for the game progress graph to be displayed.';
 
   @override
-  String get empty_text_1 => 'Pretty empty here...';
-
-  @override
-  String get empty_text_2 =>
-      'Create a new game using the button in the top right.';
+  String get no_games_created_yet => 'No games created yet';
 
   @override
   String get end_game => 'End Game';

@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class OpacityButton extends StatefulWidget {
       padding: padding,
       isText: false,
       isIcon: true,
-      child: Icon(icon, size: size, color: color ?? CustomTheme.primaryColor),
+      child: AppIcon(icon, size: size, color: color ?? CustomTheme.primaryColor),
     );
   }
 
@@ -101,14 +102,14 @@ class _OpacityButtonState extends State<OpacityButton> {
           ),
         );
       }
-    } else if (widget._isIcon && effectiveChild is Icon) {
-      darkChild = Icon(
+    } else if (widget._isIcon && effectiveChild is AppIcon) {
+      darkChild = AppIcon(
         effectiveChild.icon,
         color: Colors.black,
         size: effectiveChild.size,
       );
       if (isDisabled) {
-        effectiveChild = Icon(
+        effectiveChild = AppIcon(
           effectiveChild.icon,
           color: CustomTheme.textColor,
           size: effectiveChild.size,

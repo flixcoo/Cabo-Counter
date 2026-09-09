@@ -70,7 +70,7 @@ class _ActiveGameListTileState extends State<ActiveGameListTile> {
                 children: [
                   if (widget.trailing != null) widget.trailing!,
                   if (widget.showChevron)
-                    Icon(
+                    AppIcon(
                       IconService.chevron,
                       size: 17,
                       color: CustomTheme.hintTextColor,

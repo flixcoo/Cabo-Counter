@@ -34,7 +34,7 @@ class _AddPlayerButtonState extends State<AddPlayerButton> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(IconService.add, size: 20, color: CustomTheme.primaryColor),
+            AppIcon(IconService.add, size: 20, color: CustomTheme.primaryColor),
             const SizedBox(width: 8),
             Text(
               loc.add_player,

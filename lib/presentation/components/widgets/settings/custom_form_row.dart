@@ -40,18 +40,23 @@ class _CustomFormRowState extends State<CustomFormRow> {
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.06,
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: widget.suffixPadding),
+          padding: EdgeInsets.only(left: 8.0, right: widget.suffixPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                spacing: 5,
                 children: [
-                  Icon(
-                    widget.prefixIcon,
-                    size: 22,
-                    color: CustomTheme.primaryColor,
+                  SizedBox(
+                    width: 40,
+                    child: Center(
+                      child: AppIcon(
+                        widget.prefixIcon,
+                        size: 22,
+                        color: CustomTheme.primaryColor,
+                      ),
+                    ),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                   Text(widget.prefixText, style: const TextStyle(fontSize: 16)),
                 ],
               ),
@@ -60,7 +65,7 @@ class _CustomFormRowState extends State<CustomFormRow> {
                   widget.suffixWidget ?? const SizedBox.shrink(),
                   if (widget.showChevron) ...[
                     const SizedBox(width: 10),
-                    Icon(
+                    AppIcon(
                       IconService.chevron,
                       color: CustomTheme.hintTextColor,
                       size: 17,

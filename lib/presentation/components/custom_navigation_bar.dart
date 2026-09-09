@@ -46,11 +46,11 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(IconService.home),
+            icon: AppIcon(IconService.home, size: 24),
             label: loc.home,
           ),
           BottomNavigationBarItem(
-            icon: Icon(IconService.info),
+            icon: AppIcon(IconService.info, size: 24),
             label: loc.about,
           ),
         ],

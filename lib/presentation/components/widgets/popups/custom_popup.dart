@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/material.dart';
 
 class CustomPopup<T> extends StatelessWidget {
@@ -96,7 +97,7 @@ class CustomPopup<T> extends StatelessWidget {
                           color: accent.withAlpha(38),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(icon, color: accent, size: 30),
+                        child: AppIcon(icon!, color: accent, size: 30),
                       ),
                     ),
                   ],

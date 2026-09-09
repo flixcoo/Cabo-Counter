@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cabo_counter/core/custom_theme.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
@@ -87,7 +88,7 @@ class _SelectableTileState extends State<SelectableTile> {
               spacing: 10,
               children: [
                 if (widget.icon != null) ...[
-                  Icon(widget.icon, color: widget.selectionColor, size: 22),
+                  AppIcon(widget.icon!, color: widget.selectionColor, size: 22),
                 ],
                 Text(
                   widget.title,

@@ -284,7 +284,7 @@ class _CreateGameViewState extends State<CreateGameView> {
                                     ),
                                     child: ReorderableDragStartListener(
                                       index: index,
-                                      child: Icon(
+                                      child: AppIcon(
                                         IconService.drag,
                                         color: CustomTheme.subtitleColor,
                                       ),

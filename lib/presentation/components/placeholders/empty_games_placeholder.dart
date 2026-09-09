@@ -16,7 +16,7 @@ class EmptyGamesPlaceholder extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Icon(
+          child: AppIcon(
             IconService.no_games,
             size: 60,
             color: CustomTheme.primaryColor,
@@ -24,19 +24,10 @@ class EmptyGamesPlaceholder extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
-          child: Column(
-            children: [
-              Text(
-                '${loc.empty_text_1}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-              Text(
-                '${loc.empty_text_2}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
+          child: Text(
+            '${loc.no_games_created_yet}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 14),
           ),
         ),
       ],

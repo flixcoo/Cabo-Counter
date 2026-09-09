@@ -128,11 +128,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
 
   @override
-  String get empty_text_1 => 'Ganz schön leer hier...';
-
-  @override
-  String get empty_text_2 =>
-      'Füge über den Button oben rechts eine neue Runde hinzu.';
+  String get no_games_created_yet => 'Noch keine Spiele erstellt.';
 
   @override
   String get end_game => 'Spiel beenden';

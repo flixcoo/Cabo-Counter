@@ -295,17 +295,11 @@ abstract class AppLocalizations {
   /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
   String get empty_graph_text;
 
-  /// No description provided for @empty_text_1.
+  /// No description provided for @no_games_created_yet.
   ///
   /// In de, this message translates to:
-  /// **'Ganz schön leer hier...'**
-  String get empty_text_1;
-
-  /// No description provided for @empty_text_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Füge über den Button oben rechts eine neue Runde hinzu.'**
-  String get empty_text_2;
+  /// **'Noch keine Spiele erstellt.'**
+  String get no_games_created_yet;
 
   /// No description provided for @end_game.
   ///

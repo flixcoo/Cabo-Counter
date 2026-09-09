@@ -36,7 +36,7 @@ class _LicenseTileState extends State<LicenseTile> {
             Expanded(
               child: Row(
                 children: [
-                  Icon(
+                  AppIcon(
                     IconService.license,
                     size: 28,
                     color: CustomTheme.primaryColor,
@@ -104,7 +104,7 @@ class _LicenseTileState extends State<LicenseTile> {
                 ],
               ),
             ),
-            Icon(
+            AppIcon(
               IconService.chevron,
               size: 17,
               color: CustomTheme.hintTextColor,

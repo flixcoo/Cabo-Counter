@@ -55,7 +55,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
                 : null,
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Icon(widget.icon, size: 28, color: widget.color)],
+              children: [AppIcon(widget.icon, size: 24, color: widget.color)],
             ),
           ),
         ),

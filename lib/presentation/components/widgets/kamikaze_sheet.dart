@@ -79,7 +79,7 @@ class _KamikazeSheetState extends State<KamikazeSheet> {
                       color: CustomTheme.kamikazeColor.withAlpha(30),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: AppIcon(
                       IconService.kamikaze,
                       color: CustomTheme.kamikazeColor,
                       size: 28,

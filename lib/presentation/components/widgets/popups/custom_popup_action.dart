@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
+import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +117,7 @@ class _CustomPopupActionState<T> extends State<CustomPopupAction<T>>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (widget.icon != null) ...[
-                Icon(widget.icon, color: foregroundColor, size: 20),
+                AppIcon(widget.icon!, color: foregroundColor, size: 20),
                 const SizedBox(width: 8),
               ],
               Flexible(

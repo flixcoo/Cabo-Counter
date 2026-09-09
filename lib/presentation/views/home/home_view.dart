@@ -162,7 +162,7 @@ class _HomeViewState extends State<HomeView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
+                                  AppIcon(
                                     IconService.visibility_off,
                                     color: CustomTheme.white.withAlpha(150),
                                     size: 16.0,
@@ -197,7 +197,7 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                       child: Align(
                                         alignment: Alignment.centerRight,
-                                        child: Icon(
+                                        child: AppIcon(
                                           IconService.delete,
                                           color: CustomTheme.white,
                                         ),

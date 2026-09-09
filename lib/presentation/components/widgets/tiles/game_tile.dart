@@ -93,7 +93,7 @@ class _GameTileState extends State<GameTile> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(a.icon, size: 16, color: CustomTheme.primaryColor),
+                      AppIcon(a.icon, size: 16, color: CustomTheme.primaryColor),
                       const SizedBox(width: 5),
                       Text(
                         a.text,
