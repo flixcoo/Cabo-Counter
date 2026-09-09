@@ -12,13 +12,13 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   /// Retrieves all players from a game by gameId
   Future<List<Player>> getPlayersByGameId({required String gameId}) async {
     final query = select(playerTable)
-      ..where((tbl) => tbl.gameId.equals(gameId));
+      ..where((tbl) => tbl.gameSessionId.equals(gameId));
     final playerResults = await query.get();
 
     return playerResults.map((row) {
       return Player(
         id: row.id,
-        gameSessionId: row.gameId,
+        gameSessionId: row.gameSessionId,
         name: row.name,
         position: row.position,
         totalScore: row.totalScore,
@@ -28,8 +28,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
 
   /// Retrieves a players position by its id
   Future<int> getPositionByPlayerId(String playerId) async {
-    final query = select(playerTable)
-      ..where((tbl) => tbl.id.equals(playerId));
+    final query = select(playerTable)..where((tbl) => tbl.id.equals(playerId));
     final result = await query.getSingle();
 
     return result.position;
@@ -46,7 +45,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
           playerTable,
           PlayerTableCompanion.insert(
             id: players[i].id,
-            gameId: gameId,
+            gameSessionId: gameId,
             name: players[i].name,
             position: i,
             totalScore: players[i].totalScore,

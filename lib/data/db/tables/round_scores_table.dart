@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 class RoundScoresTable extends Table {
   TextColumn get roundId =>
-      text().references(RoundsTable, #roundId, onDelete: KeyAction.cascade)();
+      text().references(RoundsTable, #id, onDelete: KeyAction.cascade)();
   TextColumn get playerId =>
       text().references(PlayerTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get score => integer()();

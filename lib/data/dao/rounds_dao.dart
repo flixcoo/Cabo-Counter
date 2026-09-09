@@ -24,14 +24,14 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final roundList = await Future.wait(
       roundResult.map((row) async {
         final scores = await db.roundScoresDao.getScoresByRoundId(
-          roundId: row.roundId,
+          roundId: row.id,
         );
         final roundScores = await db.roundScoresDao.getScoreUpdatesByRoundId(
-          roundId: row.roundId,
+          roundId: row.id,
         );
 
         return Round(
-          roundId: row.roundId,
+          roundId: row.id,
           gameSessionId: row.gameSessionId,
           caboPlayerIndex: row.caboPlayerIndex,
           kamikazePlayerIndex: row.kamikazePlayerIndex,
@@ -60,12 +60,12 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     if (roundResult == null) return null;
 
     final scoreResult = await Future.wait([
-      db.roundScoresDao.getScoresByRoundId(roundId: roundResult.roundId),
-      db.roundScoresDao.getScoreUpdatesByRoundId(roundId: roundResult.roundId),
+      db.roundScoresDao.getScoresByRoundId(roundId: roundResult.id),
+      db.roundScoresDao.getScoreUpdatesByRoundId(roundId: roundResult.id),
     ]);
 
     return Round(
-      roundId: roundResult.roundId,
+      roundId: roundResult.id,
       gameSessionId: roundResult.gameSessionId,
       caboPlayerIndex: roundResult.caboPlayerIndex,
       kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
@@ -88,7 +88,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     required List<Player> players,
   }) async {
     final roundEntry = RoundsTableCompanion.insert(
-      roundId: round.id,
+      id: round.id,
       gameSessionId: gameId,
       roundNumber: roundNumber,
       caboPlayerIndex: round.caboPlayerIndex,
@@ -151,7 +151,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         final round = rounds[r];
         roundEntries.add(
           RoundsTableCompanion.insert(
-            roundId: round.id,
+            id: round.id,
             gameSessionId: gameSessionId,
             roundNumber: r + 1,
             caboPlayerIndex: round.caboPlayerIndex,

@@ -451,10 +451,12 @@ class $PlayerTableTable extends PlayerTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _gameIdMeta = const VerificationMeta('gameId');
+  static const VerificationMeta _gameSessionIdMeta = const VerificationMeta(
+    'gameSessionId',
+  );
   @override
-  late final GeneratedColumn<String> gameId = GeneratedColumn<String>(
-    'game_id',
+  late final GeneratedColumn<String> gameSessionId = GeneratedColumn<String>(
+    'game_session_id',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -497,7 +499,7 @@ class $PlayerTableTable extends PlayerTable
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    gameId,
+    gameSessionId,
     totalScore,
     position,
     name,
@@ -519,13 +521,16 @@ class $PlayerTableTable extends PlayerTable
     } else if (isInserting) {
       context.missing(_idMeta);
     }
-    if (data.containsKey('game_id')) {
+    if (data.containsKey('game_session_id')) {
       context.handle(
-        _gameIdMeta,
-        gameId.isAcceptableOrUnknown(data['game_id']!, _gameIdMeta),
+        _gameSessionIdMeta,
+        gameSessionId.isAcceptableOrUnknown(
+          data['game_session_id']!,
+          _gameSessionIdMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_gameIdMeta);
+      context.missing(_gameSessionIdMeta);
     }
     if (data.containsKey('total_score')) {
       context.handle(
@@ -564,9 +569,9 @@ class $PlayerTableTable extends PlayerTable
         DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
-      gameId: attachedDatabase.typeMapping.read(
+      gameSessionId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}game_id'],
+        data['${effectivePrefix}game_session_id'],
       )!,
       totalScore: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -591,13 +596,13 @@ class $PlayerTableTable extends PlayerTable
 
 class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   final String id;
-  final String gameId;
+  final String gameSessionId;
   final int totalScore;
   final int position;
   final String name;
   const PlayerTableData({
     required this.id,
-    required this.gameId,
+    required this.gameSessionId,
     required this.totalScore,
     required this.position,
     required this.name,
@@ -606,7 +611,7 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
-    map['game_id'] = Variable<String>(gameId);
+    map['game_session_id'] = Variable<String>(gameSessionId);
     map['total_score'] = Variable<int>(totalScore);
     map['position'] = Variable<int>(position);
     map['name'] = Variable<String>(name);
@@ -616,7 +621,7 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   PlayerTableCompanion toCompanion(bool nullToAbsent) {
     return PlayerTableCompanion(
       id: Value(id),
-      gameId: Value(gameId),
+      gameSessionId: Value(gameSessionId),
       totalScore: Value(totalScore),
       position: Value(position),
       name: Value(name),
@@ -630,7 +635,7 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlayerTableData(
       id: serializer.fromJson<String>(json['id']),
-      gameId: serializer.fromJson<String>(json['gameId']),
+      gameSessionId: serializer.fromJson<String>(json['gameSessionId']),
       totalScore: serializer.fromJson<int>(json['totalScore']),
       position: serializer.fromJson<int>(json['position']),
       name: serializer.fromJson<String>(json['name']),
@@ -641,7 +646,7 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
-      'gameId': serializer.toJson<String>(gameId),
+      'gameSessionId': serializer.toJson<String>(gameSessionId),
       'totalScore': serializer.toJson<int>(totalScore),
       'position': serializer.toJson<int>(position),
       'name': serializer.toJson<String>(name),
@@ -650,13 +655,13 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
 
   PlayerTableData copyWith({
     String? id,
-    String? gameId,
+    String? gameSessionId,
     int? totalScore,
     int? position,
     String? name,
   }) => PlayerTableData(
     id: id ?? this.id,
-    gameId: gameId ?? this.gameId,
+    gameSessionId: gameSessionId ?? this.gameSessionId,
     totalScore: totalScore ?? this.totalScore,
     position: position ?? this.position,
     name: name ?? this.name,
@@ -664,7 +669,9 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   PlayerTableData copyWithCompanion(PlayerTableCompanion data) {
     return PlayerTableData(
       id: data.id.present ? data.id.value : this.id,
-      gameId: data.gameId.present ? data.gameId.value : this.gameId,
+      gameSessionId: data.gameSessionId.present
+          ? data.gameSessionId.value
+          : this.gameSessionId,
       totalScore: data.totalScore.present
           ? data.totalScore.value
           : this.totalScore,
@@ -677,7 +684,7 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   String toString() {
     return (StringBuffer('PlayerTableData(')
           ..write('id: $id, ')
-          ..write('gameId: $gameId, ')
+          ..write('gameSessionId: $gameSessionId, ')
           ..write('totalScore: $totalScore, ')
           ..write('position: $position, ')
           ..write('name: $name')
@@ -686,13 +693,14 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, gameId, totalScore, position, name);
+  int get hashCode =>
+      Object.hash(id, gameSessionId, totalScore, position, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is PlayerTableData &&
           other.id == this.id &&
-          other.gameId == this.gameId &&
+          other.gameSessionId == this.gameSessionId &&
           other.totalScore == this.totalScore &&
           other.position == this.position &&
           other.name == this.name);
@@ -700,14 +708,14 @@ class PlayerTableData extends DataClass implements Insertable<PlayerTableData> {
 
 class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
   final Value<String> id;
-  final Value<String> gameId;
+  final Value<String> gameSessionId;
   final Value<int> totalScore;
   final Value<int> position;
   final Value<String> name;
   final Value<int> rowid;
   const PlayerTableCompanion({
     this.id = const Value.absent(),
-    this.gameId = const Value.absent(),
+    this.gameSessionId = const Value.absent(),
     this.totalScore = const Value.absent(),
     this.position = const Value.absent(),
     this.name = const Value.absent(),
@@ -715,19 +723,19 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
   });
   PlayerTableCompanion.insert({
     required String id,
-    required String gameId,
+    required String gameSessionId,
     required int totalScore,
     required int position,
     required String name,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
-       gameId = Value(gameId),
+       gameSessionId = Value(gameSessionId),
        totalScore = Value(totalScore),
        position = Value(position),
        name = Value(name);
   static Insertable<PlayerTableData> custom({
     Expression<String>? id,
-    Expression<String>? gameId,
+    Expression<String>? gameSessionId,
     Expression<int>? totalScore,
     Expression<int>? position,
     Expression<String>? name,
@@ -735,7 +743,7 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (gameId != null) 'game_id': gameId,
+      if (gameSessionId != null) 'game_session_id': gameSessionId,
       if (totalScore != null) 'total_score': totalScore,
       if (position != null) 'position': position,
       if (name != null) 'name': name,
@@ -745,7 +753,7 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
 
   PlayerTableCompanion copyWith({
     Value<String>? id,
-    Value<String>? gameId,
+    Value<String>? gameSessionId,
     Value<int>? totalScore,
     Value<int>? position,
     Value<String>? name,
@@ -753,7 +761,7 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
   }) {
     return PlayerTableCompanion(
       id: id ?? this.id,
-      gameId: gameId ?? this.gameId,
+      gameSessionId: gameSessionId ?? this.gameSessionId,
       totalScore: totalScore ?? this.totalScore,
       position: position ?? this.position,
       name: name ?? this.name,
@@ -767,8 +775,8 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
-    if (gameId.present) {
-      map['game_id'] = Variable<String>(gameId.value);
+    if (gameSessionId.present) {
+      map['game_session_id'] = Variable<String>(gameSessionId.value);
     }
     if (totalScore.present) {
       map['total_score'] = Variable<int>(totalScore.value);
@@ -789,7 +797,7 @@ class PlayerTableCompanion extends UpdateCompanion<PlayerTableData> {
   String toString() {
     return (StringBuffer('PlayerTableCompanion(')
           ..write('id: $id, ')
-          ..write('gameId: $gameId, ')
+          ..write('gameSessionId: $gameSessionId, ')
           ..write('totalScore: $totalScore, ')
           ..write('position: $position, ')
           ..write('name: $name, ')
@@ -805,12 +813,10 @@ class $RoundsTableTable extends RoundsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $RoundsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _roundIdMeta = const VerificationMeta(
-    'roundId',
-  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> roundId = GeneratedColumn<String>(
-    'round_id',
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -864,7 +870,7 @@ class $RoundsTableTable extends RoundsTable
   );
   @override
   List<GeneratedColumn> get $columns => [
-    roundId,
+    id,
     gameSessionId,
     roundNumber,
     caboPlayerIndex,
@@ -882,13 +888,10 @@ class $RoundsTableTable extends RoundsTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('round_id')) {
-      context.handle(
-        _roundIdMeta,
-        roundId.isAcceptableOrUnknown(data['round_id']!, _roundIdMeta),
-      );
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
-      context.missing(_roundIdMeta);
+      context.missing(_idMeta);
     }
     if (data.containsKey('game_session_id')) {
       context.handle(
@@ -936,14 +939,14 @@ class $RoundsTableTable extends RoundsTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {roundId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   RoundsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RoundsTableData(
-      roundId: attachedDatabase.typeMapping.read(
+      id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}round_id'],
+        data['${effectivePrefix}id'],
       )!,
       gameSessionId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -971,13 +974,13 @@ class $RoundsTableTable extends RoundsTable
 }
 
 class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
-  final String roundId;
+  final String id;
   final String gameSessionId;
   final int roundNumber;
   final int caboPlayerIndex;
   final int? kamikazePlayerIndex;
   const RoundsTableData({
-    required this.roundId,
+    required this.id,
     required this.gameSessionId,
     required this.roundNumber,
     required this.caboPlayerIndex,
@@ -986,7 +989,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['round_id'] = Variable<String>(roundId);
+    map['id'] = Variable<String>(id);
     map['game_session_id'] = Variable<String>(gameSessionId);
     map['round_number'] = Variable<int>(roundNumber);
     map['cabo_player_index'] = Variable<int>(caboPlayerIndex);
@@ -998,7 +1001,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
 
   RoundsTableCompanion toCompanion(bool nullToAbsent) {
     return RoundsTableCompanion(
-      roundId: Value(roundId),
+      id: Value(id),
       gameSessionId: Value(gameSessionId),
       roundNumber: Value(roundNumber),
       caboPlayerIndex: Value(caboPlayerIndex),
@@ -1014,7 +1017,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return RoundsTableData(
-      roundId: serializer.fromJson<String>(json['roundId']),
+      id: serializer.fromJson<String>(json['id']),
       gameSessionId: serializer.fromJson<String>(json['gameSessionId']),
       roundNumber: serializer.fromJson<int>(json['roundNumber']),
       caboPlayerIndex: serializer.fromJson<int>(json['caboPlayerIndex']),
@@ -1027,7 +1030,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'roundId': serializer.toJson<String>(roundId),
+      'id': serializer.toJson<String>(id),
       'gameSessionId': serializer.toJson<String>(gameSessionId),
       'roundNumber': serializer.toJson<int>(roundNumber),
       'caboPlayerIndex': serializer.toJson<int>(caboPlayerIndex),
@@ -1036,13 +1039,13 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   }
 
   RoundsTableData copyWith({
-    String? roundId,
+    String? id,
     String? gameSessionId,
     int? roundNumber,
     int? caboPlayerIndex,
     Value<int?> kamikazePlayerIndex = const Value.absent(),
   }) => RoundsTableData(
-    roundId: roundId ?? this.roundId,
+    id: id ?? this.id,
     gameSessionId: gameSessionId ?? this.gameSessionId,
     roundNumber: roundNumber ?? this.roundNumber,
     caboPlayerIndex: caboPlayerIndex ?? this.caboPlayerIndex,
@@ -1052,7 +1055,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   );
   RoundsTableData copyWithCompanion(RoundsTableCompanion data) {
     return RoundsTableData(
-      roundId: data.roundId.present ? data.roundId.value : this.roundId,
+      id: data.id.present ? data.id.value : this.id,
       gameSessionId: data.gameSessionId.present
           ? data.gameSessionId.value
           : this.gameSessionId,
@@ -1071,7 +1074,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   @override
   String toString() {
     return (StringBuffer('RoundsTableData(')
-          ..write('roundId: $roundId, ')
+          ..write('id: $id, ')
           ..write('gameSessionId: $gameSessionId, ')
           ..write('roundNumber: $roundNumber, ')
           ..write('caboPlayerIndex: $caboPlayerIndex, ')
@@ -1082,7 +1085,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
 
   @override
   int get hashCode => Object.hash(
-    roundId,
+    id,
     gameSessionId,
     roundNumber,
     caboPlayerIndex,
@@ -1092,7 +1095,7 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is RoundsTableData &&
-          other.roundId == this.roundId &&
+          other.id == this.id &&
           other.gameSessionId == this.gameSessionId &&
           other.roundNumber == this.roundNumber &&
           other.caboPlayerIndex == this.caboPlayerIndex &&
@@ -1100,14 +1103,14 @@ class RoundsTableData extends DataClass implements Insertable<RoundsTableData> {
 }
 
 class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
-  final Value<String> roundId;
+  final Value<String> id;
   final Value<String> gameSessionId;
   final Value<int> roundNumber;
   final Value<int> caboPlayerIndex;
   final Value<int?> kamikazePlayerIndex;
   final Value<int> rowid;
   const RoundsTableCompanion({
-    this.roundId = const Value.absent(),
+    this.id = const Value.absent(),
     this.gameSessionId = const Value.absent(),
     this.roundNumber = const Value.absent(),
     this.caboPlayerIndex = const Value.absent(),
@@ -1115,18 +1118,18 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
     this.rowid = const Value.absent(),
   });
   RoundsTableCompanion.insert({
-    required String roundId,
+    required String id,
     required String gameSessionId,
     required int roundNumber,
     required int caboPlayerIndex,
     this.kamikazePlayerIndex = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : roundId = Value(roundId),
+  }) : id = Value(id),
        gameSessionId = Value(gameSessionId),
        roundNumber = Value(roundNumber),
        caboPlayerIndex = Value(caboPlayerIndex);
   static Insertable<RoundsTableData> custom({
-    Expression<String>? roundId,
+    Expression<String>? id,
     Expression<String>? gameSessionId,
     Expression<int>? roundNumber,
     Expression<int>? caboPlayerIndex,
@@ -1134,7 +1137,7 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (roundId != null) 'round_id': roundId,
+      if (id != null) 'id': id,
       if (gameSessionId != null) 'game_session_id': gameSessionId,
       if (roundNumber != null) 'round_number': roundNumber,
       if (caboPlayerIndex != null) 'cabo_player_index': caboPlayerIndex,
@@ -1145,7 +1148,7 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
   }
 
   RoundsTableCompanion copyWith({
-    Value<String>? roundId,
+    Value<String>? id,
     Value<String>? gameSessionId,
     Value<int>? roundNumber,
     Value<int>? caboPlayerIndex,
@@ -1153,7 +1156,7 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
     Value<int>? rowid,
   }) {
     return RoundsTableCompanion(
-      roundId: roundId ?? this.roundId,
+      id: id ?? this.id,
       gameSessionId: gameSessionId ?? this.gameSessionId,
       roundNumber: roundNumber ?? this.roundNumber,
       caboPlayerIndex: caboPlayerIndex ?? this.caboPlayerIndex,
@@ -1165,8 +1168,8 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (roundId.present) {
-      map['round_id'] = Variable<String>(roundId.value);
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
     }
     if (gameSessionId.present) {
       map['game_session_id'] = Variable<String>(gameSessionId.value);
@@ -1189,7 +1192,7 @@ class RoundsTableCompanion extends UpdateCompanion<RoundsTableData> {
   @override
   String toString() {
     return (StringBuffer('RoundsTableCompanion(')
-          ..write('roundId: $roundId, ')
+          ..write('id: $id, ')
           ..write('gameSessionId: $gameSessionId, ')
           ..write('roundNumber: $roundNumber, ')
           ..write('caboPlayerIndex: $caboPlayerIndex, ')
@@ -1217,7 +1220,7 @@ class $RoundScoresTableTable extends RoundScoresTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES rounds_table (round_id) ON DELETE CASCADE',
+      'REFERENCES rounds_table (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _playerIdMeta = const VerificationMeta(
@@ -1624,14 +1627,14 @@ final class $$GameSessionTableTableReferences
   static MultiTypedResultKey<$PlayerTableTable, List<PlayerTableData>>
   _playerTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.playerTable,
-    aliasName: 'game_session_table__id__player_table__game_id',
+    aliasName: 'game_session_table__id__player_table__game_session_id',
   );
 
   $$PlayerTableTableProcessedTableManager get playerTableRefs {
     final manager = $$PlayerTableTableTableManager(
       $_db,
       $_db.playerTable,
-    ).filter((f) => f.gameId.id.sqlEquals($_itemColumn<String>('id')!));
+    ).filter((f) => f.gameSessionId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_playerTableRefsTable($_db));
     return ProcessedTableManager(
@@ -1704,7 +1707,7 @@ class $$GameSessionTableTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.playerTable,
-      getReferencedColumn: (t) => t.gameId,
+      getReferencedColumn: (t) => t.gameSessionId,
       builder:
           (
             joinBuilder, {
@@ -1828,7 +1831,7 @@ class $$GameSessionTableTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.playerTable,
-      getReferencedColumn: (t) => t.gameId,
+      getReferencedColumn: (t) => t.gameSessionId,
       builder:
           (
             joinBuilder, {
@@ -1974,7 +1977,7 @@ class $$GameSessionTableTableTableManager
                               ).playerTableRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
-                                (e) => e.gameId == item.id,
+                                (e) => e.gameSessionId == item.id,
                               ),
                           typedResults: items,
                         ),
@@ -2024,7 +2027,7 @@ typedef $$GameSessionTableTableProcessedTableManager =
 typedef $$PlayerTableTableCreateCompanionBuilder =
     PlayerTableCompanion Function({
       required String id,
-      required String gameId,
+      required String gameSessionId,
       required int totalScore,
       required int position,
       required String name,
@@ -2033,7 +2036,7 @@ typedef $$PlayerTableTableCreateCompanionBuilder =
 typedef $$PlayerTableTableUpdateCompanionBuilder =
     PlayerTableCompanion Function({
       Value<String> id,
-      Value<String> gameId,
+      Value<String> gameSessionId,
       Value<int> totalScore,
       Value<int> position,
       Value<String> name,
@@ -2044,18 +2047,18 @@ final class $$PlayerTableTableReferences
     extends BaseReferences<_$AppDatabase, $PlayerTableTable, PlayerTableData> {
   $$PlayerTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $GameSessionTableTable _gameIdTable(_$AppDatabase db) => db
+  static $GameSessionTableTable _gameSessionIdTable(_$AppDatabase db) => db
       .gameSessionTable
-      .createAlias('player_table__game_id__game_session_table__id');
+      .createAlias('player_table__game_session_id__game_session_table__id');
 
-  $$GameSessionTableTableProcessedTableManager get gameId {
-    final $_column = $_itemColumn<String>('game_id')!;
+  $$GameSessionTableTableProcessedTableManager get gameSessionId {
+    final $_column = $_itemColumn<String>('game_session_id')!;
 
     final manager = $$GameSessionTableTableTableManager(
       $_db,
       $_db.gameSessionTable,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_gameIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_gameSessionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -2112,10 +2115,10 @@ class $$PlayerTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  $$GameSessionTableTableFilterComposer get gameId {
+  $$GameSessionTableTableFilterComposer get gameSessionId {
     final $$GameSessionTableTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.gameId,
+      getCurrentColumn: (t) => t.gameSessionId,
       referencedTable: $db.gameSessionTable,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2190,10 +2193,10 @@ class $$PlayerTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  $$GameSessionTableTableOrderingComposer get gameId {
+  $$GameSessionTableTableOrderingComposer get gameSessionId {
     final $$GameSessionTableTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.gameId,
+      getCurrentColumn: (t) => t.gameSessionId,
       referencedTable: $db.gameSessionTable,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2237,10 +2240,10 @@ class $$PlayerTableTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
-  $$GameSessionTableTableAnnotationComposer get gameId {
+  $$GameSessionTableTableAnnotationComposer get gameSessionId {
     final $$GameSessionTableTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.gameId,
+      getCurrentColumn: (t) => t.gameSessionId,
       referencedTable: $db.gameSessionTable,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2299,7 +2302,10 @@ class $$PlayerTableTableTableManager
           $$PlayerTableTableUpdateCompanionBuilder,
           (PlayerTableData, $$PlayerTableTableReferences),
           PlayerTableData,
-          PrefetchHooks Function({bool gameId, bool roundScoresTableRefs})
+          PrefetchHooks Function({
+            bool gameSessionId,
+            bool roundScoresTableRefs,
+          })
         > {
   $$PlayerTableTableTableManager(_$AppDatabase db, $PlayerTableTable table)
     : super(
@@ -2315,14 +2321,14 @@ class $$PlayerTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
-                Value<String> gameId = const Value.absent(),
+                Value<String> gameSessionId = const Value.absent(),
                 Value<int> totalScore = const Value.absent(),
                 Value<int> position = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PlayerTableCompanion(
                 id: id,
-                gameId: gameId,
+                gameSessionId: gameSessionId,
                 totalScore: totalScore,
                 position: position,
                 name: name,
@@ -2331,14 +2337,14 @@ class $$PlayerTableTableTableManager
           createCompanionCallback:
               ({
                 required String id,
-                required String gameId,
+                required String gameSessionId,
                 required int totalScore,
                 required int position,
                 required String name,
                 Value<int> rowid = const Value.absent(),
               }) => PlayerTableCompanion.insert(
                 id: id,
-                gameId: gameId,
+                gameSessionId: gameSessionId,
                 totalScore: totalScore,
                 position: position,
                 name: name,
@@ -2353,7 +2359,7 @@ class $$PlayerTableTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({gameId = false, roundScoresTableRefs = false}) {
+              ({gameSessionId = false, roundScoresTableRefs = false}) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
@@ -2375,14 +2381,14 @@ class $$PlayerTableTableTableManager
                           dynamic
                         >
                       >(state) {
-                        if (gameId) {
+                        if (gameSessionId) {
                           state = state.withJoin(
                             currentTable: table,
-                            currentColumn: table.gameId,
+                            currentColumn: table.gameSessionId,
                             referencedTable: $$PlayerTableTableReferences
-                                ._gameIdTable(db),
+                                ._gameSessionIdTable(db),
                             referencedColumn: $$PlayerTableTableReferences
-                                ._gameIdTable(db)
+                                ._gameSessionIdTable(db)
                                 .id,
                           ) as T;
                         }
@@ -2432,11 +2438,11 @@ typedef $$PlayerTableTableProcessedTableManager =
       $$PlayerTableTableUpdateCompanionBuilder,
       (PlayerTableData, $$PlayerTableTableReferences),
       PlayerTableData,
-      PrefetchHooks Function({bool gameId, bool roundScoresTableRefs})
+      PrefetchHooks Function({bool gameSessionId, bool roundScoresTableRefs})
     >;
 typedef $$RoundsTableTableCreateCompanionBuilder =
     RoundsTableCompanion Function({
-      required String roundId,
+      required String id,
       required String gameSessionId,
       required int roundNumber,
       required int caboPlayerIndex,
@@ -2445,7 +2451,7 @@ typedef $$RoundsTableTableCreateCompanionBuilder =
     });
 typedef $$RoundsTableTableUpdateCompanionBuilder =
     RoundsTableCompanion Function({
-      Value<String> roundId,
+      Value<String> id,
       Value<String> gameSessionId,
       Value<int> roundNumber,
       Value<int> caboPlayerIndex,
@@ -2478,14 +2484,14 @@ final class $$RoundsTableTableReferences
   static MultiTypedResultKey<$RoundScoresTableTable, List<RoundScoresTableData>>
   _roundScoresTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.roundScoresTable,
-    aliasName: 'rounds_table__round_id__round_scores_table__round_id',
+    aliasName: 'rounds_table__id__round_scores_table__round_id',
   );
 
   $$RoundScoresTableTableProcessedTableManager get roundScoresTableRefs {
-    final manager =
-        $$RoundScoresTableTableTableManager($_db, $_db.roundScoresTable).filter(
-          (f) => f.roundId.roundId.sqlEquals($_itemColumn<String>('round_id')!),
-        );
+    final manager = $$RoundScoresTableTableTableManager(
+      $_db,
+      $_db.roundScoresTable,
+    ).filter((f) => f.roundId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(
       _roundScoresTableRefsTable($_db),
@@ -2505,8 +2511,8 @@ class $$RoundsTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get roundId => $composableBuilder(
-    column: $table.roundId,
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2553,7 +2559,7 @@ class $$RoundsTableTableFilterComposer
   ) {
     final $$RoundScoresTableTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.roundId,
+      getCurrentColumn: (t) => t.id,
       referencedTable: $db.roundScoresTable,
       getReferencedColumn: (t) => t.roundId,
       builder:
@@ -2583,8 +2589,8 @@ class $$RoundsTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get roundId => $composableBuilder(
-    column: $table.roundId,
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2636,8 +2642,8 @@ class $$RoundsTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get roundId =>
-      $composableBuilder(column: $table.roundId, builder: (column) => column);
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<int> get roundNumber => $composableBuilder(
     column: $table.roundNumber,
@@ -2682,7 +2688,7 @@ class $$RoundsTableTableAnnotationComposer
   ) {
     final $$RoundScoresTableTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.roundId,
+      getCurrentColumn: (t) => t.id,
       referencedTable: $db.roundScoresTable,
       getReferencedColumn: (t) => t.roundId,
       builder:
@@ -2734,14 +2740,14 @@ class $$RoundsTableTableTableManager
               $$RoundsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String> roundId = const Value.absent(),
+                Value<String> id = const Value.absent(),
                 Value<String> gameSessionId = const Value.absent(),
                 Value<int> roundNumber = const Value.absent(),
                 Value<int> caboPlayerIndex = const Value.absent(),
                 Value<int?> kamikazePlayerIndex = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RoundsTableCompanion(
-                roundId: roundId,
+                id: id,
                 gameSessionId: gameSessionId,
                 roundNumber: roundNumber,
                 caboPlayerIndex: caboPlayerIndex,
@@ -2750,14 +2756,14 @@ class $$RoundsTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String roundId,
+                required String id,
                 required String gameSessionId,
                 required int roundNumber,
                 required int caboPlayerIndex,
                 Value<int?> kamikazePlayerIndex = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RoundsTableCompanion.insert(
-                roundId: roundId,
+                id: id,
                 gameSessionId: gameSessionId,
                 roundNumber: roundNumber,
                 caboPlayerIndex: caboPlayerIndex,
@@ -2828,7 +2834,7 @@ class $$RoundsTableTableTableManager
                               ).roundScoresTableRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
-                                (e) => e.roundId == item.roundId,
+                                (e) => e.roundId == item.id,
                               ),
                           typedResults: items,
                         ),
@@ -2885,7 +2891,7 @@ final class $$RoundScoresTableTableReferences
   );
 
   static $RoundsTableTable _roundIdTable(_$AppDatabase db) => db.roundsTable
-      .createAlias('round_scores_table__round_id__rounds_table__round_id');
+      .createAlias('round_scores_table__round_id__rounds_table__id');
 
   $$RoundsTableTableProcessedTableManager get roundId {
     final $_column = $_itemColumn<String>('round_id')!;
@@ -2893,7 +2899,7 @@ final class $$RoundScoresTableTableReferences
     final manager = $$RoundsTableTableTableManager(
       $_db,
       $_db.roundsTable,
-    ).filter((f) => f.roundId.sqlEquals($_column));
+    ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_roundIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2943,7 +2949,7 @@ class $$RoundScoresTableTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.roundId,
       referencedTable: $db.roundsTable,
-      getReferencedColumn: (t) => t.roundId,
+      getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
@@ -3009,7 +3015,7 @@ class $$RoundScoresTableTableOrderingComposer
       composer: this,
       getCurrentColumn: (t) => t.roundId,
       referencedTable: $db.roundsTable,
-      getReferencedColumn: (t) => t.roundId,
+      getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
@@ -3073,7 +3079,7 @@ class $$RoundScoresTableTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.roundId,
       referencedTable: $db.roundsTable,
-      getReferencedColumn: (t) => t.roundId,
+      getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
@@ -3209,7 +3215,7 @@ class $$RoundScoresTableTableTableManager
                             ._roundIdTable(db),
                         referencedColumn: $$RoundScoresTableTableReferences
                             ._roundIdTable(db)
-                            .roundId,
+                            .id,
                       ) as T;
                     }
                     if (playerId) {

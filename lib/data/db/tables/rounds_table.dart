@@ -2,7 +2,7 @@ import 'package:cabo_counter/data/db/tables/game_session_table.dart';
 import 'package:drift/drift.dart';
 
 class RoundsTable extends Table {
-  TextColumn get roundId => text()();
+  TextColumn get id => text()();
   TextColumn get gameSessionId =>
       text().references(GameSessionTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get roundNumber => integer()();
@@ -10,5 +10,5 @@ class RoundsTable extends Table {
   IntColumn get kamikazePlayerIndex => integer().nullable()();
 
   @override
-  Set<Column<Object>> get primaryKey => {roundId};
+  Set<Column<Object>> get primaryKey => {id};
 }

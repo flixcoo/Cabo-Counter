@@ -20,13 +20,14 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onUpgrade: (migrator, from, to) async {
         if (from < 3) {
+          // Deleteing isPointLimitEnabled
           await migrator.alterTable(
             TableMigration(
               gameSessionTable,
@@ -37,16 +38,36 @@ class AppDatabase extends _$AppDatabase {
               },
             ),
           );
-        }
-        if (from < 4) {
+
+          /* GameSessionTable */
+
+          // Renaming gameID -> id
           await customStatement(
             'ALTER TABLE game_session_table RENAME COLUMN game_id TO id',
           );
+
+          // Renaming playerID -> id
           await customStatement(
             'ALTER TABLE player_table RENAME COLUMN player_id TO id',
           );
+
+          /* PlayerTable */
+
+          // Renaming gameId -> gameSessionId
           await customStatement(
             'ALTER TABLE player_table RENAME COLUMN game_id TO game_session_id',
+          );
+
+          /* RoundsTable */
+
+          // Renaming roundId -> id
+          await customStatement(
+            'ALTER TABLE rounds_table RENAME COLUMN round_id TO id',
+          );
+
+          //Renaming gameID -> gameSession
+          await customStatement(
+            'ALTER TABLE rounds_table RENAME COLUMN game_id TO game_session_id',
           );
         }
       },

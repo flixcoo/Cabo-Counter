@@ -3,11 +3,8 @@ import 'package:drift/drift.dart';
 
 class PlayerTable extends Table {
   TextColumn get id => text()();
-  TextColumn get gameId => text().references(
-    GameSessionTable,
-    #id,
-    onDelete: KeyAction.cascade,
-  )();
+  TextColumn get gameSessionId =>
+      text().references(GameSessionTable, #id, onDelete: KeyAction.cascade)();
   IntColumn get totalScore => integer()();
   IntColumn get position => integer()();
   TextColumn get name => text()();
