@@ -56,21 +56,18 @@ void main() {
     );
     round1 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 1,
       caboPlayerIndex: 0,
       scores: [5, 7, 10],
       scoreUpdates: [0, 7, 10],
     );
     round2 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 2,
       caboPlayerIndex: 1,
       scores: [2, 4, 4],
       scoreUpdates: [0, 9, 4],
     );
     round3 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 3,
       caboPlayerIndex: 1,
       kamikazePlayerIndex: 2,
       scores: [5, 2, 50],
@@ -78,21 +75,18 @@ void main() {
     );
     round3Replacement = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 3,
       caboPlayerIndex: 0,
       scores: [4, 3, 6],
       scoreUpdates: [9, 0, 6],
     );
     round4 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 4,
       caboPlayerIndex: 2,
       scores: [3, 6, 8],
       scoreUpdates: [3, 6, 8],
     );
     round5 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 5,
       caboPlayerIndex: 0,
       scores: [2, 7, 5],
       scoreUpdates: [0, 7, 5],
@@ -139,7 +133,6 @@ void main() {
           fetchedRounds[i].gameSessionId,
           gameSession.roundList[i].gameSessionId,
         );
-        expect(fetchedRounds[i].roundNum, gameSession.roundList[i].roundNum);
         expect(
           fetchedRounds[i].caboPlayerIndex,
           gameSession.roundList[i].caboPlayerIndex,
@@ -183,7 +176,6 @@ void main() {
 
           expect(round.id, expectedRound.id);
           expect(round.gameSessionId, expectedRound.gameSessionId);
-          expect(round.roundNum, expectedRound.roundNum);
           expect(round.caboPlayerIndex, expectedRound.caboPlayerIndex);
           expect(round.kamikazePlayerIndex, expectedRound.kamikazePlayerIndex);
           expect(areListsEqual(round.scores, expectedRound.scores), true);
@@ -200,6 +192,7 @@ void main() {
       await database.roundsDao.insertOneRound(
         gameId: gameSession.id,
         round: round4,
+        roundNumber: 4,
         players: gameSession.players,
       );
 
@@ -213,7 +206,6 @@ void main() {
       } else {
         expect(round.id, round4.id);
         expect(round.gameSessionId, round4.gameSessionId);
-        expect(round.roundNum, round4.roundNum);
         expect(round.caboPlayerIndex, round4.caboPlayerIndex);
         expect(round.kamikazePlayerIndex, round4.kamikazePlayerIndex);
         expect(areListsEqual(round.scores, round4.scores), true);
@@ -234,7 +226,6 @@ void main() {
       } else {
         expect(round.id, round3.id);
         expect(round.gameSessionId, round3.gameSessionId);
-        expect(round.roundNum, round3.roundNum);
         expect(round.caboPlayerIndex, round3.caboPlayerIndex);
         expect(round.kamikazePlayerIndex, round3.kamikazePlayerIndex);
         expect(areListsEqual(round.scores, round3.scores), true);
@@ -244,6 +235,7 @@ void main() {
       await database.roundsDao.replaceRound(
         gameId: gameSession.id,
         round: round3Replacement,
+        roundNumber: 3,
         players: gameSession.players,
       );
 
@@ -257,7 +249,6 @@ void main() {
       } else {
         expect(round.id, round3Replacement.id);
         expect(round.gameSessionId, round3Replacement.gameSessionId);
-        expect(round.roundNum, round3Replacement.roundNum);
         expect(round.caboPlayerIndex, round3Replacement.caboPlayerIndex);
         expect(
           round.kamikazePlayerIndex,
@@ -291,7 +282,6 @@ void main() {
       for (int i = 0; i < fetchedRounds.length; i++) {
         expect(fetchedRounds[i].id, newRounds[i].id);
         expect(fetchedRounds[i].gameSessionId, newRounds[i].gameSessionId);
-        expect(fetchedRounds[i].roundNum, newRounds[i].roundNum);
         expect(fetchedRounds[i].caboPlayerIndex, newRounds[i].caboPlayerIndex);
         expect(
           fetchedRounds[i].kamikazePlayerIndex,

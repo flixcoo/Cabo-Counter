@@ -75,21 +75,18 @@ void main() {
     );
     round1 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 1,
       caboPlayerIndex: 0,
       scores: [5, 7, 10],
       scoreUpdates: [0, 7, 10],
     );
     round2 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 2,
       caboPlayerIndex: 1,
       scores: [2, 4, 4],
       scoreUpdates: [0, 9, 4],
     );
     round3 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 3,
       caboPlayerIndex: 1,
       kamikazePlayerIndex: 2,
       scores: [5, 2, 50],
@@ -97,21 +94,18 @@ void main() {
     );
     round4 = Round(
       gameSessionId: 'test_game_id2',
-      roundNum: 1,
       caboPlayerIndex: 2,
       scores: [3, 6, 8],
       scoreUpdates: [3, 6, 8],
     );
     round5 = Round(
       gameSessionId: 'test_game_id2',
-      roundNum: 2,
       caboPlayerIndex: 0,
       scores: [2, 7, 5],
       scoreUpdates: [0, 7, 5],
     );
     round6 = Round(
       gameSessionId: 'test_game_id2',
-      roundNum: 3,
       caboPlayerIndex: 0,
       scores: [2, 7, 5],
       scoreUpdates: [0, 7, 5],
@@ -232,10 +226,6 @@ void main() {
                 expectedSession.roundList[i].gameSessionId,
               );
               expect(
-                session.roundList[i].roundNum,
-                expectedSession.roundList[i].roundNum,
-              );
-              expect(
                 session.roundList[i].caboPlayerIndex,
                 expectedSession.roundList[i].caboPlayerIndex,
               );
@@ -309,30 +299,6 @@ void main() {
       );
       expect(updatedSession, isNotNull);
       expect(updatedSession!.isGameFinished, isFalse);
-    });
-
-    test('Updating round number works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      await database.gameSessionDao.setRoundNumber(
-        gameId: gameSession.id,
-        roundNumber: 4,
-      );
-      var updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
-      );
-
-      expect(updatedSession, isNotNull);
-      expect(updatedSession!.roundNumber, 4);
-
-      await database.gameSessionDao.setRoundNumber(
-        gameId: gameSession.id,
-        roundNumber: 2,
-      );
-      updatedSession = await database.gameSessionDao.getGameSession(
-        gameId: gameSession.id,
-      );
-      expect(updatedSession, isNotNull);
-      expect(updatedSession!.roundNumber, 2);
     });
 
     test('Updating winner works correctly', () async {

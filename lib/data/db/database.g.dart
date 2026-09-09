@@ -98,17 +98,6 @@ class $GameSessionTableTable extends GameSessionTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _roundNumberMeta = const VerificationMeta(
-    'roundNumber',
-  );
-  @override
-  late final GeneratedColumn<int> roundNumber = GeneratedColumn<int>(
-    'round_number',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     gameId,
@@ -119,7 +108,6 @@ class $GameSessionTableTable extends GameSessionTable
     isPointsLimitEnabled,
     isGameFinished,
     winner,
-    roundNumber,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -204,17 +192,6 @@ class $GameSessionTableTable extends GameSessionTable
         winner.isAcceptableOrUnknown(data['winner']!, _winnerMeta),
       );
     }
-    if (data.containsKey('round_number')) {
-      context.handle(
-        _roundNumberMeta,
-        roundNumber.isAcceptableOrUnknown(
-          data['round_number']!,
-          _roundNumberMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_roundNumberMeta);
-    }
     return context;
   }
 
@@ -256,10 +233,6 @@ class $GameSessionTableTable extends GameSessionTable
         DriftSqlType.string,
         data['${effectivePrefix}winner'],
       ),
-      roundNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}round_number'],
-      )!,
     );
   }
 
@@ -279,7 +252,6 @@ class GameSessionTableData extends DataClass
   final bool isPointsLimitEnabled;
   final bool isGameFinished;
   final String? winner;
-  final int roundNumber;
   const GameSessionTableData({
     required this.gameId,
     required this.createdAt,
@@ -289,7 +261,6 @@ class GameSessionTableData extends DataClass
     required this.isPointsLimitEnabled,
     required this.isGameFinished,
     this.winner,
-    required this.roundNumber,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -304,7 +275,6 @@ class GameSessionTableData extends DataClass
     if (!nullToAbsent || winner != null) {
       map['winner'] = Variable<String>(winner);
     }
-    map['round_number'] = Variable<int>(roundNumber);
     return map;
   }
 
@@ -320,7 +290,6 @@ class GameSessionTableData extends DataClass
       winner: winner == null && nullToAbsent
           ? const Value.absent()
           : Value(winner),
-      roundNumber: Value(roundNumber),
     );
   }
 
@@ -340,7 +309,6 @@ class GameSessionTableData extends DataClass
       ),
       isGameFinished: serializer.fromJson<bool>(json['isGameFinished']),
       winner: serializer.fromJson<String?>(json['winner']),
-      roundNumber: serializer.fromJson<int>(json['roundNumber']),
     );
   }
   @override
@@ -355,7 +323,6 @@ class GameSessionTableData extends DataClass
       'isPointsLimitEnabled': serializer.toJson<bool>(isPointsLimitEnabled),
       'isGameFinished': serializer.toJson<bool>(isGameFinished),
       'winner': serializer.toJson<String?>(winner),
-      'roundNumber': serializer.toJson<int>(roundNumber),
     };
   }
 
@@ -368,7 +335,6 @@ class GameSessionTableData extends DataClass
     bool? isPointsLimitEnabled,
     bool? isGameFinished,
     Value<String?> winner = const Value.absent(),
-    int? roundNumber,
   }) => GameSessionTableData(
     gameId: gameId ?? this.gameId,
     createdAt: createdAt ?? this.createdAt,
@@ -378,7 +344,6 @@ class GameSessionTableData extends DataClass
     isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
     isGameFinished: isGameFinished ?? this.isGameFinished,
     winner: winner.present ? winner.value : this.winner,
-    roundNumber: roundNumber ?? this.roundNumber,
   );
   GameSessionTableData copyWithCompanion(GameSessionTableCompanion data) {
     return GameSessionTableData(
@@ -398,9 +363,6 @@ class GameSessionTableData extends DataClass
           ? data.isGameFinished.value
           : this.isGameFinished,
       winner: data.winner.present ? data.winner.value : this.winner,
-      roundNumber: data.roundNumber.present
-          ? data.roundNumber.value
-          : this.roundNumber,
     );
   }
 
@@ -414,8 +376,7 @@ class GameSessionTableData extends DataClass
           ..write('caboPenalty: $caboPenalty, ')
           ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
           ..write('isGameFinished: $isGameFinished, ')
-          ..write('winner: $winner, ')
-          ..write('roundNumber: $roundNumber')
+          ..write('winner: $winner')
           ..write(')'))
         .toString();
   }
@@ -430,7 +391,6 @@ class GameSessionTableData extends DataClass
     isPointsLimitEnabled,
     isGameFinished,
     winner,
-    roundNumber,
   );
   @override
   bool operator ==(Object other) =>
@@ -443,8 +403,7 @@ class GameSessionTableData extends DataClass
           other.caboPenalty == this.caboPenalty &&
           other.isPointsLimitEnabled == this.isPointsLimitEnabled &&
           other.isGameFinished == this.isGameFinished &&
-          other.winner == this.winner &&
-          other.roundNumber == this.roundNumber);
+          other.winner == this.winner);
 }
 
 class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
@@ -456,7 +415,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
   final Value<bool> isPointsLimitEnabled;
   final Value<bool> isGameFinished;
   final Value<String?> winner;
-  final Value<int> roundNumber;
   final Value<int> rowid;
   const GameSessionTableCompanion({
     this.gameId = const Value.absent(),
@@ -467,7 +425,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     this.isPointsLimitEnabled = const Value.absent(),
     this.isGameFinished = const Value.absent(),
     this.winner = const Value.absent(),
-    this.roundNumber = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   GameSessionTableCompanion.insert({
@@ -479,7 +436,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     required bool isPointsLimitEnabled,
     required bool isGameFinished,
     this.winner = const Value.absent(),
-    required int roundNumber,
     this.rowid = const Value.absent(),
   }) : gameId = Value(gameId),
        createdAt = Value(createdAt),
@@ -487,8 +443,7 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
        pointLimit = Value(pointLimit),
        caboPenalty = Value(caboPenalty),
        isPointsLimitEnabled = Value(isPointsLimitEnabled),
-       isGameFinished = Value(isGameFinished),
-       roundNumber = Value(roundNumber);
+       isGameFinished = Value(isGameFinished);
   static Insertable<GameSessionTableData> custom({
     Expression<String>? gameId,
     Expression<DateTime>? createdAt,
@@ -498,7 +453,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Expression<bool>? isPointsLimitEnabled,
     Expression<bool>? isGameFinished,
     Expression<String>? winner,
-    Expression<int>? roundNumber,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -511,7 +465,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
         'is_points_limit_enabled': isPointsLimitEnabled,
       if (isGameFinished != null) 'is_game_finished': isGameFinished,
       if (winner != null) 'winner': winner,
-      if (roundNumber != null) 'round_number': roundNumber,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -525,7 +478,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     Value<bool>? isPointsLimitEnabled,
     Value<bool>? isGameFinished,
     Value<String?>? winner,
-    Value<int>? roundNumber,
     Value<int>? rowid,
   }) {
     return GameSessionTableCompanion(
@@ -537,7 +489,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
       isPointsLimitEnabled: isPointsLimitEnabled ?? this.isPointsLimitEnabled,
       isGameFinished: isGameFinished ?? this.isGameFinished,
       winner: winner ?? this.winner,
-      roundNumber: roundNumber ?? this.roundNumber,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -571,9 +522,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
     if (winner.present) {
       map['winner'] = Variable<String>(winner.value);
     }
-    if (roundNumber.present) {
-      map['round_number'] = Variable<int>(roundNumber.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -591,7 +539,6 @@ class GameSessionTableCompanion extends UpdateCompanion<GameSessionTableData> {
           ..write('isPointsLimitEnabled: $isPointsLimitEnabled, ')
           ..write('isGameFinished: $isGameFinished, ')
           ..write('winner: $winner, ')
-          ..write('roundNumber: $roundNumber, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1757,7 +1704,6 @@ typedef $$GameSessionTableTableCreateCompanionBuilder =
       required bool isPointsLimitEnabled,
       required bool isGameFinished,
       Value<String?> winner,
-      required int roundNumber,
       Value<int> rowid,
     });
 typedef $$GameSessionTableTableUpdateCompanionBuilder =
@@ -1770,7 +1716,6 @@ typedef $$GameSessionTableTableUpdateCompanionBuilder =
       Value<bool> isPointsLimitEnabled,
       Value<bool> isGameFinished,
       Value<String?> winner,
-      Value<int> roundNumber,
       Value<int> rowid,
     });
 
@@ -1790,10 +1735,7 @@ final class $$GameSessionTableTableReferences
   static MultiTypedResultKey<$PlayerTableTable, List<PlayerTableData>>
   _playerTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.playerTable,
-    aliasName: $_aliasNameGenerator(
-      db.gameSessionTable.gameId,
-      db.playerTable.gameId,
-    ),
+    aliasName: 'game_session_table__game_id__player_table__game_id',
   );
 
   $$PlayerTableTableProcessedTableManager get playerTableRefs {
@@ -1811,10 +1753,7 @@ final class $$GameSessionTableTableReferences
   static MultiTypedResultKey<$RoundsTableTable, List<RoundsTableData>>
   _roundsTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.roundsTable,
-    aliasName: $_aliasNameGenerator(
-      db.gameSessionTable.gameId,
-      db.roundsTable.gameId,
-    ),
+    aliasName: 'game_session_table__game_id__rounds_table__game_id',
   );
 
   $$RoundsTableTableProcessedTableManager get roundsTableRefs {
@@ -1876,11 +1815,6 @@ class $$GameSessionTableTableFilterComposer
 
   ColumnFilters<String> get winner => $composableBuilder(
     column: $table.winner,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get roundNumber => $composableBuilder(
-    column: $table.roundNumber,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1983,11 +1917,6 @@ class $$GameSessionTableTableOrderingComposer
     column: $table.winner,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<int> get roundNumber => $composableBuilder(
-    column: $table.roundNumber,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$GameSessionTableTableAnnotationComposer
@@ -2030,11 +1959,6 @@ class $$GameSessionTableTableAnnotationComposer
 
   GeneratedColumn<String> get winner =>
       $composableBuilder(column: $table.winner, builder: (column) => column);
-
-  GeneratedColumn<int> get roundNumber => $composableBuilder(
-    column: $table.roundNumber,
-    builder: (column) => column,
-  );
 
   Expression<T> playerTableRefs<T extends Object>(
     Expression<T> Function($$PlayerTableTableAnnotationComposer a) f,
@@ -2125,7 +2049,6 @@ class $$GameSessionTableTableTableManager
                 Value<bool> isPointsLimitEnabled = const Value.absent(),
                 Value<bool> isGameFinished = const Value.absent(),
                 Value<String?> winner = const Value.absent(),
-                Value<int> roundNumber = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion(
                 gameId: gameId,
@@ -2136,7 +2059,6 @@ class $$GameSessionTableTableTableManager
                 isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
                 winner: winner,
-                roundNumber: roundNumber,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2149,7 +2071,6 @@ class $$GameSessionTableTableTableManager
                 required bool isPointsLimitEnabled,
                 required bool isGameFinished,
                 Value<String?> winner = const Value.absent(),
-                required int roundNumber,
                 Value<int> rowid = const Value.absent(),
               }) => GameSessionTableCompanion.insert(
                 gameId: gameId,
@@ -2160,13 +2081,14 @@ class $$GameSessionTableTableTableManager
                 isPointsLimitEnabled: isPointsLimitEnabled,
                 isGameFinished: isGameFinished,
                 winner: winner,
-                roundNumber: roundNumber,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$GameSessionTableTable, GameSessionTableData>(
+                    table,
+                  ),
                   $$GameSessionTableTableReferences(db, table, e),
                 ),
               )
@@ -2269,10 +2191,9 @@ final class $$PlayerTableTableReferences
     extends BaseReferences<_$AppDatabase, $PlayerTableTable, PlayerTableData> {
   $$PlayerTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $GameSessionTableTable _gameIdTable(_$AppDatabase db) =>
-      db.gameSessionTable.createAlias(
-        $_aliasNameGenerator(db.playerTable.gameId, db.gameSessionTable.gameId),
-      );
+  static $GameSessionTableTable _gameIdTable(_$AppDatabase db) => db
+      .gameSessionTable
+      .createAlias('player_table__game_id__game_session_table__game_id');
 
   $$GameSessionTableTableProcessedTableManager get gameId {
     final $_column = $_itemColumn<String>('game_id')!;
@@ -2291,10 +2212,7 @@ final class $$PlayerTableTableReferences
   static MultiTypedResultKey<$RoundScoresTableTable, List<RoundScoresTableData>>
   _roundScoresTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.roundScoresTable,
-    aliasName: $_aliasNameGenerator(
-      db.playerTable.playerId,
-      db.roundScoresTable.playerId,
-    ),
+    aliasName: 'player_table__player_id__round_scores_table__player_id',
   );
 
   $$RoundScoresTableTableProcessedTableManager get roundScoresTableRefs {
@@ -2577,7 +2495,7 @@ class $$PlayerTableTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$PlayerTableTable, PlayerTableData>(table),
                   $$PlayerTableTableReferences(db, table, e),
                 ),
               )
@@ -2606,19 +2524,15 @@ class $$PlayerTableTableTableManager
                         >
                       >(state) {
                         if (gameId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.gameId,
-                                    referencedTable:
-                                        $$PlayerTableTableReferences
-                                            ._gameIdTable(db),
-                                    referencedColumn:
-                                        $$PlayerTableTableReferences
-                                            ._gameIdTable(db)
-                                            .gameId,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.gameId,
+                            referencedTable: $$PlayerTableTableReferences
+                                ._gameIdTable(db),
+                            referencedColumn: $$PlayerTableTableReferences
+                                ._gameIdTable(db)
+                                .gameId,
+                          ) as T;
                         }
 
                         return state;
@@ -2691,10 +2605,9 @@ final class $$RoundsTableTableReferences
     extends BaseReferences<_$AppDatabase, $RoundsTableTable, RoundsTableData> {
   $$RoundsTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $GameSessionTableTable _gameIdTable(_$AppDatabase db) =>
-      db.gameSessionTable.createAlias(
-        $_aliasNameGenerator(db.roundsTable.gameId, db.gameSessionTable.gameId),
-      );
+  static $GameSessionTableTable _gameIdTable(_$AppDatabase db) => db
+      .gameSessionTable
+      .createAlias('rounds_table__game_id__game_session_table__game_id');
 
   $$GameSessionTableTableProcessedTableManager get gameId {
     final $_column = $_itemColumn<String>('game_id')!;
@@ -2713,10 +2626,7 @@ final class $$RoundsTableTableReferences
   static MultiTypedResultKey<$RoundScoresTableTable, List<RoundScoresTableData>>
   _roundScoresTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.roundScoresTable,
-    aliasName: $_aliasNameGenerator(
-      db.roundsTable.roundId,
-      db.roundScoresTable.roundId,
-    ),
+    aliasName: 'rounds_table__round_id__round_scores_table__round_id',
   );
 
   $$RoundScoresTableTableProcessedTableManager get roundScoresTableRefs {
@@ -3002,7 +2912,7 @@ class $$RoundsTableTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$RoundsTableTable, RoundsTableData>(table),
                   $$RoundsTableTableReferences(db, table, e),
                 ),
               )
@@ -3031,19 +2941,15 @@ class $$RoundsTableTableTableManager
                         >
                       >(state) {
                         if (gameId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.gameId,
-                                    referencedTable:
-                                        $$RoundsTableTableReferences
-                                            ._gameIdTable(db),
-                                    referencedColumn:
-                                        $$RoundsTableTableReferences
-                                            ._gameIdTable(db)
-                                            .gameId,
-                                  )
-                                  as T;
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.gameId,
+                            referencedTable: $$RoundsTableTableReferences
+                                ._gameIdTable(db),
+                            referencedColumn: $$RoundsTableTableReferences
+                                ._gameIdTable(db)
+                                .gameId,
+                          ) as T;
                         }
 
                         return state;
@@ -3123,13 +3029,8 @@ final class $$RoundScoresTableTableReferences
     super.$_typedResult,
   );
 
-  static $RoundsTableTable _roundIdTable(_$AppDatabase db) =>
-      db.roundsTable.createAlias(
-        $_aliasNameGenerator(
-          db.roundScoresTable.roundId,
-          db.roundsTable.roundId,
-        ),
-      );
+  static $RoundsTableTable _roundIdTable(_$AppDatabase db) => db.roundsTable
+      .createAlias('round_scores_table__round_id__rounds_table__round_id');
 
   $$RoundsTableTableProcessedTableManager get roundId {
     final $_column = $_itemColumn<String>('round_id')!;
@@ -3145,13 +3046,8 @@ final class $$RoundScoresTableTableReferences
     );
   }
 
-  static $PlayerTableTable _playerIdTable(_$AppDatabase db) =>
-      db.playerTable.createAlias(
-        $_aliasNameGenerator(
-          db.roundScoresTable.playerId,
-          db.playerTable.playerId,
-        ),
-      );
+  static $PlayerTableTable _playerIdTable(_$AppDatabase db) => db.playerTable
+      .createAlias('round_scores_table__player_id__player_table__player_id');
 
   $$PlayerTableTableProcessedTableManager get playerId {
     final $_column = $_itemColumn<String>('player_id')!;
@@ -3423,7 +3319,9 @@ class $$RoundScoresTableTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$RoundScoresTableTable, RoundScoresTableData>(
+                    table,
+                  ),
                   $$RoundScoresTableTableReferences(db, table, e),
                 ),
               )
@@ -3449,34 +3347,26 @@ class $$RoundScoresTableTableTableManager
                     >
                   >(state) {
                     if (roundId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.roundId,
-                                referencedTable:
-                                    $$RoundScoresTableTableReferences
-                                        ._roundIdTable(db),
-                                referencedColumn:
-                                    $$RoundScoresTableTableReferences
-                                        ._roundIdTable(db)
-                                        .roundId,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.roundId,
+                        referencedTable: $$RoundScoresTableTableReferences
+                            ._roundIdTable(db),
+                        referencedColumn: $$RoundScoresTableTableReferences
+                            ._roundIdTable(db)
+                            .roundId,
+                      ) as T;
                     }
                     if (playerId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.playerId,
-                                referencedTable:
-                                    $$RoundScoresTableTableReferences
-                                        ._playerIdTable(db),
-                                referencedColumn:
-                                    $$RoundScoresTableTableReferences
-                                        ._playerIdTable(db)
-                                        .playerId,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.playerId,
+                        referencedTable: $$RoundScoresTableTableReferences
+                            ._playerIdTable(db),
+                        referencedColumn: $$RoundScoresTableTableReferences
+                            ._playerIdTable(db)
+                            .playerId,
+                      ) as T;
                     }
 
                     return state;

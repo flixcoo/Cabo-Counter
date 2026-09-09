@@ -10,4 +10,24 @@ mixin _$RoundsDaoMixin on DatabaseAccessor<AppDatabase> {
   $PlayerTableTable get playerTable => attachedDatabase.playerTable;
   $RoundScoresTableTable get roundScoresTable =>
       attachedDatabase.roundScoresTable;
+  RoundsDaoManager get managers => RoundsDaoManager(this);
+}
+
+class RoundsDaoManager {
+  final _$RoundsDaoMixin _db;
+  RoundsDaoManager(this._db);
+  $$GameSessionTableTableTableManager get gameSessionTable =>
+      $$GameSessionTableTableTableManager(
+        _db.attachedDatabase,
+        _db.gameSessionTable,
+      );
+  $$RoundsTableTableTableManager get roundsTable =>
+      $$RoundsTableTableTableManager(_db.attachedDatabase, _db.roundsTable);
+  $$PlayerTableTableTableManager get playerTable =>
+      $$PlayerTableTableTableManager(_db.attachedDatabase, _db.playerTable);
+  $$RoundScoresTableTableTableManager get roundScoresTable =>
+      $$RoundScoresTableTableTableManager(
+        _db.attachedDatabase,
+        _db.roundScoresTable,
+      );
 }

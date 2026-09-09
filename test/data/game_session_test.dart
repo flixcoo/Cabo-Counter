@@ -112,9 +112,9 @@ void main() {
   });
 
   group('Helper Functions', () {
-    test('increaseRound', () {
+    test('roundNumber is correct', () {
       expect(session.roundNumber, 1);
-      controller.increaseRound();
+      controller.addRoundScoresToList(1, [10, 20, 30], [10, 20, 30], 0);
       expect(session.roundNumber, 2);
     });
 
@@ -154,7 +154,6 @@ void main() {
     test('addRoundScoresToList', () {
       controller.addRoundScoresToList(1, [3, 5, 8], [0, 5, 8], 0);
       expect(session.roundList.length, 1);
-      expect(session.roundList[0].roundNum, 1);
       expect(session.roundList[0].scoreUpdates, [0, 5, 8]);
       expect(session.roundList[0].scores, [3, 5, 8]);
       expect(session.roundList[0].kamikazePlayerIndex, isNull);

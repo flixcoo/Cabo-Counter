@@ -15,7 +15,6 @@ void main() {
     round = Round(
       roundId: 'testRoundId',
       gameSessionId: 'testGameId',
-      roundNum: testRoundNum,
       caboPlayerIndex: testCaboPlayerIndex,
       kamikazePlayerIndex: testKamikazePlayerIndex,
       scores: testScores,
@@ -25,7 +24,6 @@ void main() {
 
   group('Constructor Tests', () {
     test('Constructor sets correct values', () {
-      expect(round.roundNum, testRoundNum);
       expect(round.caboPlayerIndex, testCaboPlayerIndex);
       expect(round.kamikazePlayerIndex, testKamikazePlayerIndex);
       expect(round.scores, testScores);
@@ -36,7 +34,6 @@ void main() {
       final roundWithoutKamikaze = Round(
         roundId: testRoundId,
         gameSessionId: testGameId,
-        roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
         scores: testScores,
@@ -73,7 +70,6 @@ void main() {
 
       final fromJsonRound = Round.fromJson(jsonMap);
 
-      expect(fromJsonRound.roundNum, testRoundNum);
       expect(fromJsonRound.caboPlayerIndex, testCaboPlayerIndex);
       expect(fromJsonRound.kamikazePlayerIndex, testKamikazePlayerIndex);
       expect(fromJsonRound.scores, testScores);
@@ -113,7 +109,6 @@ void main() {
       final roundWithoutKamikaze = Round(
         roundId: 'testRoundId',
         gameSessionId: 'testGameId',
-        roundNum: testRoundNum,
         caboPlayerIndex: testCaboPlayerIndex,
         kamikazePlayerIndex: null,
         scores: testScores,

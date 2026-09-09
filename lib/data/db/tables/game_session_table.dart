@@ -9,7 +9,6 @@ class GameSessionTable extends Table {
   late final isPointsLimitEnabled = boolean()();
   late final isGameFinished = boolean()();
   late final winner = text().nullable()();
-  late final roundNumber = integer()();
 
   @override
   Set<Column<Object>> get primaryKey => {gameId};

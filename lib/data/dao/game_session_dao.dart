@@ -28,7 +28,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         isPointsLimitEnabled: gameSession.isPointsLimitEnabled,
         isGameFinished: gameSession.isGameFinished,
         winner: Value(gameSession.winner),
-        roundNumber: gameSession.roundNumber,
       ),
     );
 
@@ -74,7 +73,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
           isPointsLimitEnabled: row.isPointsLimitEnabled,
           isGameFinished: row.isGameFinished,
           winner: row.winner ?? '',
-          roundNumber: row.roundNumber,
           roundList: roundList,
         );
       }),
@@ -113,7 +111,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       isPointsLimitEnabled: gameSessionResult.isPointsLimitEnabled,
       isGameFinished: gameSessionResult.isGameFinished,
       winner: gameSessionResult.winner ?? '',
-      roundNumber: gameSessionResult.roundNumber,
       roundList: roundList,
     );
 
@@ -149,19 +146,6 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         .write(GameSessionTableCompanion(isGameFinished: Value(isFinished)));
   }
 
-  /// Updates the round number of a specific game session.
-  /// This method updates the [roundNumber] field in the [gameSessionTable]
-  /// for the game session with the given [gameId].
-  /// [gameId] The ID of the game session to update.
-  /// [roundNumber] The new round number to set.
-  Future<void> setRoundNumber({
-    required String gameId,
-    required int roundNumber,
-  }) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
-        .write(GameSessionTableCompanion(roundNumber: Value(roundNumber)));
-  }
-
   /// Updates the winner of a specific game session.
   /// This method updates the [winner] field in the [gameSessionTable]
   /// for the game session with the given [gameId].
@@ -175,24 +159,10 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
         .write(GameSessionTableCompanion(winner: Value(winner)));
   }
 
-  /// Ends a game session by marking it as finished and adjusting the round number.
-  /// This method updates the [isGameFinished] field to true and decrements the [roundNumber]
-  /// by 1 for the game session with the given [gameId].
+  /// Ends a game session by marking it as finished.
   /// [gameId] The ID of the game session to end.
   Future<void> endGame({required String gameId}) async {
     await (update(gameSessionTable)..where((tbl) => tbl.gameId.equals(gameId)))
         .write(const GameSessionTableCompanion(isGameFinished: Value(true)));
-
-    int currentRoundNumber =
-        await (select(gameSessionTable)
-              ..where((tbl) => tbl.gameId.equals(gameId)))
-            .map((row) => row.roundNumber)
-            .getSingle();
-
-    await (update(
-      gameSessionTable,
-    )..where((tbl) => tbl.gameId.equals(gameId))).write(
-      GameSessionTableCompanion(roundNumber: Value(currentRoundNumber - 1)),
-    );
   }
 }

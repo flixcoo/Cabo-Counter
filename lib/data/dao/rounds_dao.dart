@@ -12,9 +12,12 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   RoundsDao(super.db);
 
   /// Retrieves all rounds for a specific game session by its ID.
+  /// The rounds are ordered by their round number so that the position of a
+  /// round in the returned list matches its round number (index + 1).
   Future<List<Round>> getRoundsByGameId({required String gameId}) async {
     final query = select(roundsTable)
-      ..where((tbl) => tbl.gameId.equals(gameId));
+      ..where((tbl) => tbl.gameId.equals(gameId))
+      ..orderBy([(tbl) => OrderingTerm(expression: tbl.roundNumber)]);
 
     final roundResult = await query.get();
 
@@ -30,7 +33,6 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
         return Round(
           roundId: row.roundId,
           gameSessionId: row.gameId,
-          roundNum: row.roundNumber,
           caboPlayerIndex: row.caboPlayerIndex,
           kamikazePlayerIndex: row.kamikazePlayerIndex,
           scores: scores,
@@ -64,7 +66,6 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     return Round(
       roundId: roundResult.roundId,
       gameSessionId: roundResult.gameId,
-      roundNum: roundResult.roundNumber,
       caboPlayerIndex: roundResult.caboPlayerIndex,
       kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
       scores: scoreResult[0],
@@ -77,16 +78,18 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// along with the scores for each player in the round.
   /// [gameId] is the ID of the game session this round belongs to.
   /// [round] is the round data to be inserted.
+  /// [roundNumber] is the position of the round within the game.
   /// [players] is the list of players in the game session.
   Future<void> insertOneRound({
     required String gameId,
     required Round round,
+    required int roundNumber,
     required List<Player> players,
   }) async {
     final roundEntry = RoundsTableCompanion.insert(
       roundId: round.id,
       gameId: gameId,
-      roundNumber: round.roundNum,
+      roundNumber: roundNumber,
       caboPlayerIndex: round.caboPlayerIndex,
       kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
     );
@@ -108,20 +111,28 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
   /// Replaces an already existing round with a new one.
   /// [gameId] is the ID of the game session this round belongs to.
   /// [round] is the round data to be inserted.
+  /// [roundNumber] is the position of the round within the game.
   /// [players] is the list of players in the game session.
   Future<void> replaceRound({
     required String gameId,
     required Round round,
+    required int roundNumber,
     required List<Player> players,
   }) async {
-    await deleteRound(gameId: gameId, roundNumber: round.roundNum);
+    await deleteRound(gameId: gameId, roundNumber: roundNumber);
 
-    await insertOneRound(gameId: gameId, round: round, players: players);
+    await insertOneRound(
+      gameId: gameId,
+      round: round,
+      roundNumber: roundNumber,
+      players: players,
+    );
   }
 
   /// Inserts multiple rounds into the database.
   /// This method uses a batch operation to insert all rounds and their scores
-  /// in a single transaction.
+  /// in a single transaction. The round number of each round is derived from
+  /// its position in the [rounds] list (index + 1).
   /// [gameId] is the ID of the game session these rounds belong to.
   /// [rounds] is the list of rounds to be inserted.
   /// [players] is the list of players in the game session.
@@ -135,12 +146,13 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
       final roundEntries = <RoundsTableCompanion>[];
       final roundScoreEntries = <RoundScoresTableCompanion>[];
 
-      for (final round in rounds) {
+      for (int r = 0; r < rounds.length; r++) {
+        final round = rounds[r];
         roundEntries.add(
           RoundsTableCompanion.insert(
             roundId: round.id,
             gameId: gameId,
-            roundNumber: round.roundNum,
+            roundNumber: r + 1,
             caboPlayerIndex: round.caboPlayerIndex,
             kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
           ),

@@ -9,7 +9,6 @@ import 'package:uuid/uuid.dart';
 /// [isPointsLimitEnabled] is a boolean indicating if the game has the default
 /// point limit of 101 points or not.
 /// [players] is a string list of player names.
-/// [roundNumber] is the current round number.
 /// [isGameFinished] is a boolean indicating if the game has ended yet.
 /// [winner] is the name of the player who won the game.
 class GameSession {
@@ -22,7 +21,6 @@ class GameSession {
   final bool isPointsLimitEnabled;
   bool isGameFinished;
   String winner;
-  int roundNumber;
   List<Round> roundList;
 
   GameSession({
@@ -35,10 +33,11 @@ class GameSession {
     required this.isPointsLimitEnabled,
     this.isGameFinished = false,
     this.winner = '',
-    this.roundNumber = 1,
     List<Round>? roundList,
   }) : id = gameId ?? const Uuid().v4(),
        roundList = roundList ?? [];
+
+  int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
 
   @override
   toString() {
@@ -58,7 +57,6 @@ class GameSession {
     'isPointsLimitEnabled': isPointsLimitEnabled,
     'isGameFinished': isGameFinished,
     'winner': winner,
-    'roundNumber': roundNumber,
     'roundList': roundList.map((e) => e.toJson()).toList(),
   };
 
@@ -75,7 +73,6 @@ class GameSession {
       isPointsLimitEnabled = json['isPointsLimitEnabled'],
       isGameFinished = json['isGameFinished'],
       winner = json['winner'],
-      roundNumber = json['roundNumber'],
       roundList = (json['roundList'] as List)
           .map((e) => Round.fromJson(e))
           .toList();

@@ -180,7 +180,6 @@ class GameSessionController extends ChangeNotifier {
     Round newRound = Round(
       roundId: uuid.v4(),
       gameSessionId: id,
-      roundNum: roundNum,
       caboPlayerIndex: caboPlayerIndex,
       kamikazePlayerIndex: kamikazePlayerIndex,
       scores: roundScores,
@@ -192,6 +191,7 @@ class GameSessionController extends ChangeNotifier {
         () => db.roundsDao.insertOneRound(
           gameId: id,
           round: newRound,
+          roundNumber: roundNum,
           players: players,
         ),
       );
@@ -201,6 +201,7 @@ class GameSessionController extends ChangeNotifier {
         () => db.roundsDao.replaceRound(
           gameId: id,
           round: newRound,
+          roundNumber: roundNum,
           players: players,
         ),
       );
@@ -271,10 +272,11 @@ class GameSessionController extends ChangeNotifier {
   /// the corresponding round update.
   List<int> _checkHundredPointsReached() {
     List<int> bonusPlayers = [];
+    final int lastRoundIndex = roundList.length - 1;
     for (int i = 0; i < players.length; i++) {
       if (players[i].totalScore == pointLimit) {
         bonusPlayers.add(i);
-        roundList[roundNumber - 1].scoreUpdates[i] -= (pointLimit / 2).round();
+        roundList[lastRoundIndex].scoreUpdates[i] -= (pointLimit / 2).round();
       }
     }
     if (bonusPlayers.isNotEmpty) {
@@ -283,7 +285,8 @@ class GameSessionController extends ChangeNotifier {
       _enqueueWrite(
         () => db.roundsDao.replaceRound(
           gameId: id,
-          round: roundList[roundNumber - 1],
+          round: roundList[lastRoundIndex],
+          roundNumber: lastRoundIndex + 1,
           players: players,
         ),
       );
@@ -316,24 +319,10 @@ class GameSessionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Increases the round number by 1.
-  void increaseRound() {
-    session.roundNumber++;
-    _enqueueWrite(
-      () => db.gameSessionDao.setRoundNumber(
-        gameId: id,
-        roundNumber: roundNumber,
-      ),
-    );
-
-    notifyListeners();
-  }
-
   /// Ends the game if it is in unlimited mode.
-  /// It decreases the round number by 1, sets isGameFinished to true,
-  /// and calls the setWinner() method to determine the winner.
+  /// It sets isGameFinished to true and calls the setWinner() method to
+  /// determine the winner.
   void endGame() {
-    session.roundNumber--;
     session.isGameFinished = true;
     setWinner();
   }

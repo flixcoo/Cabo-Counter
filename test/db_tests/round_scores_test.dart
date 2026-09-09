@@ -44,21 +44,18 @@ void main() {
     );
     round1 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 1,
       caboPlayerIndex: 0,
       scores: [5, 7, 10],
       scoreUpdates: [0, 7, 10],
     );
     round2 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 2,
       caboPlayerIndex: 1,
       scores: [2, 4, 4],
       scoreUpdates: [0, 9, 4],
     );
     round3 = Round(
       gameSessionId: 'test_game_id',
-      roundNum: 3,
       caboPlayerIndex: 1,
       kamikazePlayerIndex: 2,
       scores: [5, 2, 50],
