@@ -103,11 +103,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.paddingOf(context).bottom,
+                    top: 10,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 10),
                       ActiveGameListSet(
                         title: loc.game,
                         content: [
@@ -175,10 +175,8 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               ),
                               trailing: Row(
                                 children: [
-                                  const SizedBox(width: 5),
                                   Text(
-                                    '${gameSession.getPlayerScoresAsList()[sortedPlayerIndices[index]]} '
-                                    '${loc.points}',
+                                    '${gameSession.getPlayerScoresAsList()[sortedPlayerIndices[index]]} ${loc.points}',
                                   ),
                                 ],
                               ),

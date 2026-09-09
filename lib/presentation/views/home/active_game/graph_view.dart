@@ -71,9 +71,9 @@ class _GraphViewState extends State<GraphView> {
           replacement: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 10,
             children: [
               Center(child: Icon(IconService.chart, size: 60)),
-              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(

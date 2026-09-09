@@ -117,21 +117,25 @@ class _RoundViewState extends State<RoundView> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 20 + bottomInset),
+              padding: EdgeInsets.only(bottom: 20 + bottomInset, top: 40),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 40),
-                    Text(
-                      '${loc.round} ${widget.roundNumber}',
-                      style: const TextStyle(
-                        fontSize: 60,
-                        color: CustomTheme.white,
-                        fontWeight: FontWeight.bold,
+                    // Round number
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        '${loc.round} ${widget.roundNumber}',
+                        style: const TextStyle(
+                          fontSize: 60,
+                          color: CustomTheme.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+
+                    // Text
                     Text(
                       loc.who_said_cabo,
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -181,6 +185,7 @@ class _RoundViewState extends State<RoundView> {
                         ),
                       ),
                     ),
+
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
