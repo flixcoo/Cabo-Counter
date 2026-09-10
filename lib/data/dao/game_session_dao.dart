@@ -12,12 +12,10 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     with _$GameSessionDaoMixin {
   GameSessionDao(super.db);
 
+  /* Create */
+
   /// Inserts a new game session into the database.
-  /// This method takes a [GameSession] object as input and inserts its details
-  /// into the [gameSessionTable]. It also inserts associated players and rounds
-  /// using the respective DAOs.
-  /// [gameSession] The [GameSession] object to insert into the database.
-  Future<void> insertGameSession(GameSession gameSession) async {
+  Future<void> addGameSession(GameSession gameSession) async {
     await into(gameSessionTable).insert(
       GameSessionTableCompanion.insert(
         id: gameSession.id,
@@ -29,24 +27,21 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       ),
     );
 
-    await db.playerDao.insertPlayers(
+    await db.playerDao.addPlayerAsList(
       gameId: gameSession.id,
       players: gameSession.players,
     );
 
-    await db.roundsDao.insertMultipleRounds(
+    await db.roundDao.addRoundAsList(
       gameSessionId: gameSession.id,
       rounds: gameSession.roundList,
       players: gameSession.players,
     );
   }
 
+  /* Read */
+
   /// Retrieves all game sessions from the database.
-  /// This method fetches all entries from the `gameSessionTable`,
-  /// along with associated players and rounds for each session from their respective DAOs.
-  /// It constructs and returns a list of `GameSession` objects containing all relevant data.
-  /// Returns 'null' if no game sessions are found.
-  /// Returns a [List] of [GameSession] objects.
   Future<List<GameSession>> getAllGameSessions() async {
     final query = select(gameSessionTable);
     final gameSessionResults = await query.get();
@@ -54,11 +49,11 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
 
     List<GameSession> gameSessions = await Future.wait(
       gameSessionResults.map((row) async {
-        List<Player> playerList = await db.playerDao.getPlayersByGameId(
-          gameId: row.id,
+        List<Player> playerList = await db.playerDao.getPlayersByGameSessionId(
+          gameSessionId: row.id,
         );
-        List<Round> roundList = await db.roundsDao.getRoundsByGameId(
-          gameId: row.id,
+        List<Round> roundList = await db.roundDao.getRoundsByGameId(
+          gameSessionId: row.id,
         );
 
         return GameSession(
@@ -78,11 +73,9 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Retrieves a game session by its ID.
-  /// This method fetches the game session details from the `gameSessionTable`,
-  /// along with associated players and rounds from their respective DAOs.
-  /// It constructs and returns a `GameSession` object containing all relevant data.
-  /// [gameSessionId] The ID of the game session to retrieve.
-  Future<GameSession?> getGameSession({required String gameSessionId}) async {
+  Future<GameSession?> getGameSessionById({
+    required String gameSessionId,
+  }) async {
     final query = select(gameSessionTable)
       ..where((tbl) => tbl.id.equals(gameSessionId));
     final gameSessionResult = await query.getSingleOrNull();
@@ -90,11 +83,11 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
       return null;
     }
 
-    List<Player> playerList = await db.playerDao.getPlayersByGameId(
-      gameId: gameSessionId,
+    List<Player> playerList = await db.playerDao.getPlayersByGameSessionId(
+      gameSessionId: gameSessionId,
     );
-    List<Round> roundList = await db.roundsDao.getRoundsByGameId(
-      gameId: gameSessionId,
+    List<Round> roundList = await db.roundDao.getRoundsByGameId(
+      gameSessionId: gameSessionId,
     );
 
     GameSession gameSession = GameSession(
@@ -111,6 +104,24 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
     return gameSession;
   }
 
+  /* Update */
+
+  /// Updates the game finish status of a specific game session.
+  Future<bool> updateGameFinished({
+    required String gameId,
+    required bool isFinished,
+  }) async {
+    final rowsAffected =
+        await (update(
+          gameSessionTable,
+        )..where((tbl) => tbl.id.equals(gameId))).write(
+          GameSessionTableCompanion(isGameFinished: Value(isFinished)),
+        );
+    return rowsAffected > 0;
+  }
+
+  /* Delete */
+
   /// Deletes the game session with the given [gameSessionId].
   /// Returns `true` if the deletion was successful, `false` otherwise.
   Future<bool> deleteGameSession({required String gameSessionId}) async {
@@ -122,28 +133,8 @@ class GameSessionDao extends DatabaseAccessor<AppDatabase>
 
   /// Deletes all game sessions from the database.
   /// This method removes all entries from the [gameSessionTable].
-  /// Returns the number of deleted rows.
-  Future<int> deleteAllGames() async {
-    return await delete(gameSessionTable).go();
-  }
-
-  /// Updates the game finish status of a specific game session.
-  /// This method updates the [isGameFinished] field in the [gameSessionTable]
-  /// for the game session with the given [gameId].
-  /// [gameId] The ID of the game session to update.
-  /// [isFinished] The new finish status to set.
-  Future<void> setGameFinishStatus({
-    required String gameId,
-    required bool isFinished,
-  }) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
-        .write(GameSessionTableCompanion(isGameFinished: Value(isFinished)));
-  }
-
-  /// Ends a game session by marking it as finished.
-  /// [gameId] The ID of the game session to end.
-  Future<void> endGame({required String gameId}) async {
-    await (update(gameSessionTable)..where((tbl) => tbl.id.equals(gameId)))
-        .write(const GameSessionTableCompanion(isGameFinished: Value(true)));
+  /// Returns `true` if any rows were deleted, `false` otherwise.
+  Future<bool> deleteAllGames() async {
+    return (await delete(gameSessionTable).go() > 0);
   }
 }

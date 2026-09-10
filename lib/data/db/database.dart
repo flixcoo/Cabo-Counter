@@ -15,7 +15,7 @@ part 'database.g.dart';
 
 @DriftDatabase(
   tables: [GameSessionTable, PlayerTable, RoundScoreTable, RoundTable],
-  daos: [GameSessionDao, PlayerDao, RoundsDao, RoundScoresDao],
+  daos: [GameSessionDao, PlayerDao, RoundDao, RoundScoresDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());

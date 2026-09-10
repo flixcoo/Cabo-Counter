@@ -56,7 +56,7 @@ void main() {
     controller = GameSessionController(session: session, db: database);
     // Persist the session and its players so the round writes triggered by the
     // controller satisfy the foreign key constraints.
-    await database.gameSessionDao.insertGameSession(session);
+    await database.gameSessionDao.addGameSession(session);
   });
 
   tearDown(() async {

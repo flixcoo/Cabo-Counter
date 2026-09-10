@@ -1543,7 +1543,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this as AppDatabase,
   );
   late final PlayerDao playerDao = PlayerDao(this as AppDatabase);
-  late final RoundsDao roundsDao = RoundsDao(this as AppDatabase);
+  late final RoundDao roundDao = RoundDao(this as AppDatabase);
   late final RoundScoresDao roundScoresDao = RoundScoresDao(
     this as AppDatabase,
   );

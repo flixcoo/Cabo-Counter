@@ -3,18 +3,18 @@
 part of 'rounds_dao.dart';
 
 // ignore_for_file: type=lint
-mixin _$RoundsDaoMixin on DatabaseAccessor<AppDatabase> {
+mixin _$RoundDaoMixin on DatabaseAccessor<AppDatabase> {
   $GameSessionTableTable get gameSessionTable =>
       attachedDatabase.gameSessionTable;
   $RoundTableTable get roundTable => attachedDatabase.roundTable;
   $PlayerTableTable get playerTable => attachedDatabase.playerTable;
   $RoundScoreTableTable get roundScoreTable => attachedDatabase.roundScoreTable;
-  RoundsDaoManager get managers => RoundsDaoManager(this);
+  RoundDaoManager get managers => RoundDaoManager(this);
 }
 
-class RoundsDaoManager {
-  final _$RoundsDaoMixin _db;
-  RoundsDaoManager(this._db);
+class RoundDaoManager {
+  final _$RoundDaoMixin _db;
+  RoundDaoManager(this._db);
   $$GameSessionTableTableTableManager get gameSessionTable =>
       $$GameSessionTableTableTableManager(
         _db.attachedDatabase,

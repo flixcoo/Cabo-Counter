@@ -199,8 +199,8 @@ class GameSessionController extends ChangeNotifier {
     if (roundNum > roundList.length) {
       roundList.add(newRound);
       _enqueueWrite(
-        () => db.roundsDao.insertOneRound(
-          gameId: id,
+        () => db.roundDao.addRound(
+          gameSessionId: id,
           round: newRound,
           roundNumber: roundNum,
           players: players,
@@ -209,8 +209,8 @@ class GameSessionController extends ChangeNotifier {
     } else {
       roundList[roundNum - 1] = newRound;
       _enqueueWrite(
-        () => db.roundsDao.replaceRound(
-          gameId: id,
+        () => db.roundDao.replaceRound(
+          gameSessionId: id,
           round: newRound,
           roundNumber: roundNum,
           players: players,
@@ -249,7 +249,7 @@ class GameSessionController extends ChangeNotifier {
       }
     }
     _enqueueWrite(
-      () => db.gameSessionDao.setGameFinishStatus(
+      () => db.gameSessionDao.updateGameFinished(
         gameId: id,
         isFinished: isGameFinished,
       ),
@@ -289,8 +289,8 @@ class GameSessionController extends ChangeNotifier {
       // The round's score updates were adjusted after it was already persisted,
       // so persist the corrected round again to keep the database in sync.
       _enqueueWrite(
-        () => db.roundsDao.replaceRound(
-          gameId: id,
+        () => db.roundDao.replaceRound(
+          gameSessionId: id,
           round: roundList[lastRoundIndex],
           roundNumber: lastRoundIndex + 1,
           players: players,

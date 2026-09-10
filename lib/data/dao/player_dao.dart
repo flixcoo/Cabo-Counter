@@ -9,10 +9,37 @@ part 'player_dao.g.dart';
 class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
   PlayerDao(super.db);
 
-  /// Retrieves all players from a game by gameId
-  Future<List<Player>> getPlayersByGameId({required String gameId}) async {
+  /* Create */
+
+  /// Inserts a new player into the database.
+  Future<void> addPlayerAsList({
+    required String gameId,
+    required List<Player> players,
+  }) async {
+    await batch((batch) {
+      for (int i = 0; i < players.length; i++) {
+        batch.insert(
+          playerTable,
+          PlayerTableCompanion.insert(
+            id: players[i].id,
+            gameSessionId: gameId,
+            name: players[i].name,
+            position: players[i].position,
+            totalScore: players[i].totalScore,
+          ),
+        );
+      }
+    });
+  }
+
+  /* Read */
+
+  /// Retrieves all players from a game by gameSessionId
+  Future<List<Player>> getPlayersByGameSessionId({
+    required String gameSessionId,
+  }) async {
     final query = select(playerTable)
-      ..where((tbl) => tbl.gameSessionId.equals(gameId));
+      ..where((tbl) => tbl.gameSessionId.equals(gameSessionId));
     final playerResults = await query.get();
 
     return playerResults.map((row) {
@@ -34,26 +61,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
     return result.position;
   }
 
-  /// Inserts a new player into the database.
-  Future<void> insertPlayers({
-    required String gameId,
-    required List<Player> players,
-  }) async {
-    await batch((batch) {
-      for (int i = 0; i < players.length; i++) {
-        batch.insert(
-          playerTable,
-          PlayerTableCompanion.insert(
-            id: players[i].id,
-            gameSessionId: gameId,
-            name: players[i].name,
-            position: players[i].position,
-            totalScore: players[i].totalScore,
-          ),
-        );
-      }
-    });
-  }
+  /* Update */
 
   /// Updates the total scores of multiple players in a batch operation.
   Future<void> updatePlayerScores({required List<Player> players}) async {

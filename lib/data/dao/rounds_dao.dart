@@ -8,88 +8,21 @@ import 'package:drift/drift.dart';
 part 'rounds_dao.g.dart';
 
 @DriftAccessor(tables: [RoundTable, RoundScoreTable])
-class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
-  RoundsDao(super.db);
+class RoundDao extends DatabaseAccessor<AppDatabase> with _$RoundDaoMixin {
+  RoundDao(super.db);
 
-  /// Retrieves all rounds for a specific game session by its ID.
-  /// The rounds are ordered by their round number so that the position of a
-  /// round in the returned list matches its round number (index + 1).
-  Future<List<Round>> getRoundsByGameId({required String gameId}) async {
-    final query = select(roundTable)
-      ..where((tbl) => tbl.gameSessionId.equals(gameId))
-      ..orderBy([(tbl) => OrderingTerm(expression: tbl.roundNumber)]);
-
-    final roundResult = await query.get();
-
-    final roundList = await Future.wait(
-      roundResult.map((row) async {
-        final scores = await db.roundScoresDao.getScoresByRoundId(
-          roundId: row.id,
-        );
-        final roundScores = await db.roundScoresDao.getScoreUpdatesByRoundId(
-          roundId: row.id,
-        );
-
-        return Round(
-          roundId: row.id,
-          gameSessionId: row.gameSessionId,
-          caboPlayerIndex: row.caboPlayerIndex,
-          kamikazePlayerIndex: row.kamikazePlayerIndex,
-          scores: scores,
-          scoreUpdates: roundScores,
-        );
-      }),
-    );
-
-    return roundList;
-  }
-
-  /// Retrieves a specific round by its [gameId] and [roundNumber].
-  /// Returns null if the round does not exist.
-  Future<Round?> getRoundByGameIdAndRoundNumber({
-    required String gameId,
-    required int roundNumber,
-  }) async {
-    final query = select(roundTable)
-      ..where(
-        (tbl) =>
-            tbl.gameSessionId.equals(gameId) &
-            tbl.roundNumber.equals(roundNumber),
-      );
-    final roundResult = await query.getSingleOrNull();
-    if (roundResult == null) return null;
-
-    final scoreResult = await Future.wait([
-      db.roundScoresDao.getScoresByRoundId(roundId: roundResult.id),
-      db.roundScoresDao.getScoreUpdatesByRoundId(roundId: roundResult.id),
-    ]);
-
-    return Round(
-      roundId: roundResult.id,
-      gameSessionId: roundResult.gameSessionId,
-      caboPlayerIndex: roundResult.caboPlayerIndex,
-      kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
-      scores: scoreResult[0],
-      scoreUpdates: scoreResult[1],
-    );
-  }
+  /* Create */
 
   /// Inserts a new round into the database.
-  /// This method creates a new round with a unique ID and inserts it
-  /// along with the scores for each player in the round.
-  /// [gameId] is the ID of the game session this round belongs to.
-  /// [round] is the round data to be inserted.
-  /// [roundNumber] is the position of the round within the game.
-  /// [players] is the list of players in the game session.
-  Future<void> insertOneRound({
-    required String gameId,
+  Future<void> addRound({
+    required String gameSessionId,
     required Round round,
     required int roundNumber,
     required List<Player> players,
   }) async {
     final roundEntry = RoundTableCompanion.insert(
       id: round.id,
-      gameSessionId: gameId,
+      gameSessionId: gameSessionId,
       roundNumber: roundNumber,
       caboPlayerIndex: round.caboPlayerIndex,
       kamikazePlayerIndex: Value(round.kamikazePlayerIndex),
@@ -109,35 +42,8 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     }
   }
 
-  /// Replaces an already existing round with a new one.
-  /// [gameId] is the ID of the game session this round belongs to.
-  /// [round] is the round data to be inserted.
-  /// [roundNumber] is the position of the round within the game.
-  /// [players] is the list of players in the game session.
-  Future<void> replaceRound({
-    required String gameId,
-    required Round round,
-    required int roundNumber,
-    required List<Player> players,
-  }) async {
-    await deleteRound(gameId: gameId, roundNumber: roundNumber);
-
-    await insertOneRound(
-      gameId: gameId,
-      round: round,
-      roundNumber: roundNumber,
-      players: players,
-    );
-  }
-
   /// Inserts multiple rounds into the database.
-  /// This method uses a batch operation to insert all rounds and their scores
-  /// in a single transaction. The round number of each round is derived from
-  /// its position in the [rounds] list (index + 1).
-  /// [gameSessionId] is the ID of the game session these rounds belong to.
-  /// [rounds] is the list of rounds to be inserted.
-  /// [players] is the list of players in the game session.
-  Future<void> insertMultipleRounds({
+  Future<void> addRoundAsList({
     required String gameSessionId,
     required List<Round> rounds,
     required List<Player> players,
@@ -176,19 +82,101 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     });
   }
 
-  /// Deletes a specific round by its [gameId] and [roundNumber].
-  /// Returns true if the round was found and deleted, false otherwise.
-  /// Also deletes all associated scores due to foreign key constraints.
-  /// [gameId] is the ID of the game session this round belongs to.
-  /// [roundNumber] is the number of the round to be deleted.
-  Future<bool> deleteRound({
-    required String gameId,
+  /* Read */
+
+  /// Retrieves all rounds for a specific game session by its ID.
+  /// The rounds are ordered by their round number so that the position of a
+  /// round in the returned list matches its round number (index + 1).
+  Future<List<Round>> getRoundsByGameId({required String gameSessionId}) async {
+    final query = select(roundTable)
+      ..where((tbl) => tbl.gameSessionId.equals(gameSessionId))
+      ..orderBy([(tbl) => OrderingTerm(expression: tbl.roundNumber)]);
+
+    final roundResult = await query.get();
+
+    final roundList = await Future.wait(
+      roundResult.map((row) async {
+        final scores = await db.roundScoresDao.getScoresByRoundId(
+          roundId: row.id,
+        );
+        final roundScores = await db.roundScoresDao.getScoreUpdatesByRoundId(
+          roundId: row.id,
+        );
+
+        return Round(
+          roundId: row.id,
+          gameSessionId: row.gameSessionId,
+          caboPlayerIndex: row.caboPlayerIndex,
+          kamikazePlayerIndex: row.kamikazePlayerIndex,
+          scores: scores,
+          scoreUpdates: roundScores,
+        );
+      }),
+    );
+
+    return roundList;
+  }
+
+  /// Retrieves a specific round by its [gameSessionId] and [roundNumber].
+  /// Returns null if the round does not exist.
+  Future<Round?> getRoundByGameIdAndRoundNumber({
+    required String gameSessionId,
     required int roundNumber,
   }) async {
     final query = select(roundTable)
       ..where(
         (tbl) =>
-            tbl.gameSessionId.equals(gameId) &
+            tbl.gameSessionId.equals(gameSessionId) &
+            tbl.roundNumber.equals(roundNumber),
+      );
+    final roundResult = await query.getSingleOrNull();
+    if (roundResult == null) return null;
+
+    final scoreResult = await Future.wait([
+      db.roundScoresDao.getScoresByRoundId(roundId: roundResult.id),
+      db.roundScoresDao.getScoreUpdatesByRoundId(roundId: roundResult.id),
+    ]);
+
+    return Round(
+      roundId: roundResult.id,
+      gameSessionId: roundResult.gameSessionId,
+      caboPlayerIndex: roundResult.caboPlayerIndex,
+      kamikazePlayerIndex: roundResult.kamikazePlayerIndex,
+      scores: scoreResult[0],
+      scoreUpdates: scoreResult[1],
+    );
+  }
+
+  /* Update */
+
+  /// Replaces an already existing round with a new one.
+  Future<void> replaceRound({
+    required String gameSessionId,
+    required Round round,
+    required int roundNumber,
+    required List<Player> players,
+  }) async {
+    await deleteRound(gameSessionId: gameSessionId, roundNumber: roundNumber);
+
+    await addRound(
+      gameSessionId: gameSessionId,
+      round: round,
+      roundNumber: roundNumber,
+      players: players,
+    );
+  }
+
+  /* Delete */
+
+  /// Deletes a specific round by its [gameSessionId] and [roundNumber].
+  Future<bool> deleteRound({
+    required String gameSessionId,
+    required int roundNumber,
+  }) async {
+    final query = select(roundTable)
+      ..where(
+        (tbl) =>
+            tbl.gameSessionId.equals(gameSessionId) &
             tbl.roundNumber.equals(roundNumber),
       );
     final roundResult = await query.getSingleOrNull();
@@ -197,7 +185,7 @@ class RoundsDao extends DatabaseAccessor<AppDatabase> with _$RoundsDaoMixin {
     final deleteQuery = delete(roundTable)
       ..where(
         (tbl) =>
-            tbl.gameSessionId.equals(gameId) &
+            tbl.gameSessionId.equals(gameSessionId) &
             tbl.roundNumber.equals(roundNumber),
       );
     await deleteQuery.go();

@@ -479,7 +479,7 @@ class _CreateGameViewState extends State<CreateGameView> {
     );
 
     final db = Provider.of<AppDatabase>(context, listen: false);
-    db.gameSessionDao.insertGameSession(gameSession);
+    db.gameSessionDao.addGameSession(gameSession);
     widget.onSessionsUpdated();
 
     Navigator.pushAndRemoveUntil(

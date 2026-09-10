@@ -86,14 +86,12 @@ class DataTransferService {
             .toList();
 
         for (GameSession session in importedList) {
-          await db.gameSessionDao.insertGameSession(session);
+          await db.gameSessionDao.addGameSession(session);
         }
       } else if (await validateJsonSchema(jsonString, false)) {
         // Checks if the JSON String is in the single game format
         final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-        await db.gameSessionDao.insertGameSession(
-          GameSession.fromJson(jsonData),
-        );
+        await db.gameSessionDao.addGameSession(GameSession.fromJson(jsonData));
       } else {
         return ImportStatus.validationError;
       }

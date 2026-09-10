@@ -91,15 +91,15 @@ void main() {
 
   group('Player-Tests', () {
     test('Insert players works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameWithoutPlayers);
+      await database.gameSessionDao.addGameSession(gameWithoutPlayers);
       final insertedPlayers = [player4, player5, player6];
-      await database.playerDao.insertPlayers(
+      await database.playerDao.addPlayerAsList(
         gameId: gameWithoutPlayers.id,
         players: insertedPlayers,
       );
 
-      final players = await database.playerDao.getPlayersByGameId(
-        gameId: gameWithoutPlayers.id,
+      final players = await database.playerDao.getPlayersByGameSessionId(
+        gameSessionId: gameWithoutPlayers.id,
       );
 
       expect(players.length, 3);
@@ -115,9 +115,9 @@ void main() {
     });
 
     test('Fetch all players of a game correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      final players = await database.playerDao.getPlayersByGameId(
-        gameId: gameSession.id,
+      await database.gameSessionDao.addGameSession(gameSession);
+      final players = await database.playerDao.getPlayersByGameSessionId(
+        gameSessionId: gameSession.id,
       );
 
       expect(players.length, 3);
@@ -133,7 +133,7 @@ void main() {
     });
 
     test('Fetch player position by playerId correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
+      await database.gameSessionDao.addGameSession(gameSession);
       var position = await database.playerDao.getPositionByPlayerId(player1.id);
 
       expect(position, player1.position);

@@ -391,7 +391,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     gameSession.endGame();
 
     final db = Provider.of<AppDatabase>(context, listen: false);
-    db.gameSessionDao.endGame(gameId: gameSession.id);
+    db.gameSessionDao.updateGameFinished(
+      gameId: gameSession.id,
+      isFinished: true,
+    );
   }
 
   /// Returns a list of player indices sorted by their scores in

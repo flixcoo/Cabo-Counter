@@ -118,9 +118,9 @@ void main() {
 
   group('Rounds-Tests', () {
     test('Fetch rounds by gameId works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      final fetchedRounds = await database.roundsDao.getRoundsByGameId(
-        gameId: 'test_game_id',
+      await database.gameSessionDao.addGameSession(gameSession);
+      final fetchedRounds = await database.roundDao.getRoundsByGameId(
+        gameSessionId: 'test_game_id',
       );
 
       expect(fetchedRounds.length, gameSession.roundList.length);
@@ -157,13 +157,13 @@ void main() {
     });
 
     test('Fetch rounds by roundNum and gameId works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
+      await database.gameSessionDao.addGameSession(gameSession);
 
       late Round? round;
 
       for (int i = 1; i <= gameSession.roundList.length; i++) {
-        round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-          gameId: gameSession.id,
+        round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+          gameSessionId: gameSession.id,
           roundNumber: i,
         );
 
@@ -186,16 +186,16 @@ void main() {
     });
 
     test('Inserting and fetching a new round works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
-      await database.roundsDao.insertOneRound(
-        gameId: gameSession.id,
+      await database.gameSessionDao.addGameSession(gameSession);
+      await database.roundDao.addRound(
+        gameSessionId: gameSession.id,
         round: round4,
         roundNumber: 4,
         players: gameSession.players,
       );
 
-      final round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      final round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 4,
       );
 
@@ -212,10 +212,10 @@ void main() {
     });
 
     test('Replacing a round works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
+      await database.gameSessionDao.addGameSession(gameSession);
 
-      var round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      var round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 3,
       );
 
@@ -230,15 +230,15 @@ void main() {
         expect(areListsEqual(round.scoreUpdates, round3.scoreUpdates), true);
       }
 
-      await database.roundsDao.replaceRound(
-        gameId: gameSession.id,
+      await database.roundDao.replaceRound(
+        gameSessionId: gameSession.id,
         round: round3Replacement,
         roundNumber: 3,
         players: gameSession.players,
       );
 
-      round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 3,
       );
 
@@ -261,18 +261,18 @@ void main() {
     });
 
     test('Inserting multiple rounds works correctly', () async {
-      await database.gameSessionDao.insertGameSession(emptyGameSession);
+      await database.gameSessionDao.addGameSession(emptyGameSession);
 
       final newRounds = [round1, round2, round3, round4, round5];
 
-      await database.roundsDao.insertMultipleRounds(
+      await database.roundDao.addRoundAsList(
         gameSessionId: emptyGameSession.id,
         rounds: newRounds,
         players: emptyGameSession.players,
       );
 
-      final fetchedRounds = await database.roundsDao.getRoundsByGameId(
-        gameId: emptyGameSession.id,
+      final fetchedRounds = await database.roundDao.getRoundsByGameId(
+        gameSessionId: emptyGameSession.id,
       );
 
       expect(fetchedRounds.length, newRounds.length);
@@ -300,10 +300,10 @@ void main() {
     });
 
     test('Fetching a non-existent round returns null', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
+      await database.gameSessionDao.addGameSession(gameSession);
 
-      final round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      final round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 99,
       );
 
@@ -311,10 +311,10 @@ void main() {
     });
 
     test('Deleting a round works correctly', () async {
-      await database.gameSessionDao.insertGameSession(gameSession);
+      await database.gameSessionDao.addGameSession(gameSession);
 
-      var round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      var round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 3,
       );
 
@@ -322,13 +322,13 @@ void main() {
         fail('Round should not be null before deletion');
       }
 
-      await database.roundsDao.deleteRound(
-        gameId: gameSession.id,
+      await database.roundDao.deleteRound(
+        gameSessionId: gameSession.id,
         roundNumber: 3,
       );
 
-      round = await database.roundsDao.getRoundByGameIdAndRoundNumber(
-        gameId: gameSession.id,
+      round = await database.roundDao.getRoundByGameIdAndRoundNumber(
+        gameSessionId: gameSession.id,
         roundNumber: 3,
       );
 
