@@ -54,7 +54,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             label: loc.about,
           ),
         ],
-        /*        ),*/
       ),
     );
   }
