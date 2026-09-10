@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -19,9 +20,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get app_name => 'Cabo Counter';
-
-  @override
-  String get app_version => 'App-Version';
 
   @override
   String get ascending => 'Aufsteigend';
@@ -71,6 +69,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get contact_email => 'E-Mail schreiben';
 
   @override
+  String get continu => 'Weiter';
+
+  @override
   String get create_game => 'Spiel erstellen';
 
   @override
@@ -110,6 +111,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get done => 'Fertig';
 
   @override
+  String get point => 'Punkt';
+
+  @override
   String get email_body => 'Ich habe folgendes Feedback...';
 
   @override
@@ -127,11 +131,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.';
 
   @override
-  String get empty_text_1 => 'Ganz schön leer hier...';
-
-  @override
-  String get empty_text_2 =>
-      'Füge über den Button oben rechts eine neue Runde hinzu.';
+  String get no_games_created_yet => 'Noch keine Spiele erstellt.';
 
   @override
   String get end_game => 'Spiel beenden';
@@ -159,6 +159,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get end_of_game_title => 'Spiel beendet';
 
   @override
+  String get created_at => 'Erstellt am';
+
+  @override
   String get export_data => 'Spieldaten exportieren';
 
   @override
@@ -171,19 +174,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get export_game => 'Spiel exportieren';
 
   @override
+  String get filter => 'Filter';
+
+  @override
   String get game => 'Spiel';
 
   @override
   String get game_data => 'Spieldaten';
 
   @override
-  String get game_title => 'Spieltitel';
+  String get game_name => 'Spielname';
 
   @override
   String get gamemode => 'Spielmodus';
 
   @override
   String get games => 'Spiele';
+
+  @override
+  String get haptic_feedback => 'Haptisches Feedback';
 
   @override
   String get home => 'Home';
@@ -241,20 +250,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mail_developer => 'E-Mail an Entwickler';
 
   @override
-  String get max_players_message =>
-      'Es können maximal 5 Spieler:innen hinzugefügt werden.';
-
-  @override
-  String get max_players_title => 'Maximale Anzahl erreicht';
-
-  @override
-  String get min_players_message =>
-      'Es müssen mindestens 2 Spieler:innen hinzugefügt werden';
-
-  @override
-  String get min_players_title => 'Zu wenig Spieler:innen';
-
-  @override
   String get mode => 'Modus';
 
   @override
@@ -283,19 +278,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get no_license_text => 'Keine Lizenz verfügbar';
 
   @override
-  String get no_mode_message => 'Es muss ein Spielmodus ausgewählt werden.';
-
-  @override
   String get no_mode_selected => 'Wähle einen Spielmodus';
-
-  @override
-  String get no_mode_title => 'Kein Modus';
-
-  @override
-  String get no_name_message => 'Jede:r Spieler:in muss einen Namen haben.';
-
-  @override
-  String get no_name_title => 'Kein Name';
 
   @override
   String get ok => 'OK';
@@ -305,10 +288,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get only_active_games => 'Nur aktive Spiele werden angezeigt';
-
-  @override
-  String get only_active_games_description =>
-      'Beendete Spiele werden ausgeblendet.';
 
   @override
   String get overview => 'Übersicht';
@@ -382,7 +361,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
-  String get sort_and_filter_options => 'Sortier- & Filteroptionen';
+  String get sort_by => 'Sortieren nach';
+
+  @override
+  String get sort_order => 'Reihenfolge';
 
   @override
   String standard_game_title(Object date) {
@@ -396,6 +378,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statistics => 'Statistiken';
 
   @override
+  String get submit => 'Bestätigen';
+
+  @override
   String get support_me => 'Unterstütze mich';
 
   @override
@@ -406,27 +391,16 @@ class AppLocalizationsDe extends AppLocalizations {
       'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.';
 
   @override
-  String get whats_new => 'Was ist neu';
+  String get version => 'Version';
+
+  @override
+  String get whats_new => 'Was ist Neu?';
 
   @override
   String get who_has_kamikaze => 'Wer hat Kamikaze?';
 
   @override
   String get who_said_cabo => 'Wer hat CABO gesagt?';
-
-  @override
-  String get wn_description_1 =>
-      'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.';
-
-  @override
-  String get wn_description_2 =>
-      'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.';
-
-  @override
-  String get wn_item_1 => 'Mischer:in';
-
-  @override
-  String get wn_item_2 => 'Verbesserte Navigation';
 
   @override
   String get yes => 'Ja';

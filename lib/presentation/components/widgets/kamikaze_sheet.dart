@@ -1,124 +1,153 @@
-import 'dart:io';
-
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/selectable_tile.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
+import 'package:cabo_counter/services/icon_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
 
-/// A widget that displays a bottom sheet for selecting a player who has Kamikaze.
-/// The sheet adapts its UI based on the platform (iOS or Android) to provide a native experience.
+/// A bottom sheet for selecting the player who has Kamikaze.
 ///
-/// [gameSession] is the current game session containing the list of players.
-///
-class KamikazeSheet extends StatelessWidget {
-  final GameSession gameSession;
+/// - [gameSession]: The current game session.
+class KamikazeSheet extends StatefulWidget {
+  final GameSessionController gameSession;
 
   const KamikazeSheet({super.key, required this.gameSession});
 
-  /// Displays a bottom sheet for selecting a player with Kamikaze.
-  /// The sheet adapts its UI based on the platform (iOS or Android).
+  /// Displays the Kamikaze bottom sheet and returns the selected player index,
+  /// or `null` if the sheet was dismissed.
   static Future<int?> show(
     BuildContext context,
-    GameSession gameSession,
+    GameSessionController gameSession,
   ) async {
-    if (Platform.isIOS) {
-      return await showCupertinoModalPopup<int?>(
-        context: context,
-        builder: (context) => KamikazeSheet(gameSession: gameSession),
-      );
-    } else {
-      return await showModalBottomSheet<int?>(
-        context: context,
-        isDismissible: true,
-        isScrollControlled: true,
-        showDragHandle: true,
-        backgroundColor: CustomTheme.mainElementBackgroundColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        builder: (context) => KamikazeSheet(gameSession: gameSession),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return _buildIosSheet(context);
-    } else {
-      return _buildAndroidSheet(context);
-    }
-  }
-
-  /// Builds the iOS-style action sheet for selecting a player with Kamikaze.
-  Widget _buildIosSheet(BuildContext context) {
-    return CupertinoActionSheet(
-      title: Text(AppLocalizations.of(context).kamikaze),
-      message: Text(AppLocalizations.of(context).who_has_kamikaze),
-      actions: gameSession.players.asMap().entries.map((entry) {
-        final index = entry.key;
-        final player = entry.value;
-        return CupertinoActionSheetAction(
-          onPressed: () => Navigator.pop(context, index),
-          child: Text(
-            player.name,
-            style: TextStyle(color: CustomTheme.kamikazeColor),
-          ),
-        );
-      }).toList(),
-      cancelButton: CupertinoActionSheetAction(
-        onPressed: () => Navigator.pop(context, null),
-        isDestructiveAction: true,
-        child: Text(AppLocalizations.of(context).cancel),
-      ),
+    return await showModalBottomSheet<int?>(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => KamikazeSheet(gameSession: gameSession),
     );
   }
 
-  /// Builds the Android-style bottom sheet for selecting a player with Kamikaze.
-  Widget _buildAndroidSheet(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            AppLocalizations.of(context).kamikaze,
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              AppLocalizations.of(context).who_has_kamikaze,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const Divider(indent: 40, endIndent: 40),
-          ...gameSession.players.asMap().entries.map((entry) {
-            final index = entry.key;
-            final player = entry.value;
-            return ListTile(
-              title: Text(
-                player.name,
-                style: TextStyle(
-                  color: CustomTheme.kamikazeColor,
-                  fontSize: 18,
+  @override
+  State<KamikazeSheet> createState() => _KamikazeSheetState();
+}
+
+class _KamikazeSheetState extends State<KamikazeSheet> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: CustomTheme.mainElementColor,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Column(
+            spacing: 16,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: CustomTheme.subtitleColor.withAlpha(120),
+                  borderRadius: BorderRadius.circular(3),
                 ),
-                textAlign: TextAlign.center,
               ),
-              onTap: () => Navigator.pop(context, index),
-            );
-          }),
-          ListTile(
-            title: Text(
-              AppLocalizations.of(context).cancel,
-              style: TextStyle(color: CustomTheme.red, fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-            onTap: () => Navigator.pop(context, null),
+
+              // Title
+              Column(
+                spacing: 4,
+                children: [
+                  // Icon
+                  Container(
+                    width: 56,
+                    height: 56,
+                    margin: const EdgeInsets.only(bottom: 6),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.kamikazeColor.withAlpha(30),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: AppIcon(
+                        IconService.kamikaze,
+                        color: CustomTheme.kamikazeColor,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+
+                  // Title
+                  Text(
+                    loc.kamikaze,
+                    style: const TextStyle(
+                      color: CustomTheme.textColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  // Description
+                  Text(
+                    loc.who_has_kamikaze,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: CustomTheme.subtitleColor,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+
+              // Player
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ...widget.gameSession.players.asMap().entries.map((
+                        entry,
+                      ) {
+                        return SelectableTile(
+                          title: entry.value.name,
+                          selectionColor: CustomTheme.kamikazeColor,
+                          selectedTintAlpha: 45,
+                          selected: selectedIndex == entry.key,
+                          onTap: () {
+                            VibrationService.selectionClick();
+                            setState(() => selectedIndex = entry.key);
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Submit
+              FloatingAnimatedButton(
+                text: loc.submit,
+                onPressed: selectedIndex == null
+                    ? null
+                    : () {
+                        VibrationService.mediumImpact();
+                        Navigator.of(context).pop(selectedIndex);
+                      },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -1,20 +1,24 @@
-import 'package:cabo_counter/core/constants.dart';
+import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
-import 'package:cabo_counter/data/dto/player.dart';
+import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
+import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/add_player_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/active_game_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/mode_selection_view.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:cabo_counter/services/popup_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// A view for creating a new game session in the Cabo Counter app.
@@ -24,18 +28,18 @@ import 'package:uuid/uuid.dart';
 /// starting a new game. It provides feedback dialogs for missing or invalid
 /// input and navigates to the active game view upon successful creation.
 class CreateGameView extends StatefulWidget {
-  final GameMode gameMode;
-  final String? gameTitle;
-  final List<String>? players;
-  final String previousPageTitle;
-
   const CreateGameView({
     super.key,
     this.gameTitle,
     this.players,
     required this.gameMode,
-    required this.previousPageTitle,
+    required this.onSessionsUpdated,
   });
+
+  final GameMode gameMode;
+  final String? gameTitle;
+  final List<String>? players;
+  final VoidCallback onSessionsUpdated;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -43,493 +47,463 @@ class CreateGameView extends StatefulWidget {
 }
 
 class _CreateGameViewState extends State<CreateGameView> {
-  final TextEditingController _gameTitleTextController =
-      TextEditingController();
+  final TextEditingController titleController = TextEditingController();
 
-  /// List of text controllers for player names.
-  final List<TextEditingController> _playerNameTextControllers = [
-    TextEditingController(),
-  ];
-
-  /// List of focus nodes for player name text fields.
-  final List<FocusNode> _playerNameFocusNodes = [FocusNode()];
-
-  /// Maximum number of players allowed in the game.
+  final int minPlayers = 2;
   final int maxPlayers = 5;
 
-  /// Factor to adjust the view length when the keyboard is visible.
-  final double keyboardHeightAdjustmentFactor = 0.75;
+  List<FocusNode> playerNameFocusNodes = [];
+  List<TextEditingController> playerNameControllers = [];
 
   /// Variable to hold the selected game mode.
-  late GameMode gameMode;
+  late GameMode selectedGameMode;
+
+  bool get hasReachedMaxPlayers => playerNameControllers.length >= maxPlayers;
+  bool get hasReachedMinPlayers => playerNameControllers.length <= minPlayers;
+  bool get isValidGame =>
+      selectedGameMode != GameMode.none &&
+      playerNameControllers.length >= 2 &&
+      everyPlayerHasAName;
 
   @override
   void initState() {
     super.initState();
+    selectedGameMode = widget.gameMode;
+    titleController.text = widget.gameTitle ?? '';
 
-    gameMode = widget.gameMode;
+    initializeController();
+  }
 
-    _gameTitleTextController.text = widget.gameTitle ?? '';
-
-    if (widget.players != null) {
-      _playerNameTextControllers.clear();
-      for (var player in widget.players!) {
-        _playerNameTextControllers.add(TextEditingController(text: player));
-        _playerNameFocusNodes.add(FocusNode());
-      }
+  @override
+  void dispose() {
+    titleController.dispose();
+    for (var controller in playerNameControllers) {
+      controller.dispose();
     }
+    for (var focusnode in playerNameFocusNodes) {
+      focusnode.dispose();
+    }
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) {
-          await _keyboardDelay();
-          if (context.mounted) Navigator.pop(context);
+          if (context.mounted) {
+            widget.onSessionsUpdated();
+            Navigator.pop(context);
+          }
         }
       },
-      child: CupertinoPageScaffold(
+      child: Scaffold(
         resizeToAvoidBottomInset: false,
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle: widget.previousPageTitle,
-          middle: Text(AppLocalizations.of(context).new_game),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Text(
-                    AppLocalizations.of(context).game,
-                    style: CustomTheme.rowTitle,
+        appBar: AppBar(title: Text(loc.new_game)),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                  child: CupertinoTextField(
-                    decoration: const BoxDecoration(),
-                    maxLength: 24,
-                    prefix: Text(AppLocalizations.of(context).name),
-                    textAlign: TextAlign.right,
-                    placeholder: getFallbackGameTitle(),
-                    controller: _gameTitleTextController,
-                    onSubmitted: (_) {
-                      _playerNameFocusNodes.isNotEmpty
-                          ? _playerNameFocusNodes[0].requestFocus()
-                          : FocusScope.of(context).unfocus();
-                    },
-                    textInputAction: _playerNameFocusNodes.isNotEmpty
-                        ? TextInputAction.next
-                        : TextInputAction.done,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-                  child: CupertinoTextField(
-                    decoration: const BoxDecoration(),
-                    readOnly: true,
-                    prefix: Text(AppLocalizations.of(context).mode),
-                    suffix: Row(
-                      children: [
-                        _getDisplayedGameMode(),
-                        const SizedBox(width: 3),
-                        const CupertinoListTileChevron(),
-                      ],
-                    ),
-                    onTap: () async {
-                      await _keyboardDelay();
-
-                      if (context.mounted) {
-                        final selectedMode = await Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => ModeSelectionMenu(
-                              pointLimit: ConfigService.getPointLimit(),
-                              showDeselection: false,
-                            ),
-                          ),
-                        );
-
-                        setState(() {
-                          gameMode = selectedMode ?? gameMode;
-                        });
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Text(
-                    AppLocalizations.of(context).players,
-                    style: CustomTheme.rowTitle,
-                  ),
-                ),
-                ReorderableListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
-                  itemCount: _playerNameTextControllers.length,
-                  onReorderItem: (oldIndex, newIndex) {
-                    setState(() {
-                      if (oldIndex < _playerNameTextControllers.length &&
-                          newIndex <= _playerNameTextControllers.length) {
-                        if (newIndex > oldIndex) newIndex--;
-                        final item = _playerNameTextControllers.removeAt(
-                          oldIndex,
-                        );
-                        _playerNameTextControllers.insert(newIndex, item);
-                      }
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      key: ValueKey(index),
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: Icon(
-                              IconService.remove_player,
-                              color: CustomTheme.red,
-                              size: 25,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _playerNameTextControllers[index].dispose();
-                                _playerNameTextControllers.removeAt(index);
-                              });
-                            },
-                          ),
-                          Expanded(
-                            child: CupertinoTextField(
-                              controller: _playerNameTextControllers[index],
-                              focusNode: _playerNameFocusNodes[index],
-                              maxLength: 12,
-                              placeholder:
-                                  '${AppLocalizations.of(context).player} ${index + 1}',
-                              padding: const EdgeInsets.all(12),
-                              decoration: const BoxDecoration(),
-                              textInputAction:
-                                  index + 1 < _playerNameTextControllers.length
-                                  ? TextInputAction.next
-                                  : TextInputAction.done,
-                              onSubmitted: (_) {
-                                if (index + 1 < _playerNameFocusNodes.length) {
-                                  _playerNameFocusNodes[index + 1]
-                                      .requestFocus();
-                                } else {
-                                  FocusScope.of(context).unfocus();
-                                }
-                              },
-                            ),
-                          ),
-                          AnimatedOpacity(
-                            opacity: _playerNameTextControllers.length > 1
-                                ? 1.0
-                                : 0.0,
-                            duration: const Duration(
-                              milliseconds: Constants.FADE_IN_DURATION,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: ReorderableDragStartListener(
-                                index: index,
-                                child: Icon(
-                                  IconService.drag,
-                                  color: CupertinoColors.systemGrey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
-                  child: Stack(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: null,
-                            child: Icon(
-                              IconService.add_player,
-                              color: CustomTheme.primaryColor,
-                              size: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    AppLocalizations.of(context).add_player,
+                      const SizedBox(height: 10),
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          // Title text field
+                          ActiveGameListTile(
+                            title: Text(loc.name),
+                            trailing: SizedBox(
+                              height: 30,
+                              width: 300,
+                              child: TextField(
+                                maxLength: 24,
+                                textAlign: TextAlign.right,
+                                controller: titleController,
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  hint: Text(
+                                    textAlign: TextAlign.end,
+                                    getFallbackGameTitle(),
                                     style: TextStyle(
-                                      color: CustomTheme.primaryColor,
+                                      color: CustomTheme.hintTextColor,
                                     ),
                                   ),
+                                  border: InputBorder.none,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                          onPressed: () {
-                            if (_playerNameTextControllers.length <
-                                maxPlayers) {
-                              setState(() {
-                                _playerNameTextControllers.add(
-                                  TextEditingController(),
+
+                          // Mode selection
+                          ActiveGameListTile(
+                            showChevron: true,
+                            title: Text(loc.mode),
+                            trailing: getDisplayedGameMode(),
+                            onTap: () async {
+                              if (context.mounted) {
+                                final result = await Navigator.push(
+                                  context,
+                                  adaptivePageRoute(
+                                    builder: (context) => ModeSelectionView(
+                                      pointLimit: ConfigService.getPointLimit(),
+                                      showDeselection: false,
+                                      initialSelectedGameMode: selectedGameMode,
+                                    ),
+                                  ),
                                 );
-                                _playerNameFocusNodes.add(FocusNode());
-                              });
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _playerNameFocusNodes.last.requestFocus();
-                              });
-                            } else {
-                              _showFeedbackDialog(CreateStatus.maxPlayers);
-                            }
-                          },
-                        ),
+
+                                setState(() {
+                                  selectedGameMode = result ?? selectedGameMode;
+                                });
+                              }
+                            },
+                          ),
+                        ],
                       ),
+                      ActiveGameListSet(
+                        title: loc.players,
+                        content: const [],
+                        subtitle: '${playerNameControllers.length} / 5',
+                      ),
+
+                      // Players
+                      ReorderableListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        itemCount: playerNameControllers.length,
+                        onReorderStart: (_) => VibrationService.heavyImpact(),
+                        onReorderEnd: (_) => VibrationService.selectionClick(),
+                        onReorderItem: (oldIndex, newIndex) {
+                          setState(() {
+                            if (oldIndex < playerNameControllers.length &&
+                                newIndex <= playerNameControllers.length) {
+                              final item = playerNameControllers.removeAt(
+                                oldIndex,
+                              );
+                              playerNameControllers.insert(newIndex, item);
+                            }
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            key: ValueKey(index),
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: CustomTheme.tileColor,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                spacing: 4,
+                                children: [
+                                  // Remove button
+                                  AnimatedIconButton(
+                                    icon: IconService.remove_player,
+                                    color: CustomTheme.red,
+                                    onPressed: () =>
+                                        removePlayerTextfield(index),
+                                  ),
+
+                                  // Name field
+                                  Expanded(
+                                    child: TextField(
+                                      controller: playerNameControllers[index],
+                                      focusNode: playerNameFocusNodes[index],
+                                      maxLength: 12,
+                                      style: const TextStyle(
+                                        color: CustomTheme.textColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      cursorColor: CustomTheme.primaryColor,
+                                      decoration: InputDecoration(
+                                        isCollapsed: true,
+                                        hint: Text(
+                                          '${loc.player} ${index + 1}',
+                                          style: TextStyle(
+                                            color: CustomTheme.hintTextColor,
+                                          ),
+                                        ),
+                                        counterText: '',
+                                        border: InputBorder.none,
+                                      ),
+                                      textInputAction:
+                                          index + 1 <
+                                              playerNameControllers.length
+                                          ? TextInputAction.next
+                                          : TextInputAction.done,
+                                      onSubmitted: (_) {
+                                        if (index + 1 <
+                                            playerNameFocusNodes.length) {
+                                          final nextNode =
+                                              playerNameFocusNodes[index + 1];
+                                          nextNode.requestFocus();
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                                final nextContext =
+                                                    nextNode.context;
+                                                if (nextContext != null) {
+                                                  Scrollable.ensureVisible(
+                                                    nextContext,
+                                                    alignment: 0.5,
+                                                    duration: const Duration(
+                                                      milliseconds: 200,
+                                                    ),
+                                                    curve: Curves.easeInOut,
+                                                  );
+                                                }
+                                              });
+                                        } else {
+                                          FocusScope.of(context).unfocus();
+                                        }
+                                      },
+                                    ),
+                                  ),
+
+                                  // Drag handle
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6.0,
+                                    ),
+                                    child: ReorderableDragStartListener(
+                                      index: index,
+                                      child: AppIcon(
+                                        IconService.drag,
+                                        color: CustomTheme.subtitleColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        proxyDecorator:
+                            (
+                              Widget child,
+                              int index,
+                              Animation<double> animation,
+                            ) {
+                              return AnimatedBuilder(
+                                animation: animation,
+                                builder: (context, _) {
+                                  final overlayOpacity = 0.08 * animation.value;
+                                  return Material(
+                                    color: Colors.transparent,
+                                    elevation: 6.0,
+                                    shadowColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        child,
+                                        Positioned.fill(
+                                          child: IgnorePointer(
+                                            child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 5.0,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withValues(
+                                                  alpha: overlayOpacity,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                      ),
+                      hasReachedMaxPlayers
+                          ? const SizedBox(width: double.infinity)
+                          : Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 1, 10, 50),
+                              child: AddPlayerButton(
+                                onPressed: addPlayerTextfield,
+                              ),
+                            ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-                  child: Center(
-                    child: CustomButton(
-                      child: Text(
-                        AppLocalizations.of(context).create_game,
-                        style: TextStyle(color: CustomTheme.primaryColor),
-                      ),
-                      onPressed: () async {
-                        await _keyboardDelay();
-                        _checkAllGameAttributes();
-                      },
-                    ),
-                  ),
+              ),
+
+              // Button
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewPadding.bottom,
+                  right: 16,
+                  left: 16,
                 ),
-                KeyboardVisibilityBuilder(
-                  builder: (context, visible) {
-                    if (visible) {
-                      return SizedBox(
-                        height:
-                            MediaQuery.of(context).viewInsets.bottom *
-                            keyboardHeightAdjustmentFactor,
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
+                child: FloatingAnimatedButton(
+                  text: loc.create_game,
+                  onPressed: isValidGame ? () async => createGame() : null,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /// Returns a widget that displays the currently selected game mode in the View.
-  Text _getDisplayedGameMode() {
-    if (gameMode == GameMode.none) {
-      return Text(AppLocalizations.of(context).no_mode_selected);
-    } else if (gameMode == GameMode.pointLimit) {
-      return Text(
-        '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}',
-        style: TextStyle(color: CustomTheme.primaryColor),
-      );
+  void initializeController() {
+    // Prefill player
+    if (widget.players != null) {
+      for (var player in widget.players!) {
+        final controller = TextEditingController(text: player);
+        controller.addListener(() => setState(() {}));
+        playerNameControllers.add(controller);
+        playerNameFocusNodes.add(FocusNode());
+      }
     } else {
-      return Text(
-        AppLocalizations.of(context).unlimited,
-        style: TextStyle(color: CustomTheme.primaryColor),
+      playerNameControllers = List.generate(
+        minPlayers,
+        (index) => TextEditingController()..addListener(() => setState(() {})),
       );
+      playerNameFocusNodes = List.generate(minPlayers, (index) => FocusNode());
     }
   }
 
-  /// Checks all game attributes before creating a new game.
-  /// If any attribute is invalid, it shows a feedback dialog.
-  /// If all attributes are valid, it calls the `_createGame` method.
-  void _checkAllGameAttributes() {
-    if (gameMode == GameMode.none) {
-      _showFeedbackDialog(CreateStatus.noModeSelected);
-      return;
-    }
+  void addPlayerTextfield() {
+    setState(() {
+      playerNameControllers.add(
+        TextEditingController()..addListener(() => setState(() {})),
+      );
+      playerNameFocusNodes.add(FocusNode());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      playerNameFocusNodes.last.requestFocus();
+    });
+  }
 
-    if (_playerNameTextControllers.length < 2) {
-      _showFeedbackDialog(CreateStatus.minPlayers);
-      return;
-    }
+  void removePlayerTextfield(int index) {
+    setState(() {
+      playerNameControllers[index].dispose();
+      playerNameControllers.removeAt(index);
+      playerNameFocusNodes[index].dispose();
+      playerNameFocusNodes.removeAt(index);
+    });
+  }
 
-    if (!_everyPlayerHasAName()) {
-      _showFeedbackDialog(CreateStatus.noPlayerName);
-      return;
-    }
+  /// Returns a widget that displays the currently selected game mode in the View.
+  Text getDisplayedGameMode() {
+    final loc = AppLocalizations.of(context);
+    const textStyle = TextStyle(color: CustomTheme.textColor);
+    final selectedTextStyle = textStyle.copyWith(
+      color: CustomTheme.primaryColor,
+    );
 
-    _createGame();
+    if (selectedGameMode == GameMode.none) {
+      return Text(loc.no_mode_selected, style: textStyle);
+    } else if (selectedGameMode == GameMode.pointLimit) {
+      return Text(
+        getPointLabel(loc, ConfigService.getPointLimit()),
+        style: selectedTextStyle,
+      );
+    } else {
+      return Text(loc.unlimited, style: selectedTextStyle);
+    }
   }
 
   /// Checks if every player has a name.
   /// Returns true if all players have a name, false otherwise.
-  bool _everyPlayerHasAName() {
-    for (var controller in _playerNameTextControllers) {
-      if (controller.text == '') {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /// Displays a feedback dialog based on the [CreateStatus].
-  void _showFeedbackDialog(CreateStatus status) {
-    final (title, message) = _getDialogContent(status);
-
-    PopupService.showInfoPopup(
-      context: context,
-      title: Text(title),
-      content: Text(message),
-    );
-  }
-
-  /// Returns the title and message for the dialog based on the [CreateStatus].
-  (String, String) _getDialogContent(CreateStatus status) {
-    switch (status) {
-      case CreateStatus.noModeSelected:
-        return (
-          AppLocalizations.of(context).no_mode_title,
-          AppLocalizations.of(context).no_mode_message,
-        );
-
-      case CreateStatus.minPlayers:
-        return (
-          AppLocalizations.of(context).min_players_title,
-          AppLocalizations.of(context).min_players_message,
-        );
-      case CreateStatus.maxPlayers:
-        return (
-          AppLocalizations.of(context).max_players_title,
-          AppLocalizations.of(context).max_players_message,
-        );
-      case CreateStatus.noPlayerName:
-        return (
-          AppLocalizations.of(context).no_name_title,
-          AppLocalizations.of(context).no_name_message,
-        );
-    }
-  }
+  bool get everyPlayerHasAName =>
+      playerNameControllers.every((controller) => controller.text != '');
 
   /// Creates a new gameSession and navigates to the active game view.
   /// This method creates a new gameSession object with the provided attributes in the text fields.
   /// It then adds the game session to the game manager and navigates to the active game view.
-  void _createGame() {
+  void createGame() {
     var uuid = const Uuid();
-    final String gameId = uuid.v4();
+    final String gameSessionId = uuid.v4();
 
     // Collect player names from the text controllers.
     List<String> playerNames = [];
-    for (var controller in _playerNameTextControllers) {
+    for (var controller in playerNameControllers) {
       playerNames.add(controller.text);
     }
 
     // Create a list of Player objects with unique IDs and the corresponding attributes
-    List<Player> playerList = [];
+    List<Player> players = [];
     for (int i = 0; i < playerNames.length; i++) {
-      String playerId = uuid.v4();
-      playerList.add(
+      String id = uuid.v4();
+      players.add(
         Player(
-          playerId: playerId,
-          gameId: gameId,
+          id: id,
+          gameSessionId: gameSessionId,
           name: playerNames[i],
           position: i,
         ),
       );
     }
 
-    final String gameTitle = _gameTitleTextController.text == ''
+    final String title = titleController.text == ''
         ? getFallbackGameTitle()
-        : _gameTitleTextController.text;
+        : titleController.text;
 
-    final bool isPointsLimitEnabled = gameMode == GameMode.pointLimit;
+    final bool isPointsLimitEnabled = selectedGameMode == GameMode.pointLimit;
 
     GameSession gameSession = GameSession(
-      gameId: gameId,
+      id: gameSessionId,
       createdAt: DateTime.now(),
-      gameTitle: gameTitle,
-      players: playerList,
-      pointLimit: ConfigService.getPointLimit(),
+      title: title,
+      players: players,
+      pointLimit: isPointsLimitEnabled ? ConfigService.getPointLimit() : null,
       caboPenalty: ConfigService.getCaboPenalty(),
-      isPointsLimitEnabled: isPointsLimitEnabled,
       isGameFinished: false,
     );
 
-    gameManager.addGameSession(gameSession);
-    final session = gameManager.getGameSessionById(gameId) ?? gameSession;
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    db.gameSessionDao.addGameSession(gameSession);
+    widget.onSessionsUpdated();
 
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute(
-        builder: (context) => ActiveGameView(gameSession: session),
+      adaptivePageRoute(
+        builder: (context) => ActiveGameView(
+          gameSession: gameSession,
+          onSessionsUpdated: widget.onSessionsUpdated,
+        ),
       ),
       (Route<dynamic> route) => route.isFirst,
     );
-  }
-
-  /// If the keyboard is visible, this method will unfocus the current text field
-  /// to prevent the keyboard from interfering with the navigation bar.
-  Future<void> _keyboardDelay() async {
-    if (!KeyboardVisibilityController().isVisible) {
-      return;
-    } else {
-      FocusScope.of(context).unfocus();
-      await Future.delayed(
-        const Duration(milliseconds: Constants.KEYBOARD_DELAY),
-      );
-    }
   }
 
   /// Generates a fallback game title based on the current date and locale.
   /// If the user does not provide a game title, this method will create one
   /// using the current date formatted according to the user's locale.
   String getFallbackGameTitle() {
-    final now = DateTime.now();
-    final String formattedDate;
-
-    Locale currentLocale = Localizations.localeOf(context);
-    switch (currentLocale.languageCode) {
-      case 'en':
-        formattedDate = DateFormat('MMMM d, y', 'en_US').format(now);
-      default:
-        formattedDate = DateFormat('dd.MM.yy').format(now);
-    }
+    final locale = Localizations.localeOf(context);
+    final formattedDate = DateFormat(
+      'dd.MM.yy',
+      locale.toLanguageTag(),
+    ).format(DateTime.now());
 
     return AppLocalizations.of(context).standard_game_title(formattedDate);
-  }
-
-  @override
-  void dispose() {
-    _gameTitleTextController.dispose();
-    for (var controller in _playerNameTextControllers) {
-      controller.dispose();
-    }
-    for (var focusnode in _playerNameFocusNodes) {
-      focusnode.dispose();
-    }
-
-    super.dispose();
   }
 }

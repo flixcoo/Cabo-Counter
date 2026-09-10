@@ -1,11 +1,10 @@
 import 'dart:ui' as dart_ui;
 
-import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/services/icon_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -16,7 +15,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 /// using a line chart. It supports dynamic coloring for each player, axis formatting,
 /// and handles cases where insufficient data is available to render the graph.
 class GraphView extends StatefulWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
 
   const GraphView({super.key, required this.gameSession});
 
@@ -25,7 +24,6 @@ class GraphView extends StatefulWidget {
 }
 
 class _GraphViewState extends State<GraphView> {
-  /// List of colors for the graph lines.
   final List<Color> lineColors = [
     CustomTheme.graphColor1,
     CustomTheme.graphColor2,
@@ -33,37 +31,53 @@ class _GraphViewState extends State<GraphView> {
     CustomTheme.graphColor4,
     CustomTheme.graphColor5,
   ];
-
-  /// Global key to access the state of the SfCartesianChart for image capturing.
   final GlobalKey<SfCartesianChartState> _key = GlobalKey();
+  bool hasZoomed = false;
+
+  late final ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+    enablePinching: true,
+    enablePanning: true,
+    enableDoubleTapZooming: true,
+    enableMouseWheelZooming: true,
+    zoomMode: ZoomMode.x,
+    maximumZoomLevel: 0.05,
+  );
 
   @override
   Widget build(BuildContext context) {
-    bool isGraphAvailable =
+    final loc = AppLocalizations.of(context);
+    final isGraphAvailable =
         widget.gameSession.roundNumber > 1 || widget.gameSession.isGameFinished;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).scoring_history),
-        trailing: IconButton(
-          onPressed: isGraphAvailable ? () => _shareImage() : null,
-          icon: Icon(IconService.share),
-          iconSize: Constants.NAVBAR_ICON_SIZE,
-        ),
-        previousPageTitle: AppLocalizations.of(context).overview,
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loc.scoring_history),
+        actions: [
+          AnimatedIconButton(
+            onPressed: isGraphAvailable && hasZoomed
+                ? () => zoomPanBehavior.reset()
+                : null,
+            icon: IconService.reset,
+          ),
+          AnimatedIconButton(
+            onPressed: isGraphAvailable ? () => shareImage() : null,
+            icon: IconService.share,
+          ),
+        ],
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: Visibility(
           visible: isGraphAvailable,
           replacement: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 10,
             children: [
-              Center(child: Icon(IconService.chart, size: 60)),
-              const SizedBox(height: 10),
+              Center(child: AppIcon(IconService.chart, size: 60)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  AppLocalizations.of(context).empty_graph_text,
+                  loc.empty_graph_text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16),
                 ),
@@ -73,22 +87,39 @@ class _GraphViewState extends State<GraphView> {
           child: SfCartesianChart(
             key: _key,
             backgroundColor: CustomTheme.backgroundColor,
-            enableAxisAnimation: true,
+            enableAxisAnimation: false,
+            zoomPanBehavior: zoomPanBehavior,
+            onZoomEnd: (ZoomPanArgs args) {
+              if (args.axis?.name != 'rounds') return;
+              final bool zoomed = args.currentZoomFactor < 1;
+              if (zoomed != hasZoomed) {
+                setState(() => hasZoomed = zoomed);
+              }
+            },
+            onZoomReset: (ZoomPanArgs args) {
+              if (args.axis?.name != 'rounds') return;
+              if (hasZoomed) {
+                setState(() => hasZoomed = false);
+              }
+            },
             legend: const Legend(
               alignment: ChartAlignment.near,
               overflowMode: LegendItemOverflowMode.scroll,
               isVisible: true,
               position: LegendPosition.bottom,
             ),
-            primaryXAxis: const NumericAxis(
+            primaryXAxis: const CategoryAxis(
+              name: 'rounds',
               labelStyle: TextStyle(fontWeight: FontWeight.bold),
               interval: 1,
-              decimalPlaces: 0,
+              labelPlacement: LabelPlacement.onTicks,
             ),
             primaryYAxis: NumericAxis(
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               labelAlignment: LabelAlignment.center,
               labelPosition: ChartDataLabelPosition.inside,
+              anchorRangeToVisiblePoints: false,
+              rangePadding: ChartRangePadding.round,
               interval: 1,
               decimalPlaces: 0,
               axisLabelFormatter: (AxisLabelRenderDetails details) {
@@ -111,7 +142,7 @@ class _GraphViewState extends State<GraphView> {
   /// Returns a list of LineSeries representing the cumulative scores of each player.
   /// Each series contains data points for each round, showing the cumulative score up to that round.
   /// The x-axis represents the round number, and the y-axis represents the cumulative score.
-  List<LineSeries<(int, num), int>> getCumulativeScores() {
+  List<LineSeries<(int, num), String>> getCumulativeScores() {
     final rounds = widget.gameSession.roundList;
     final playerCount = widget.gameSession.players.length;
     final playerNames = widget.gameSession.getPlayerNamesAsList();
@@ -146,10 +177,10 @@ class _GraphViewState extends State<GraphView> {
 
       /// Create a LineSeries for the player
       /// The xValueMapper maps the round number, and the yValueMapper maps the cumulative score.
-      return LineSeries<(int, num), int>(
+      return LineSeries<(int, num), String>(
         name: playerNames[i],
         dataSource: data,
-        xValueMapper: (record, _) => record.$1,
+        xValueMapper: (record, _) => '${record.$1}',
         yValueMapper: (record, _) => record.$2,
         markerSettings: const MarkerSettings(isVisible: true),
         color: lineColors[i],
@@ -160,7 +191,7 @@ class _GraphViewState extends State<GraphView> {
   /// Captures the current state of the graph as an image and shares it using the SharePlus package.
   /// The image is saved as a PNG file and shared via available sharing options on the device.
   /// The method uses a pixel ratio of 5.0 for high-resolution images.
-  Future<void> _shareImage() async {
+  Future<void> shareImage() async {
     // Get the RenderBox of the current view to determine its position on screen.
     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
 

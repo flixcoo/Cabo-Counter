@@ -26,11 +26,10 @@ class Constants {
   static const String CONTACT_EMAIL = 'cabocounter@felixkirchner.de';
 
   /// URL to the app's privacy policy page.
-  static const String PRIVACY_POLICY_LINK =
-      'https://felixkirchner.de/projects/cabo-counter/privacy';
+  static const String PRIVACY_POLICY_LINK = 'https://cabocounter.app/privacy';
 
   /// URL to the app's imprint page, containing legal information.
-  static const String LEGAL_LINK = 'https://felixkirchner.de/legal';
+  static const String LEGAL_LINK = 'https://cabocounter.app/legal';
 
   /// URL to my PayPal donation page for users who wish to support the app.
   static const String DONATE_LINK = 'https://www.paypal.me/flixcoo';

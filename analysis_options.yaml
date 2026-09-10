@@ -1,5 +1,9 @@
 analyzer:
-  exclude: lib/presentation/views/about/licenses/oss_licenses.dart
+  exclude:
+    - lib/presentation/views/about/licenses/oss_licenses.dart
+    - build/**
+    - android/**
+    - ios/**
 
 linter:
   rules:

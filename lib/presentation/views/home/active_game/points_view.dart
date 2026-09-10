@@ -1,6 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +8,10 @@ import 'package:flutter/material.dart';
 ///
 /// The [PointsView] widget shows a table with all rounds and player scores,
 /// including score updates and highlights for players who said "Cabo".
-/// It uses a Cupertino-style layout and adapts to the number of players.
 ///
 /// Requires a [GameSession] to provide player and round data.
 class PointsView extends StatefulWidget {
-  final GameSession gameSession;
+  final GameSessionController gameSession;
 
   const PointsView({super.key, required this.gameSession});
 
@@ -23,12 +22,11 @@ class PointsView extends StatefulWidget {
 class _PointsViewState extends State<PointsView> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).point_overview),
-        previousPageTitle: AppLocalizations.of(context).overview,
-      ),
-      child: SafeArea(
+    final loc = AppLocalizations.of(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(loc.point_overview)),
+      body: SafeArea(
+        bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             const double caboFieldWidthFactor = 0.2;
@@ -93,6 +91,9 @@ class _PointsViewState extends State<PointsView> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.paddingOf(context).bottom,
+                    ),
                     scrollDirection: Axis.vertical,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(

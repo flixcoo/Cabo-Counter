@@ -122,12 +122,6 @@ abstract class AppLocalizations {
   /// **'Cabo Counter'**
   String get app_name;
 
-  /// No description provided for @app_version.
-  ///
-  /// In de, this message translates to:
-  /// **'App-Version'**
-  String get app_version;
-
   /// No description provided for @ascending.
   ///
   /// In de, this message translates to:
@@ -192,6 +186,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'E-Mail schreiben'**
   String get contact_email;
+
+  /// No description provided for @continu.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get continu;
 
   /// No description provided for @create_game.
   ///
@@ -265,6 +265,12 @@ abstract class AppLocalizations {
   /// **'Fertig'**
   String get done;
 
+  /// No description provided for @point.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkt'**
+  String get point;
+
   /// No description provided for @email_body.
   ///
   /// In de, this message translates to:
@@ -295,17 +301,11 @@ abstract class AppLocalizations {
   /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
   String get empty_graph_text;
 
-  /// No description provided for @empty_text_1.
+  /// No description provided for @no_games_created_yet.
   ///
   /// In de, this message translates to:
-  /// **'Ganz schön leer hier...'**
-  String get empty_text_1;
-
-  /// No description provided for @empty_text_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Füge über den Button oben rechts eine neue Runde hinzu.'**
-  String get empty_text_2;
+  /// **'Noch keine Spiele erstellt.'**
+  String get no_games_created_yet;
 
   /// No description provided for @end_game.
   ///
@@ -337,6 +337,12 @@ abstract class AppLocalizations {
   /// **'Spiel beendet'**
   String get end_of_game_title;
 
+  /// No description provided for @created_at.
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt am'**
+  String get created_at;
+
   /// No description provided for @export_data.
   ///
   /// In de, this message translates to:
@@ -361,6 +367,12 @@ abstract class AppLocalizations {
   /// **'Spiel exportieren'**
   String get export_game;
 
+  /// No description provided for @filter.
+  ///
+  /// In de, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
   /// No description provided for @game.
   ///
   /// In de, this message translates to:
@@ -373,11 +385,11 @@ abstract class AppLocalizations {
   /// **'Spieldaten'**
   String get game_data;
 
-  /// No description provided for @game_title.
+  /// No description provided for @game_name.
   ///
   /// In de, this message translates to:
-  /// **'Spieltitel'**
-  String get game_title;
+  /// **'Spielname'**
+  String get game_name;
 
   /// No description provided for @gamemode.
   ///
@@ -390,6 +402,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Spiele'**
   String get games;
+
+  /// No description provided for @haptic_feedback.
+  ///
+  /// In de, this message translates to:
+  /// **'Haptisches Feedback'**
+  String get haptic_feedback;
 
   /// No description provided for @home.
   ///
@@ -493,30 +511,6 @@ abstract class AppLocalizations {
   /// **'E-Mail an Entwickler'**
   String get mail_developer;
 
-  /// No description provided for @max_players_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es können maximal 5 Spieler:innen hinzugefügt werden.'**
-  String get max_players_message;
-
-  /// No description provided for @max_players_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Maximale Anzahl erreicht'**
-  String get max_players_title;
-
-  /// No description provided for @min_players_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es müssen mindestens 2 Spieler:innen hinzugefügt werden'**
-  String get min_players_message;
-
-  /// No description provided for @min_players_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Zu wenig Spieler:innen'**
-  String get min_players_title;
-
   /// No description provided for @mode.
   ///
   /// In de, this message translates to:
@@ -571,35 +565,11 @@ abstract class AppLocalizations {
   /// **'Keine Lizenz verfügbar'**
   String get no_license_text;
 
-  /// No description provided for @no_mode_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Es muss ein Spielmodus ausgewählt werden.'**
-  String get no_mode_message;
-
   /// No description provided for @no_mode_selected.
   ///
   /// In de, this message translates to:
   /// **'Wähle einen Spielmodus'**
   String get no_mode_selected;
-
-  /// No description provided for @no_mode_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Kein Modus'**
-  String get no_mode_title;
-
-  /// No description provided for @no_name_message.
-  ///
-  /// In de, this message translates to:
-  /// **'Jede:r Spieler:in muss einen Namen haben.'**
-  String get no_name_message;
-
-  /// No description provided for @no_name_title.
-  ///
-  /// In de, this message translates to:
-  /// **'Kein Name'**
-  String get no_name_title;
 
   /// No description provided for @ok.
   ///
@@ -618,12 +588,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Nur aktive Spiele werden angezeigt'**
   String get only_active_games;
-
-  /// No description provided for @only_active_games_description.
-  ///
-  /// In de, this message translates to:
-  /// **'Beendete Spiele werden ausgeblendet.'**
-  String get only_active_games_description;
 
   /// No description provided for @overview.
   ///
@@ -757,11 +721,17 @@ abstract class AppLocalizations {
   /// **'Einstellungen'**
   String get settings;
 
-  /// No description provided for @sort_and_filter_options.
+  /// No description provided for @sort_by.
   ///
   /// In de, this message translates to:
-  /// **'Sortier- & Filteroptionen'**
-  String get sort_and_filter_options;
+  /// **'Sortieren nach'**
+  String get sort_by;
+
+  /// No description provided for @sort_order.
+  ///
+  /// In de, this message translates to:
+  /// **'Reihenfolge'**
+  String get sort_order;
 
   /// No description provided for @standard_game_title.
   ///
@@ -781,6 +751,12 @@ abstract class AppLocalizations {
   /// **'Statistiken'**
   String get statistics;
 
+  /// No description provided for @submit.
+  ///
+  /// In de, this message translates to:
+  /// **'Bestätigen'**
+  String get submit;
+
   /// No description provided for @support_me.
   ///
   /// In de, this message translates to:
@@ -799,10 +775,16 @@ abstract class AppLocalizations {
   /// **'Es wird so lange gespielt, bis ihr keine Lust mehr habt. Das Spiel kann jederzeit manuell beendet werden.'**
   String get unlimited_description;
 
+  /// No description provided for @version.
+  ///
+  /// In de, this message translates to:
+  /// **'Version'**
+  String get version;
+
   /// No description provided for @whats_new.
   ///
   /// In de, this message translates to:
-  /// **'Was ist neu'**
+  /// **'Was ist Neu?'**
   String get whats_new;
 
   /// No description provided for @who_has_kamikaze.
@@ -816,30 +798,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Wer hat CABO gesagt?'**
   String get who_said_cabo;
-
-  /// No description provided for @wn_description_1.
-  ///
-  /// In de, this message translates to:
-  /// **'In der Rundenübersicht wird angezeigt, wer mischen muss. In den Einstellungen kannst du festlegen, ob standardmäßig der vorherige Verlierer oder rotierend gemischt wird.'**
-  String get wn_description_1;
-
-  /// No description provided for @wn_description_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Chevrons wurden hinzugefügt, um die Bedienung übersichtlicher und intuitiver zu machen.'**
-  String get wn_description_2;
-
-  /// No description provided for @wn_item_1.
-  ///
-  /// In de, this message translates to:
-  /// **'Mischer:in'**
-  String get wn_item_1;
-
-  /// No description provided for @wn_item_2.
-  ///
-  /// In de, this message translates to:
-  /// **'Verbesserte Navigation'**
-  String get wn_item_2;
 
   /// No description provided for @yes.
   ///

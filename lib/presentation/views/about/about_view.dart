@@ -1,11 +1,14 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/constants.dart';
+import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_row.dart';
+import 'package:cabo_counter/presentation/components/widgets/settings/custom_form_section.dart';
 import 'package:cabo_counter/presentation/views/about/licenses/license_view.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/version_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A view that displays information about the app, including its name, version,
@@ -15,91 +18,126 @@ class AboutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    final loc = AppLocalizations.of(context);
+
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(AppLocalizations.of(context).about),
-      ),
-      child: SafeArea(
+      appBar: AppBar(title: Text(loc.about)),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Text(
-                  AppLocalizations.of(context).app_name,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Text(
-                '${AppLocalizations.of(context).app_version} ${VersionService.getVersionWithBuild()}',
-                style: TextStyle(fontSize: 15, color: Colors.grey[300]),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 15,
-                ),
-                child: SizedBox(
-                  height: 200,
-                  child: Image.asset('assets/cabo_counter-logo_rounded.png'),
-                ),
-              ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).privacy_policy),
-                onPressed: () =>
-                    launchUrl(Uri.parse(Constants.PRIVACY_POLICY_LINK)),
-              ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).support_me),
-                onPressed: () => launchUrl(Uri.parse(Constants.DONATE_LINK)),
-              ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).legal_notice),
-                onPressed: () => launchUrl(Uri.parse(Constants.LEGAL_LINK)),
-              ),
-              CupertinoButton(
-                sizeStyle: CupertinoButtonSize.medium,
-                padding: EdgeInsets.zero,
-                child: Text(AppLocalizations.of(context).licenses),
-                onPressed: () => Navigator.push(
-                  context,
-                  CupertinoPageRoute(builder: (_) => const LicenseView()),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                '\u00A9 Felix Kirchner',
-                style: TextStyle(fontSize: 16),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
                 children: [
-                  IconButton(
-                    onPressed: () =>
-                        launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
-                    icon: Icon(IconService.website),
-                  ),
-                  IconButton(
-                    onPressed: () => launchUrl(
-                      Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Text(
+                      loc.app_name,
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    icon: Icon(IconService.e_mail),
                   ),
-                  IconButton(
+
+                  // Version
+                  Text(
+                    '${loc.version} ${VersionService.getVersionNumber()}',
+                    style: TextStyle(fontSize: 15, color: Colors.grey[300]),
+                  ),
+                ],
+              ),
+              // App name
+
+              // Logo
+              SizedBox(
+                height: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset('assets/app-logo.jpg'),
+                ),
+              ),
+
+              CustomFormSection(
+                rows: [
+                  // Support me
+                  CustomFormRow(
+                    prefixText: loc.support_me,
+                    prefixIcon: IconService.support,
                     onPressed: () =>
-                        launchUrl(Uri.parse(Constants.GITHUB_LINK)),
-                    icon: const FaIcon(FontAwesomeIcons.github, size: 22),
+                        launchUrl(Uri.parse(Constants.DONATE_LINK)),
+                  ),
+
+                  // Licenses
+                  CustomFormRow(
+                    prefixText: loc.licenses,
+                    prefixIcon: IconService.license,
+                    onPressed: () => Navigator.push(
+                      context,
+                      adaptivePageRoute(builder: (_) => const LicenseView()),
+                    ),
+                  ),
+
+                  // Privacy policy
+                  CustomFormRow(
+                    prefixText: loc.privacy_policy,
+                    prefixIcon: IconService.privacy,
+                    onPressed: () => launchUrl(
+                      Uri.parse(
+                        '${Constants.PRIVACY_POLICY_LINK}?lang=${loc.localeName}',
+                      ),
+                    ),
+                  ),
+
+                  // Legal notice
+                  CustomFormRow(
+                    prefixText: loc.legal_notice,
+                    prefixIcon: IconService.legal,
+                    onPressed: () => launchUrl(
+                      Uri.parse(
+                        '${Constants.LEGAL_LINK}?lang=${loc.localeName}',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Column(
+                spacing: 10,
+                children: [
+                  const Text(
+                    '\u00A9 Felix Kirchner',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Website
+                      AnimatedIconButton(
+                        onPressed: () =>
+                            launchUrl(Uri.parse(Constants.WEBSITE_LINK)),
+                        icon: IconService.website,
+                        color: CustomTheme.primaryColor,
+                      ),
+
+                      // Contact
+                      AnimatedIconButton(
+                        onPressed: () => launchUrl(
+                          Uri.parse('mailto:${Constants.CONTACT_EMAIL}'),
+                        ),
+                        icon: IconService.e_mail,
+                        color: CustomTheme.primaryColor,
+                      ),
+
+                      // Github
+                      AnimatedIconButton(
+                        onPressed: () =>
+                            launchUrl(Uri.parse(Constants.GITHUB_LINK)),
+                        icon: IconService.brand_github,
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -1,160 +1,155 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:cabo_counter/core/custom_theme.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/custom_segmented_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
+import 'package:cabo_counter/presentation/components/widgets/tiles/score_enter_tile.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
+import 'package:flutter/material.dart';
 
-/// A view for displaying and managing a single round
-///
-/// This widget allows users to input and review scores for each player in a round,
-/// select the player who called CABO, and handle special cases such as Kamikaze rounds.
-/// It manages the round state, validates input, and coordinates navigation between rounds.
-///
-/// Features:
-/// - Rotates player order based on the previous round's winner.
-/// - Supports Kamikaze rounds with dedicated UI and logic.
-/// - Handles score input, validation, and updates to the game session.
-/// - Displays bonus point popups when applicable.
-///
-/// Requires a [GameSession] and the current [roundNumber].
 class RoundView extends StatefulWidget {
-  final GameSession gameSession;
-  final int roundNumber;
-
+  /// A view for displaying and managing a single round
+  ///
+  /// - [roundNumber]: The number of the current round.
+  /// - [gameSession]: The controller managing the current game session.
   const RoundView({
     super.key,
     required this.roundNumber,
     required this.gameSession,
   });
 
+  final int roundNumber;
+
+  final GameSessionController gameSession;
+
   @override
-  // ignore: library_private_types_in_public_api
   _RoundViewState createState() => _RoundViewState();
 }
 
 class _RoundViewState extends State<RoundView> {
-  /// The current game session.
-  late GameSession gameSession = widget.gameSession;
+  late GameSessionController gameSession = widget.gameSession;
 
-  /// Index of the player who said CABO.
-  int _caboPlayerIndex = 0;
+  int? caboPlayerIndex;
+  int? kamikazePlayerIndex;
 
-  /// Index of the player who has Kamikaze.
-  /// Default is null (no Kamikaze player).
-  int? _kamikazePlayerIndex;
+  bool get hasRoundBeenPlayed =>
+      widget.roundNumber < widget.gameSession.roundNumber;
+  bool get isGameFinished => widget.gameSession.isGameFinished;
+  int get playerAmount => widget.gameSession.players.length;
 
-  /// List of text controllers for the score text fields.
-  late final List<TextEditingController> _scoreControllerList = List.generate(
-    widget.gameSession.players.length,
+  late int shufflePlayerIndex;
+
+  late final List<TextEditingController> scoreControllerList = List.generate(
+    playerAmount,
     (index) => TextEditingController(),
   );
 
-  /// List of focus nodes for the score text fields.
-  late final List<FocusNode> _focusNodeList = List.generate(
-    widget.gameSession.players.length,
+  late final List<FocusNode> focusNodes = List.generate(
+    playerAmount,
     (index) => FocusNode(),
   );
 
   /// List of global keys for the score text fields.
-  late List<GlobalKey> _textFieldKeys;
-
-  /// Index of the player who shuffles the cards for this round.
-  late int _shufflePlayerIndex;
+  late List<GlobalKey> textFieldKeys;
 
   @override
   void initState() {
-    _shufflePlayerIndex = _getShufflePlayerIndex();
-    if (widget.roundNumber < widget.gameSession.roundNumber ||
-        widget.gameSession.isGameFinished == true) {
-      // If the current round has already been played, the text fields
-      // are filled with the scores from this round
-      for (int i = 0; i < _scoreControllerList.length; i++) {
-        _scoreControllerList[i].text = gameSession
-            .roundList[widget.roundNumber - 1]
-            .scores[i]
-            .toString();
-      }
-      _caboPlayerIndex =
-          gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
-      _kamikazePlayerIndex =
-          gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
-    }
+    shufflePlayerIndex = getShufflePlayerIndex();
 
-    _textFieldKeys = List.generate(
-      widget.gameSession.players.length,
-      (index) => GlobalKey(),
-    );
+    if (hasRoundBeenPlayed || isGameFinished) prefillFields();
+
+    textFieldKeys = List.generate(playerAmount, (index) => GlobalKey());
 
     super.initState();
   }
 
   @override
+  void dispose() {
+    for (final controller in scoreControllerList) {
+      controller.dispose();
+    }
+    for (final focusNode in focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final rotatedPlayers = _getRotatedPlayers();
-    final originalIndices = _getOriginalIndices();
+    final rotatedPlayers = getRotatedPlayers();
+    final originalIndices = getOriginalIndices();
 
-    return CupertinoPageScaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () => {
-            //LocalStorageService.saveGameSessions(),
-            Navigator.pop(context, -1),
-          },
-          child: Text(AppLocalizations.of(context).cancel),
+      appBar: AppBar(
+        leading: AnimatedIconButton(
+          onPressed: () => Navigator.of(context).pop(-1),
+          icon: IconService.back,
         ),
-        middle: Text(AppLocalizations.of(context).results),
-        trailing: Visibility(
-          visible: widget.gameSession.isGameFinished,
-          child: Icon(IconService.locked, size: 25),
-        ),
+        title: Text(loc.results),
+        actions: [
+          AnimatedIconButton(
+            icon: IconService.kamikaze,
+            color: CustomTheme.kamikazeColor,
+            onPressed: () async {
+              if (await showKamikazeSheet(context)) {
+                if (!context.mounted) return;
+                endOfRoundNavigation(
+                  context: context,
+                  navigateToNextRound: true,
+                );
+              }
+            },
+          ),
+        ],
       ),
-      child: Column(
+      body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 20 + bottomInset),
+              padding: EdgeInsets.only(bottom: 20 + bottomInset, top: 40),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 40),
-                    Text(
-                      '${AppLocalizations.of(context).round} ${widget.roundNumber}',
-                      style: CustomTheme.roundTitle,
+                    // Round number
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        '${loc.round} ${widget.roundNumber}',
+                        style: const TextStyle(
+                          fontSize: 60,
+                          color: CustomTheme.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 10),
+
+                    // Text
                     Text(
-                      AppLocalizations.of(context).who_said_cabo,
+                      loc.who_said_cabo,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+
+                    // Cabo player selection
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: widget.gameSession.players.length > 3
-                            ? 5
-                            : 20,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
                         vertical: 10,
                       ),
                       child: SizedBox(
-                        height: 60,
-                        child: CupertinoSegmentedControl<int>(
-                          unselectedColor:
-                              CustomTheme.mainElementBackgroundColor,
-                          selectedColor: CustomTheme.primaryColor,
-                          groupValue: _caboPlayerIndex,
+                        height: 40,
+                        child: CustomSegmentedControl<int>(
+                          groupValue: caboPlayerIndex,
                           children: Map.fromEntries(
                             widget.gameSession.players.asMap().entries.map((
                               entry,
@@ -184,173 +179,128 @@ class _RoundViewState extends State<RoundView> {
                             }),
                           ),
                           onValueChanged: (value) {
-                            setState(() {
-                              _caboPlayerIndex = value;
-                            });
+                            setState(() => caboPlayerIndex = value);
                           },
                         ),
                       ),
                     ),
+
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: rotatedPlayers.length,
                       itemBuilder: (context, index) {
+                        // The index of the player in the original players list,
+                        // which is needed to access the correct score and to
+                        // update the correct text controller.
                         final originalIndex = originalIndices[index];
+
+                        // The name of the player to display, which is taken
+                        // from the rotated players list.
                         final name = rotatedPlayers[index];
-                        bool shouldShowMedal =
+
+                        // Whether to show the medal icon for this player.
+                        // The medal is shown for the first player in the list
+                        final shouldShowMedal =
                             index == 0 && widget.roundNumber > 1;
-                        bool isShufflePlayer =
-                            originalIndex == _shufflePlayerIndex;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: CupertinoListTile(
-                              backgroundColor: CustomTheme.playerTileColor,
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          name,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (isShufflePlayer) ...[
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            AppLocalizations.of(context).dealer,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: CupertinoColors.systemGrey,
-                                            ),
-                                          ),
-                                        ],
-                                        if (shouldShowMedal) ...[
-                                          const SizedBox(width: 10),
-                                          const FaIcon(
-                                            FontAwesomeIcons.crown,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              subtitle: Text(
-                                '${widget.gameSession.getPlayerScoresAsList()[originalIndex]}'
-                                ' ${AppLocalizations.of(context).points}',
-                                style: TextStyle(color: CustomTheme.white),
-                              ),
-                              trailing: SizedBox(
-                                width: 100,
-                                key: _textFieldKeys[originalIndex],
-                                child: CupertinoTextField(
-                                  maxLength: 3,
-                                  focusNode: _focusNodeList[originalIndex],
-                                  keyboardType: Platform.isIOS
-                                      ? TextInputType.number
-                                      : const TextInputType.numberWithOptions(
-                                          signed: true,
-                                          decimal: false,
-                                        ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  textInputAction:
-                                      index ==
-                                          widget.gameSession.players.length - 1
-                                      ? TextInputAction.done
-                                      : TextInputAction.next,
-                                  controller:
-                                      _scoreControllerList[originalIndex],
-                                  placeholder: AppLocalizations.of(
-                                    context,
-                                  ).points,
-                                  textAlign: TextAlign.center,
-                                  onSubmitted: (_) =>
-                                      _focusNextTextfield(originalIndex),
-                                  onChanged: (_) => setState(() {}),
-                                ),
-                              ),
-                            ),
+
+                        // Whether to show the shuffle player indicator for this player
+                        final isShufflePlayer =
+                            originalIndex == shufflePlayerIndex;
+
+                        // The text input action for the score text field.
+                        // It is "next" for all players except the last one,
+                        // which is "done".
+                        final textInputAction = index == playerAmount - 1
+                            ? TextInputAction.done
+                            : TextInputAction.next;
+
+                        // The score for this player in the current round.
+                        final score = widget.gameSession
+                            .getPlayerScoresAsList()[originalIndex];
+
+                        return Center(
+                          child: ScoreEnterTile(
+                            key: textFieldKeys[originalIndex],
+                            playerName: name,
+                            points: score,
+                            shufflePlayer: isShufflePlayer,
+                            showMedal: shouldShowMedal,
+                            controller: scoreControllerList[originalIndex],
+                            textInputAction: textInputAction,
+                            onSubmitted: (_) =>
+                                focusNextTextfield(originalIndex),
+                            focusNode: focusNodes[originalIndex],
+                            onChanged: (_) => setState(() {}),
                           ),
                         );
                       },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Center(
-                        heightFactor: 1,
-                        child: CustomButton(
-                          onPressed: () async {
-                            if (await _showKamikazeSheet(context)) {
-                              if (!context.mounted) return;
-                              _endOfRoundNavigation(context, true);
-                            }
-                          },
-                          child: Text(
-                            AppLocalizations.of(context).kamikaze,
-                            style: TextStyle(color: CustomTheme.kamikazeColor),
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          KeyboardVisibilityBuilder(
-            builder: (context, visible) {
-              if (!visible) {
-                return Container(
-                  height: 80,
-                  padding: const EdgeInsets.only(bottom: 20),
-                  color: CustomTheme.mainElementBackgroundColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CupertinoButton(
-                        onPressed: _areRoundInputsValid()
-                            ? () {
-                                _endOfRoundNavigation(context, false);
-                              }
+          Container(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  spacing: 10,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: FloatingAnimatedButton(
+                        onPressed: canSubmitRound
+                            ? () => endOfRoundNavigation(
+                                context: context,
+                                navigateToNextRound: false,
+                              )
                             : null,
-                        child: Text(AppLocalizations.of(context).done),
+                        text: loc.done,
                       ),
-                      if (!widget.gameSession.isGameFinished)
-                        CupertinoButton(
-                          onPressed: _areRoundInputsValid()
-                              ? () {
-                                  _endOfRoundNavigation(context, true);
-                                }
+                    ),
+                    if (!isGameFinished)
+                      Expanded(
+                        child: FloatingAnimatedButton(
+                          onPressed: canSubmitRound
+                              ? () => endOfRoundNavigation(
+                                  context: context,
+                                  navigateToNextRound: true,
+                                )
                               : null,
-                          child: Text(AppLocalizations.of(context).next_round),
+                          text: loc.next_round,
                         ),
-                    ],
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+                      ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
+  void prefillFields() {
+    for (int i = 0; i < scoreControllerList.length; i++) {
+      scoreControllerList[i].text = gameSession
+          .roundList[widget.roundNumber - 1]
+          .scores[i]
+          .toString();
+    }
+    caboPlayerIndex =
+        gameSession.roundList[widget.roundNumber - 1].caboPlayerIndex;
+    kamikazePlayerIndex =
+        gameSession.roundList[widget.roundNumber - 1].kamikazePlayerIndex;
+  }
+
   /// Gets the index of the player who won the previous round.
   /// Returns 0 in the first round, as there is no previous round.
-  int _getPreviousRoundWinnerIndex() {
+  int getPreviousRoundWinnerIndex() {
     if (widget.roundNumber == 1) {
       return 0; // If it's the first round, the order should be the same as the players list.
     }
@@ -371,7 +321,7 @@ class _RoundViewState extends State<RoundView> {
   /// the player with the highest score from the previous round (round loser)
   /// shuffles. If rotate shuffler is enabled in the configuration,
   /// the shuffler rotates among players each round.
-  int _getShufflePlayerIndex() {
+  int getShufflePlayerIndex() {
     // In the first round the first player shuffles the cards
     if (widget.roundNumber == 1) {
       return 0;
@@ -380,7 +330,7 @@ class _RoundViewState extends State<RoundView> {
     // If the configuration is set to rotate the shuffler, calculate the
     // shuffler index according to the current round number and amount of players
     if (ConfigService.getRotateShuffler()) {
-      return (widget.roundNumber - 1) % widget.gameSession.players.length;
+      return (widget.roundNumber - 1) % playerAmount;
     }
 
     final List<int> scores =
@@ -411,8 +361,8 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Rotates the players list based on the previous round's winner.
-  List<String> _getRotatedPlayers() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
+  List<String> getRotatedPlayers() {
+    final winnerIndex = getPreviousRoundWinnerIndex();
     final playerList = widget.gameSession.getPlayerNamesAsList();
     return [
       playerList[winnerIndex],
@@ -422,12 +372,12 @@ class _RoundViewState extends State<RoundView> {
   }
 
   /// Gets the original indices of the players by recalculating it from the rotated list.
-  List<int> _getOriginalIndices() {
-    final winnerIndex = _getPreviousRoundWinnerIndex();
+  List<int> getOriginalIndices() {
+    final winnerIndex = getPreviousRoundWinnerIndex();
     return [
       winnerIndex,
       ...List.generate(
-        widget.gameSession.players.length - winnerIndex - 1,
+        playerAmount - winnerIndex - 1,
         (i) => winnerIndex + i + 1,
       ),
       ...List.generate(winnerIndex, (i) => i),
@@ -436,10 +386,10 @@ class _RoundViewState extends State<RoundView> {
 
   /// Shows a bottom sheet sheet to select the player who has Kamikaze.
   /// It returns true if a player was selected, false if the action was cancelled.
-  Future<bool> _showKamikazeSheet(BuildContext context) async {
+  Future<bool> showKamikazeSheet(BuildContext context) async {
     final selectedIndex = await KamikazeSheet.show(context, gameSession);
     if (selectedIndex != null) {
-      _kamikazePlayerIndex = selectedIndex;
+      kamikazePlayerIndex = selectedIndex;
       return true;
     }
     return false;
@@ -447,45 +397,42 @@ class _RoundViewState extends State<RoundView> {
 
   /// Focuses the next text field in the list of text fields.
   /// [index] is the index of the current text field.
-  void _focusNextTextfield(int index) {
-    final originalIndices = _getOriginalIndices();
+  void focusNextTextfield(int index) {
+    final originalIndices = getOriginalIndices();
     final currentPos = originalIndices.indexOf(index);
 
     if (currentPos < originalIndices.length - 1) {
       final nextIndex = originalIndices[currentPos + 1];
-      FocusScope.of(
-        context,
-      ).requestFocus(_focusNodeList[originalIndices[currentPos + 1]]);
+      FocusScope.of(context)
+          .requestFocus(focusNodes[originalIndices[currentPos + 1]]);
 
-      final scrollContext = _textFieldKeys[nextIndex].currentContext;
+      final scrollContext = textFieldKeys[nextIndex].currentContext;
       if (scrollContext != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Scrollable.ensureVisible(
             scrollContext,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOut,
-            alignment: 0.55,
+            alignment: 0.45,
           );
         });
       }
     } else {
-      _focusNodeList[index].unfocus();
+      focusNodes[index].unfocus();
     }
   }
 
-  /// Checks if the inputs for the round are valid.
-  /// Returns true if the inputs are valid, false otherwise.
-  /// Round Inputs are valid if every player has a score or
-  /// kamikaze is selected for a player
-  bool _areRoundInputsValid() {
-    if (_areTextFieldsEmpty() && _kamikazePlayerIndex == null) return false;
-    return true;
-  }
+  /// Checks if the round can be submitted.
+  /// Therefore we need input in every text field and a cabo player selected
+  /// or a kamikaze player selected
+  bool get canSubmitRound =>
+      (!areTextFieldsEmpty() && caboPlayerIndex != null) ||
+      kamikazePlayerIndex != null;
 
   /// Checks if any of the text fields for the players points are empty.
   /// Returns true if any of the text fields is empty, false otherwise.
-  bool _areTextFieldsEmpty() {
-    for (TextEditingController t in _scoreControllerList) {
+  bool areTextFieldsEmpty() {
+    for (TextEditingController t in scoreControllerList) {
       if (t.text.isEmpty) {
         return true;
       }
@@ -498,66 +445,66 @@ class _RoundViewState extends State<RoundView> {
   /// every player. If the round is the highest round played in this game,
   /// it expands the player score lists. At the end it updates the score
   /// array for the game.
-  List<int> _finishRound() {
-    if (_kamikazePlayerIndex != null) {
+  List<int> finishRound() {
+    if (kamikazePlayerIndex != null) {
       widget.gameSession.applyKamikaze(
         widget.roundNumber,
-        _kamikazePlayerIndex!,
+        kamikazePlayerIndex!,
       );
     } else {
       List<int> roundScores = [];
-      for (TextEditingController c in _scoreControllerList) {
+      for (TextEditingController c in scoreControllerList) {
         if (c.text.isNotEmpty) roundScores.add(int.parse(c.text));
       }
       widget.gameSession.calculateScoredPoints(
         widget.roundNumber,
         roundScores,
-        _caboPlayerIndex,
+        caboPlayerIndex!,
       );
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
-    if (widget.roundNumber == widget.gameSession.roundNumber &&
-        !widget.gameSession.isGameFinished) {
-      widget.gameSession.increaseRound();
-    }
     return bonusPlayers;
   }
 
   /// Shows a popup dialog with the information which player received the bonus points.
-  Future<void> _showBonusPopup(
+  Future<void> showBonusPopup(
     BuildContext context,
     List<int> bonusPlayers,
   ) async {
-    int pointLimit = widget.gameSession.pointLimit;
-    int bonusPoints = (pointLimit / 2).round();
+    final loc = AppLocalizations.of(context);
+    final pointLimit = widget.gameSession.pointLimit!;
+    final bonusPoints = (pointLimit / 2).round();
 
-    String resultText = _getBonusPopupMessageString(
+    String resultText = getBonusPopupMessageString(
       pointLimit,
       bonusPoints,
       bonusPlayers,
     );
 
+    VibrationService.heavyImpact();
     await PopupService.showInfoPopup(
       context: context,
-      title: Text(AppLocalizations.of(context).bonus_points_title),
-      content: Text(resultText),
+      icon: Icons.star_rounded,
+      title: loc.bonus_points_title,
+      message: resultText,
     );
   }
 
   /// Generates the message string for the bonus popup.
   /// It takes the [pointLimit], [bonusPoints] and the list of [bonusPlayers]
   /// and returns a formatted string.
-  String _getBonusPopupMessageString(
+  String getBonusPopupMessageString(
     int pointLimit,
     int bonusPoints,
     List<int> bonusPlayers,
   ) {
+    final loc = AppLocalizations.of(context);
     List<String> nameList = bonusPlayers
         .map((i) => widget.gameSession.players[i].name)
         .toList();
     String resultText = '';
     if (nameList.length == 1) {
-      resultText = AppLocalizations.of(context).bonus_points_message(
+      resultText = loc.bonus_points_message(
         nameList.length,
         nameList.first,
         pointLimit,
@@ -567,7 +514,7 @@ class _RoundViewState extends State<RoundView> {
       resultText = nameList.length == 2
           ? '${nameList[0]} & ${nameList[1]}'
           : '${nameList.sublist(0, nameList.length - 1).join(', ')} & ${nameList.last}';
-      resultText = AppLocalizations.of(context).bonus_points_message(
+      resultText = loc.bonus_points_message(
         nameList.length,
         resultText,
         pointLimit,
@@ -582,20 +529,20 @@ class _RoundViewState extends State<RoundView> {
   /// and navigates to the next round or back to the previous screen.
   /// It takes the BuildContext [context] and a boolean [navigateToNextRound] to determine
   /// if it should navigate to the next round or not.
-  Future<void> _endOfRoundNavigation(
-    BuildContext context,
-    bool navigateToNextRound,
-  ) async {
-    List<int> bonusPlayersIndices = _finishRound();
+  Future<void> endOfRoundNavigation({
+    required BuildContext context,
+    required bool navigateToNextRound,
+  }) async {
+    List<int> bonusPlayersIndices = finishRound();
     if (bonusPlayersIndices.isNotEmpty) {
-      await _showBonusPopup(context, bonusPlayersIndices);
+      await showBonusPopup(context, bonusPlayersIndices);
     }
 
     //LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.
-      if (widget.gameSession.isGameFinished) {
+      if (isGameFinished) {
         Navigator.pop(context);
         return;
       }
@@ -608,16 +555,5 @@ class _RoundViewState extends State<RoundView> {
       // pop the context and navigate to the next round.
       Navigator.pop(context, widget.roundNumber + 1);
     }
-  }
-
-  @override
-  void dispose() {
-    for (final controller in _scoreControllerList) {
-      controller.dispose();
-    }
-    for (final focusNode in _focusNodeList) {
-      focusNode.dispose();
-    }
-    super.dispose();
   }
 }

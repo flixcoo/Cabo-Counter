@@ -45,3 +45,6 @@ enum ImportStatus {
   formatError,
   genericError,
 }
+
+/// Visual style of a [CustomPopupAction].
+enum CustomPopupActionStyle { primary, secondary }

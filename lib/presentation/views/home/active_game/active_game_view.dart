@@ -1,22 +1,27 @@
+import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/adaptive_sheet_route.dart';
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
-import 'package:cabo_counter/data/dto/game_manager.dart';
-import 'package:cabo_counter/data/dto/game_session.dart';
+import 'package:cabo_counter/data/db/database.dart';
+import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_set.dart';
+import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
+import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
-import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
-import 'package:cabo_counter/services/icon_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
 ///
@@ -26,23 +31,20 @@ import 'package:flutter/material.dart';
 ///
 /// The widget listens to changes in the provided [GameSession] and updates the UI accordingly.
 class ActiveGameView extends StatefulWidget {
+  const ActiveGameView({
+    super.key,
+    required this.gameSession,
+    required this.onSessionsUpdated,
+  });
   final GameSession gameSession;
-  const ActiveGameView({super.key, required this.gameSession});
+  final VoidCallback onSessionsUpdated;
 
   @override
-  // ignore: library_private_types_in_public_api
   _ActiveGameViewState createState() => _ActiveGameViewState();
 }
 
 class _ActiveGameViewState extends State<ActiveGameView> {
-  /// Constant value to represent a press on the cancel button in round view.
-  static const int kRoundCancelled = -1;
-
-  final confettiController = ConfettiController(
-    duration: const Duration(seconds: 10),
-  );
-
-  late final GameSession gameSession;
+  late final GameSessionController gameSession;
 
   /// A list of the ranks for each player corresponding to their index in sortedPlayerIndices
   late List<int> denseRanks;
@@ -50,122 +52,153 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// A list of player indices sorted by their scores in ascending order.
   late List<int> sortedPlayerIndices;
 
+  String get formattedDate {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMd(locale)
+        .add_Hm()
+        .format(gameSession.createdAt.toLocal());
+  }
+
+  final confettiController = ConfettiController(
+    duration: const Duration(seconds: 10),
+  );
+
   @override
   void initState() {
     super.initState();
-    gameSession = widget.gameSession;
+    gameSession = GameSessionController(
+      session: widget.gameSession,
+      db: Provider.of<AppDatabase>(context, listen: false),
+    );
+  }
+
+  @override
+  void dispose() {
+    gameSession.dispose();
+    confettiController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Stack(
       children: [
         ListenableBuilder(
           listenable: gameSession,
           builder: (context, _) {
-            sortedPlayerIndices = _getSortedPlayerIndices();
-            denseRanks = _calculateDenseRank(
+            sortedPlayerIndices = getSortedPlayerIndices();
+            denseRanks = calculateDenseRank(
               gameSession.getPlayerScoresAsList(),
               sortedPlayerIndices,
             );
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                previousPageTitle: AppLocalizations.of(context).games,
-                middle: Text(AppLocalizations.of(context).overview),
-              ),
-              child: SafeArea(
+            return Scaffold(
+              appBar: AppBar(title: Text(loc.overview)),
+              body: SafeArea(
+                bottom: false,
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom,
+                    top: 10,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).game,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).name),
-                        trailing: Text(
-                          gameSession.gameTitle,
-                          style: TextStyle(color: CustomTheme.primaryColor),
-                        ),
-                      ),
-                      CupertinoListTile(
-                        title: Text(AppLocalizations.of(context).mode),
-                        trailing: Text(
-                          gameSession.isPointsLimitEnabled
-                              ? '${ConfigService.getPointLimit()} ${AppLocalizations.of(context).points}'
-                              : AppLocalizations.of(context).unlimited,
-                          style: TextStyle(color: CustomTheme.primaryColor),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).players,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.players.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          int playerIndex = sortedPlayerIndices[index];
-                          return CupertinoListTile(
-                            padding: const EdgeInsets.fromLTRB(14, 5, 14, 0),
-                            title: Row(
-                              children: [
-                                _getPlacementTextWidget(index),
-                                const SizedBox(width: 5),
-                                Text(
-                                  gameSession.players[playerIndex].name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: Row(
-                              children: [
-                                const SizedBox(width: 5),
-                                Text(
-                                  '${gameSession.getPlayerScoresAsList()[playerIndex]} '
-                                  '${AppLocalizations.of(context).points}',
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).rounds,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: gameSession.roundNumber,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: CupertinoListTile(
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 5,
+                      ActiveGameListSet(
+                        title: loc.game,
+                        content: [
+                          // Title
+                          ActiveGameListTile(
+                            title: Text(loc.name),
+                            trailing: Text(
+                              gameSession.title,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
                               ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              title: Text(
-                                '${AppLocalizations.of(context).round} ${index + 1}',
+                            ),
+                          ),
+
+                          // Mode
+                          ActiveGameListTile(
+                            title: Text(loc.mode),
+                            trailing: Text(
+                              gameSession.isPointsLimitEnabled
+                                  ? getPointLabel(loc, gameSession.pointLimit!)
+                                  : loc.unlimited,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+
+                          // Date
+                          ActiveGameListTile(
+                            title: Text(loc.created_at),
+                            trailing: Text(
+                              formattedDate,
+                              style: const TextStyle(
+                                color: CustomTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Players
+                      ActiveGameListSet(
+                        title: loc.players,
+                        tilePadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.players.length;
+                            index++
+                          ) ...[
+                            ActiveGameListTile(
+                              title: Row(
+                                spacing: 5,
+                                children: [
+                                  getPlacementTextWidget(index),
+                                  Text(
+                                    gameSession
+                                        .players[sortedPlayerIndices[index]]
+                                        .name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    getPointLabel(
+                                      loc,
+                                      gameSession
+                                          .getPlayerScoresAsList()[sortedPlayerIndices[index]],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+
+                      // Rounds
+                      ActiveGameListSet(
+                        title: loc.rounds,
+                        content: [
+                          for (
+                            int index = 0;
+                            index < gameSession.roundNumber;
+                            index++
+                          )
+                            ActiveGameListTile(
+                              title: Text('${loc.round} ${index + 1}'),
+                              showChevron: true,
+                              trailing: Row(
                                 children: [
                                   index + 1 != gameSession.roundNumber ||
                                           gameSession.isGameFinished
@@ -177,53 +210,36 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                           '\u{23F3}',
                                           style: TextStyle(fontSize: 22),
                                         ),
-                                  const SizedBox(width: 10),
-                                  IconService.chevron,
                                 ],
                               ),
                               onTap: () async {
-                                _openRoundView(context, index + 1);
+                                openRoundView(context, index + 1);
                               },
                             ),
-                          );
-                        },
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).statistics,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          CupertinoListTile(
-                            trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
-                            title: Text(
-                              AppLocalizations.of(context).scoring_history,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+
+                      // Statistics
+                      ActiveGameListSet(
+                        title: loc.statistics,
+                        content: [
+                          ActiveGameListTile(
+                            showChevron: true,
+                            title: Text(loc.scoring_history),
                             onTap: () => Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              adaptivePageRoute(
                                 builder: (_) =>
                                     GraphView(gameSession: gameSession),
                               ),
                             ),
                           ),
-                          CupertinoListTile(
-                            trailing: IconService.chevron,
-                            padding: const EdgeInsets.only(left: 20, right: 5),
-                            title: Text(
-                              AppLocalizations.of(context).point_overview,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                          ActiveGameListTile(
+                            showChevron: true,
+                            title: Text(loc.point_overview),
                             onTap: () => Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              adaptivePageRoute(
                                 builder: (_) =>
                                     PointsView(gameSession: gameSession),
                               ),
@@ -231,64 +247,44 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Text(
-                          AppLocalizations.of(context).game,
-                          style: CustomTheme.rowTitle,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Visibility(
-                            visible: !gameSession.isPointsLimitEnabled,
-                            child: CupertinoListTile(
-                              title: Text(
-                                AppLocalizations.of(context).end_game,
-                                style:
-                                    gameSession.roundNumber > 1 &&
-                                        !gameSession.isGameFinished
-                                    ? const TextStyle(color: Colors.white)
-                                    : const TextStyle(color: Colors.white30),
-                              ),
-                              backgroundColorActivated:
-                                  CustomTheme.backgroundColor,
-                              onTap: () {
-                                if (gameSession.roundNumber > 1 &&
-                                    !gameSession.isGameFinished) {
-                                  _showEndGameDialog();
-                                }
-                              },
+
+                      // Settings
+                      ActiveGameListSet(
+                        title: loc.settings,
+                        content: [
+                          if (!gameSession.isPointsLimitEnabled)
+                            ActiveGameListTile(
+                              title: Text(loc.end_game),
+                              showChevron: true,
+                              onTap:
+                                  (gameSession.roundNumber > 1 &&
+                                      !gameSession.isGameFinished)
+                                  ? () => showEndGameDialog()
+                                  : null,
                             ),
-                          ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context).delete_game,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                          ActiveGameListTile(
+                            title: Text(loc.delete_game),
+                            showChevron: true,
                             onTap: () {
-                              _showDeleteGameDialog().then((shouldDeleteGame) {
+                              showDeleteGameDialog().then((shouldDeleteGame) {
                                 if (shouldDeleteGame) {
-                                  _removeGameSession(gameSession);
+                                  removeGameSession(widget.gameSession);
                                 }
                               });
                             },
                           ),
-                          CupertinoListTile(
+                          ActiveGameListTile(
+                            showChevron: true,
                             title: Text(
-                              AppLocalizations.of(
-                                context,
-                              ).new_game_same_settings,
+                              AppLocalizations.of(context)
+                                  .new_game_same_settings,
                             ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
                             onTap: () {
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(
+                                adaptivePageRoute(
                                   builder: (_) => CreateGameView(
-                                    gameTitle: gameSession.gameTitle,
+                                    gameTitle: gameSession.title,
                                     gameMode:
                                         widget
                                                 .gameSession
@@ -297,20 +293,15 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                                         ? GameMode.pointLimit
                                         : GameMode.unlimited,
                                     players: gameSession.getPlayerNamesAsList(),
-                                    previousPageTitle: AppLocalizations.of(
-                                      context,
-                                    ).overview,
+                                    onSessionsUpdated: widget.onSessionsUpdated,
                                   ),
                                 ),
                               );
                             },
                           ),
-                          CupertinoListTile(
-                            title: Text(
-                              AppLocalizations.of(context).export_game,
-                            ),
-                            backgroundColorActivated:
-                                CustomTheme.backgroundColor,
+                          ActiveGameListTile(
+                            showChevron: true,
+                            title: Text(loc.export_game),
                             onTap: () async {
                               final success =
                                   await DataTransferService.exportSingleGameSession(
@@ -319,16 +310,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               if (!success && context.mounted) {
                                 PopupService.showInfoPopup(
                                   context: context,
-                                  title: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).export_error_title,
-                                  ),
-                                  content: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).export_error_message,
-                                  ),
+                                  icon: Icons.error_outline_rounded,
+                                  title: AppLocalizations.of(context)
+                                      .export_error_title,
+                                  message: AppLocalizations.of(context)
+                                      .export_error_message,
                                 );
                               }
                             },
@@ -365,36 +351,55 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Shows a dialog to confirm ending the game.
   /// If the user confirms, it calls the `endGame` method on the game manager
-  void _showEndGameDialog() {
-    final endGameAction = CustomDialogAction<bool>(
-      isDestructiveAction: true,
-      actionText: AppLocalizations.of(context).end_game,
+  void showEndGameDialog() {
+    final loc = AppLocalizations.of(context);
+
+    final endGameAction = CustomPopupAction<bool>(
+      style: CustomPopupActionStyle.primary,
+      isDestructive: true,
+      label: loc.end_game,
       returnValue: true,
-      onAfterPop: () {
+      onPressed: () {
         if (mounted) {
           setState(() {
-            gameManager.endGame(gameSession.gameId);
-            _playFinishAnimation(context);
+            endGame();
+            playFinishAnimation(context);
           });
         }
       },
     );
-    final cancelAction = CustomDialogAction<bool>(
-      actionText: AppLocalizations.of(context).cancel,
+    final cancelAction = CustomPopupAction<bool>(
+      style: CustomPopupActionStyle.secondary,
+      label: loc.cancel,
       returnValue: false,
     );
 
     PopupService.showSelectionPopup<bool>(
       context: context,
-      title: Text(AppLocalizations.of(context).end_game_title),
-      message: Text(AppLocalizations.of(context).end_game_message),
-      actions: [cancelAction, endGameAction],
+      icon: Icons.flag_outlined,
+      title: loc.end_game_title,
+      message: loc.end_game_message,
+      actions: [endGameAction, cancelAction],
+    );
+  }
+
+  /// Ends a game session if its in unlimited mode.
+  /// Takes a String [id] as input. It finds the index of the game
+  /// session with the matching ID marks it as finished,
+  void endGame() {
+    if (gameSession.isPointsLimitEnabled == true) return;
+    gameSession.endGame();
+
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    db.gameSessionDao.updateGameFinished(
+      gameId: gameSession.id,
+      isFinished: true,
     );
   }
 
   /// Returns a list of player indices sorted by their scores in
   /// ascending order.
-  List<int> _getSortedPlayerIndices() {
+  List<int> getSortedPlayerIndices() {
     List<int> playerIndices = List<int>.generate(
       gameSession.players.length,
       (index) => index,
@@ -412,7 +417,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   }
 
   /// Calculates the dense rank for a player based on their index in the sorted list of players.
-  List<int> _calculateDenseRank(
+  List<int> calculateDenseRank(
     List<int> playerScores,
     List<int> sortedIndices,
   ) {
@@ -433,42 +438,42 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Returns a text widget representing the placement text based on the given placement number.
   /// [index] is the index of the player in [players] list,
-  Text _getPlacementTextWidget(int index) {
+  Text getPlacementTextWidget(int index) {
     int placement = denseRanks[index];
     switch (placement) {
       case 1:
-        return const Text('\u{1F947}', style: TextStyle(fontSize: 22)); // 🥇
+        return const Text('\u{1F947}', style: TextStyle(fontSize: 20)); // 🥇
       case 2:
-        return const Text('\u{1F948}', style: TextStyle(fontSize: 22)); // 🥈
+        return const Text('\u{1F948}', style: TextStyle(fontSize: 20)); // 🥈
       case 3:
-        return const Text('\u{1F949}', style: TextStyle(fontSize: 22)); // 🥉
+        return const Text('\u{1F949}', style: TextStyle(fontSize: 20)); // 🥉
       default:
         return Text(
           ' $placement.',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold, height: 1.6),
         );
     }
   }
 
   /// Shows a dialog to confirm deleting the game session.
-  Future<bool> _showDeleteGameDialog() async {
+  Future<bool> showDeleteGameDialog() async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<bool>(
           context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message: Text(
-            AppLocalizations.of(
-              context,
-            ).delete_game_message(gameSession.gameTitle),
-          ),
+          icon: Icons.delete_outline_rounded,
+          title: loc.delete_game_title,
+          message: loc.delete_game_message(gameSession.title),
           actions: [
-            CustomDialogAction(
-              returnValue: false,
-              actionText: AppLocalizations.of(context).cancel,
-            ),
-            CustomDialogAction(
-              isDestructiveAction: true,
-              actionText: AppLocalizations.of(context).delete,
+            CustomPopupAction(
+              style: CustomPopupActionStyle.primary,
+              isDestructive: true,
+              label: loc.delete,
               returnValue: true,
+            ),
+            CustomPopupAction(
+              returnValue: false,
+              style: CustomPopupActionStyle.secondary,
+              label: loc.cancel,
             ),
           ],
         ) ??
@@ -477,15 +482,22 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// Removes the game session in the game manager and navigates back to the previous screen.
   /// If the game session does not exist in the game list, it shows an error dialog.
-  Future<void> _removeGameSession(GameSession gameSession) async {
-    if (gameManager.gameExistsInGameList(gameSession.gameId)) {
-      gameManager.deleteGameById(gameSession.gameId);
+  Future<void> removeGameSession(GameSession gameSession) async {
+    final db = Provider.of<AppDatabase>(context, listen: false);
+    final deleted = await db.gameSessionDao.deleteGameSession(
+      gameSessionId: gameSession.id,
+    );
+    if (!mounted) return;
+    if (deleted) {
+      widget.onSessionsUpdated.call();
       Navigator.pop(context);
     } else {
+      final loc = AppLocalizations.of(context);
       PopupService.showInfoPopup(
         context: context,
-        title: Text(AppLocalizations.of(context).id_error_title),
-        content: Text(AppLocalizations.of(context).id_error_message),
+        icon: Icons.error_outline_rounded,
+        title: loc.id_error_title,
+        message: loc.id_error_message,
       );
     }
   }
@@ -493,40 +505,42 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Recursively opens the RoundView for the specified round number.
   /// It starts with the given [roundNumber] and continues to open the next round
   /// until the user navigates back or the round number is invalid.
-  void _openRoundView(BuildContext context, int roundNumber) async {
-    final round = await Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-        fullscreenDialog: true,
-        builder: (context) =>
-            RoundView(gameSession: gameSession, roundNumber: roundNumber),
-      ),
-    );
+  void openRoundView(BuildContext context, int roundNumber) async {
+    final int? nextRoundNumber =
+        await Navigator.of(context, rootNavigator: true).push(
+          adaptiveSheetRoute(
+            builder: (context) =>
+                RoundView(gameSession: gameSession, roundNumber: roundNumber),
+          ),
+        );
 
     // If the user presses the cancel button
-    if (round == kRoundCancelled) return;
+    if (nextRoundNumber == -1) return;
 
     if (widget.gameSession.isGameFinished && context.mounted) {
-      _playFinishAnimation(context);
+      playFinishAnimation(context);
     }
 
     // If the previous round was not the last one
-    if (round != null && round >= 0) {
+    if (nextRoundNumber != null && nextRoundNumber >= 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await Future.delayed(
           const Duration(milliseconds: Constants.ROUND_VIEW_DELAY),
         );
         if (context.mounted) {
-          _openRoundView(context, round);
+          openRoundView(context, nextRoundNumber);
         }
       });
     }
+    widget.onSessionsUpdated.call();
   }
 
   /// Plays the confetti animation and shows a dialog with the winner's information.
-  Future<void> _playFinishAnimation(BuildContext context) async {
+  Future<void> playFinishAnimation(BuildContext context) async {
+    final loc = AppLocalizations.of(context);
     String winner = widget.gameSession.winner;
 
-    int winnerPoints = widget.gameSession.getPlayerScoresAsList().min;
+    int winnerPoints = widget.gameSession.getScoresList.min;
     int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();
@@ -536,20 +550,12 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     if (context.mounted) {
       PopupService.showInfoPopup(
         context: context,
-        title: Text(AppLocalizations.of(context).end_of_game_title),
-        content: Text(
-          AppLocalizations.of(
-            context,
-          ).end_of_game_message(winnerAmount, winner, winnerPoints),
-        ),
+        icon: Icons.emoji_events_rounded,
+        iconColor: CustomTheme.kamikazeColor,
+        title: loc.end_of_game_title,
+        message: loc.end_of_game_message(winnerAmount, winner, winnerPoints),
         onAfterPop: () => confettiController.stop(),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    confettiController.dispose();
-    super.dispose();
   }
 }
