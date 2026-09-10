@@ -28,7 +28,6 @@ import 'package:flutter/material.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Home screen of the app that displays a list of game sessions.
 ///
@@ -89,7 +88,6 @@ class _HomeViewState extends State<HomeView> {
     loadSessions();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showRatingDialog();
       showNewsView(context);
     });
   }
@@ -309,46 +307,6 @@ class _HomeViewState extends State<HomeView> {
     await db.gameSessionDao.deleteGameSession(gameSessionId: gameSessionId);
   }
 
-  /// Handles the feedback dialog when the conditions for rating are met.
-  /// It shows a dialog asking the user if they like the app,
-  /// and based on their response, it either opens the rating dialog or an email client for feedback.
-  Future<void> startFeedbackDialogProcess() async {
-    PreRatingDialogDecision preRatingDecision =
-        await PopupService.showPreRatingDialog(context);
-    BadRatingDialogDecision? badRatingDecision;
-
-    // so that the bad rating dialog is not shown immediately
-    await Future.delayed(const Duration(milliseconds: Constants.POP_UP_DELAY));
-
-    switch (preRatingDecision) {
-      case PreRatingDialogDecision.yes:
-        if (mounted) Constants.rateMyApp.showStarRateDialog(context);
-        break;
-      case PreRatingDialogDecision.no:
-        if (mounted)
-          badRatingDecision = await PopupService.showBadRatingDialog(context);
-        if (badRatingDecision == BadRatingDialogDecision.email)
-          openFeedbackEmail();
-        break;
-      case PreRatingDialogDecision.cancel:
-    }
-  }
-
-  void openFeedbackEmail() {
-    final loc = AppLocalizations.of(context);
-    final emailSubject = loc.email_subject;
-    final emailBody = loc.email_body;
-    final emailUri = Uri(
-      scheme: 'mailto',
-      path: Constants.CONTACT_EMAIL,
-      query:
-          'subject=$emailSubject'
-          '&body=$emailBody',
-    );
-
-    launchUrl(emailUri);
-  }
-
   /// Shows a confirmation dialog to delete all game sessions.
   /// Returns true if the user confirms the deletion, false otherwise.
   /// [gameTitle] is the title of the game session to be deleted.
@@ -462,22 +420,6 @@ class _HomeViewState extends State<HomeView> {
         );
       },
     );
-  }
-
-  Future<void> showRatingDialog() async {
-    await Constants.rateMyApp.init();
-    if (Constants.rateMyApp.shouldOpenDialog) {
-      Future.delayed(
-        const Duration(
-          milliseconds:
-              Constants.MINIMUM_SKELETON_SCREEN_DURATION +
-              Constants.POP_UP_DELAY,
-        ),
-        () {
-          if (mounted) startFeedbackDialogProcess();
-        },
-      );
-    }
   }
 
   /// The sorting button shown in the navigation bar.

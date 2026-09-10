@@ -17,6 +17,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:cabo_counter/services/rating_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         .add_Hm()
         .format(gameSession.createdAt.toLocal());
   }
+
+  bool get hasGameValues =>
+      gameSession.roundNumber > 1 || gameSession.isGameFinished;
+  bool get isGameFinished => gameSession.isGameFinished;
 
   final confettiController = ConfettiController(
     duration: const Duration(seconds: 10),
@@ -200,16 +205,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               showChevron: true,
                               trailing: Row(
                                 children: [
-                                  index + 1 != gameSession.roundNumber ||
-                                          gameSession.isGameFinished
-                                      ? (const Text(
-                                          '\u{2705}',
-                                          style: TextStyle(fontSize: 22),
-                                        ))
-                                      : const Text(
+                                  // Round is in progress
+                                  index + 1 == gameSession.roundNumber &&
+                                          !isGameFinished
+                                      ? const Text(
                                           '\u{23F3}',
                                           style: TextStyle(fontSize: 22),
-                                        ),
+                                        )
+                                      : (const Text(
+                                          '\u{2705}',
+                                          style: TextStyle(fontSize: 22),
+                                        )),
                                 ],
                               ),
                               onTap: () async {
@@ -226,24 +232,28 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ActiveGameListTile(
                             showChevron: true,
                             title: Text(loc.scoring_history),
-                            onTap: () => Navigator.push(
-                              context,
-                              adaptivePageRoute(
-                                builder: (_) =>
-                                    GraphView(gameSession: gameSession),
-                              ),
-                            ),
+                            onTap: hasGameValues
+                                ? () => Navigator.push(
+                                    context,
+                                    adaptivePageRoute(
+                                      builder: (_) =>
+                                          GraphView(gameSession: gameSession),
+                                    ),
+                                  )
+                                : null,
                           ),
                           ActiveGameListTile(
                             showChevron: true,
                             title: Text(loc.point_overview),
-                            onTap: () => Navigator.push(
-                              context,
-                              adaptivePageRoute(
-                                builder: (_) =>
-                                    PointsView(gameSession: gameSession),
-                              ),
-                            ),
+                            onTap: hasGameValues
+                                ? () => Navigator.push(
+                                    context,
+                                    adaptivePageRoute(
+                                      builder: (_) =>
+                                          PointsView(gameSession: gameSession),
+                                    ),
+                                  )
+                                : null,
                           ),
                         ],
                       ),
@@ -257,8 +267,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               title: Text(loc.end_game),
                               showChevron: true,
                               onTap:
-                                  (gameSession.roundNumber > 1 &&
-                                      !gameSession.isGameFinished)
+                                  hasGameValues && !gameSession.isGameFinished
                                   ? () => showEndGameDialog()
                                   : null,
                             ),
@@ -387,7 +396,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Takes a String [id] as input. It finds the index of the game
   /// session with the matching ID marks it as finished,
   void endGame() {
-    if (gameSession.isPointsLimitEnabled == true) return;
+    if (gameSession.isPointsLimitEnabled) return;
     gameSession.endGame();
 
     final db = Provider.of<AppDatabase>(context, listen: false);
@@ -509,8 +518,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     final int? nextRoundNumber =
         await Navigator.of(context, rootNavigator: true).push(
           adaptiveSheetRoute(
-            builder: (context) =>
-                RoundView(gameSession: gameSession, roundNumber: roundNumber),
+            builder: (context) => RoundView(
+              gameSession: gameSession,
+              roundNumber: roundNumber,
+              onRoundSubmitted: () => setState(() {}),
+            ),
           ),
         );
 
@@ -554,7 +566,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         iconColor: CustomTheme.kamikazeColor,
         title: loc.end_of_game_title,
         message: loc.end_of_game_message(winnerAmount, winner, winnerPoints),
-        onAfterPop: () => confettiController.stop(),
+        onAfterPop: () {
+          confettiController.stop();
+          RatingService.maybeShowRatingDialog(context);
+        },
       );
     }
   }
