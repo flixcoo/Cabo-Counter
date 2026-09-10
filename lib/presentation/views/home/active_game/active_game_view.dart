@@ -388,7 +388,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Takes a String [id] as input. It finds the index of the game
   /// session with the matching ID marks it as finished,
   void endGame() {
-    if (gameSession.isPointsLimitEnabled == true) return;
+    if (gameSession.isPointsLimitEnabled) return;
     gameSession.endGame();
 
     final db = Provider.of<AppDatabase>(context, listen: false);
@@ -510,8 +510,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     final int? nextRoundNumber =
         await Navigator.of(context, rootNavigator: true).push(
           adaptiveSheetRoute(
-            builder: (context) =>
-                RoundView(gameSession: gameSession, roundNumber: roundNumber),
+            builder: (context) => RoundView(
+              gameSession: gameSession,
+              roundNumber: roundNumber,
+              onRoundSubmitted: () => setState(() {}),
+            ),
           ),
         );
 

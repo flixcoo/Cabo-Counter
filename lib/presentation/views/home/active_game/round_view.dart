@@ -19,15 +19,17 @@ class RoundView extends StatefulWidget {
   ///
   /// - [roundNumber]: The number of the current round.
   /// - [gameSession]: The controller managing the current game session.
+  /// - [onRoundSubmitted]: Optional callback for when a round is submitted.
   const RoundView({
     super.key,
     required this.roundNumber,
     required this.gameSession,
+    this.onRoundSubmitted,
   });
 
   final int roundNumber;
-
   final GameSessionController gameSession;
+  final void Function()? onRoundSubmitted;
 
   @override
   _RoundViewState createState() => _RoundViewState();
@@ -463,6 +465,7 @@ class _RoundViewState extends State<RoundView> {
       );
     }
     List<int> bonusPlayers = widget.gameSession.updatePoints();
+    widget.onRoundSubmitted?.call();
     return bonusPlayers;
   }
 
@@ -537,8 +540,6 @@ class _RoundViewState extends State<RoundView> {
     if (bonusPlayersIndices.isNotEmpty) {
       await showBonusPopup(context, bonusPlayersIndices);
     }
-
-    //LocalStorageService.saveGameSessions();
 
     if (context.mounted) {
       // If the game is finished, pop the context and return to the previous screen.
