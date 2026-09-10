@@ -47,7 +47,7 @@ class PlayerDao extends DatabaseAccessor<AppDatabase> with _$PlayerDaoMixin {
             id: players[i].id,
             gameSessionId: gameId,
             name: players[i].name,
-            position: i,
+            position: players[i].position,
             totalScore: players[i].totalScore,
           ),
         );
