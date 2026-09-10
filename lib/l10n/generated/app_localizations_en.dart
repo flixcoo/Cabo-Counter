@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_game => 'Create Game';
 
   @override
+  String get created_at => 'Created At';
+
+  @override
   String get date => 'Date';
 
   @override
@@ -111,9 +114,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
-  String get point => 'Point';
-
-  @override
   String get email_body => 'I have the following feedback...';
 
   @override
@@ -128,9 +128,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get empty_graph_text =>
       'You must play at least one round for the game progress graph to be displayed.';
-
-  @override
-  String get no_games_created_yet => 'No games created yet';
 
   @override
   String get end_game => 'End Game';
@@ -158,7 +155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get end_of_game_title => 'End of Game';
 
   @override
-  String get created_at => 'Created At';
+  String get evaluation => 'Evaluation';
 
   @override
   String get export_data => 'Export Data';
@@ -246,6 +243,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get licenses => 'Licenses';
 
   @override
+  String get longest_win_streak => 'Longest Win Streak';
+
+  @override
   String get mail_developer => 'E-Mail the Developer';
 
   @override
@@ -273,6 +273,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_default_mode => 'No default mode';
 
   @override
+  String get no_games_created_yet => 'No games created yet';
+
+  @override
   String get no_license_text => 'No license available';
 
   @override
@@ -297,6 +300,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get players => 'Players';
 
   @override
+  String get point => 'Point';
+
+  @override
   String get point_limit => 'Point Limit';
 
   @override
@@ -311,6 +317,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get points => 'Points';
 
   @override
+  String get points_per_round => 'Points per Round';
+
+  @override
   String get pre_rating_message =>
       'Feedback helps me to continuously improve the app. Thank you!';
 
@@ -319,6 +328,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacy_policy => 'Privacy Policy';
+
+  @override
+  String get received_cabo_penalties => 'Received Cabo Penalties';
 
   @override
   String get report_error => 'Report a bug';
@@ -350,6 +362,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rounds => 'Rounds';
+
+  @override
+  String get rounds_won => 'Rounds Won';
 
   @override
   String get scoring_history => 'Scoring History';

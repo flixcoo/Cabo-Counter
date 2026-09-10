@@ -11,6 +11,7 @@ import 'package:cabo_counter/presentation/components/widgets/active_game/active_
 import 'package:cabo_counter/presentation/components/widgets/active_game/active_game_list_tile.dart';
 import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
 import 'package:cabo_counter/presentation/controllers/game_session_controller.dart';
+import 'package:cabo_counter/presentation/views/home/active_game/evaluation_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
@@ -229,6 +230,20 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                       ActiveGameListSet(
                         title: loc.statistics,
                         content: [
+                          ActiveGameListTile(
+                            showChevron: true,
+                            title: Text(loc.evaluation),
+                            onTap: hasGameValues
+                                ? () => Navigator.push(
+                                    context,
+                                    adaptivePageRoute(
+                                      builder: (_) => EvaluationView(
+                                        gameSession: gameSession,
+                                      ),
+                                    ),
+                                  )
+                                : null,
+                          ),
                           ActiveGameListTile(
                             showChevron: true,
                             title: Text(loc.scoring_history),

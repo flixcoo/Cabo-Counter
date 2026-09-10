@@ -199,6 +199,12 @@ abstract class AppLocalizations {
   /// **'Spiel erstellen'**
   String get create_game;
 
+  /// No description provided for @created_at.
+  ///
+  /// In de, this message translates to:
+  /// **'Erstellt am'**
+  String get created_at;
+
   /// No description provided for @date.
   ///
   /// In de, this message translates to:
@@ -265,12 +271,6 @@ abstract class AppLocalizations {
   /// **'Fertig'**
   String get done;
 
-  /// No description provided for @point.
-  ///
-  /// In de, this message translates to:
-  /// **'Punkt'**
-  String get point;
-
   /// No description provided for @email_body.
   ///
   /// In de, this message translates to:
@@ -300,12 +300,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Du musst mindestens eine Runde spielen, damit der Graph des Spielverlaufes angezeigt werden kann.'**
   String get empty_graph_text;
-
-  /// No description provided for @no_games_created_yet.
-  ///
-  /// In de, this message translates to:
-  /// **'Noch keine Spiele erstellt.'**
-  String get no_games_created_yet;
 
   /// No description provided for @end_game.
   ///
@@ -337,11 +331,11 @@ abstract class AppLocalizations {
   /// **'Spiel beendet'**
   String get end_of_game_title;
 
-  /// No description provided for @created_at.
+  /// No description provided for @evaluation.
   ///
   /// In de, this message translates to:
-  /// **'Erstellt am'**
-  String get created_at;
+  /// **'Auswertung'**
+  String get evaluation;
 
   /// No description provided for @export_data.
   ///
@@ -505,6 +499,12 @@ abstract class AppLocalizations {
   /// **'Lizenzen'**
   String get licenses;
 
+  /// No description provided for @longest_win_streak.
+  ///
+  /// In de, this message translates to:
+  /// **'Längste Siegesserie'**
+  String get longest_win_streak;
+
   /// No description provided for @mail_developer.
   ///
   /// In de, this message translates to:
@@ -559,6 +559,12 @@ abstract class AppLocalizations {
   /// **'Kein Modus'**
   String get no_default_mode;
 
+  /// No description provided for @no_games_created_yet.
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine Spiele erstellt.'**
+  String get no_games_created_yet;
+
   /// No description provided for @no_license_text.
   ///
   /// In de, this message translates to:
@@ -607,6 +613,12 @@ abstract class AppLocalizations {
   /// **'Spieler:innen'**
   String get players;
 
+  /// No description provided for @point.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkt'**
+  String get point;
+
   /// No description provided for @point_limit.
   ///
   /// In de, this message translates to:
@@ -631,6 +643,12 @@ abstract class AppLocalizations {
   /// **'Punkte'**
   String get points;
 
+  /// No description provided for @points_per_round.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkte pro Runde'**
+  String get points_per_round;
+
   /// No description provided for @pre_rating_message.
   ///
   /// In de, this message translates to:
@@ -648,6 +666,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Datenschutzerklärung'**
   String get privacy_policy;
+
+  /// No description provided for @received_cabo_penalties.
+  ///
+  /// In de, this message translates to:
+  /// **'Erhaltene Cabo-Strafen'**
+  String get received_cabo_penalties;
 
   /// No description provided for @report_error.
   ///
@@ -708,6 +732,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Runden'**
   String get rounds;
+
+  /// No description provided for @rounds_won.
+  ///
+  /// In de, this message translates to:
+  /// **'Gewonnene Runden'**
+  String get rounds_won;
 
   /// No description provided for @scoring_history.
   ///
