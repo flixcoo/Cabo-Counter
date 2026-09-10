@@ -34,14 +34,14 @@ class _GraphViewState extends State<GraphView> {
   final GlobalKey<SfCartesianChartState> _key = GlobalKey();
   bool hasZoomed = false;
 
-  late final ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
+  /*late final ZoomPanBehavior zoomPanBehavior = ZoomPanBehavior(
     enablePinching: true,
     enablePanning: true,
     enableDoubleTapZooming: true,
     enableMouseWheelZooming: true,
     zoomMode: ZoomMode.x,
     maximumZoomLevel: 0.05,
-  );
+  );*/
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +53,12 @@ class _GraphViewState extends State<GraphView> {
       appBar: AppBar(
         title: Text(loc.scoring_history),
         actions: [
-          AnimatedIconButton(
+          /*AnimatedIconButton(
             onPressed: isGraphAvailable && hasZoomed
                 ? () => zoomPanBehavior.reset()
                 : null,
             icon: IconService.reset,
-          ),
+          ),*/
           AnimatedIconButton(
             onPressed: isGraphAvailable ? () => shareImage() : null,
             icon: IconService.share,
@@ -88,7 +88,7 @@ class _GraphViewState extends State<GraphView> {
             key: _key,
             backgroundColor: CustomTheme.backgroundColor,
             enableAxisAnimation: false,
-            zoomPanBehavior: zoomPanBehavior,
+            /*zoomPanBehavior: zoomPanBehavior,
             onZoomEnd: (ZoomPanArgs args) {
               if (args.axis?.name != 'rounds') return;
               final bool zoomed = args.currentZoomFactor < 1;
@@ -101,7 +101,7 @@ class _GraphViewState extends State<GraphView> {
               if (hasZoomed) {
                 setState(() => hasZoomed = false);
               }
-            },
+            },*/
             legend: const Legend(
               alignment: ChartAlignment.near,
               overflowMode: LegendItemOverflowMode.scroll,
