@@ -322,10 +322,11 @@ class _HomeViewState extends State<HomeView> {
 
     switch (preRatingDecision) {
       case PreRatingDialogDecision.yes:
-        Constants.rateMyApp.showStarRateDialog(context);
+        if (mounted) Constants.rateMyApp.showStarRateDialog(context);
         break;
       case PreRatingDialogDecision.no:
-        badRatingDecision = await PopupService.showBadRatingDialog(context);
+        if (mounted)
+          badRatingDecision = await PopupService.showBadRatingDialog(context);
         if (badRatingDecision == BadRatingDialogDecision.email)
           openFeedbackEmail();
         break;
@@ -446,10 +447,19 @@ class _HomeViewState extends State<HomeView> {
     Once.runOnEveryNewVersion(
       key: 'whats_new_dialog',
       callback: () {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          Navigator.of(context)
-              .push(adaptiveSheetRoute(builder: (context) => const NewsView()));
-        });
+        Future.delayed(
+          const Duration(
+            milliseconds:
+                Constants.MINIMUM_SKELETON_SCREEN_DURATION +
+                Constants.POP_UP_DELAY,
+          ),
+          () {
+            if (mounted)
+              Navigator.of(context).push(
+                adaptiveSheetRoute(builder: (context) => const NewsView()),
+              );
+          },
+        );
       },
     );
   }
@@ -457,15 +467,16 @@ class _HomeViewState extends State<HomeView> {
   Future<void> showRatingDialog() async {
     await Constants.rateMyApp.init();
     if (Constants.rateMyApp.shouldOpenDialog) {
-      await Future.delayed(
+      Future.delayed(
         const Duration(
           milliseconds:
               Constants.MINIMUM_SKELETON_SCREEN_DURATION +
               Constants.POP_UP_DELAY,
         ),
+        () {
+          if (mounted) startFeedbackDialogProcess();
+        },
       );
-      if (!mounted) return;
-      startFeedbackDialogProcess();
     }
   }
 

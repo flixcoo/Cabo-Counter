@@ -183,7 +183,7 @@ class _SettingsViewState extends State<SettingsView> {
                       final status = await DataTransferService.importJsonFile(
                         context,
                       );
-                      showFeedbackDialog(status);
+                      if (mounted) showFeedbackDialog(status);
                       widget.onSessionsUpdated.call();
                     },
                   ),
