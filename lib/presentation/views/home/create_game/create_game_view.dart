@@ -192,7 +192,6 @@ class _CreateGameViewState extends State<CreateGameView> {
                           setState(() {
                             if (oldIndex < playerNameControllers.length &&
                                 newIndex <= playerNameControllers.length) {
-                              if (newIndex > oldIndex) newIndex--;
                               final item = playerNameControllers.removeAt(
                                 oldIndex,
                               );
