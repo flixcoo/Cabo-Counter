@@ -29,8 +29,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton> {
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = widget.onPressed != null;
-    final bool applyPadding =
-        widget.icon != IconService.back && widget.icon != IconService.close;
+    final bool applyPadding = widget.icon != IconService.back;
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 100),

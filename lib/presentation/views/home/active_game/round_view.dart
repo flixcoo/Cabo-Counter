@@ -93,7 +93,7 @@ class _RoundViewState extends State<RoundView> {
       appBar: AppBar(
         leading: AnimatedIconButton(
           onPressed: () => Navigator.of(context).pop(-1),
-          icon: IconService.back,
+          icon: IconService.close,
         ),
         title: Text(loc.results),
         actions: [
