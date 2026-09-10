@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Generated schema for a single cabo counter game",
   "type": "object",
   "properties": {
@@ -16,36 +16,34 @@
       "type": "array",
       "minItems": 2,
       "maxItems": 5,
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "gameSessionId": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "position": {
-              "type": "integer"
-            },
-            "totalScore": {
-              "type": "integer"
-            }
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "required": [
-            "id",
-            "gameSessionId",
-            "name",
-            "position",
-            "totalScore"
-          ],
-          "additionalProperties": false
-        }
-      ]
+          "gameSessionId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "totalScore": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "gameSessionId",
+          "name",
+          "position",
+          "totalScore"
+        ],
+        "additionalProperties": false
+      }
     },
     "pointLimit": {
       "type": ["integer", "null"]
@@ -58,56 +56,48 @@
     },
     "roundList": {
       "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "gameSessionId": {
-              "type": "string"
-            },
-            "caboPlayerIndex": {
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "gameSessionId": {
+            "type": "string"
+          },
+          "caboPlayerIndex": {
+            "type": "integer"
+          },
+          "kamikazePlayerIndex": {
+            "type": ["integer", "null"]
+          },
+          "scores": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
               "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": ["integer", "null"]
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
             }
           },
-          "required": [
-            "id",
-            "gameSessionId",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ],
-          "additionalProperties": false
-        }
-      ]
+          "scoreUpdates": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "gameSessionId",
+          "caboPlayerIndex",
+          "kamikazePlayerIndex",
+          "scores",
+          "scoreUpdates"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

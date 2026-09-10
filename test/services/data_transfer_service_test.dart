@@ -130,5 +130,29 @@ void main() {
       var result = await DataTransferService.validateJsonSchema(jsonFile, true);
       expect(result, isTrue);
     });
+
+    test('Rejects malformed json', () async {
+      // Corrupt the 2nd player
+      final gameMap = json.decode(
+        json.encode(gameSession2.toJson()),
+      ) as Map<String, dynamic>;
+      (gameMap['players'] as List)[1] = {'name': 'incomplete'};
+      var result = await DataTransferService.validateJsonSchema(
+        json.encode(gameMap),
+        false,
+      );
+      expect(result, isFalse);
+
+      // Corrupt the 2n round's scores with a non-integer entry.
+      final roundMap = json.decode(
+        json.encode(gameSession2.toJson()),
+      ) as Map<String, dynamic>;
+      ((roundMap['roundList'] as List)[1]['scores'] as List)[1] = 'not-an-int';
+      result = await DataTransferService.validateJsonSchema(
+        json.encode(roundMap),
+        false,
+      );
+      expect(result, isFalse);
+    });
   });
 }
