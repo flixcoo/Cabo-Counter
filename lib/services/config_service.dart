@@ -6,22 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Provides methods to initialize, retrieve, update, and reset configuration values such as point limit,
 /// cabo penalty, and game mode. Ensures that user preferences are stored locally and persist across app restarts.
 class ConfigService {
-  /// Current point limit for every game.
   static int _pointLimit = 100;
-
-  /// Default value of [_pointLimit]
   static const int _defaultPointLimit = 100;
-
-  /// Key for the stored point limit value.
   static const String _keyPointLimit = 'pointLimit';
 
-  /// Current cabo penalty for every game.
   static int _caboPenalty = 5;
-
-  /// Key for the stored cabo penalty value.
   static const String _keyCaboPenalty = 'caboPenalty';
-
-  /// Default value of [_caboPenalty]
   static const int _defaultCaboPenalty = 5;
 
   /// Current game mode for every game.<br>
@@ -29,62 +19,43 @@ class ConfigService {
   /// [0] = point limit <br>
   /// [1] = unlimited
   static int _gameMode = -1;
-
-  /// Default value of [_gameMode]
   static const _defaultGameMode = -1;
-
-  /// Key for the stored game mode value.
   static const String _keyGameMode = 'gameMode';
 
   /// Migration done flag.
   /// false = migration not done, true = migration done
   static bool _migrationDone = false;
-
-  /// Default value of [_migrationDone]
   static const bool _defaultMigrationDone = false;
-
-  /// Key for the stored migration done flag.
   static const String _keyMigrationDone = 'migrationDone';
 
   /// Sorting option for the game list in the main menu.
   /// true = sort by date, false = sort by title
   static bool _sortingOption = true;
-
-  /// Default value of [_sortingOption]
   static const bool _defaultSortingOption = true;
-
-  /// Key for the stored sorting option.
   static const String _keySortingOption = 'sortingOption';
 
   /// Sorting direction for the game list in the main menu.
   /// true = descending, false = ascending
   static bool _sortingDirection = true;
-
-  /// Default value of [_sortingDirection]
   static const bool _defaultSortingDirection = true;
-
-  /// Key for the stored sorting direction.
   static const String _keySortingDirection = 'sortingDirection';
 
   /// Show active games only flag.
   /// false = show all games, true = show only active games
   static bool _showActiveGamesOnly = false;
-
-  /// Default value of [_showActiveGamesOnly]
   static const bool _defaultShowActiveGamesOnly = false;
-
-  /// Key for the stored show active games only flag.
   static const String _keyShowActiveGamesOnly = 'showActiveGamesOnly';
 
   /// Should the shuffle player rotate?
   /// true = rotate shuffle player, false = last round loser shuffles
   static bool _rotateShuffler = false;
-
-  /// Default value of [_rotateShuffler]
   static const bool _defaultRotateShuffler = false;
-
-  /// Key for the stored rotate shuffler flag.
   static const String _keyRotateShuffler = 'rotateShuffler';
+
+  /// Whether the app should have vibrations
+  static bool _vibrationsEnabled = true;
+  static const bool _defaultVibrationsEnabled = true;
+  static const String _keyVibrationsEnabled = 'vibrationsEnabled';
 
   static Future<void> initConfig() async {
     final prefs = await SharedPreferences.getInstance();
@@ -103,6 +74,8 @@ class ConfigService {
         prefs.getBool(_keyShowActiveGamesOnly) ?? _defaultShowActiveGamesOnly;
     _rotateShuffler =
         prefs.getBool(_keyRotateShuffler) ?? _defaultRotateShuffler;
+    _vibrationsEnabled =
+        prefs.getBool(_keyVibrationsEnabled) ?? _defaultVibrationsEnabled;
 
     // Save the initial values to SharedPreferences
     prefs.setInt(_keyPointLimit, _pointLimit);
@@ -113,6 +86,17 @@ class ConfigService {
     prefs.setBool(_keySortingDirection, _sortingDirection);
     prefs.setBool(_keyShowActiveGamesOnly, _showActiveGamesOnly);
     prefs.setBool(_keyRotateShuffler, _rotateShuffler);
+    prefs.setBool(_keyVibrationsEnabled, _vibrationsEnabled);
+  }
+
+  static bool getVibrationsEnabled() {
+    return _vibrationsEnabled;
+  }
+
+  static Future<void> setVibrationsEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyVibrationsEnabled, enabled);
+    _vibrationsEnabled = enabled;
   }
 
   /// Retrieves the current game mode.

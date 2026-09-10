@@ -1,0 +1,52 @@
+name: Bug
+description: Create a bug report
+labels: 'task : bug'
+title: "<enter short title here>"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the error behavior clearly and concisely
+      placeholder: |
+        - What exactly is the unexpected behavior?
+        - What are the effects of the error?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Describe how the bug can be reproduced
+      placeholder: |
+        - 1. Step 1  
+        - 2. Step 2  
+        - 3. ...
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Specify the platforms on which this error occurs
+      multiple: true
+      options: ['Android', 'iOS']
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution Idea
+      description: Describe how the problem can be solved
+      placeholder: |
+        - Modify Button X so that ...
+        - Extend Function X so that ...
+        - Customize the design so that ...
+
+  - type: textarea
+    attributes:
+      label: Related Issues
+      description: Links to similar issues or PRs
+      placeholder: |
+        - Follows up on Issue #35
+        - Replaces Issue #12
+        - Requires implementation of #43

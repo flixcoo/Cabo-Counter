@@ -2,6 +2,8 @@
 # See https://github.com/flutter/flutter/issues/128635 for more context.
 
 # Miscellaneous
+*.resolved
+.kotlin
 *.class
 *.lock
 *.log
@@ -115,6 +117,7 @@ local.properties
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 **/xcuserdata/
+*.resolved
 
 # Windows
 **/windows/flutter/ephemeral/

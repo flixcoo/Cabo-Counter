@@ -29,66 +29,65 @@ class MainMenuSkeleton extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: CupertinoListTile(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                title: Container(
-                  width: 170,
-                  height: 25,
-                  decoration: BoxDecoration(
-                    color: CustomTheme.white.withAlpha(50),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              title: Container(
+                width: 170,
+                height: 25,
+                decoration: BoxDecoration(
+                  color: CustomTheme.white.withAlpha(50),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                subtitle: Container(
-                  width: 120,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    color: CustomTheme.white.withAlpha(50),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+              ),
+              subtitle: Container(
+                width: 120,
+                height: 15,
+                decoration: BoxDecoration(
+                  color: CustomTheme.white.withAlpha(50),
+                  borderRadius: BorderRadius.circular(3),
                 ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(
-                      width: 5,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(width: 5),
+                  Container(
+                    width: 15,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(3),
                     ),
-                    Container(
-                      width: 15,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(3),
-                      ),
+                  ),
+                  const SizedBox(width: 3),
+                  Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    const SizedBox(width: 3),
-                    Container(
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                  ),
+                  const SizedBox(width: 15),
+                  Container(
+                    width: 15,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(3),
                     ),
-                    const SizedBox(width: 15),
-                    Container(
-                      width: 15,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(3),
-                      ),
+                  ),
+                  const SizedBox(width: 3),
+                  Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.white.withAlpha(50),
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    const SizedBox(width: 3),
-                    Container(
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: CustomTheme.white.withAlpha(50),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

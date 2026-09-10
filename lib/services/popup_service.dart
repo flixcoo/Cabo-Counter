@@ -1,72 +1,64 @@
-import 'dart:io';
-
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
-import 'package:cabo_counter/presentation/components/widgets/custom_dialog_action.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup.dart';
+import 'package:cabo_counter/presentation/components/widgets/popups/custom_popup_action.dart';
 import 'package:flutter/material.dart';
 
 class PopupService {
-  /// Displays an informational pop-up dialog with a title, message, and a single action button.
-  /// The dialog adapts its style based on the platform (iOS or Android).
-  /// [context]: The BuildContext to show the dialog in.
-  /// [title]: The title of the pop-up.
+  /// Displays an informational pop-up with a title, message and a single
+  /// confirming action, styled with the app's [CustomPopup] design.
+  ///
+  /// [title]: The headline of the pop-up.
   /// [message]: The message content of the pop-up.
+  /// [icon]: Optional accent icon shown above the title.
+  /// [onAfterPop]: Optional callback executed after the pop-up is dismissed.
   /// Returns a Future that completes when the dialog is dismissed.
   static Future<void> showInfoPopup({
     required BuildContext context,
-    required Widget title,
-    required Widget content,
+    required String title,
+    required String message,
+    IconData? icon,
+    Color? iconColor,
     VoidCallback? onAfterPop,
   }) async {
-    await showAdaptiveDialog(
+    final loc = AppLocalizations.of(context);
+    await CustomPopup.show<void>(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
-        title: title,
-        content: content,
-        actions: [
-          Platform.isIOS
-              ? CupertinoDialogAction(
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    if (onAfterPop != null) onAfterPop();
-                  },
-                )
-              : TextButton(
-                  child: Text(AppLocalizations.of(context).ok),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    if (onAfterPop != null) onAfterPop();
-                  },
-                )
-        ],
-      ),
+      title: title,
+      message: message,
+      icon: icon,
+      iconColor: iconColor,
+      actions: [
+        CustomPopupAction<void>(
+          label: loc.ok,
+          style: CustomPopupActionStyle.primary,
+          onPressed: onAfterPop,
+        ),
+      ],
     );
   }
 
-  /// Displays a selection pop-up dialog with a title, message, and a list of actions.
-  /// The dialog adapts its style based on the platform (iOS or Android).
-  /// [context]: The BuildContext to show the dialog in.
-  /// [title]: The title of the pop-up.
+  /// Displays a selection pop-up with a title, message and a list of actions,
+  /// styled with the app's [CustomPopup] design.
+  ///
+  /// [title]: The headline of the pop-up.
   /// [message]: The message content of the pop-up.
-  /// [dialogActions]: A list of CustomDialogAction widgets representing the actions available in the pop-up.
-  /// Returns a Future that completes when the dialog is dismissed.
+  /// [actions]: The [CustomPopupAction]s available in the pop-up.
+  /// [icon]: Optional accent icon shown above the title.
+  /// Returns a Future that completes with the tapped action's value.
   static Future<T?> showSelectionPopup<T>({
     required BuildContext context,
-    required Widget title,
-    required Widget message,
-    required List<CustomDialogAction<T>> actions,
+    required String title,
+    required String message,
+    required List<CustomPopupAction<T>> actions,
+    IconData? icon,
   }) async {
-    return await showAdaptiveDialog<T>(
+    return await CustomPopup.show<T>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog.adaptive(
-          title: title,
-          content: message,
-          actions: actions.map((action) => action.build(context)).toList(),
-        );
-      },
+      title: title,
+      message: message,
+      icon: icon,
+      actions: actions,
     );
   }
 
@@ -76,27 +68,30 @@ class PopupService {
   /// PreRatingDialogDecision.no: User does not like the app.
   /// PreRatingDialogDecision.cancel: User cancels the dialog.
   static Future<PreRatingDialogDecision> showPreRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<PreRatingDialogDecision>(
           context: context,
+          icon: Icons.favorite_rounded,
+          title: loc.pre_rating_title,
+          message: loc.pre_rating_message,
           actions: [
-            CustomDialogAction(
+            CustomPopupAction(
               returnValue: PreRatingDialogDecision.yes,
-              isDefaultAction: true,
-              actionText: AppLocalizations.of(context).yes,
+              isEmphasized: true,
+              label: loc.yes,
             ),
-            CustomDialogAction(
+            CustomPopupAction(
               returnValue: PreRatingDialogDecision.no,
-              actionText: AppLocalizations.of(context).no,
+              label: loc.no,
             ),
-            CustomDialogAction(
+            CustomPopupAction(
               returnValue: PreRatingDialogDecision.cancel,
-              isDestructiveAction: true,
-              actionText: AppLocalizations.of(context).cancel,
-            )
+              style: CustomPopupActionStyle.secondary,
+              label: loc.cancel,
+            ),
           ],
-          title: Text(AppLocalizations.of(context).pre_rating_title),
-          message: Text(AppLocalizations.of(context).pre_rating_message),
         ) ??
         PreRatingDialogDecision.cancel;
   }
@@ -106,47 +101,26 @@ class PopupService {
   /// BadRatingDialogDecision.email: User wants to send an email for feedback.
   /// BadRatingDialogDecision.cancel: User cancels the dialog.
   static Future<BadRatingDialogDecision> showBadRatingDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
+    final loc = AppLocalizations.of(context);
     return await PopupService.showSelectionPopup<BadRatingDialogDecision>(
           context: context,
-          title: Text(AppLocalizations.of(context).bad_rating_title),
-          message: Text(AppLocalizations.of(context).bad_rating_message),
+          icon: Icons.feedback_outlined,
+          title: loc.bad_rating_title,
+          message: loc.bad_rating_message,
           actions: [
-            CustomDialogAction(
-              actionText: AppLocalizations.of(context).contact_email,
+            CustomPopupAction(
+              label: loc.contact_email,
               returnValue: BadRatingDialogDecision.email,
             ),
-            CustomDialogAction(
-              actionText: AppLocalizations.of(context).cancel,
+            CustomPopupAction(
+              label: loc.cancel,
+              style: CustomPopupActionStyle.secondary,
               returnValue: BadRatingDialogDecision.cancel,
             ),
           ],
         ) ??
         BadRatingDialogDecision.cancel;
-  }
-
-  static Future<bool> showDeleteGameDialog({
-    required BuildContext context,
-    required String gameTitle,
-  }) async {
-    return await PopupService.showSelectionPopup<bool>(
-          context: context,
-          title: Text(AppLocalizations.of(context).delete_game_title),
-          message:
-              Text(AppLocalizations.of(context).delete_game_message(gameTitle)),
-          actions: [
-            CustomDialogAction(
-              returnValue: false,
-              isDefaultAction: true,
-              actionText: AppLocalizations.of(context).cancel,
-            ),
-            CustomDialogAction(
-              isDestructiveAction: true,
-              returnValue: true,
-              actionText: AppLocalizations.of(context).delete,
-            ),
-          ],
-        ) ??
-        false;
   }
 }

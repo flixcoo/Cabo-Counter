@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/opacity_button.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -7,17 +8,21 @@ import 'package:flutter/cupertino.dart';
 class EmptyFilterPlaceholder extends StatelessWidget {
   final void Function() toggleShowOnlyActiveGames;
 
-  const EmptyFilterPlaceholder(
-      {super.key, required this.toggleShowOnlyActiveGames});
+  const EmptyFilterPlaceholder({
+    super.key,
+    required this.toggleShowOnlyActiveGames,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 30),
         Center(
-          child: Icon(
+          child: AppIcon(
             IconService.visibility_off,
             size: 60,
             color: CustomTheme.primaryColor,
@@ -27,14 +32,15 @@ class EmptyFilterPlaceholder extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
           child: Text(
-            AppLocalizations.of(context).empty_filter_text,
+            loc.empty_filter_text,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16),
           ),
         ),
-        CupertinoButton(
-            onPressed: () => toggleShowOnlyActiveGames(),
-            child: Text(AppLocalizations.of(context).empty_filter_button))
+        OpacityButton.text(
+          onPressed: () => toggleShowOnlyActiveGames(),
+          text: loc.empty_filter_button,
+        ),
       ],
     );
   }

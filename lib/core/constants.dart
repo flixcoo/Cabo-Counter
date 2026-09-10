@@ -13,54 +13,54 @@ class Constants {
 
   /// Links to various social media profiles and resources related to the app.
   /// URL to my Instagram profile
-  static const String kInstagramLink = 'https://instagram.felixkirchner.de';
+  static const String WEBSITE_LINK = 'https://felixkirchner.de';
 
   /// URL to my GitHub profile
-  static const String kGithubLink = 'https://github.felixkirchner.de';
+  static const String GITHUB_LINK = 'https://github.felixkirchner.de';
 
   /// URL to the GitHub issues page for reporting bugs or requesting features.
-  static const String kGithubIssuesLink =
+  static const String GITHUB_ISSUE_LINK =
       'https://github.com/flixcoo/cabo-counter/issues';
 
   /// Official email address for user inquiries and support.
-  static const String kEmail = 'cabocounter@felixkirchner.de';
+  static const String CONTACT_EMAIL = 'cabocounter@felixkirchner.de';
 
   /// URL to the app's privacy policy page.
-  static const String kPrivacyPolicyLink =
-      'https://felixkirchner.de/projects/cabo-counter/privacy/';
+  static const String PRIVACY_POLICY_LINK = 'https://cabocounter.app/privacy';
 
   /// URL to the app's imprint page, containing legal information.
-  static const String kLegalLink = 'https://felixkirchner.de/legal';
+  static const String LEGAL_LINK = 'https://cabocounter.app/legal';
 
   /// URL to my PayPal donation page for users who wish to support the app.
-  static const String kDonateLink = 'https://www.paypal.me/flixcoo';
+  static const String DONATE_LINK = 'https://www.paypal.me/flixcoo';
 
   /// Instance of [RateMyApp] configured to prompt users for app store ratings.
   static RateMyApp rateMyApp = RateMyApp(
-      appStoreIdentifier: '6751843294',
-      minDays: 14,
-      remindDays: 28,
-      minLaunches: 10,
-      remindLaunches: 30);
+    appStoreIdentifier: '6751843294',
+    minDays: 14,
+    remindDays: 28,
+    minLaunches: 10,
+    remindLaunches: 30,
+  );
 
   /// Delay in milliseconds before a pop-up appears.
-  static const int kPopUpDelay = 300;
+  static const int POP_UP_DELAY = 300;
 
   /// Delay in milliseconds before the round view appears after the previous one is closed.
-  static const int kRoundViewDelay = 600;
+  static const int ROUND_VIEW_DELAY = 600;
 
   /// Duration in milliseconds for the fade-in animation of texts.
-  static const int kFadeInDuration = 300;
+  static const int FADE_IN_DURATION = 300;
 
   /// Duration in milliseconds for the keyboard to fully disappear.
-  static const int kKeyboardDelay = 300;
+  static const int KEYBOARD_DELAY = 300;
 
   /// Minimum duration in milliseconds that the skeleton screen should be displayed.
-  static const int kMinimumSkeletonScreenDuration = 500;
+  static const int MINIMUM_SKELETON_SCREEN_DURATION = 500;
 
   /// Size of the icons used on the buttons in the nav bar.
-  static const double kNavBarIconSize = 28.0;
+  static const double NAVBAR_ICON_SIZE = 28.0;
 
   /// Standard divider widget for material bottom sheets.
-  static const Widget bottomSheetDivider = Divider(indent: 10, endIndent: 10);
+  static const Widget BOTTOM_SHEET_DIVIDER = Divider(indent: 10, endIndent: 10);
 }

@@ -3,86 +3,63 @@ name: Push Pipeline
 on:
   push:
     branches:
-     - "develop"
-     - "main"
+      - "development"
+      - "main"
+
+permissions:
+  contents: write
 
 jobs:
-  generate_licenses:
+  version:
+    name: "Bump version no."
     runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v1.5.3
-      with: 
-        flutter-version: '3.35.6'
-        channel: "stable"
-
-    - name: Get dependencies
-      run: flutter pub get
-
-    - name: Generate oss_licenses.dart
-      run: flutter pub run dart_pubspec_licenses:generate --output lib/presentation/views/about/licenses/oss_licenses.dart
-
-    - name: Check for changes
-      id: check_changes
-      run: |
-        if [[ $(git status --porcelain) ]]; then
-          echo "changes_detected=true" >> $GITHUB_OUTPUT
-        else
-          echo "changes_detected=false" >> $GITHUB_OUTPUT
-        fi
-            
-    - name: Commit Changes
-      if: steps.check_changes.outputs.changes_detected == 'true'
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git add .
-        git commit -m "Actions: Licenses updated [skip ci]"
-        git push
-
-  lint:
-    runs-on: ubuntu-latest
-    needs: generate_licenses
-    if: always()
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set Up Flutter
-        uses: subosito/flutter-action@v2
+        uses: actions/checkout@v5
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
-          
-      - name: Check Formatting
-        run: flutter analyze
-          
-  format:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Bump version
+        uses: stikkyapp/update-pubspec-version@v2
+        with:
+          strategy: 'patch'
+          bump-build: true
+          path: './pubspec.yaml'
+
+      - name: Commit version bump
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git pull --rebase --autostash
+          git commit -m "Actions: Updating version [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
+
+  licenses:
+    name: "Generate OSS Licenses"
     runs-on: ubuntu-latest
-    needs: lint
-    if: ${{ failure() && needs.lint.result == 'failure'}} 
+    needs: version
+    if: ${{ always() }}
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
-          
-      - name: Get & upgrade dependencies
-        run: |
-          flutter pub get
-          flutter pub upgrade --major-versions
-          
-      - name: Auto-format
-        run: |
-          dart format .
-          dart fix --apply
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate oss_licenses.dart
+        run: flutter pub run dart_pubspec_licenses:generate --output lib/presentation/views/about/licenses/oss_licenses.dart
 
       - name: Check for changes
         id: check_changes
@@ -92,53 +69,175 @@ jobs:
           else
             echo "changes_detected=false" >> $GITHUB_OUTPUT
           fi
-            
+
       - name: Commit Changes
         if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull --rebase --autostash
           git add .
-          git commit -m "Actions: Auto-formatting [skip ci]"
-          git push
-    
-  test:
+          git commit -m "Actions: Updated licenses [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
+
+  localizations:
+    name: "Localizations"
     runs-on: ubuntu-latest
+    needs: licenses
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
+          channel: stable
 
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Remove unused localization keys
+        run: dart run remove_unused_localizations
+
+      - name: Sort .arb-Files
+        run: |
+          shopt -s nullglob
+          for file in lib/l10n/arb/app_*.arb; do
+            echo "Sorting $file"
+            dart run arb_utils sort "$file"
+          done
+
+      - name: Generate localizations
+        run: flutter gen-l10n --no-use-deferred-loading
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [ -n "$(git status --porcelain lib/l10n)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit generated localizations
+        if: steps.check_changes.outputs.has_changes == 'true'
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          git fetch origin "$BRANCH_NAME"
+          git checkout "$BRANCH_NAME"
+
+          if [ -n "$(git status --porcelain lib/l10n)" ]; then
+             git config --global user.name "GitHub Actions"
+              git config --global user.email "actions@github.com"
+              git pull --rebase --autostash
+              git add .
+              git commit -m "Actions: Localizations updated [skip ci]"
+              git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No changes to commit"
+          fi
+
+
+
+  format:
+    name: "Format code"
+    runs-on: ubuntu-latest
+    needs: localizations
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Sort pubspec.yaml
+        run: dart run sort_pubspec_dependencies
+
+      - name: Check code format
+        id: check_format
+        continue-on-error: true
+        run: flutter analyze lib test
+
+      - name: Format code
+        if: steps.check_format.outcome == 'failure'
+        run: |
+          dart fix --apply lib
+          dart fix --apply test
+
+      - name: Commit changes
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          git fetch origin "$BRANCH_NAME"
+          git checkout "$BRANCH_NAME"
           
+          if [ -n "$(git status --porcelain lib test pubspec.yaml)" ]; then
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+            git add lib test pubspec.yaml
+            git commit -m "Auto-format code [skip ci]"
+            git pull --rebase --autostash origin "$BRANCH_NAME"
+            git push origin HEAD:$BRANCH_NAME
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Verify format
+        run: flutter analyze lib test
+
+  test:
+    runs-on: ubuntu-latest
+    name: "Testing code"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
       - name: Run Tests
         run: flutter test
 
-    
   build:
+    name: "Building for Android"
     runs-on: ubuntu-latest
-    if: false # skips job
-    needs: [lint, format, test]
-    
+    needs: test
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Java (Temurin 17)
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
+          channel: stable
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Analyze project source
-        run: flutter analyze --fatal-infos
-        
-      - name: Run App
-        run: flutter run
+      - name: Build APK
+        run: flutter build apk --release

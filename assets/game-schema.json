@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Generated schema for a single cabo counter game",
   "type": "object",
   "properties": {
@@ -9,120 +9,107 @@
     "createdAt": {
       "type": "string"
     },
-    "gameTitle": {
+    "title": {
       "type": "string"
     },
     "players": {
       "type": "array",
-      "items": [
-       {
-          "type": "object",
-          "properties": {
-            "playerId": {
-              "type": "string"
-            },
-            "gameId": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "position": {
-              "type": "integer"
-            },
-            "totalScore": {
-              "type": "integer"
-            }
+      "minItems": 2,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "required": [
-            "playerId",
-            "gameId",
-            "name",
-            "position",
-            "totalScore"
-          ]
-        }
-      ]
+          "gameSessionId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "totalScore": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "gameSessionId",
+          "name",
+          "position",
+          "totalScore"
+        ],
+        "additionalProperties": false
+      }
     },
     "pointLimit": {
-      "type": "integer"
+      "type": ["integer", "null"]
     },
     "caboPenalty": {
       "type": "integer"
     },
-    "isPointsLimitEnabled": {
-      "type": "boolean"
-    },
     "isGameFinished": {
       "type": "boolean"
     },
-    "winner": {
-      "type": "string"
-    },
-    "roundNumber": {
-      "type": "integer"
-    },
     "roundList": {
       "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "roundNum": {
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "gameSessionId": {
+            "type": "string"
+          },
+          "caboPlayerIndex": {
+            "type": "integer"
+          },
+          "kamikazePlayerIndex": {
+            "type": ["integer", "null"]
+          },
+          "scores": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
               "type": "integer"
-            },
-            "caboPlayerIndex": {
-              "type": "integer"
-            },
-            "kamikazePlayerIndex": {
-              "type": "null"
-            },
-            "scores": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "scoreUpdates": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
             }
           },
-          "required": [
-            "roundNum",
-            "caboPlayerIndex",
-            "kamikazePlayerIndex",
-            "scores",
-            "scoreUpdates"
-          ]
-        }
-      ]
+          "scoreUpdates": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "gameSessionId",
+          "caboPlayerIndex",
+          "kamikazePlayerIndex",
+          "scores",
+          "scoreUpdates"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
     "id",
     "createdAt",
-    "gameTitle",
+    "title",
     "players",
     "pointLimit",
     "caboPenalty",
-    "isPointsLimitEnabled",
     "isGameFinished",
-    "winner",
-    "roundNumber",
     "roundList"
-  ]
+  ],
+  "additionalProperties": false
 }
 

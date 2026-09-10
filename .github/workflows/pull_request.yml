@@ -5,34 +5,89 @@ on:
 
 jobs:
   lint:
+    name: "Lint code"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      
+        uses: actions/checkout@v5
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
-          
+          channel: stable
+
       - name: Check Formatting
         run: flutter analyze
           
   test:
+    name: "Test code"
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
-          channel: 'stable'
+          channel: stable
 
       - name: Get dependencies
         run: flutter pub get
           
       - name: Run Tests
         run: flutter test
+
+  untranslated_localizations:
+    name: "Check for untranslated localizations"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Check for untranslated messages
+        run: |
+          flutter gen-l10n --no-use-deferred-loading
+          
+          UNTRANSLATED_FILE=lib/l10n/arb/untranslated_messages.json
+          if [ ! -f "$UNTRANSLATED_FILE" ]; then
+            echo "Expected $UNTRANSLATED_FILE to be generated, but it does not exist."
+            exit 1
+          fi
+          
+          CONTENT=$(tr -d '[:space:]' < "$UNTRANSLATED_FILE")
+          if [ "$CONTENT" != "{}" ]; then
+            echo "Found untranslated messages:"
+            cat "$UNTRANSLATED_FILE"
+            exit 1
+          fi
+          
+          echo "All messages translated."
+
+  unused_localizations:
+      name: "Check for unused localizations"
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v5
+
+        - name: Set Up Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: stable
+
+        - name: Check for unused localization keys
+          run: |
+            dart run remove_unused_localizations --keep-unused
+
+            if [ -f "unused_localization_keys.txt" ]; then
+              echo "Found unused localization keys in unused_localization_keys.txt"
+              cat unused_localization_keys.txt
+              exit 1
+            fi
+
+            echo "No unused localization keys found."

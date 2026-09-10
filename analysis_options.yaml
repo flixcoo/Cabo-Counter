@@ -1,4 +1,9 @@
-include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    - lib/presentation/views/about/licenses/oss_licenses.dart
+    - build/**
+    - android/**
+    - ios/**
 
 linter:
   rules:
@@ -11,3 +16,4 @@ linter:
     prefer_const_literals_to_create_immutables: true
     unnecessary_const: true
     lines_longer_than_80_chars: false
+    constant_identifier_names: false

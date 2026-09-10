@@ -1,67 +1,66 @@
-# CABO Counter
+<p align="center">
+    <img alt="Cabo Counter Logo" src="/artefacts/app-logo.webp" width="200"/>
+    <h2 align="center">Cabo Counter</h2>
+</p>
+<p align="center">
+An open-source app to track your Cabo games, manage rounds and get detailed statistics about your scores. 
+</p>
+<p align="center">
+    <a href="https://apps.apple.com/gb/app/cabo-counter/id6751843294">
+      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-US" 
+           alt="Download on the App Store" 
+           height="48"
+      />
+    </a>
+<!--
+    <a href="https://play.google.com/">
+      <img alt="Get it on Google Play" 
+           title="Google Play" 
+           src="https://raw.githubusercontent.com/pd4d10/git-touch/main/assets/google-play-badge.png" 
+           height="48" 
+      />
+    </a>
+-->
+</p>
 
-![Version](https://img.shields.io/badge/App--Version-1.0.6-orange)
-![Flutter](https://img.shields.io/badge/Flutter-3.35.6-027DFD?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.9.2-027DFD?logo=dart)
-![iOS18](https://img.shields.io/badge/iOS-18.7.1-white?logo=apple)
-![iOS26](https://img.shields.io/badge/iOS-26.1-white?logo=apple)
+![Version](https://img.shields.io/badge/App--Version-1.0.7-orange)![Flutter](https://img.shields.io/badge/Flutter-3.38.6-027DFD?logo=flutter)
+![iOS26](https://img.shields.io/badge/iOS-26-white?logo=apple)
 ![Android16](https://img.shields.io/badge/Android-16-3DDC84?logo=android)
-![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github) 
+![GitHub Last Commit](https://img.shields.io/github/last-commit/flixcoo/Cabo-Counter?logo=github)
 
-Cabo Counter is a Flutter-based mobile app for automated score tracking in the card game CABO. It helps players effortlessly manage scores and automatically calculate round results.
+## Screenshots
 
-🔗 App Store: [Cabo Counter on Apple App Store](https://apps.apple.com/de/app/cabo-counter/id6751843294)  
-🔗 Play Store: (coming soon)
+<table align="center" cellspacing="8">
+  <tr>
+    <td><img src="/artefacts/screenshot-1.webp" alt="Screenshot 1" width="240" /></td>
+    <td><img src="/artefacts/screenshot-2.webp" alt="Screenshot 2" width="240" /></td>
+    <td><img src="/artefacts/screenshot-3.webp" alt="Screenshot 3" width="240" /></td>
+    <td><img src="/artefacts/screenshot-4.webp" alt="Screenshot 4" width="240" /></td>
+  </tr>
+</table>
 
-## 🃏 Features
+## Contributing
 
-- Supports games with 2 - 5 players
-- Two game modes: 
-  - **Point Limit Mode**: Play until a certain point limit is reached
-  - **Unlimited Mode**: Play without an limit and end the round at any point
-- Automatic score calculation with:
-  - Falsly calling Cabo
-  - Exact 100-point bonus (score halving)
-  - Kamikaze rule handling
-- Round history tracking via graph and table
-- Customizable
-  - Change the default settings for point limits and cabo penaltys
-  - Choose a default game mode for every new created game
-  - Two dealer modes: Last rounds loser or rotating
-- Im- and exporting certain games or the whole app data
+Contributions are welcome! If you find a bug or have a feature request, please open an issue on GitHub. If you'd like to
+contribute code, feel free to fork the repository and submit a pull request. For contribution guidelines, please refer
+to [CONTRIBUTING.md](CONTRIBUTING.md).
 
-The complete rules of the game are also available in the repository wiki at [Cabo Rules (English)](https://github.com/flixcoo/cabo-counter/wiki/CABO-Rules-(English))
+## License
 
-## 🚀 Getting Started
+This project is licensed under the GNU LGPLv3 License. See the [LICENSE](LICENSE) file for details.
 
-### Prerequisites
-- Flutter 3.35.6+
-- Dart 3.9.2+
-- Xcode (for iOS builds) / Android Studio (for Android builds)
-- A device or simulator running iOS 18.5+ / Android 16
+<!--
+## Contributors
 
-### Installation
+<a href="https://github.com/flixcoo/cabo-counter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=flixcoo/cabo-counter" />
+</a>
+-->
 
-```bash
-git clone https://github.com/flixcoo/cabo-counter.git
-cd cabo-counter
-flutter pub get
-flutter run
-```
+## Credits
 
-## 🤝 Contributing
+Cabo Counter is developed and maintained by [Felix Kirchner](https://github.felixkirchner.de). For more information or support regarding Cabo Counter, contact me through my website [felixkirchner.de](https://felixkirchner.de/contact/) or via email [cabocounter@felixkirchner.de](mailto:cabocounter@felixkirchner.de).
 
-Contributions are welcome! If you'd like to improve Cabo Counter, please:
-- Follow the existing code style and architecture
-- Maintain clean, well-documented code
-- Keep changes focused and test your work
-
-Feel free to open issues or submit pull requests!
-
-## ⚠️ Disclaimer
+## Disclaimer
 
 This project is not affiliated with or endorsed by Smiling Monster GmbH. CABO is a registered trademark of its respective owners. This app is designed for scorekeeping purposes only and does not include actual game components.
-
----
-
-> 🚀 Powered by Flutter | Developed with 🩵
