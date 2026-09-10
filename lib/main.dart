@@ -60,9 +60,9 @@ class _CaboCounterAppState extends State<CaboCounterApp>
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       localeResolutionCallback: (locale, supportedLocales) {
-        for (final supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale?.languageCode) {
-            return supportedLocale;
+        for (final loc in supportedLocales) {
+          if (loc.languageCode == locale?.languageCode) {
+            return loc;
           }
         }
         return supportedLocales.first;
