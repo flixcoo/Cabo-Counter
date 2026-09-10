@@ -60,6 +60,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         .format(gameSession.createdAt.toLocal());
   }
 
+  bool get hasGameValues =>
+      gameSession.roundNumber > 1 || gameSession.isGameFinished;
+  bool get isGameFinished => gameSession.isGameFinished;
+
   final confettiController = ConfettiController(
     duration: const Duration(seconds: 10),
   );
@@ -201,16 +205,17 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               showChevron: true,
                               trailing: Row(
                                 children: [
-                                  index + 1 != gameSession.roundNumber ||
-                                          gameSession.isGameFinished
-                                      ? (const Text(
-                                          '\u{2705}',
-                                          style: TextStyle(fontSize: 22),
-                                        ))
-                                      : const Text(
+                                  // Round is in progress
+                                  index + 1 == gameSession.roundNumber &&
+                                          !isGameFinished
+                                      ? const Text(
                                           '\u{23F3}',
                                           style: TextStyle(fontSize: 22),
-                                        ),
+                                        )
+                                      : (const Text(
+                                          '\u{2705}',
+                                          style: TextStyle(fontSize: 22),
+                                        )),
                                 ],
                               ),
                               onTap: () async {
@@ -227,24 +232,28 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ActiveGameListTile(
                             showChevron: true,
                             title: Text(loc.scoring_history),
-                            onTap: () => Navigator.push(
-                              context,
-                              adaptivePageRoute(
-                                builder: (_) =>
-                                    GraphView(gameSession: gameSession),
-                              ),
-                            ),
+                            onTap: hasGameValues
+                                ? () => Navigator.push(
+                                    context,
+                                    adaptivePageRoute(
+                                      builder: (_) =>
+                                          GraphView(gameSession: gameSession),
+                                    ),
+                                  )
+                                : null,
                           ),
                           ActiveGameListTile(
                             showChevron: true,
                             title: Text(loc.point_overview),
-                            onTap: () => Navigator.push(
-                              context,
-                              adaptivePageRoute(
-                                builder: (_) =>
-                                    PointsView(gameSession: gameSession),
-                              ),
-                            ),
+                            onTap: hasGameValues
+                                ? () => Navigator.push(
+                                    context,
+                                    adaptivePageRoute(
+                                      builder: (_) =>
+                                          PointsView(gameSession: gameSession),
+                                    ),
+                                  )
+                                : null,
                           ),
                         ],
                       ),
@@ -258,8 +267,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               title: Text(loc.end_game),
                               showChevron: true,
                               onTap:
-                                  (gameSession.roundNumber > 1 &&
-                                      !gameSession.isGameFinished)
+                                  hasGameValues && !gameSession.isGameFinished
                                   ? () => showEndGameDialog()
                                   : null,
                             ),
