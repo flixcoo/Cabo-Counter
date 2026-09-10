@@ -3,7 +3,7 @@ name: Push Pipeline
 on:
   push:
     branches:
-      - "develop"
+      - "development"
       - "main"
 
 permissions:
