@@ -13,11 +13,12 @@ final localizedNews = {
         color: CustomTheme.primaryColor,
       ),
     ),
+
     NewsItem(
-      title: 'Problem mit Kamikaze behoben',
-      text: 'Kamikaze addiert nun immer die Hälfte vom Punktelimit auf die Punktestände. Vorher wurde immer 50 Punkte addiert.',
+      title: 'Auswertung',
+      text: '',
       icon: const SFIcon(
-        SFIcons.sf_wrench_adjustable_fill,
+        SFIcons.sf_graph_2d,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
@@ -41,10 +42,10 @@ final localizedNews = {
       ),
     ),
     NewsItem(
-      title: 'Zoomen im Graphen',
-      text: 'Es ist jetzt möglich im Graphen des Spielverlaufs zu zoomen und herumzunavigieren.',
+      title: 'Problem mit Kamikaze behoben',
+      text: 'Kamikaze addiert nun immer die Hälfte vom Punktelimit auf die Punktestände. Vorher wurde immer 50 Punkte addiert.',
       icon: const SFIcon(
-        SFIcons.sf_graph_2d,
+        SFIcons.sf_wrench_adjustable_fill,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
@@ -61,10 +62,10 @@ final localizedNews = {
       ),
     ),
     NewsItem(
-      title: 'Kamikaze Issue Fixed',
-      text: 'Kamikaze now always adds half of the point limit to the scores. Previously it always added 50 points.',
+      title: 'Evaluation',
+      text: '',
       icon: const SFIcon(
-        SFIcons.sf_wrench_adjustable_fill,
+        SFIcons.sf_graph_2d,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
@@ -87,11 +88,12 @@ final localizedNews = {
         color: CustomTheme.primaryColor,
       ),
     ),
+
     NewsItem(
-      title: 'Zoom in Graph',
-      text: 'It is now possible to zoom and navigate around the graph of the game progress.',
+      title: 'Kamikaze Issue Fixed',
+      text: 'Kamikaze now always adds half of the point limit to the scores. Previously it always added 50 points.',
       icon: const SFIcon(
-        SFIcons.sf_graph_2d,
+        SFIcons.sf_wrench_adjustable_fill,
         fontSize: 28,
         color: CustomTheme.primaryColor,
       ),
