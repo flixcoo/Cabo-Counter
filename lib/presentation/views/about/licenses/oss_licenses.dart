@@ -39794,12 +39794,20 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   );
 
+<<<<<<< Updated upstream
 /// cabo_counter 1.1.2+1312
+=======
+/// cabo_counter 1.1.3+1314
+>>>>>>> Stashed changes
 const _cabo_counter = Package(
     name: 'cabo_counter',
     description: 'Mobile app for the card game Cabo',
     authors: [],
+<<<<<<< Updated upstream
     version: '1.1.2+1312',
+=======
+    version: '1.1.3+1314',
+>>>>>>> Stashed changes
     spdxIdentifiers: ['LGPL-3.0'],
     isMarkdown: false,
     isSdk: false,
