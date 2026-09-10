@@ -1,5 +1,6 @@
 import 'package:cabo_counter/core/adaptive_page_route.dart';
 import 'package:cabo_counter/core/adaptive_sheet_route.dart';
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -14,7 +15,6 @@ import 'package:cabo_counter/presentation/views/home/active_game/graph_view.dart
 import 'package:cabo_counter/presentation/views/home/active_game/points_view.dart';
 import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart';
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
-import 'package:cabo_counter/services/config_service.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:collection/collection.dart';
@@ -124,7 +124,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                             title: Text(loc.mode),
                             trailing: Text(
                               gameSession.isPointsLimitEnabled
-                                  ? '${ConfigService.getPointLimit()} ${loc.points}'
+                                  ? getPointLabel(loc, gameSession.pointLimit!)
                                   : loc.unlimited,
                               style: const TextStyle(
                                 color: CustomTheme.primaryColor,
@@ -173,7 +173,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               trailing: Row(
                                 children: [
                                   Text(
-                                    '${gameSession.getPlayerScoresAsList()[sortedPlayerIndices[index]]} ${loc.points}',
+                                    getPointLabel(
+                                      loc,
+                                      gameSession
+                                          .getPlayerScoresAsList()[sortedPlayerIndices[index]],
+                                    ),
                                   ),
                                 ],
                               ),

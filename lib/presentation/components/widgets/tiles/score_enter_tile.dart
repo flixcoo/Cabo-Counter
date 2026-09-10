@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class _ScoreEnterTileState extends State<ScoreEnterTile> {
                   ],
                 ),
                 Text(
-                  '${widget.points} ${loc.points}',
+                  getPointLabel(loc, widget.points),
                   style: const TextStyle(fontSize: 12),
                 ),
               ],

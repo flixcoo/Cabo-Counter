@@ -111,6 +111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
+  String get point => 'Point';
+
+  @override
   String get email_body => 'I have the following feedback...';
 
   @override

@@ -1,3 +1,13 @@
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
+
+String getPointLabel(AppLocalizations loc, int points) {
+  if (points == 1 || points == -1) {
+    return '$points ${loc.point}';
+  } else {
+    return '$points ${loc.points}';
+  }
+}
+
 extension FilenameSanitization on String {
   /// Sanitizes a string to be used as a filename.
   ///

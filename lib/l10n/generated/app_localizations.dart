@@ -265,6 +265,12 @@ abstract class AppLocalizations {
   /// **'Fertig'**
   String get done;
 
+  /// No description provided for @point.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkt'**
+  String get point;
+
   /// No description provided for @email_body.
   ///
   /// In de, this message translates to:

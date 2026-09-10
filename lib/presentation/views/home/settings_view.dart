@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/constants.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
@@ -111,7 +112,10 @@ class _SettingsViewState extends State<SettingsView> {
                       defaultMode == GameMode.none
                           ? loc.no_default_mode
                           : (defaultMode == GameMode.pointLimit
-                                ? '${ConfigService.getPointLimit()} ${loc.points}'
+                                ? getPointLabel(
+                                    loc,
+                                    ConfigService.getPointLimit(),
+                                  )
                                 : loc.unlimited),
                       style: const TextStyle(color: CustomTheme.primaryColor),
                     ),

@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -51,7 +52,7 @@ class _ModeSelectionViewState extends State<ModeSelectionView> {
           // Point limit mode
           SelectableTile(
             icon: IconService.point_limit,
-            title: '${widget.pointLimit} ${loc.points}',
+            title: getPointLabel(loc, widget.pointLimit),
             description: loc.point_limit_description(widget.pointLimit),
             onTap: supressTap ? null : () => onTapTile(GameMode.pointLimit),
             selected: selectedMode == GameMode.pointLimit,

@@ -1,4 +1,5 @@
 import 'package:cabo_counter/core/adaptive_page_route.dart';
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/core/enums.dart';
 import 'package:cabo_counter/data/db/database.dart';
@@ -421,7 +422,7 @@ class _CreateGameViewState extends State<CreateGameView> {
       return Text(loc.no_mode_selected, style: textStyle);
     } else if (selectedGameMode == GameMode.pointLimit) {
       return Text(
-        '${ConfigService.getPointLimit()} ${loc.points}',
+        getPointLabel(loc, ConfigService.getPointLimit()),
         style: selectedTextStyle,
       );
     } else {

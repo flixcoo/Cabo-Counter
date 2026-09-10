@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/data/models/game_session.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
@@ -32,12 +33,12 @@ class _GameTileState extends State<GameTile> {
             ? IconService.point_limit
             : IconService.infinity,
         text: session.isPointsLimitEnabled
-            ? '${session.pointLimit.toString()} ${loc.points}'
+            ? getPointLabel(loc, session.pointLimit!)
             : loc.unlimited,
       ),
       (
         icon: IconService.cabo_penalty,
-        text: '${session.caboPenalty.toString()} ${loc.points}',
+        text: getPointLabel(loc, session.caboPenalty),
       ),
     ];
 

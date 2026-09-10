@@ -50,6 +50,7 @@
   "delete_game_title": "Delete game?",
   "descending": "Descending",
   "done": "Done",
+  "point": "Point",
   "email_body": "I have the following feedback...",
   "email_subject": "Feedback: Cabo Counter App",
   "empty_filter_button": "Show all games",
