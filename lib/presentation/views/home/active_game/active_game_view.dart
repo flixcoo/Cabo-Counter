@@ -17,6 +17,7 @@ import 'package:cabo_counter/presentation/views/home/active_game/round_view.dart
 import 'package:cabo_counter/presentation/views/home/create_game/create_game_view.dart';
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
+import 'package:cabo_counter/services/rating_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -554,7 +555,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         iconColor: CustomTheme.kamikazeColor,
         title: loc.end_of_game_title,
         message: loc.end_of_game_message(winnerAmount, winner, winnerPoints),
-        onAfterPop: () => confettiController.stop(),
+        onAfterPop: () {
+          confettiController.stop();
+          RatingService.maybeShowRatingDialog(context);
+        },
       );
     }
   }
