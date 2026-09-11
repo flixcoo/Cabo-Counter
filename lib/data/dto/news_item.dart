@@ -1,3 +1,4 @@
+import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/services/icon_service.dart';
 
 class NewsItem {
@@ -9,5 +10,17 @@ class NewsItem {
     required this.localizedTitle,
     required this.localizedText,
     required this.icon,
-  });
+  }) {
+    for (final locale
+        in AppLocalizations.supportedLocales.map((e) => e.languageCode)) {
+      assert(
+        localizedTitle[locale]?.isNotEmpty ?? false,
+        'NewsItem is missing a title for locale "$locale"',
+      );
+      assert(
+        localizedText[locale]?.isNotEmpty ?? false,
+        'NewsItem is missing a text for locale "$locale"',
+      );
+    }
+  }
 }
