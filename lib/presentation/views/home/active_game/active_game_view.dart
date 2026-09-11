@@ -486,6 +486,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     return await PopupService.showSelectionPopup<bool>(
           context: context,
           icon: Icons.delete_outline_rounded,
+          iconColor: Colors.red,
           title: loc.delete_game_title,
           message: loc.delete_game_message(gameSession.title),
           actions: [
