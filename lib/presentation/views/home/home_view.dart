@@ -38,7 +38,6 @@ class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeViewState createState() => _HomeViewState();
 }
 
