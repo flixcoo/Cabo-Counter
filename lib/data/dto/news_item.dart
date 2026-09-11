@@ -1,9 +1,13 @@
 import 'package:cabo_counter/services/icon_service.dart';
 
 class NewsItem {
-  final String title;
-  final String text;
+  final Map<String, String> localizedTitle;
+  final Map<String, String> localizedText;
   final AppIcon icon;
 
-  NewsItem({required this.title, required this.text, required this.icon});
+  NewsItem({
+    required this.localizedTitle,
+    required this.localizedText,
+    required this.icon,
+  });
 }

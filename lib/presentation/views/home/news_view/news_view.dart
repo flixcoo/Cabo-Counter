@@ -12,10 +12,6 @@ class NewsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final locale = loc.localeName;
-    final newsItems = localizedNews.containsKey(locale)
-        ? localizedNews[locale]
-        : localizedNews['en'];
 
     return Scaffold(
       backgroundColor: CustomTheme.backgroundColor,
@@ -66,7 +62,7 @@ class NewsView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // News Items
-                      for (final item in newsItems ?? [])
+                      for (final item in localizedNews)
                         NewsTile(newsItem: item),
                     ],
                   ),
