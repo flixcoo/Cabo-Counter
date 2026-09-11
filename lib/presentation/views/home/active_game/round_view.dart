@@ -4,7 +4,7 @@ import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/core/custom_theme.dart';
 import 'package:cabo_counter/l10n/generated/app_localizations.dart';
 import 'package:cabo_counter/presentation/components/widgets/buttons/animated_icon_button.dart';
-import 'package:cabo_counter/presentation/components/widgets/buttons/floating_animated_button.dart';
+import 'package:cabo_counter/presentation/components/widgets/buttons/animated_text_button.dart';
 import 'package:cabo_counter/presentation/components/widgets/custom_segmented_control.dart';
 import 'package:cabo_counter/presentation/components/widgets/kamikaze_sheet.dart';
 import 'package:cabo_counter/presentation/components/widgets/tiles/score_enter_tile.dart';
@@ -256,7 +256,7 @@ class _RoundViewState extends State<RoundView> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      child: FloatingAnimatedButton(
+                      child: AnimtedTextButton(
                         onPressed: canSubmitRound
                             ? () => endOfRoundNavigation(
                                 context: context,
@@ -268,7 +268,7 @@ class _RoundViewState extends State<RoundView> {
                     ),
                     if (!isGameFinished)
                       Expanded(
-                        child: FloatingAnimatedButton(
+                        child: AnimtedTextButton(
                           onPressed: canSubmitRound
                               ? () => endOfRoundNavigation(
                                   context: context,
