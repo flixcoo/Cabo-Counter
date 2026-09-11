@@ -13,7 +13,10 @@ final localizedNews = [
     icon: AppIcon(AppIcons.brush, color: CustomTheme.primaryColor),
   ),
   NewsItem(
-    localizedTitle: {'de': 'Auswertung', 'en': 'Evaluation'},
+    localizedTitle: {
+      'de': 'Detaillierte Auswertung',
+      'en': 'Detailed Analytics',
+    },
     localizedText: {
       'de': 'Es gibt jetzt Auswertungen für jedes Spiel. Sie zeigt dir pro Spieler:in verschiedene Metriken an, mit welchen Ihr euch untereinander vergleichen könnt. Danke an Cameron für diesen Vorschlag!',
       'en': 'There are now statistics available for every game. They show you various metrics for each player, which you can use to compare yourselves with one another. Thanks to Cameron for this suggestion!',
