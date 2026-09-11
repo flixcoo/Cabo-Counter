@@ -110,12 +110,6 @@ abstract class AppLocalizations {
   /// **'Spieler:in hinzufügen'**
   String get add_player;
 
-  /// No description provided for @detailed_analytics.
-  ///
-  /// In de, this message translates to:
-  /// **'Detailauswertung'**
-  String get detailed_analytics;
-
   /// No description provided for @app.
   ///
   /// In de, this message translates to:
@@ -205,12 +199,6 @@ abstract class AppLocalizations {
   /// **'Spiel erstellen'**
   String get create_game;
 
-  /// No description provided for @created_at.
-  ///
-  /// In de, this message translates to:
-  /// **'Erstellt am'**
-  String get created_at;
-
   /// No description provided for @date.
   ///
   /// In de, this message translates to:
@@ -270,6 +258,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Absteigend'**
   String get descending;
+
+  /// No description provided for @detailed_analytics.
+  ///
+  /// In de, this message translates to:
+  /// **'Detailauswertung'**
+  String get detailed_analytics;
 
   /// No description provided for @done.
   ///
@@ -378,6 +372,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Spieldaten'**
   String get game_data;
+
+  /// No description provided for @game_graph.
+  ///
+  /// In de, this message translates to:
+  /// **'Spielgraph'**
+  String get game_graph;
 
   /// No description provided for @game_name.
   ///
@@ -631,12 +631,6 @@ abstract class AppLocalizations {
   /// **'Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht'**
   String point_limit_description(int pointLimit);
 
-  /// No description provided for @score_table.
-  ///
-  /// In de, this message translates to:
-  /// **'Punktetabelle'**
-  String get score_table;
-
   /// No description provided for @points.
   ///
   /// In de, this message translates to:
@@ -739,11 +733,11 @@ abstract class AppLocalizations {
   /// **'Gewonnene Runden'**
   String get rounds_won;
 
-  /// No description provided for @game_graph.
+  /// No description provided for @score_table.
   ///
   /// In de, this message translates to:
-  /// **'Spielgraph'**
-  String get game_graph;
+  /// **'Punktetabelle'**
+  String get score_table;
 
   /// No description provided for @settings.
   ///

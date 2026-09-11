@@ -16,9 +16,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_player => 'Add Player';
 
   @override
-  String get detailed_analytics => 'Detailed Analytics';
-
-  @override
   String get app => 'App';
 
   @override
@@ -78,9 +75,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_game => 'Create Game';
 
   @override
-  String get created_at => 'Created At';
-
-  @override
   String get date => 'Date';
 
   @override
@@ -112,6 +106,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get descending => 'Descending';
+
+  @override
+  String get detailed_analytics => 'Detailed Analytics';
 
   @override
   String get done => 'Done';
@@ -177,6 +174,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get game_data => 'Game Data';
+
+  @override
+  String get game_graph => 'Game Graph';
 
   @override
   String get game_name => 'Game Name';
@@ -311,9 +311,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get score_table => 'Score Table';
-
-  @override
   String get points => 'Points';
 
   @override
@@ -367,7 +364,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rounds_won => 'Rounds Won';
 
   @override
-  String get game_graph => 'Game Graph';
+  String get score_table => 'Score Table';
 
   @override
   String get settings => 'Settings';
