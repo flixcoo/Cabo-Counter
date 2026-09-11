@@ -16,6 +16,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_player => 'Add Player';
 
   @override
+  String get analytics => 'Analytics';
+
+  @override
   String get app => 'App';
 
   @override
@@ -153,9 +156,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get end_of_game_title => 'End of Game';
-
-  @override
-  String get analytics => 'Analytics';
 
   @override
   String get export_data => 'Export Data';

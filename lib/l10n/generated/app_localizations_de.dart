@@ -16,6 +16,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get add_player => 'Spieler:in hinzufügen';
 
   @override
+  String get analytics => 'Auswertung';
+
+  @override
   String get app => 'App';
 
   @override
@@ -154,9 +157,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get end_of_game_title => 'Spiel beendet';
-
-  @override
-  String get analytics => 'Auswertung';
 
   @override
   String get export_data => 'Spieldaten exportieren';

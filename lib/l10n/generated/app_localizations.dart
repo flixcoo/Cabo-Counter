@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Spieler:in hinzufügen'**
   String get add_player;
 
+  /// No description provided for @analytics.
+  ///
+  /// In de, this message translates to:
+  /// **'Auswertung'**
+  String get analytics;
+
   /// No description provided for @app.
   ///
   /// In de, this message translates to:
@@ -330,12 +336,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Spiel beendet'**
   String get end_of_game_title;
-
-  /// No description provided for @analytics.
-  ///
-  /// In de, this message translates to:
-  /// **'Auswertung'**
-  String get analytics;
 
   /// No description provided for @export_data.
   ///

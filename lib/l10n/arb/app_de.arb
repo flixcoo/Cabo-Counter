@@ -2,6 +2,7 @@
   "@@locale": "de",
   "about": "Über",
   "add_player": "Spieler:in hinzufügen",
+  "analytics": "Auswertung",
   "app": "App",
   "app_name": "Cabo Counter",
   "ascending": "Aufsteigend",
@@ -74,7 +75,6 @@
     }
   },
   "end_of_game_title": "Spiel beendet",
-  "analytics": "Auswertung",
   "export_data": "Spieldaten exportieren",
   "export_error_message": "Datei konnte nicht exportiert werden",
   "export_error_title": "Fehler",
