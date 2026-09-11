@@ -23,7 +23,6 @@ import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Displays the active game view, showing game details, player rankings, rounds, and statistics.
@@ -54,13 +53,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
 
   /// A list of player indices sorted by their scores in ascending order.
   late List<int> sortedPlayerIndices;
-
-  String get formattedDate {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    return DateFormat.yMd(locale)
-        .add_Hm()
-        .format(gameSession.createdAt.toLocal());
-  }
 
   bool get hasGameValues =>
       gameSession.roundNumber > 1 || gameSession.isGameFinished;
@@ -133,17 +125,6 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                               gameSession.isPointsLimitEnabled
                                   ? getPointLabel(loc, gameSession.pointLimit!)
                                   : loc.unlimited,
-                              style: const TextStyle(
-                                color: CustomTheme.primaryColor,
-                              ),
-                            ),
-                          ),
-
-                          // Date
-                          ActiveGameListTile(
-                            title: Text(loc.created_at),
-                            trailing: Text(
-                              formattedDate,
                               style: const TextStyle(
                                 color: CustomTheme.primaryColor,
                               ),
