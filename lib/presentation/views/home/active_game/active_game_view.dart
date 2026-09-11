@@ -19,6 +19,7 @@ import 'package:cabo_counter/presentation/views/home/create_game/create_game_vie
 import 'package:cabo_counter/services/data_transfer_service.dart';
 import 'package:cabo_counter/services/popup_service.dart';
 import 'package:cabo_counter/services/rating_service.dart';
+import 'package:cabo_counter/services/vibration_service.dart';
 import 'package:collection/collection.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -571,6 +572,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
     int winnerAmount = winner.contains('&') ? 2 : 1;
 
     confettiController.play();
+    VibrationService.successNotification();
 
     await Future.delayed(const Duration(milliseconds: Constants.POP_UP_DELAY));
 
