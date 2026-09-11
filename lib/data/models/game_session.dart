@@ -1,3 +1,4 @@
+import 'package:cabo_counter/core/common.dart';
 import 'package:cabo_counter/data/models/player.dart';
 import 'package:cabo_counter/data/models/round.dart';
 import 'package:collection/collection.dart';
@@ -103,11 +104,7 @@ class GameSession {
   }
 
   /// Concatenates the winners as readable string
-  String get winnerAsString {
-    if (winner.isEmpty) return '';
-    if (winner.length == 1) return winner.first;
-    return '${winner.sublist(0, winner.length - 1).join(', ')} & ${winner.last}';
-  }
+  String get winnerAsString => concatenateNames(winner);
 
   /// Returns the summed scores of all players as a list.
   List<int> get getScoresList =>
