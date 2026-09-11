@@ -214,7 +214,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         content: [
                           ActiveGameListTile(
                             showChevron: true,
-                            title: Text(loc.analytics),
+                            title: Text(loc.detailed_analytics),
                             onTap: hasGameValues
                                 ? () => Navigator.push(
                                     context,
@@ -228,7 +228,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                           ActiveGameListTile(
                             showChevron: true,
-                            title: Text(loc.scoring_history),
+                            title: Text(loc.game_graph),
                             onTap: hasGameValues
                                 ? () => Navigator.push(
                                     context,
@@ -241,7 +241,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                           ),
                           ActiveGameListTile(
                             showChevron: true,
-                            title: Text(loc.point_overview),
+                            title: Text(loc.score_table),
                             onTap: hasGameValues
                                 ? () => Navigator.push(
                                     context,

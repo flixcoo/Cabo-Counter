@@ -110,11 +110,11 @@ abstract class AppLocalizations {
   /// **'Spieler:in hinzufügen'**
   String get add_player;
 
-  /// No description provided for @analytics.
+  /// No description provided for @detailed_analytics.
   ///
   /// In de, this message translates to:
-  /// **'Auswertung'**
-  String get analytics;
+  /// **'Detailauswertung'**
+  String get detailed_analytics;
 
   /// No description provided for @app.
   ///
@@ -631,11 +631,11 @@ abstract class AppLocalizations {
   /// **'Es wird so lange gespielt, bis ein:e Spieler:in mehr als {pointLimit} Punkte erreicht'**
   String point_limit_description(int pointLimit);
 
-  /// No description provided for @point_overview.
+  /// No description provided for @score_table.
   ///
   /// In de, this message translates to:
   /// **'Punktetabelle'**
-  String get point_overview;
+  String get score_table;
 
   /// No description provided for @points.
   ///
@@ -739,11 +739,11 @@ abstract class AppLocalizations {
   /// **'Gewonnene Runden'**
   String get rounds_won;
 
-  /// No description provided for @scoring_history.
+  /// No description provided for @game_graph.
   ///
   /// In de, this message translates to:
-  /// **'Spielverlauf'**
-  String get scoring_history;
+  /// **'Spielgraph'**
+  String get game_graph;
 
   /// No description provided for @settings.
   ///

@@ -16,7 +16,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get add_player => 'Spieler:in hinzufügen';
 
   @override
-  String get analytics => 'Auswertung';
+  String get detailed_analytics => 'Detailauswertung';
 
   @override
   String get app => 'App';
@@ -313,7 +313,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get point_overview => 'Punktetabelle';
+  String get score_table => 'Punktetabelle';
 
   @override
   String get points => 'Punkte';
@@ -370,7 +370,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get rounds_won => 'Gewonnene Runden';
 
   @override
-  String get scoring_history => 'Spielverlauf';
+  String get game_graph => 'Spielgraph';
 
   @override
   String get settings => 'Einstellungen';
