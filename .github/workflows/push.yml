@@ -20,6 +20,7 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
           persist-credentials: true
+          token: ${{ secrets.ACTIONS_TOKEN }}
 
       - name: Bump version
         uses: stikkyapp/update-pubspec-version@v2
@@ -49,6 +50,7 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
           persist-credentials: true
+          token: ${{ secrets.ACTIONS_TOKEN }}
 
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
@@ -91,6 +93,7 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
           persist-credentials: true
+          token: ${{ secrets.ACTIONS_TOKEN }}
 
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
@@ -155,6 +158,7 @@ jobs:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
           persist-credentials: true
+          token: ${{ secrets.ACTIONS_TOKEN }}
 
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
