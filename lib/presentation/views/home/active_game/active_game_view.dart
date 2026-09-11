@@ -233,7 +233,7 @@ class _ActiveGameViewState extends State<ActiveGameView> {
                         content: [
                           ActiveGameListTile(
                             showChevron: true,
-                            title: Text(loc.evaluation),
+                            title: Text(loc.analytics),
                             onTap: hasGameValues
                                 ? () => Navigator.push(
                                     context,
