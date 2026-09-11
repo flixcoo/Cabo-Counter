@@ -40,10 +40,19 @@ class _SettingsViewState extends State<SettingsView> {
   GameMode defaultMode = ConfigService.getGameMode();
   bool rotateShuffler = ConfigService.getRotateShuffler();
   bool enableVibrations = ConfigService.getVibrationsEnabled();
+  int pointLimit = ConfigService.getPointLimit();
+  int caboPenalty = ConfigService.getCaboPenalty();
 
-  @override
-  void initState() {
-    super.initState();
+  String get defaultModeString {
+    final loc = AppLocalizations.of(context);
+    switch (defaultMode) {
+      case GameMode.none:
+        return loc.no_default_mode;
+      case GameMode.pointLimit:
+        return getPointLabel(loc, pointLimit);
+      case GameMode.unlimited:
+        return loc.unlimited;
+    }
   }
 
   @override
@@ -97,9 +106,8 @@ class _SettingsViewState extends State<SettingsView> {
                       maxValue: 1000,
                       step: 10,
                       onChanged: (newPointLimit) {
-                        setState(() {
-                          ConfigService.setPointLimit(newPointLimit);
-                        });
+                        setState(() => pointLimit = newPointLimit);
+                        ConfigService.setPointLimit(newPointLimit);
                       },
                     ),
                   ),
@@ -109,14 +117,7 @@ class _SettingsViewState extends State<SettingsView> {
                     prefixText: loc.standard_mode,
                     prefixIcon: IconService.mode,
                     suffixWidget: Text(
-                      defaultMode == GameMode.none
-                          ? loc.no_default_mode
-                          : (defaultMode == GameMode.pointLimit
-                                ? getPointLabel(
-                                    loc,
-                                    ConfigService.getPointLimit(),
-                                  )
-                                : loc.unlimited),
+                      defaultModeString,
                       style: const TextStyle(color: CustomTheme.primaryColor),
                     ),
                     onPressed: () async {
