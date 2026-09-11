@@ -331,11 +331,11 @@ abstract class AppLocalizations {
   /// **'Spiel beendet'**
   String get end_of_game_title;
 
-  /// No description provided for @evaluation.
+  /// No description provided for @analytics.
   ///
   /// In de, this message translates to:
   /// **'Auswertung'**
-  String get evaluation;
+  String get analytics;
 
   /// No description provided for @export_data.
   ///

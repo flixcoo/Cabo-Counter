@@ -74,7 +74,7 @@
     }
   },
   "end_of_game_title": "Spiel beendet",
-  "evaluation": "Auswertung",
+  "analytics": "Auswertung",
   "export_data": "Spieldaten exportieren",
   "export_error_message": "Datei konnte nicht exportiert werden",
   "export_error_title": "Fehler",
