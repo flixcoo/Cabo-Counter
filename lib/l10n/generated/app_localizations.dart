@@ -262,7 +262,7 @@ abstract class AppLocalizations {
   /// No description provided for @detailed_analytics.
   ///
   /// In de, this message translates to:
-  /// **'Detailauswertung'**
+  /// **'Detaillierte Auswertung'**
   String get detailed_analytics;
 
   /// No description provided for @done.

@@ -108,7 +108,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get descending => 'Absteigend';
 
   @override
-  String get detailed_analytics => 'Detailauswertung';
+  String get detailed_analytics => 'Detaillierte Auswertung';
 
   @override
   String get done => 'Fertig';
