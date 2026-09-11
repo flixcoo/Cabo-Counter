@@ -567,10 +567,10 @@ class _ActiveGameViewState extends State<ActiveGameView> {
   /// Plays the confetti animation and shows a dialog with the winner's information.
   Future<void> playFinishAnimation(BuildContext context) async {
     final loc = AppLocalizations.of(context);
-    String winner = widget.gameSession.winner;
 
     int winnerPoints = widget.gameSession.getScoresList.min;
-    int winnerAmount = winner.contains('&') ? 2 : 1;
+    int winnerCount = widget.gameSession.winner.length;
+    String winnerString = widget.gameSession.winnerAsString;
 
     confettiController.play();
     VibrationService.successNotification();
@@ -583,7 +583,11 @@ class _ActiveGameViewState extends State<ActiveGameView> {
         icon: Icons.emoji_events_rounded,
         iconColor: CustomTheme.kamikazeColor,
         title: loc.end_of_game_title,
-        message: loc.end_of_game_message(winnerAmount, winner, winnerPoints),
+        message: loc.end_of_game_message(
+          winnerCount,
+          winnerString,
+          winnerPoints,
+        ),
         onAfterPop: () {
           confettiController.stop();
           RatingService.maybeShowRatingDialog(context);

@@ -89,9 +89,9 @@ class GameSession {
   int get roundNumber => roundList.length + (isGameFinished ? 0 : 1);
   bool get isPointsLimitEnabled => pointLimit != null;
 
-  /// The players with the loweste score when the match is finished.
-  String get winner {
-    if (!isGameFinished || players.isEmpty) return '';
+  /// The players with the lowest score when the match is finished.
+  List<String> get winner {
+    if (!isGameFinished || players.isEmpty) return [];
     final int minScore = players
         .map((p) => p.totalScore)
         .reduce((a, b) => a < b ? a : b);
@@ -99,10 +99,14 @@ class GameSession {
         .where((p) => p.totalScore == minScore)
         .map((p) => p.name)
         .toList();
-    if (lowestPlayers.length > 1) {
-      return '${lowestPlayers.sublist(0, lowestPlayers.length - 1).join(', ')} & ${lowestPlayers.last}';
-    }
-    return lowestPlayers.first;
+    return lowestPlayers;
+  }
+
+  /// Concatenates the winners as readable string
+  String get winnerAsString {
+    if (winner.isEmpty) return '';
+    if (winner.length == 1) return winner.first;
+    return '${winner.sublist(0, winner.length - 1).join(', ')} & ${winner.last}';
   }
 
   /// Returns the summed scores of all players as a list.
